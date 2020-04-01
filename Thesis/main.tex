@@ -1,0 +1,95 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% LATEX-TEMPLATE GENERIEK
+% Voor readme en meest recente versie, zie
+% https://gitlab-fnwi.uva.nl/informatica/LaTeX-template.git
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%-------------------------------------------------------------------------------
+%	PACKAGES EN DOCUMENT CONFIGURATIE
+%-------------------------------------------------------------------------------
+
+\documentclass{uva-inf-article}
+\usepackage[english]{babel}
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage[htt]{hyphenat}
+\usepackage{csquotes}
+\usepackage{graphicx} % images
+\usepackage{subfig} % sub-figures
+\usepackage{wrapfig} % wrapping figures
+\usepackage[super]{nth} % superscript nth
+\usepackage{forest}
+
+\usepackage{amsmath,amsfonts,amssymb,amsthm,cancel,icomma,nicefrac,mathrsfs,
+            eurosym,verbatim,environ,ifthen,ifdraft,pdfpages,float,booktabs}
+\allowdisplaybreaks[1]
+
+\let\oldemptyset\emptyset
+
+\usepackage{color}
+\definecolor{lstgrey}{rgb}{0.95,0.95,0.95}
+\usepackage{listings}
+\lstset{
+    language=Java,
+    frame=single,
+    backgroundcolor=\color{lstgrey},
+    basicstyle=\small\ttfamily,
+    captionpos=b,
+    tabsize=2,
+    commentstyle=\color{gray},              % Comments font
+    numbers=left,                           % Line nums position
+    numberstyle=\tiny,                      % Line-numbers fonts
+    % stepnumber=1,                           % Step between two line-numbers
+    % numbersep=5pt,                          % How far are line-numbers from code
+    tabsize=2,                              % Default tab size
+    captionpos=b,                           % Caption-position = bottom
+    breaklines=true,                        % Automatic line breaking?
+    breakatwhitespace=false,                % Automatic breaks only at whitespace?
+    showspaces=false,                       % Dont make spaces visible
+    showtabs=false,                         % Dont make tabls visible
+    columns=flexible,                       % Column format
+}
+
+\graphicspath{ {figures/} }
+\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
+% Wikipedia-style "citation needed" macro
+\newcommand{\cn}[1][]{\textsuperscript{\color{red} ~[citation needed]~}}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+%-------------------------------------------------------------------------------
+%	GEGEVENS VOOR IN DE TITEL, HEADER EN FOOTER
+%-------------------------------------------------------------------------------
+
+% Vul de naam van de opdracht in.
+\assignment{Master Thesis}
+% Vul het soort opdracht in.
+% Vul de titel van de eindopdracht in.
+\title{Measuring the degree of library dependency}
+
+% Vul de volledige namen van alle auteurs in.
+\authors{Núria Bruch Tàrrega}
+% Vul de corresponderende UvAnetID's in.
+\uvanetids{12783145}
+
+% Vul altijd de naam in van diegene die het nakijkt, tutor of docent.
+% Vul eventueel ook de naam van de docent of vakcoordinator toe.
+\docent{Ana M. Oprescu}
+\tutor{Lodewijk Bergmans}
+% Vul de naam van de cursus in.
+%\course{DevOps and Cloud-based Software}
+% Te vinden op onder andere Datanose.
+
+% Dit is de datum die op het document komt te staan. Standaard is dat vandaag.
+\date{2020}
+
+\begin{document}
+\maketitle
+
+
+
+\end{document}
