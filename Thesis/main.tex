@@ -1,96 +1,206 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% LATEX-TEMPLATE GENERIEK
-% Voor readme en meest recente versie, zie
-% https://gitlab-fnwi.uva.nl/informatica/LaTeX-template.git
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[a4paper,10pt,titlepage]{report}
+%%This template is based on Paco van Beckhoven's thesis.
 
-%-------------------------------------------------------------------------------
-%	PACKAGES EN DOCUMENT CONFIGURATIE
-%-------------------------------------------------------------------------------
+\usepackage{xspace}
+\usepackage{xargs}   % Use more than one optional parameter in a new commands
+\usepackage[pdftex,dvipsnames]{xcolor}
 
-\documentclass{uva-inf-article}
+% Putting images next to each other
+\usepackage[font=bf,]{caption}
+\usepackage{subcaption}
+\input{glyphtounicode}
+
+% for last page
+\usepackage{lastpage}
+
 \usepackage[english]{babel}
-\renewcommand{\familydefault}{\sfdefault}
-
-\usepackage[htt]{hyphenat}
+\usepackage[utf8]{inputenc}
 \usepackage{csquotes}
-\usepackage{graphicx} % images
-\usepackage{subfig} % sub-figures
-\usepackage{wrapfig} % wrapping figures
-\usepackage[super]{nth} % superscript nth
-\usepackage{forest}
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{paralist}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{adjustbox}
+\usepackage{titlepic}
+\usepackage{vhistory}
+\usepackage{enumitem}
+\usepackage{longtable}
+\usepackage[backend=biber, style=ieee,citestyle=numeric-comp]{biblatex}
+\usepackage[colorinlistoftodos, prependcaption]{todonotes}
+\usepackage{placeins}
+\usepackage{multirow}
+\usepackage{amsmath,amssymb}
+\usepackage[hidelinks]{hyperref}
+\usepackage[acronym,nogroupskip,nohypertypes={acronym},toc,section=chapter]{glossaries}
+\usepackage{amssymb}
+\usepackage{verbatim}
+\usepackage{cmap}
 
-\usepackage{amsmath,amsfonts,amssymb,amsthm,cancel,icomma,nicefrac,mathrsfs,
-            eurosym,verbatim,environ,ifthen,ifdraft,pdfpages,float,booktabs}
-\allowdisplaybreaks[1]
+%\usepackage[ansinew]{inputenc}
+%\usepackage[T1]{fontenc}
+%\usepackage{libertine}
+\input{glyphtounicode}
 
-\let\oldemptyset\emptyset
+\pdfglyphtounicode{f_f}{FB00}
+\pdfglyphtounicode{f_f_i}{FB03}
+\pdfglyphtounicode{f_f_l}{FB04}
+\pdfglyphtounicode{f_i}{FB01}
 
-\usepackage{color}
-\definecolor{lstgrey}{rgb}{0.95,0.95,0.95}
+\pdfgentounicode=1
+
+
+
+%Appendix package + appendix in chapter title
+\usepackage[titletoc]{appendix}
+
+
+
+
+%for highlighting findings
+\usepackage{tcolorbox}
+
+% for highlighting code examples
 \usepackage{listings}
-\lstset{
-    language=Java,
-    frame=single,
-    backgroundcolor=\color{lstgrey},
-    basicstyle=\small\ttfamily,
-    captionpos=b,
-    tabsize=2,
-    commentstyle=\color{gray},              % Comments font
-    numbers=left,                           % Line nums position
-    numberstyle=\tiny,                      % Line-numbers fonts
-    % stepnumber=1,                           % Step between two line-numbers
-    % numbersep=5pt,                          % How far are line-numbers from code
-    tabsize=2,                              % Default tab size
-    captionpos=b,                           % Caption-position = bottom
-    breaklines=true,                        % Automatic line breaking?
-    breakatwhitespace=false,                % Automatic breaks only at whitespace?
-    showspaces=false,                       % Dont make spaces visible
-    showtabs=false,                         % Dont make tabls visible
-    columns=flexible,                       % Column format
+
+\newcommand{\ie}{\emph{i.e.},\xspace}
+\newcommand{\eg}{\emph{e.g.},\xspace}
+\newcommand{\etc}{\emph{etc.}\xspace}
+\newcommand{\etal}{\emph{et al.}\xspace}
+
+\newcommand{\sig}{\gls{sig}}
+\newcommand{\sigs}{\glspl{sig}}
+
+\newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1, inline]{#2}}
+\newcommandx{\discussion}[2][1=]{\todo[linecolor=red,backgroundcolor=green!25,bordercolor=red,inline,#1]{#2}}
+
+\newcommandx{\improvement}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+
+\newcommandx{\reminder}[2][1=]{\todo[linecolor=yellow,backgroundcolor=yellow!25,bordercolor=yellow,#1]{#2}}
+
+\newcommandx{\lessprio}[2][1=]{\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
+\newcommandx{\todocontent}[2][1=]{\todo[author=\textbf{Planned content},backgroundcolor=Goldenrod!25,bordercolor=Goldenrod,inline,#1]{#2}}
+
+
+%%Some additional table column specifiers, allowing for fixed width columns that wrap.
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+
+\definecolor{ryel}{HTML}{fcd116}
+\definecolor{rred}{HTML}{ce1126}
+\definecolor{rblu}{HTML}{0a3eb9}
+%these are examples of commands that may facilitate feedback annotations in the document
+%replace \paco by your name and \ana by your supervisor's name
+%\newcommandx{\ana}[2][1=]{\todo[linecolor=rblu,backgroundcolor=ryel,bordercolor=rred,#1]{#2}}
+%\newcommandx{\paco}[2][1=]{\todo[author=Paco,linecolor=blue,backgroundcolor=white,bordercolor=red,#1]{#2}}
+
+
+% -- title page is a modified version of https://github.com/software-engineering-amsterdam/latex/blob/master/thesis/uvamscse.cls
+\newcommand{\email}[1]{\ttfamily\href{mailto:#1}{#1}}
+
+\newcommand{\uvacoverfoot}{%
+	\vfill
+	\begin{center}
+		\begin{tabular}{r|l}
+			\multirow{3}{*}{\includegraphics[height=48pt]{uva.pdf}}
+			&\textsc{\Large Universiteit van Amsterdam}\\
+			&\textsc{Faculteit der Natuurwetenschappen, Wiskunde en Informatica}\\
+			&\textsc{Master Software Engineering}\\
+			&\url{http://www.software-engineering-amsterdam.nl}
+		\end{tabular}
+	\end{center}
 }
 
-\graphicspath{ {figures/} }
-\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
-% Wikipedia-style "citation needed" macro
-\newcommand{\cn}[1][]{\textsuperscript{\color{red} ~[citation needed]~}}
+\renewcommand{\maketitle}{%
+	% The cover page
+	% --------------
+	\thispagestyle{empty}
+	\enlargethispage{30pt}
+	\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+	% Will be page 0, s.t. contents start on page 1
+	\setcounter{page}{0}
+	% \eccoverhead
+	% Volume and article title, author(s)
+	\vspace{60pt}
+	\begin{center}
+		{\Huge\bfseries Measuring the degree of library dependency \par}
 
-\makeatletter
-\def\@seccntformat#1{%
-  \expandafter\ifx\csname c@#1\endcsname\c@section\else
-  \csname the#1\endcsname\quad
-  \fi}
-\makeatother
-%-------------------------------------------------------------------------------
-%	GEGEVENS VOOR IN DE TITEL, HEADER EN FOOTER
-%-------------------------------------------------------------------------------
+		\vspace{44pt}
+		{\Large\bfseries Núria Bruch Tàrrega \par}
+		\email{nuria.bruch@gmail.com}\\
+		\vspace{11pt}
+		July 16, 2020, \pageref{LastPage} pages
+	\end{center}
+	\vfill
+	\begin{tabular}{ll}
+		\textbf{Academic supervisor:} 	& Dr. Ana Oprescu, \email{ana.oprescu@uva.nl} \\
+		\textbf{Daily supervisor:} & Lodewijk Bergmans, \email{l.bergmans@sig.eu}\\
+		\textbf{Host organisation:} & Software Improvement Group (SIG), \href{https://www.softwareimprovementgroup.com/}{www.softwareimprovementgroup.com} \\
+	\end{tabular}
+	\uvacoverfoot
+	\newpage
+	\setcounter{footnote}{0}
+	\renewcommand{\thefootnote}{\arabic{footnote}}
+	\setlength{\parskip}{0pt}
+}
 
-% Vul de naam van de opdracht in.
-\assignment{Master Thesis}
-% Vul het soort opdracht in.
-\assignmenttype{Msc. Software Engineering}
-% Vul de titel van de eindopdracht in.
-\title{Measuring the degree of library dependency}
+%\newcommand{\uvaabstract}{}latex
+%\renewcommand{\abstract}[2][Abstract]{\renewcommand{\uvaabstract}{\chapter*{Abstract}%
+%\par#2\newpage}}
 
-% Vul de volledige namen van alle auteurs in.
-\authors{Núria Bruch Tàrrega}
-% Vul de corresponderende UvAnetID's in.
-\uvanetids{12783145}
 
-% Vul altijd de naam in van diegene die het nakijkt, tutor of docent.
-% Vul eventueel ook de naam van de docent of vakcoordinator toe.
-\docent{Ana M. Oprescu}
-\tutor{Lodewijk Bergmans}
-% Vul de naam van de cursus in.
-%\course{DevOps and Cloud-based Software}
-% Te vinden op onder andere Datanose.
+%-------- End of ``title page''
 
-% Dit is de datum die op het document komt te staan. Standaard is dat vandaag.
-\date{2020}
+%Fancy page headers
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}
+
+
+%%FINDING ENV
+\newcounter{findingctr}
+
+\newenvironment{finding}{%      define a custom environment
+	\refstepcounter{findingctr}% increment the environment's counter
+	\begin{tcolorbox}
+	\textbf{Finding \thefindingctr:}
+}{\end{tcolorbox}}
+% If you want numbers that start with the chapter or section number (e.g. 7.1.1 or 7.1) enable the following lines
+%\usepackage{amsmath}
+%\numberwithin{findingctr}{chapter}
+
+
+% Decrease the size of all these lists
+\setlist{noitemsep,topsep=4pt,parsep=1pt,partopsep=4pt}
+
+
+\lstset{
+	basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+	breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+	breaklines=true,                 % sets automatic line breaking
+	captionpos=b,                    % sets the caption-position to bottom
+	frame=single,                    % adds a frame around the code
+	language=Java,                 % the language of the code
+	keywordstyle=\bf,
+	tabsize=2                       % sets default tabsize to 2 spaces
+}
+
+%make it fit more nicely
+\setlength\extrarowheight{2pt}
+
+\makeglossaries
+\loadglsentries[acronym]{acronym}
+
+\addbibresource{res.bib}
 
 \begin{document}
 \maketitle
 \newpage
+\input{sections/0.Abstract}
 \tableofcontents
 \newpage
 
@@ -111,7 +221,9 @@
 \input{sections/8.Conclusion}
 
 \newpage
-\bibliographystyle{IEEEannot}
-\bibliography{res}
+\printbibliography[heading=bibintoc]
+\printglossaries%
+
+\input{sections/Appendix}
 
 \end{document}
