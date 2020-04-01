@@ -1,0 +1,43 @@
+% !TEX root = ..\main.tex
+\section{Literature survey}\label{section:literature} % Acabar
+For the creation of this proposal, we have conducted research on various topics, listed below. For each of these research activities, the tool that has been mainly used is \textit{Google Scholar}.
+
+\begin{itemize}
+    \item Dependency management
+    \item Coupling metrics
+    \item Code change effort measurement
+    \item Research methods
+\end{itemize}
+
+\noindent
+The papers to be used for this document were selected according to their language (English) and accessibility. Of all the performed searches, we first conducted a selection according to titles and a second filter after reading the abstract and introduction of the papers.
+
+The papers that according to these filters are related and relevant to the topic of this research were completely read and used to create this proposal. For each of the selected papers, the references of the paper were reviewed following the same procedure.
+
+\paragraph{Dependency management}
+This topic has been researched from various facets, one of the most widespread being the vulnerability of libraries.
+Examples of research on vulnerabilities in libraries and how these are expanded through the projects that utilize them, are \cite{decan2018impact,  hejderup2015dependencies, pashchenko2018vulnerable, plate2015impact}.
+
+Another aspect of the dependencies between projects that have also been studied are the dynamics of usage between packages and versions of these.
+For example, Wittern et al. in \cite{wittern2016look} analyze the dynamics of package use in \textit{npm} and the adoption of new versions of these by the developers.
+Plus, Mileva et al. analyzed the popularity of library versions, as well as the adoption process of them \cite{mileva2009mining}.
+
+Ultimately, there is research related to modeling software ecosystems, such as \cite{decan2017empirical, hejderup2015dependencies, kikas2017structure}. However, most of these models are created at a project or project version level.
+
+\bigskip\noindent
+There are no studies, that we have been capable to find, analyzing the degree of dependence of a project on the libraries that it uses. This fact was perceived by Hejderup et al in \cite{hejderup2018software}.
+
+\paragraph{Coupling metrics}
+To obtain the papers describing the coupling metrics to be used in this project, we initially found the papers about measuring dependency (e.g. \cite{cataldo2009software, poshyvanyk2006conceptual}). Based on these papers, the research was focused on structural coupling metrics, which lead to finding the literature review papers and the definition of the metrics (e.g. \cite{briand1997investigation, briand1999unified, harrison1998coupling}).
+
+Finally, we conducted a literature survey focused on how to validate the metrics. Resulting in papers about the diverse approaches and properties of the metrics to take into account when conducting a validation. For instance, \cite{meneely2013validating, roche1994software, srinivasan2014software}.
+
+\paragraph{Code change effort measurement}
+To gather information about the techniques to estimate effort, the first step was to research about the general topic effort estimation, yielding papers such as \cite{sharma2011analysis}.
+Next, the research focused on estimating effort to change code, providing as principal result the research by Kama et al. in \cite{kama2013integrated, kama2014cochcomo}.
+
+\paragraph{Dependency graphs}
+To create the PoC, it is necessary to implement a dependency graph that permits the calculation of the metrics. The first results obtained during the literature survey about dependency graphs (e.g. \cite{kikas2017structure, kula2017modeling}) used package-based approaches. Therefore, we limited the search to call-based approaches. The two main results of this final search have been \cite{hejderup2018prazi, hejderup2018software}.
+
+\paragraph{Research methods}
+In this case, the first paper used to define the research method of the project, was given by the university. In \cite{easterbrook2008selecting} a description of each of the main research methods can be found. Based on this paper, the research was focused on papers about the research methods selected to be used during this project (e.g. \cite{wieringa2012technical}).

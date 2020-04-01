@@ -1,0 +1,74 @@
+% !TEX root = ..\main.tex
+\section{Timeline}\label{section:timeline}
+This project will be divided into several phases:
+
+\begin{enumerate}
+    \item \textbf{Learning:} This initial phase consists of acquiring the necessary knowledge to obtain the level of competence required to carry out the project
+    (see section \ref{section:requiredExpertise}).
+
+    \item \textbf{Creation of the theoretical model:} In this phase, we will define the metrics to be used to calculate the coupling of a project with the libraries it uses. Also, the model to estimate the effort to replace a library will be defined.
+
+    In addition, the validation criteria that are going to be used for each of the metrics will be described, and the theoretical validation of these metrics will be carried out.
+
+    \item \textbf{Development of the Proof-of-Concept (PoC):} This third phase consists of implementing the PoC to calculate the coupling metrics and to implement the effort estimation model.
+
+    \item \textbf{Evaluation of the project:} In this phase, the PoC will be used in real projects. The results obtained for each one of the metrics, as well as the model of effort estimation, will serve as the data to conduct the empirical validation. This validation will be done by means of controlled experiments and case studies.
+
+    \item \textbf{Thesis writing:} This phase consists of writing down the process of each of the previous phases for the creation of the documentation of the project.
+\end{enumerate}
+
+\noindent
+It should be noted that the last phase: \textit{Thesis writing}, will not be carried out in a sequential manner with the other phases, but will be done in parallel with the rest of the phases.
+
+During phases 2, 3, and 4, the three expected results of the project will be developed (see section \ref{section:expectedResults}).
+
+
+\begin{figure}[p]
+    \begin{center}
+        \rotatebox{90}{\begin{ganttchart}[y unit title=0.4cm,
+        y unit chart=0.5cm,
+        vgrid,hgrid,
+        title label anchor/.style={below=-1.6ex},
+        title left shift=.05,
+        title right shift=-.05,
+        title height=.75,
+        bar/.style={fill=gray!55},
+        incomplete/.style={fill=white},
+        progress label text={},
+        group right shift=0,
+        group top shift=.25,
+        group height=.25]{14}{33}
+        %labels
+        \gantttitle{Weeks}{19} \\
+        \gantttitlelist{14,...,33}{1} \ganttnewline
+        %tasks
+        \ganttgroup{Learning}{14}{18} \\
+            \ganttbar{Static / Dynamic code analysis}{14}{14} \\
+            \ganttbar{Software metrics consideration}{15}{15} \\
+            \ganttbar{Software Architecture design}{16}{16} \\
+            \ganttbar{Library dependency evaluation}{17}{17} \\
+            \ganttbar{R coding}{18}{18} \\
+        \ganttgroup{Creation of the theoretical model}{19}{22} \\
+            \ganttbar{Metrics to calculate the degree of dependence}{19}{20} \\
+            \ganttbar{Metrics to calculate change effort}{21}{22} \\
+        \ganttgroup{Implementation of the PoC}{23}{27} \\
+            \ganttbar{Implementation of the dependency call-graph}{23}{25} \\
+            \ganttbar{Implementation of the calculation of the metrics}{25}{26} \\
+            \ganttbar{Implementation of the visual representation}{27}{27} \\
+        \ganttgroup{Evaluation of the project}{28}{33} \\
+            \ganttbar{Validation of code change effort}{28}{31} \\
+            \ganttbar{Validation of dependency degree}{32}{33} \\
+        \ganttgroup{Thesis writing}{14}{33} \\
+            \ganttbar{\textit{Background} Chapter}{14}{18} \\
+            \ganttbar{\textit{Set of metrics} Chapter}{19}{22} \\
+            \ganttbar{\textit{PoC} Chapter}{23}{28} \\
+            \ganttbar{\textit{Evaluation} and \textit{Conclusions} Chapter}{29}{33} \\
+
+        %relations
+        %\ganttlink{elem0}{elem4}
+
+        \end{ganttchart}}
+    \end{center}
+    \caption{Gantt Chart}
+    \label{figure:gantt-chart}
+\end{figure}

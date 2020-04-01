@@ -1,0 +1,24 @@
+% !TEX root = ..\main.tex
+\section{Project summary} \label{section:project-summary} % Corrector
+Nowadays, many open-source libraries are used by developers to be able to reuse the features that these libraries implement.
+This implies that a significant number of projects depend on open-source as a concept \cite{kula2014visualizing}.
+Maintaining these dependencies and managing the vulnerabilities or problems that these can cause is not a trivial task.
+
+Furthermore, it is a critical task. For example, some vulnerabilities can become security problems that can have a negative impact in terms of integrity, privacy or availability \cite{CVE-FAQ}. This may make it necessary to replace the library being used, to prevent these problems from spreading to the project.
+
+Replacing a library dependency could be a very costly process. For instance, it could involve determining which modules of your project are affected, and which functionalities of the library are being used and need replacement. As well as which is the best way to replace them (i.e. using another library or developing them in-house).
+In addition, similar problems may arise if a library becomes closed-source.
+
+Currently, most of the package management systems include dependency management, but these are only listing which dependencies exist in each project \cite{hejderup2018prazi}.
+However, a more detailed risk evaluation of the open-source dependencies is missing and could be useful for many projects.
+It would be beneficial to analyze the coupling between the project and the libraries that are being used, as well as the effort that replacing a library would involve. It would provide the developers with a more extensive evaluation to be considered when assessing the risk of the project.
+
+This project is carried out in collaboration with the company \textit{Software Improvement Group (SIG)}, and it is motivated by the \textit{FASTEN} project \footnote{\url{https://www.fasten-project.eu/}}. The objective of this project is to improve the quality of open-source development environments to make them more secure and reliable. For this reason, the FASTEN project aims to analyze the software library dependencies that the projects have, in more detail.
+
+\bigskip\noindent
+According to the problem described above, we specify the following research questions:
+
+\begin{itemize}
+    \item \textbf{RQ1:} How can we measure the degree of source code dependency between a software project and the open-source libraries it uses?
+    \item \textbf{RQ2:} How can we measure the effort required to replace the use of an open-source library in a given software project?
+\end{itemize}

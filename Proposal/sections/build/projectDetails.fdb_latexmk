@@ -1,0 +1,10 @@
+# Fdb version 3
+["pdflatex"] 1585725214 "projectDetails.tex" "build/projectDetails.pdf" "projectDetails" 1585725214
+  "C:/Users/usuario/AppData/Local/MiKTeX/2.9/miktex/data/le/pdftex/pdflatex.fmt" 1579956979 3774221 de2b9dd90c73f50f9ce7e7bfd7b4e65d ""
+  "C:/Users/usuario/AppData/Local/Programs/MiKTeX 2.9/fonts/tfm/public/cm/cmbx10.tfm" 1136768653 1328 c834bbb027764024c09d3d2bf908b5f0 ""
+  "C:/Users/usuario/AppData/Local/Programs/MiKTeX 2.9/fonts/tfm/public/cm/cmti10.tfm" 1136768653 1480 aa8e34af0eb6a2941b776984cf1dfdc4 ""
+  "build/projectDetails.aux" 1585725214 9 a94a2480d3289e625eea47cd1b285758 ""
+  "projectDetails.tex" 1585725213 615 5044612d6e8debacb77001282a93a567 ""
+  (generated)
+  "build/projectDetails.log"
+  "build/projectDetails.pdf"
