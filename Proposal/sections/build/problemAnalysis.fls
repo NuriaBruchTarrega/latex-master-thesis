@@ -1,8 +1,0 @@
-PWD C:\Users\usuario\Google Drive\UvA SE\Thesis\Proposal\sections
-INPUT C:\Users\usuario\AppData\Local\MiKTeX\2.9\miktex\data\le\pdftex\pdflatex.fmt
-INPUT problemAnalysis.tex
-OUTPUT C:\Users\usuario\Google Drive\UvA SE\Thesis\Proposal\sections\build\problemAnalysis.log
-INPUT C:\Users\usuario\AppData\Local\Programs\MiKTeX 2.9\fonts\tfm\public\cm\cmbx10.tfm
-INPUT C:\Users\usuario\AppData\Local\Programs\MiKTeX 2.9\fonts\tfm\public\cm\cmti10.tfm
-OUTPUT C:\Users\usuario\Google Drive\UvA SE\Thesis\Proposal\sections\build\problemAnalysis.pdf
-INPUT C:\Users\usuario\AppData\Local\MiKTeX\2.9\pdftex\config\pdftex.map

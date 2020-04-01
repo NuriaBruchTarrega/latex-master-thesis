@@ -1,8 +1,0 @@
-# Fdb version 3
-["pdflatex"] 1585725547 "expectedResults.tex" "build/expectedResults.pdf" "expectedResults" 1585725547
-  "C:/Users/usuario/AppData/Local/MiKTeX/2.9/miktex/data/le/pdftex/pdflatex.fmt" 1579956979 3774221 de2b9dd90c73f50f9ce7e7bfd7b4e65d ""
-  "build/expectedResults.aux" 1585725547 9 a94a2480d3289e625eea47cd1b285758 ""
-  "expectedResults.tex" 1585725547 1284 f1d5b71489847b3e0e301d8eb45bd187 ""
-  (generated)
-  "build/expectedResults.log"
-  "build/expectedResults.pdf"
