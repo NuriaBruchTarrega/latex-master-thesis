@@ -15,10 +15,31 @@ It would be beneficial to analyze the coupling between the project and the libra
 
 This project is carried out in collaboration with the company \textit{Software Improvement Group (SIG)}, and it is motivated by the \textit{FASTEN} project \footnote{\url{https://www.fasten-project.eu/}}. The objective of this project is to improve the quality of open-source development environments to make them more secure and reliable. For this reason, the FASTEN project aims to analyze the software library dependencies that the projects have, in more detail.
 
-\bigskip\noindent
-According to the problem described above, we specify the following research questions:
+\newpage\noindent
+In the problem described, there are software projects that depend on open-source libraries. For the definition of the research questions, both the software projects and the open-source libraries are considered \textit{software products}. According to the problem described, we specify the following research questions:
 
 \begin{itemize}
-    \item \textbf{RQ1:} How can we measure the degree of source code dependency between a software project and the open-source libraries it uses?
-    \item \textbf{RQ2:} How can we measure the effort required to replace the use of an open-source library in a given software project?
+    \item \textbf{RQ1:} How can we measure the degree of source code dependency between two software products?
+
+    \begin{itemize}
+      \item \textbf{RQ1.1:} What constitutes a dependency between two products?
+      \item \textbf{RQ1.2:} Which metrics can be used to measure the dependency?
+      \item \textbf{RQ1.3:} How can we calculate the metrics?
+      \item \textbf{RQ1.4:} In which way should the metrics be evaluated?
+      \item \textbf{RQ1.5:} How can we validate the used metrics?
+    \end{itemize}
+
+    \item \textbf{RQ2:} How can we measure the effort required to replace the use of a software product in another software product?
+
+    \begin{itemize}
+      \item \textbf{RQ2.1:} What do we consider effort, which is the definition of effort?
+      \item \textbf{RQ2.2:} Which is the definition of replace the use of a software product?
+      \item \textbf{RQ2.3:} Which are the applicable methods to measure effort?
+      \item \textbf{RQ2.4:} How can we validate the measurement of the effort?
+    \end{itemize}
+
+    \item \textbf{RQ3:} How can the degree of the dependency and the effort needed to replace a software product be aggregated?
+    \begin{itemize}
+      \item \textbf{RQ3.1:} TODO: this third RQ is still a work in progress
+    \end{itemize}
 \end{itemize}
