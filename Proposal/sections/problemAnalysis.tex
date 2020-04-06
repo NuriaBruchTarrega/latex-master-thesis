@@ -202,7 +202,15 @@ Finally, the metrics that are being considered for this project, taking into acc
     \item Metrics by Briand et al. (only for one of the locus)
 \end{itemize}
 
-Finally, another option would be to consider the framework described in \cite{briand1999unified}.
+\paragraph{Measuring coupling between software products}
+All the metrics described in this section, calculate the coupling at method, class, or set level. However, in the use case of this project, it is necessary to calculate the coupling between two different products. To do so, we are going to look at how are package-level coupling metrics defined.
+
+Martin in \cite{martin1994oo}, defines two metrics to measure coupling for a group of classes (e.g. packages). Afferent and efferent coupling (Ca and Ce, respectively). Ca is defined as \textit{"The number of classes outside this category that depend upon classes within this category"}, while the description of Ce is \textit{"The number of classes inside this category that depend upon classes outside this categories"}. A similar idea is described in \cite{briand1999unified}, there Briand et al. specify that for each coupling there is a client and a server, the dependency has a direction. The problem with the metrics defined by Martin, is that it is not specified what creates a dependency between two classes. That is why, the metrics discussed earlier are interesting for the project in hand, the ambiguity is removed from the description of these metrics, so that they can be understood and calculated.
+
+To use the metrics in a broader domain than the one these are defined to, it is necessay to define an aggregation method. In \cite{briand1999unified}, Briand et al. state \textit{"Of course, measures for smaller domains such as the class level can easily be extended to larger domains like the sets of classes and the system level."}, however, there is no specification of how can this be done.
+Nevertheless, in \cn{Lee et al.} it is explained that the coupling of a set of classes, is calculated according to the sum of the coupling of each of the classes. Following this strategy, to calculate the coupling between two software projects, it would be done by calculating the coupling of each of the methods of one project, with each of the methods of the other project, and sum the results.
+
+Finally, Grupta and Chhabra in \cite{gupta2009package} define the \textit{Package Coupling Metric} (PCM). This metric is defined based on the hierachical structure of the packages, and the dependencies on each one of the levels. This strategy of calculating the dependencies of each one of the levels, can also be considered when aggregating the coupling of the smaller elements (e.g. methods or classes).
 
 \subsection{Measuring the effort needed to replace a library}
 The typical way of estimating effort is by the means of models such as COCOMO II \cite{sharma2011analysis}, which calculate the effort to generate new code. However, for the second research question, it is necessary to find a way to calculate the effort to modify the existing code instead of developing new code. In \cite{kama2014cochcomo} and \cite{asl2013change}, Kama et al. present a tool for software change effort estimation, based on COCOMO II.
