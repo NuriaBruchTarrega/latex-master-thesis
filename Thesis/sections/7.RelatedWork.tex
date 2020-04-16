@@ -1,4 +1,39 @@
 % !TEX root = ..\main.tex
 \chapter{Related Work}\label{ch:RelatedWork}
-We divide the related work into ... categories:  ...
-% Here I should, for sure, talk about the paper "A Comprehensive Study of Bloated Dependencies in the Maven Ecosystem" since they also analyse dependencies and resolve them.
+In this chapter we are going to present the related work to this thesis.
+
+We are going to explain the different topics researched during the literature study part of this project, according to different categories.
+For the research activities done during the project, the tool that has been mainly used is \textit{Google Scholar}, as well as \textit{IEEE Xplore}.
+
+\blankl
+The papers to be used for this document were selected according to their language (English) and accessibility. Of all the performed searches, we first conducted a selection according to titles and a second filter after reading the abstract and introduction of the papers.
+The papers that according to these filters are related and relevant to the topic of this research were completely read and used to create this thesis. For each of the selected papers, the references of the paper were also reviewed.
+
+\section{Dependency management}
+
+As far as we have been able to find, there are no papers that specifically propose a way to measure dependencies between two software products, nor the effort needed to replace one library with another. However, there is a lot of related work in the area of dependency management.
+
+\paragraph{In Dependencies We Trust: How vulnerable are dependencies in software modules? \cite{hejderup2015dependencies}}
+In this thesis, Hejderup studies the impact of vulnerabilities in the JavaScript ecosystem. In particular, this research studies the prevalence of known vulnerable modules, the cascading effect of these, and finally the time needed to update libraries to a version without vulnerabilities.
+One of the main contributions of this research is the tool used to conduct the experiments to answer the research questions, \texttt{rastogi.js}\footnote{\href{https://github.com/jhejderup/rastogi.js}{https://github.com/jhejderup/rastogi.js}}.
+
+However, in this research the structure used to study the dependencies is not a call-level graph. In the conclusions, Hejderup states: \textit{"On the other hand, reports of a vulnerable dependency are not an immediate sign of a security weaknessinamodule. Thereareseveralfactorstothis: themoduleisusedinadevelopment environment, the vulnerable functionality of the dependency is not used, or there is a little risk that the vulnerability can be triggered."}. This points out the need for a more detailed analysis of the usage of the dependencies.
+
+\paragraph{A Comprehensive Study of Bloated Dependencies in the Maven Ecosystem \cite{soto2020comprehensive}}
+Soto-Valero et al. conduct a study of the bloated dependencies. The bloated dependencies are those libraries that are included in the compilation of a software product, but that are not really used in the code of the product, neither directly or indirectly. These libraries can be directly included in the dependency declaration file, or included by transitivity or inheritance.
+
+One of the experiments conducted during the research, reported that a 75.1\% of the analyzed dependencies were bloated dependencies. In this experiment Soto-Valero et al. used their tool \texttt{DepClean}\footnote{\href{https://github.com/castor-software/depclean}{https://github.com/castor-software/depclean}} to analyze the dependencies of 9,639 Java artifacts from Maven Central.
+The tool \texttt{DepClean} analyses the dependencies of an artifact by creating a call graph of the API members of the libraries involved to define if a dependency is bloated or not.
+
+
+%\blankl
+%There are other examples of papers researching about the vulnerabilities of the packages, and how these affect other products (\cite{decan2018impact, pashchenko2018vulnerable, plate2015impact}).
+
+%Another aspect of the dependencies between projects that have also been studied are the dynamics of usage between packages and versions of these.
+%For example, Wittern et al. in \cite{wittern2016look} analyze the dynamics of package use in \textit{npm} and the adoption of new versions of these by the developers.
+%Plus, Mileva et al. analyzed the popularity of library versions, as well as the adoption process of them \cite{mileva2009mining}.
+
+%Ultimately, there is research related to modeling software ecosystems, such as \cite{decan2017empirical, kikas2017structure}. However, most of these models are created at a project or project version level.
+
+%\blankl
+%There are no studies, that we have been capable to find, analyzing the degree of dependency of a project on the libraries that it uses. This fact was perceived by Hejderup et al in \cite{hejderup2018software}.
