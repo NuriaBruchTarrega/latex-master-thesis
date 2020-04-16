@@ -20,31 +20,65 @@ This project is carried out in collaboration with the company \textit{Software I
 \subsection{Research questions} % Here, I still have to think about the terminology used, because I am not sure about this "software product" thing.
 To tackle the issues described in the previous section, we specify the following research questions:
 
+\blankl
+\textbf{RQ1:} \textit{How can we measure the degree of source code dependency between two software products?}
+
+In order to define an approach to answer this question and to divide the question in different parts or steps, we have defined the following subquestions:
+
 \begin{itemize}
-    \item \textbf{RQ1:} How can we measure the degree of source code dependency between two software products?
+  \item \textbf{RQ1.1:} \textit{What constitutes a dependency between two products?}
 
-    \begin{itemize}
-      \item \textbf{RQ1.1:} What constitutes a dependency between two products?
-      \item \textbf{RQ1.2:} Which metrics can be used to measure the dependency?
-      \item \textbf{RQ1.3:} How can we calculate the metrics?
-      \item \textbf{RQ1.4:} In which way should the metrics be evaluated?
-      \item \textbf{RQ1.5:} How can we validate the used metrics?
-    \end{itemize}
+  One of the first steps to find a way to measure the degree of dependency, it is to determine what creates a dependency. The type of connection between the products and how to count them, among other characteristics.
+  \blankl
 
-    \item \textbf{RQ2:} How can we measure the effort required to replace the use of a software product in another software product?
+  \item \textbf{RQ1.2:} \textit{Which metrics can be used to measure the dependency?}
 
-    \begin{itemize}
-      \item \textbf{RQ2.1:} What do we consider effort, which is the definition of effort?
-      \item \textbf{RQ2.2:} Which is the definition of replace the use of a software product?
-      \item \textbf{RQ2.3:} Which are the applicable methods to measure effort?
-      \item \textbf{RQ2.4:} How can we validate the measurement of the effort?
-    \end{itemize}
+  In this part of the research, we investigated which existing coupling metrics could be used to measure dependency between software products. We evaluated the metrics according to the characteristics defined in the previous subquestion, to select the ones applicable for our case. Also, in this part, it is defined how to adapt them to the new usage.
+  \blankl
 
-    \item \textbf{RQ3:} How can the degree of the dependency and the effort needed to replace a software product be aggregated?
-    \begin{itemize}
-      \item \textbf{RQ3.1:} TODO: this RQ is still a work in progress
-    \end{itemize}
+  \item \textbf{RQ1.3:} \textit{How can we calculate the metrics?}
+
+  With a defined set of metrics to use, it is necessary to calculate them, to have some results to evaluate the metrics. In order to do so, we are going to use a call-level dependency graph, as will be explained later on.
+  \blankl
+
+  \item \textbf{RQ1.4:} \textit{Which is the meaning of the metrics in this scenario?}
+
+  After calculating the metrics in a project, there is a number as a result. But what is the meaning of the number? What is the meaning of the metric? The idea is to define the meaning of the metric, so the number gives actionable information, which can be used to improve the state of the product.
+  \blankl
+
+  \item \textbf{RQ1.5:} \textit{How can we validate the proposed metrics?}
+
+  Finally, with the results, and the definition of the metrics, we have validated them. There are two approaches to do so, the theoretical and the empirical. The metrics will be validated using both approaches, as extensibly as time permits.
 \end{itemize}
+
+\blankl
+\textbf{RQ2:} \textit{How can we measure the effort required to replace the use of a library in a software product?}
+
+This second question is in the case that a vulnerability is discovered in one of the dependencies of a software product, or a library becomes deprecated. In this case, it may be necessary to replace the dependency of the product. To do so, it could be useful to have an estimation of the effort needed to replace the library. To answer this question, we have defined the following subquestions:
+
+\begin{itemize}
+  \item \textbf{RQ2.1:} \textit{What do we consider effort, which is the definition?}
+
+  There are many different definitions of effort in the literature. One of the most common ones is the man-hours per lines of code. In this case we are going to define which one is the effort that we want to measure in this research.
+  \blankl
+
+  \item \textbf{RQ2.2:} \textit{Which is the definition of replace the use of a library?}
+
+  There are many different cases which could be defined as replacing a library. All the cases between adding a new dependency and removing an existing one. Therefore, we are going to specify the taxonomy used to describe the types of library replacement, and from those types, determine which are the studied ones, and which are not.
+  \blankl
+
+  \item \textbf{RQ2.3:} \textit{Which are the applicable methods to measure effort?}
+  From all the methods and strategies to measure effort existing in the literature, we are going to chose which are the ones that measure the effort that we defined in RQ2.1, and are applicable to the specific situation defined in RQ2.2.
+  \blankl
+
+  \item \textbf{RQ2.4:} \textit{How can we validate the measurement of the effort?}
+  Finally, as in RQ1.5, it is necessary to validate the method used to measure effort, both empirically and theorically. Therefore, we are going to validate that the formulas fulfill some defined properties. In addition, we are going to conduct some case studies from project in which a library has been replace, to contrast this with the estimation made with our model.
+\end{itemize}
+
+\blankl
+\textbf{RQ3:} \textit{How can the degree of the dependency and the effort needed to replace a software product be aggregated?}
+
+This last Research Question is meant to aggregate the research done in RQ1 and RQ2. However, this research question will only be answered in case time permits.
 
 \subsection{Research method}
 The main research method that is going to be employed during this project is \textit{Technical Action Research} (TAR) \cite{wieringa2012technical}.
@@ -63,14 +97,16 @@ After the formal definition and theoretical validation of the metrics for both, 
 The methodology for validating the metrics chosen during this research will be divided into two phases: a first phase of theoretical validation and a second one of empirical validation \cite{srinivasan2014software}.
 
 \section{Contributions}
-Our research makes the following contributions:
+Considering the current state of the art in the domain of this thesis project, the main contributions made by this research are the following:
+
 \begin{enumerate}
-	\item 1
-	\item 2
-	\item 3
+	\item Applying coupling metrics to measure the coupling between two different software products.
+	\item Proposing a model to calculate the effort needed to replace a library usage from a software product.
+	\item Evaluation and validation of the proposed metrics and model, by the means of a proof-of-concept tool to calculate the metrics.
 \end{enumerate}
 
-\section{Scope} % TODO: do i need this? Review
+\section{Scope} % I think this is the problem analysis, but I'm not so sure
+
 
 \section{Outline}
 In Chapter \ref{ch:Background} we describe the background of this thesis based on the existing literature of the domain.
