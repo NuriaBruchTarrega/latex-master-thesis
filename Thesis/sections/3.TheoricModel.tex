@@ -1,9 +1,41 @@
 % !TEX root = ..\main.tex
-\chapter{Theoric Model}\label{ch:TheoricModel}
+\chapter{Theorical Model}\label{ch:TheoricModel}
 
 \section{Dependency coupling}
 % When defining what creates dependency, remember to talk about inheritance, polymorphy, interfaces and annotations
 
 \section{Dependency replacement effort}
+\subsection{Defining the taxonomy of package replacement (\textbf{RQ2.2})}
+
+Before starting the measurement of package replacement, it is important to specify which kind of replacement is being studied. Therefore, we have defined a classification of the possible scenarios.
+
+First, Kula et al. \cite{kula2014visualizing} in their study about the visualization of the evolution of library dependency, identify four distinct behabiours. Namely, adopter, idler, updater and dropper. In addition, Kikas et al. \cite{kikas2017structure} when studying the evolution of software ecosystems, define two different types of update, explicit and implicit. Considering this two classifications, we have created the following classification:
+
+\begin{table}[ht!]
+    \begin{center}
+    \begin{tabularx}{\textwidth}{|X|l|l|}
+      \hline
+      Description & Kula et al. & Kikas et al. \\
+      \hline\hline
+      Add new package dependency & adopter & - \\
+      \hline
+      Maintain package dependency in new application version & idler & - \\
+      \hline
+      Manual update of dependent package version & updater & explicit package update \\
+      \hline
+      Automatic update of dependent package version & updater & implicit package update \\
+      \hline
+      Change a dependency from one package to another & dropper \& adopter & - \\
+      \hline
+      Remove dependency with a package & dropper & - \\
+      \hline
+    \end{tabularx}
+    \end{center}
+    \caption{Taxonomy of depdendency evolution}
+    \label{table:taxonomy-dependency}
+\end{table}
+
+\smallskip\noindent
+In this classification, we have added the scenario in which a dependency is dropped and substituted by another one. When looking at the terminology defined by Kula et al. it would mean dropping a package, and adopting a new one at the same time.
 
 \section{Aggregation of coupling and effort}
