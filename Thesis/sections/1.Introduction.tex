@@ -4,11 +4,11 @@
 \section{Problem statement}
 
 \subsection{Context}
-At present, there are many open-source libraries available for all developers, to reuse the features that these libraries implement. This practice is becoming more and more popular since it allows code reuse, and helps developers avoid implementing the same functionalities multiple times.
+At present, there are many open-source libraries available for all developers to reuse the features that these libraries implement. This practice is becoming more and more popular since it allows to reuse previously developed code, and helps developers avoid implementing the same functionalities multiple times.
 
 When a developer uses an open-source library in a project, it creates a dependency between the application and the library. This implies that a significant number of projects depend on other open-source projects, and it adds the task of managing these dependencies to the maintenance tasks of the project. How to maintain the dependencies is not a trivial task, and it is one of the problems that the field of software engineering is trying to solve \cite{kula2014visualizing}.
 
-The management and maintenance of the dependencies of a project is a critical task. Open-source libraries, just like any other software project, can have security vulnerabilities that may affect the projects that depend on these libraries. For example, some vulnerabilities can become security problems that can have a negative impact in terms of integrity, privacy or availability.
+The management and maintenance of the dependencies of a project is an important task. Open-source libraries, just like any other software project, can have security vulnerabilities that may affect the projects that depend on these libraries. For example, some vulnerabilities can become security problems that can have a negative impact in terms of integrity, privacy or availability.
 
 \blankl
 Currently, developers have at their disposal package managers, to ease the task of managing the dependencies of their projects. However, the dependency management available in these package managers only evaluate if a dependency exists or not and a more detailed risk evaluation is missing \cite{hejderup2018prazi}. There is no way to evaluate how much a project depends on a library.
@@ -16,7 +16,7 @@ Currently, developers have at their disposal package managers, to ease the task 
 Furthermore, it could happen that the developers of a project decide to replace one of the dependencies of the project with another one. This could happen in case a library has vulnerabilities or is deprecated, to prevent the vulnerabilities from affecting the project. However, replacing a dependency could be a costly process. It involves identifying which parts of the project are affected by the dependency, and which parts of the library are being used and need replacement.
 
 \blankl
-Therefore, this thesis has the aim to perform a more detailed evaluation of the dependencies. We are going to propose metrics to measure the dependencies between the projects and the open-source libraries they use. In addition, we want to propose a way to measure the effort that would be required to replace a dependency with a new one. We are going to propose a method to estimate effort considering which parts of the code are affected by the dependency.
+Therefore, this thesis has the aim to perform a more detailed evaluation of the dependencies. A set of metrics is proposed to measure the dependencies between projects and the open-source libraries these use. In addition, we want to propose a way to measure the effort that would be required to replace a dependency with a new one. We are going to define a method to estimate effort considering which parts of the code are affected by the dependency.
 
 \subsection{Host organization}
 This project is carried out in collaboration with the company \textit{Software Improvement Group (SIG)}, and it is motivated by the \textit{FASTEN} project \footnote{\url{https://www.fasten-project.eu/}}. The objective of this project is to improve the quality of open-source development environments to make them more secure and reliable. For this reason, the FASTEN project aims to analyze the software library dependencies that the projects have, in more detail. SIG is collaborating in the FASTEN project since the goals of the project, are aligned with those of SIG. The good maintenance of the dependencies of a project is also part of the heath and security of software applications.
