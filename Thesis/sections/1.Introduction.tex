@@ -33,22 +33,18 @@ In order to define an approach to answer this question and to divide the questio
   \item \textbf{RQ1.1:} \textit{What constitutes a dependency between two products?}
 
   One of the first steps to find a way to measure the degree of dependency, it is to determine what creates a dependency. The type of connection between the products and how to count them, among other characteristics.
-  \blankl
 
   \item \textbf{RQ1.2:} \textit{Which metrics can be used to measure the dependency?}
 
   With this question, we investigate which existing coupling metrics could be used to measure dependency between software products. This implies evaluate the metrics according to the characteristics defined in the previous subquestion, to select the ones applicable for our case. In addition, it is also necessary to define how to adapt them to the new usage.
-  \blankl
 
   \item \textbf{RQ1.3:} \textit{How can we calculate the metrics?}
 
   With a defined set of metrics to use, it is necessary to calculate them, to have results to evaluate the metrics. This is done with a call-level dependency graph, as will be explained later on.
-  \blankl
 
   \item \textbf{RQ1.4:} \textit{Which is the meaning of the metrics in this scenario?}
 
   After calculating the metrics in a project, there is a number as a result. But what is the meaning of the number? What is the meaning of the metric? The goal is to define the meaning of the metric, so a number gives actionable information.
-  \blankl
 
   \item \textbf{RQ1.5:} \textit{How can we validate the proposed metrics?}
 
@@ -64,16 +60,13 @@ This second question is in the case that it is necessary to replace the dependen
   \item \textbf{RQ2.1:} \textit{What do we consider effort, which is the definition?}
 
   There are many different definitions of effort in the literature. One of the most common ones is the man-hours. In this case we are going to define which one is the effort measured in this research.
-  \blankl
 
   \item \textbf{RQ2.2:} \textit{Which is the definition of replace a dependency?}
 
   There are many different cases which could be defined as replacing a dependency. Therefore, we are going to specify the taxonomy used to describe the types of library replacement, and from those types, determine which are the studied ones, and which are not.
-  \blankl
 
   \item \textbf{RQ2.3:} \textit{Which are the applicable methods to measure effort?}
   From all the methods and strategies to measure effort existing in the literature, we are going to chose which are the ones that measure the effort that we defined in RQ2.1, and are applicable to the specific situation defined in RQ2.2.
-  \blankl
 
   \item \textbf{RQ2.4:} \textit{How can we validate the measurement of the effort?}
   Finally, as in RQ1.5, it is necessary to validate the method used to measure effort, both empirically and theorically. Case studies are used for the empirical validation, comparing the real effort with the estimated one.
@@ -105,12 +98,61 @@ Considering the current state of the art in the domain of this thesis project, t
 
 \begin{enumerate}
 	\item Applying coupling metrics to measure the coupling between two different software products, redefining the meaning and usage. Therefore, creating a methodology to measure the dependencies in a project.
-	\item Proposing a model to calculate the effort needed to replace a library usage from a software product.
+  \blankls
+
+	\item Proposing a model to calculate the effort needed to replace a library usage from a software product.\blankls
+
 	\item Evaluation and validation of the proposed metrics and model, by the means of a proof-of-concept tool to calculate the metrics.
 \end{enumerate}
 
 \section{Scope} % I think this is the problem analysis, but I'm not so sure
 
+\subsection{Quantifying the dependencies}
+To the best of our knowledge, there are no papers about measuring the degree of dependency between two separate projects. However, it is true that the degree of dependency between two classes or modules of the same project has already been measured many times, using coupling metrics \cite{briand1999unified}.
+
+Therefore, we propose re-using the already existing coupling metrics, meant to measure the coupling between units of the \textit{same} project and adapt them to measure coupling \textit{between} projects.
+
+\blankl
+According to Poshyvanyk and Marcus in \cite{poshyvanyk2006conceptual}, there are five main groups of coupling metrics:
+
+\begin{itemize}
+  \item \textbf{Structural coupling metrics:} Measured directly from static source code analysis. Largely studied by the literature about coupling.
+
+  \item \textbf{Dynamic coupling measures:} Measured using dynamic code analysis. \textit{"Introduced as the refinement to existing coupling measures due to gaps in addressing polymorphism, dynamic binding, and the presence of unused code by static structural coupling measures"} \cite{poshyvanyk2006conceptual}.
+
+  \item \textbf{Evolutionary and Logical coupling:} According to Zimmermann and Diehl \cite{zimmermann2005mining}, evolutionary coupling can: \textit{"tell us which parts of the system are coupled by common changes or cochanges."}
+
+  \item \textbf{Coupling measures based on information entropy approach:} Coupling metrics based on the information-theory approach, such as the metrics proposed by Allen and Khoshgoftaar in \cite{allen1999measuring}.
+
+  \item \textbf{Coupling metrics for specific types of software applications:} Specialized coupling metrics for certain types of projects, such as knowledge-based systems or aspect-oriented approach.
+\end{itemize}
+
+\blankl
+From the above list, the last category is much more domain-specific. Moreover, the evolutionary coupling is not possible to be applied in our context since it is very likely that the separate projects are not going to evolve at the same time, given that they are not developed by the same team. Therefore, the research of this project, owing to the time limitation, is going to be centered on the structural metrics.
+
+These metrics are going to be proposed as a first step to measure the degree of library dependency. Nevertheless, the metrics can be extended and calculated more accurately by adding dynamic coupling and information entropy approach metrics if time permits or in future work.
+
+
+\subsection{Estimating the effort to replace a dependency}
+% Escriure alguna cosa aqui, quan hagi discutit quin dels efforts estem mesurant, com i perque.
+
+\begin{comment}
+  In order to estimate the effort needed to replace a dependency in a project, there are different variables that need to be considered first:
+
+  - How much code do I need to change - estimate based on the usage of the Dependency
+  - Refactoring adjustment
+  - How many methods do I need to change.
+  - The impact of the change - inside the project.
+\end{comment}
+
+\subsection{Evaluation and validation}
+This thesis includes the evaluation and validation of the proposed methodology to measure dependencies and estimate the effort to replace dependencies. To do so, it is necessary to use in practice the proposed measurements. Therefore, this research includes a Proof of Concept (PoC) to use the proposed model with real projects. Then, the metrics and estimations are validated using the results obtained with the PoC.
+To calculate the metrics with the PoC, it is necessary to create a dependency graph of the project that is going to be evaluated. This graph has to be a call-level dependency graph since we require a fine-grained analysis of the source code dependencies. Moreover, it has to represent the software ecosystem of the project considering the various versions of the libraries it depends on.
+
+Ultimately, the metrics used in this project will have to be validated. There is not a unique way to validate metrics which is globally accepted and used. Therefore, various approaches will be adopted to validate the metrics as holistically as possible. In the paper \cite{srinivasan2014software}, Srinivasan et al. explain that there are two fundamental approaches for metric validation: \textit{theoretically} and \textit{empirically}. Therefore, to provide a check of validity that is as broad as possible, a mixture of these two approaches will be used during this project.
+
+For the theoretical validity of the coupling metrics, these are validated according to the \textit{Mathematical Properties of Measures for Coupling} \cite{srinivasan2014software}. In addition, Meneely et al. \cite{meneely2013validating} describe a set of 47 validation criteria for metrics. The time limit of the project does not allow for a complete validation of all the metrics. Consequently, a sub-set of these criteria are used to validate the metrics, both the coupling and effort metrics.
+The empirical validation of the metrics is carried out by the means of case studies. For instance, the predicted effort corresponds to the real required effort, within a certain error window.
 
 \section{Outline}
 In Chapter \ref{ch:Background} we describe the background of this thesis based on the existing literature of the domain.
