@@ -11,13 +11,20 @@ The papers that according to these filters are related and relevant to the topic
 
 \section{Dependency management}
 
-As far as we have been able to find, there are no papers that specifically propose a way to measure dependencies between two software products, nor the effort needed to replace one library with another. However, there is a lot of related work in the area of dependency management.
+As far as we have been able to find, there are no papers that propose a way to measure dependencies between two software products, nor the effort needed to replace one library by another. However, there is a lot of related work in the area of dependency management.
 
 \paragraph{In Dependencies We Trust: How vulnerable are dependencies in software modules? \cite{hejderup2015dependencies}}
 In this thesis, Hejderup studies the impact of vulnerabilities in the JavaScript ecosystem. In particular, this research studies the prevalence of known vulnerable modules, the cascading effect of these, and finally the time needed to update libraries to a version without vulnerabilities.
 One of the main contributions of this research is the tool used to conduct the experiments to answer the research questions, \texttt{rastogi.js}\footnote{\href{https://github.com/jhejderup/rastogi.js}{https://github.com/jhejderup/rastogi.js}}.
 
-However, in this research the structure used to study the dependencies is not a call-level graph. In the conclusions, Hejderup states: \textit{"On the other hand, reports of a vulnerable dependency are not an immediate sign of a security weaknessinamodule. Thereareseveralfactorstothis: themoduleisusedinadevelopment environment, the vulnerable functionality of the dependency is not used, or there is a little risk that the vulnerability can be triggered."}. This points out the need for a more detailed analysis of the usage of the dependencies.
+However, in this research the structure used to study the dependencies is not a call-level graph. In the conclusions, Hejderup states: \textit{"On the other hand, reports of a vulnerable dependency are not an immediate sign of a security weaknessinamodule. There are several factors to this: the module isused in a development environment, the vulnerable functionality of the dependency is not used, or there is a little risk that the vulnerability can be triggered."}. This points out the need for a more detailed analysis of the usage of the dependencies.
+
+\paragraph{Vulnerable Open Source Dependencies: Counting Those That Matter \cite{pashchenko2018vulnerable}}
+In this research, Pashchenko et al. propose a new method to count the dependencies of libraries. This method is used to analyse the dependencies of 200 libraries of the Maven ecosystem. With their method, they differentiate between libraries from the same project and third-party libraries. Furthermore, the dependencies that are not deployed in production (only used for testing or development purposes) are filtered out, since the vulnerabilities of this dependencies do not affect the final product. Furthermore, they consider the special case of halted dependencies, which are the ones that are not being actively developed. Vulnerabilities in halted dependencies suppose an important threat to the software project that depend on these, since the vulnerability is not going to be fixed.
+
+One of the main contributions of this research is a tool implementing the method defined in the paper to detect the vulnerabilities that, according to their definition, matter.
+
+However, Pashchenko et al. do not perform a call-level analysis of the dependencies, since their dependency resolution is based only on the \textit{POM} file of the libraries. Hence, the transitive dependencies that are not really used in the analysed library are still counted.
 
 \paragraph{A Comprehensive Study of Bloated Dependencies in the Maven Ecosystem \cite{soto2020comprehensive}}
 Soto-Valero et al. conduct a study of the bloated dependencies. The bloated dependencies are those libraries that are included in the compilation of a software product, but that are not really used in the code of the product, neither directly or indirectly. These libraries can be directly included in the dependency declaration file, or included by transitivity or inheritance.
@@ -27,13 +34,10 @@ The tool \texttt{DepClean} analyses the dependencies of an artifact by creating 
 
 
 %\blankl
-%There are other examples of papers researching about the vulnerabilities of the packages, and how these affect other products (\cite{decan2018impact, pashchenko2018vulnerable, plate2015impact}).
+%There are other examples of papers researching about the vulnerabilities of the packages, and how these affect other products (\cite{decan2018impact, plate2015impact}).
 
 %Another aspect of the dependencies between projects that have also been studied are the dynamics of usage between packages and versions of these.
 %For example, Wittern et al. in \cite{wittern2016look} analyze the dynamics of package use in \textit{npm} and the adoption of new versions of these by the developers.
 %Plus, Mileva et al. analyzed the popularity of library versions, as well as the adoption process of them \cite{mileva2009mining}.
 
 %Ultimately, there is research related to modeling software ecosystems, such as \cite{decan2017empirical, kikas2017structure}. However, most of these models are created at a project or project version level.
-
-%\blankl
-%There are no studies, that we have been capable to find, analyzing the degree of dependency of a project on the libraries that it uses. This fact was perceived by Hejderup et al in \cite{hejderup2018software}.
