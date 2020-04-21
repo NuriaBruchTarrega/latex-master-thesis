@@ -19,6 +19,10 @@ One of the main contributions of this research is the tool used to conduct the e
 
 However, in this research the structure used to study the dependencies is not a call-level graph. In the conclusions, Hejderup states: \textit{"On the other hand, reports of a vulnerable dependency are not an immediate sign of a security weaknessinamodule. There are several factors to this: the module isused in a development environment, the vulnerable functionality of the dependency is not used, or there is a little risk that the vulnerability can be triggered."}. This points out the need for a more detailed analysis of the usage of the dependencies.
 
+\paragraph{Impact Assessment for Vulnerabilities in Open-Source Software Libraries \cite{plate2015impact}}
+Plate et al. create a methodology to analyse the impact of a vulnerability in an application that uses the vulnerable library. Their methodology is meant to help assess the need to update the application with a version which does not use the vulnerable version of the library.
+The methodology consists on comparing the parts of the library that are used by the application, with the parts updated in the library patch that fixes the vulnerability. The parts of the library used by the application are defined based on dynamic analysis of the application and the bundled libraries.
+
 \paragraph{Vulnerable Open Source Dependencies: Counting Those That Matter \cite{pashchenko2018vulnerable}}
 In this research, Pashchenko et al. propose a new method to count the dependencies of libraries. This method is used to analyse the dependencies of 200 libraries of the Maven ecosystem. With their method, they differentiate between libraries from the same project and third-party libraries. Furthermore, the dependencies that are not deployed in production (only used for testing or development purposes) are filtered out, since the vulnerabilities of this dependencies do not affect the final product. Furthermore, they consider the special case of halted dependencies, which are the ones that are not being actively developed. Vulnerabilities in halted dependencies suppose an important threat to the software project that depend on these, since the vulnerability is not going to be fixed.
 
@@ -34,7 +38,7 @@ The tool \texttt{DepClean} analyses the dependencies of an artifact by creating 
 
 
 %\blankl
-%There are other examples of papers researching about the vulnerabilities of the packages, and how these affect other products (\cite{decan2018impact, plate2015impact}).
+%There are other examples of papers researching about the vulnerabilities of the packages, and how these affect other products (\cite{decan2018impact}).
 
 %Another aspect of the dependencies between projects that have also been studied are the dynamics of usage between packages and versions of these.
 %For example, Wittern et al. in \cite{wittern2016look} analyze the dynamics of package use in \textit{npm} and the adoption of new versions of these by the developers.
