@@ -105,7 +105,7 @@ Considering the current state of the art in the domain of this thesis project, t
 	\item Evaluation and validation of the proposed metrics and model, by the means of a proof-of-concept tool to calculate the metrics.
 \end{enumerate}
 
-\section{Scope} % I think this is the problem analysis, but I'm not so sure
+\section{Scope}\label{section:scope} % I think this is the problem analysis, but I'm not so sure
 
 \subsection{Quantifying the dependencies}
 To the best of our knowledge, there are no papers about measuring the degree of dependency between two separate projects. However, it is true that the degree of dependency between two classes or modules of the same project has already been measured many times, using coupling metrics \cite{briand1999unified}.
@@ -124,11 +124,13 @@ According to Poshyvanyk and Marcus in \cite{poshyvanyk2006conceptual}, there are
 
   \item \textbf{Coupling measures based on information entropy approach:} Coupling metrics based on the information-theory approach, such as the metrics proposed by Allen and Khoshgoftaar in \cite{allen1999measuring}.
 
+  \item \textbf{Conceptual coupling metrics:} Based on the semantic similarity between the elements. This is the focus of the work from Poshyvanyk and Marcus \cite{poshyvanyk2006conceptual}.
+
   \item \textbf{Coupling metrics for specific types of software applications:} Specialized coupling metrics for certain types of projects, such as knowledge-based systems or aspect-oriented approach.
 \end{itemize}
 
 \blankl
-From the above list, the last category is much more domain-specific. Moreover, the evolutionary coupling is not possible to be applied in our context since it is very likely that the separate projects are not going to evolve at the same time, given that they are not developed by the same team. Therefore, the research of this project, owing to the time limitation, is going to be centered on the structural metrics.
+Since this research is aimed to be independent of the domain, the last cathegory is not considered in this thesis. Moreover, the evolutionary coupling is not possible to be applied in our context since it is very likely that the separate projects are not going to evolve at the same time, given that they are not developed by the same team. Finally, the research of this project, owing to the time limitation, is going to be centered on the structural metrics.
 
 These metrics are going to be proposed as a first step to measure the degree of library dependency. Nevertheless, the metrics can be extended and calculated more accurately by adding dynamic coupling and information entropy approach metrics if time permits or in future work.
 
@@ -159,4 +161,4 @@ In Chapter \ref{ch:Background} we describe the background of this thesis based o
 Chapter \ref{ch:TheoreticModel} describes the theoretic model of the metrics used to calculate the degree of dependency between software products and the effort needed to replace a library in a project.
 The theoretic model is used in Chapter \ref{ch:PoC}, which describes the creation of the Proof-of-Concept of this model.
 In Chapter \ref{ch:Experiments}, the set up and execution of the experiments is explained, and the results of the experiments are shown. These results are discussed in Chapter \ref{ch:Discussion}. Chapter \ref{ch:RelatedWork}, contains the work related to the domain of this thesis.
-Finally, we present our concluding remarks in Chapter~\ref{ch:Conclusion} as well as the future work.
+Finally, we present our concluding remarks in Chapter \ref{ch:Conclusion} as well as the future work.
