@@ -25,9 +25,9 @@ Direct dependency (kikas2017, pashchenko2018)
 
 Transitive dependency (kikas2017, pashchenko2018)
 
-Halted dependency (pashchenko2018)
+Halted dependency (pashchenko2018): Dependency in which the server library is no longer updated. This means that if a vulnerability is detected in this library, it will not be fixed.
 
-Bloated dependency (soto2020comprehensive)
+Bloated dependency (soto2020comprehensive): Direct or transitive dependency that is included when compiling the application, but it is not really used by the code of the application.
 
 Deployed / non-deployed dependency (pashchenko2018)
 
@@ -53,17 +53,67 @@ There are many structural coupling metrics, each one measuring a different type 
 According to the unified framework defined by Briand et al., the coupling metrics have certain characteristics defining which type of coupling are they measuring. In particular, six criteria are defined:
 
 \begin{itemize}
-  \item \textbf{Type of connection:} This criteria defines what creates the coupling, which type of dependency is measured, how the two elements are connected.
+  \item \textbf{Type of connection:} This criteria defines which mechanism creates coupling, which type of dependency is measured, how the two elements are connected. The different types of connection, as described by Briand et al. \cite{briand1999unified} can be found in Table \ref{table:types-connections}.
 
   \item \textbf{Locus of impact:} If the coupling is import or export. In other words, if the class for which coupling is being measured is the client or the server of the relationship.
 
-  \item \textbf{Granularity of the measure:} The domain at which coupling is measured (e.g. class-level). The granularity also refers to how the metric counts the connection (e.g. binary evaluation, or counting each one of the connections).
+  \item \textbf{Granularity of the measure:} The detail at which the metric calculates coupling. It is defined by 1) The domain at which coupling is measured (e.g. class-level) and 2) how the metric counts the connections (e.g. binary evaluation or counting each one of the connections). The six options to count connections as defined by Briand et al. \cite{briand199unified}, can be found in Table \ref{table:counting-connections}.
 
-  \item \textbf{Stability of the server:} According to Briand et al. one of the applications of this criteria could be to distinguish between dependency with standard libraries and others. However, it is not used by the existing metrics.
+  \item \textbf{Stability of the server:} In the framework by Briand et al. the servers are classified as unstable if these are  "subject to development or modification in the project at hand", and stable if these "are not subject to change in the project at hand". The last one includes classes imported from libraries. According to Briand et al., the coupling with an unstable class is represents more risk than coupling with a stable class. However, the studied metrics in the framework do not make use of this criteria, and treat all classes with the same importance.
 
   \item \textbf{Direct and indirect coupling:} Whether the connection between the two elements is direct, or transitive (there is at least one other element connecting the two). The metrics that do not account for indirect coupling, can be adapted by calculating the transitive closure of the metric.
 
   \item \textbf{Inheritance:} In this criteria, Briand et al. group the position of the metric respecting special cases such as inheritance and polymorphism.
 \end{itemize}
+
+\begin{table}[ht!]
+    \begin{center}
+    \begin{tabularx}{\textwidth}{|l|l|l|X|}
+    \hline
+    \# & Client Item & Server Item & Description \\
+    \hline\hline
+    1   & attribute \textit{a} of a class \textit{c} & class \textit{d}, d != c & class \textit{d} is the type of \textit{a} \\
+    \hline
+    2   & method \textit{m} of a class \textit{c} & class \textit{d}, d != c  & class \textit{d} is the type of a parameter of \textit{m}, or the return type of \textit{m} \\
+    \hline
+    3   & method \textit{m} of a class \textit{c} & class \textit{d}, d != c  & class \textit{d} is the type of a local variable of \textit{m} \\
+    \hline
+    4   & method \textit{m} of a class \textit{c} & class \textit{d}, d != c  & class \textit{d} is the type of a parameter of a method invoked by \textit{m} \\
+    \hline
+    5   & method \textit{m} of a class \textit{c} & \begin{tabular}[c]{@{}l@{}}attribute \textit{a} of a\\ class \textit{d}, d != c \end{tabular}  & \textit{m} references \textit{a} \\
+    \hline
+    6   & method \textit{m} of a class \textit{c} & \begin{tabular}[c]{@{}l@{}}method \textit{m'} of a\\ class \textit{d}, d != c \end{tabular} & \textit{m} invokes \textit{m'} \\
+    \hline
+    7   & class \textit{c} & class \textit{d}, d != c  & high-level relationships between classes, such as \textit{uses} or \textit{consists-of} \\
+    \hline
+    \end{tabularx}
+    \end{center}
+    \caption{Types of connections, obtained from \cite{briand1999unified}}
+    \label{table:types-connections}
+\end{table}
+
+\begin{table}[htb!]
+    \begin{center}
+    \begin{tabularx}{\textwidth}{|l|l|X|}
+    \hline
+    \begin{tabular}[c]{@{}l@{}}Counting\\ connections\end{tabular} & Level & Description \\
+    \hline\hline
+    A   & \begin{tabular}[c]{@{}l@{}}Method or\\ attribute\end{tabular} & count individual connections  \\
+     \hline
+    B   & \begin{tabular}[c]{@{}l@{}}Method or\\ attribute\end{tabular} & count the number of distinct items at the other end of the connections  \\
+     \hline
+    C   & Class & add up the number of connections counted as in A) for each method or attribute of the class   \\
+     \hline
+    D   & Class & add up the number of connections counted as in B) for each method or attribute of the class   \\
+     \hline
+    E   & Class & count the number of distinct items at the end of connections starting from or ending in methods or attributes of the class    \\
+     \hline
+    F   & Class & for a class c, count the number of other classes to which there is at least  one connection  \\
+    \hline
+    \end{tabularx}
+    \end{center}
+    \caption{Counting connections, obtained from \cite{briand1999unified}}
+    \label{table:counting-connections}
+\end{table}
 
 \section{Effort measurement}
