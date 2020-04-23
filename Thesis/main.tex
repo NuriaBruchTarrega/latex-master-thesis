@@ -37,6 +37,7 @@
 \usepackage{amssymb}
 \usepackage{verbatim}
 \usepackage{cmap}
+\usepackage{xparse}
 
 %\usepackage[ansinew]{inputenc}
 %\usepackage[T1]{fontenc}
@@ -96,6 +97,7 @@
 %\newcommandx{\ana}[2][1=]{\todo[linecolor=rblu,backgroundcolor=ryel,bordercolor=rred,#1]{#2}}
 %\newcommandx{\paco}[2][1=]{\todo[author=Paco,linecolor=blue,backgroundcolor=white,bordercolor=red,#1]{#2}}
 
+\NewDocumentCommand{\rot}{O{90} O{1em} m}{\makebox[#2][l]{\rotatebox{#1}{#3}}}
 
 \newcommand{\cn}[1]{\textsuperscript{\color{red} ~[citation needed](#1)~}}
 

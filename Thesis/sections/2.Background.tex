@@ -116,4 +116,100 @@ According to the unified framework defined by Briand et al., the coupling metric
     \label{table:counting-connections}
 \end{table}
 
+\begin{table}[p]
+    \begin{center}
+    \begin{tabular}{|l|l|l|l|l|l|l|}
+    \hline
+    \rot{Metric} & \rot{Inheritance} & \rot{Locus of impact} & \rot{Types of connection} & \rot{Domain of measure} & \rot{Counting connections   } & \rot{Indirect coupling} \\ \hline \hline
+    CBO           & both  & both    & 5, 6  & class               & F     & no      \\
+    CBO'          & no    & both    & 5, 6  & class               & F     & no      \\
+    \hline
+    $RFC_\alpha$  & both  & import  & 6     & class               & E     & depends \\
+    RFC           & both  & import  & 6     & class               & E     & no      \\
+    RFC'          & both  & import  & 6     & class               & E     & yes     \\
+    \hline
+    MPC           & both  & import  & 6     & class               & C     & no      \\
+    \hline
+    DAC           & both  & import  & 1     & class               & C     & no      \\
+    DAC'          & both  & import  & 1     & class               & D     & no      \\
+    \hline
+    COF           & no    & both    & 5, 6  & system              & F     & no      \\
+    \hline
+    ICP           & both  & import  & 6     & method, class, set  & A, C  & no      \\
+    IH-ICP        & only  & import  & 6     & method, class, set  & A, C  & no      \\
+    NIH-ICP       & no    & import  & 6     & method, class, set  & A, C  & no      \\
+    \hline
+    IFCAIC        & no    & import  & 1     & class               & C     & no      \\
+    ACAIC         & only  & import  & 1     & class               & C     & no      \\
+    OCAIC         & no    & import  & 1     & class               & C     & no      \\
+    FCAEC         & no    & export  & 1     & class               & C     & no      \\
+    DCAEC         & only  & export  & 1     & class               & C     & no      \\
+    OCAEC         & no    & export  & 1     & class               & C     & no      \\
+    \hline
+    IFCMIC        & no    & import  & 2     & class               & C     & no      \\
+    ACMIC         & only  & import  & 2     & class               & C     & no      \\
+    OCMIC         & no    & import  & 2     & class               & C     & no      \\
+    FCMEC         & no    & export  & 6     & class               & C     & no      \\
+    DCMEC         & only  & export  & 6     & class               & C     & no      \\
+    OCMEC         & no    & export  & 6     & class               & C     & no      \\
+    \hline
+    OMMIC         & no    & import  & 6     & class               & C     & no      \\
+    IFMMIC        & no    & import  & 6     & class               & C     & no      \\
+    AMMIC         & only  & import  & 6     & class               & C     & no      \\
+    OMMEC         & no    & export  & 6     & class               & C     & no      \\
+    FMMEC         & no    & export  & 6     & class               & C     & no      \\
+    DMMEC         & only  & export  & 6     & class               & C     & no      \\
+    \hline
+    \end{tabular}
+    \end{center}
+    \caption{Coupling metrics comparison}
+    \label{table:coupling-metrics}
+\end{table}
+
+
+\blankl
+Based on this criteria, Briand et al. classify the existing coupling metrics, according to their definitions. The comparison of all the metrics, according to the criteria of the framework can be found in Table \ref{table:coupling-metrics}. The criteria stability of the server has been excluded from the table, since none of the metrics consider it.
+
+\paragraph{Coupling Between Objects (CBO)} This metric counts the number of other classes to which the client class coupled, this metric has two definitions. The original definition, CBO' in Table \ref{table:coupling-metrics}, which does not count inheritance. Then, there is the revised definition of the metric \cite{chidamber1994metrics}, does include inheritance.
+
+\paragraph{Response for Class (RFC)} This metric calculates the response set of a class. According to Chidamber and Kemerer \cite{chidamber1994metrics}, \textit{"The response set of a class is a set of methods that can potentially be executed in response to a message received by an object of that class"}. The return set includes the methods called directly by the class, as well as the methods that are called by transitivity. In the framework by Briand et al. \cite{briand1999unified} it is considered that the inherited methods should be included in this set since they can be executed to respond to a message received in the class. Based on this definition, there are three defined metrics, the first one being $RFC_\alpha$ \cite{churcher1995towards}. The $\alpha$ defines the number of nested levels of transitivity considered in the calculation of the metric. The other two metrics are particular cases of this one: RFC corresponds to when $\alpha = 1$, and RFC' when $\alpha = \infty$.
+
+\paragraph{Message Passing Coupling (MPC)} This metric, originally created by Li and Henry \cite{li1993object}, counts invocations from the new methods of a class to methods of other classes. This means that the inherited methods are not considered, but it is not clear how it treats overridden methods or calls to inherited methods. Briand et al. \cite{briand1999unified}, in order to eliminate ambiguity, redefined the metric as \textit{"the number of static invocations of methods not implemented in c by methods implemented in c"}.
+
+\paragraph{Data Abstraction Coupling (DAC)} This metric was also defined by Li and Henry \cite{li1993object} as follows: \textit{"number of ADTs defined in a class"}, where ADT is abstract data type. However, this definition does not specify how the metric should count the connections, or how to consider inherited ADTs. Because of this ambiguity in the original definition of the metric, Briand et al. \cite{briand1999unified} redefined the metric: \textit{"DAC is the number of not inherited attributes that have a class as their type. The number of the classes used as types for attributes is counted by DAC'"}.
+
+\paragraph{Coupling Factor (COF)} COF is the only metric of which the domain of measurement is the entire system, and was defined by Abreu et al. \cite{abreu1995toward}. COF calculates the number of relations between classes of the system, which are not related through inheritance. The relations are counted in a binary manner. The factor is normalized between 1 and 0 by dividing the number of relations by the maximum number of relations possible in the system. This way, it is possible to compare systems of different sizes.
+
+\paragraph{Information-flow-based Coupling (ICP)} The original ICP metric counts \textit{"for method m of class c, the number of polymorphistically invoked methods of other classes, weighted by the number of parameters of the invoked method."} \cn{lee1995}. From this description, the metrics IH-ICP and NIH-ICP are defined. IH-ICP counts only inheritance-based coupling, whereas NIH-ICP counts coupling to those classes with which there is no inheritance relationship. Finally, the metric ICP is the sum of the previous two.
+
+\paragraph{Suite of metrics by Briand et al.} This set of metrics was defined by Briand et al. with their previous framework for coupling metrics \cite{briand1997investigation}. This framework, was specially created for C++, and therefore, it has some extensions specific for this language.
+The metrics of the set are named according to three criteria: relationship, locus, and type. The name of each metric is composed in the following way: the initials of the relationship, the initials of the type of interaction, and the initials of the locus. These initials are described below.
+
+\blankl
+There are three types of relationships, listed below, which can be used to determine the coupling of a class $c$. All the definitions have been obtained from \cite{briand1997investigation}.
+
+\begin{itemize}
+  \item Inheritance (A, D): Interactions from a class to its antecessors or descendents, depending on the locus.
+  \item Friendship (F, IF): Extension for C++, interactions from class to all the  classes declared as friends or the classes that declare it their friend (inverse friends), depending on the locus.
+  \item Other (O): interaction with classes that do not have an inheritance or friendship relationship.
+\end{itemize}
+
+\blankls
+The three different types of interaction descibed by Briand et al. \cite{briand1997investigation}, are the following:
+\begin{itemize}
+    \item Class-Atribute (CA): "There is a class-attribute (CA-) interaction from class c to class d, if an attribute of class c is of type class d."
+    \item Class-Method (CM): "There is a class-method (CM-) interaction from class c to class d, if a newly defined method of class c has a parameter of type class d."
+    \item Method-Method (MM): "There is a method-method (MM-) interaction from class c to class d, if a method implemented at class c statically invokes a method of class d (newly defined or overriding), or receives a pointer to such a method."
+\end{itemize}
+
+\blankls
+Finally, the two types of locus are:
+\begin{itemize}
+  \item Export from a class (EC): "Change flows away from a class", related to the descendants (D) and the friends (F).
+  \item Import to a class (IC): "Change flows towards a class", related to the antecesors (A) and the inverse friends (IF).
+\end{itemize}
+
+\blankls
+The suite of metrics is defined based on all possible combinations of these three criteria.
+
 \section{Effort measurement}
