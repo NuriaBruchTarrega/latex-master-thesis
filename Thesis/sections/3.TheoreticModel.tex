@@ -36,9 +36,18 @@ First, Kula et al. \cite{kula2014visualizing} in their study about the visualiza
     \label{table:taxonomy-dependency}
 \end{table}
 
-\smallskip\noindent
-In this classification, we have added the scenario in which a dependency is dropped and substituted by another one. When looking at the terminology defined by Kula et al. it would mean dropping a package, and adopting a new one at the same time.
+\blankls
+In this classification, we have added the scenario in which a dependency is dropped and substituted by another one. When looking at the terminology defined by Kula et al. it would mean dropping a package, and adopting a new one at the same time. This situation could be given due to libraries that are not maintained longer. These libraries, are usually marked as deprecated, indicating that there is no team updating it anymore. The dependencies created with these libraries, are called halted libraries \cite{pashchenko2018vulnerable}.
 
+Vulneriabilities created by halted dependencies have to be mitigated with a different and more costly strategy. There are different options to mitigate the vulnerabilities, listed below:
 
-\section{Aggregation of coupling and effort}
+\begin{itemize}
+  \item Replace with a library with the same API. Therefore, the replacement would only involve changing the name of the library in the calls to it.
+
+  \item Replace twith a library in which the API is different, with different parameters needed for the calls. In this case, the replacement would involve the entire methods (units) in which the library is used.
+
+  \item Creating a new library. The replacement of this library with this option involves developing the functionalities that were used from the original library.
+
+  \item Contribute to the library. In this case, the effort would be related to the eamount of code that needs to be changed in order to fix the bug that is causing the vulnerability.
+\end{itemize}
 \end{comment}
