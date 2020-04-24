@@ -5,35 +5,88 @@ In this chapter we present the background information needed for this thesis. In
 \section{Terminology}
 
 \reminder{This is only to remember the terms from the literature}
-Terms that I have to decide which to use and how to define them:
 
-Library / Package (kikas2017)
+\blankl
+pashchenko2018
 
-Library version / Package version
+A library is a separately distributed software component,
+which typically consists of a logically grouped set of classes
+(objects) or methods (functions). To avoid any ambiguity, we
+refer to a specific version of a library as a library instance.
 
-Application (kikas2017)
+A dependency is a library instance, some functionality of
+which is used by another library instance (the dependent
+library instance).
 
-Project (pashchenko2018)
+A dependency is direct if it is directly invoked from the
+dependent library instance.
 
-Product (FASTEN)
+A dependency tree is a representation of a software library
+instance and its dependencies where each node is a library
+instance and edges connect dependent library instances to
+their direct dependencies.
 
-Repositories (kikas2017)
+A transitive dependency is connected to the root library instance
+of a dependency tree through a path with more than
+one edge.
 
-Dependency
+A project is a set of libraries developed and/or maintained
+together by a group of developers. Dependencies belonging
+to the same project of the dependent library instance are own
+dependencies, while library instances maintained by other
+projects are third-party dependencies.
 
-Direct dependency (kikas2017, pashchenko2018)
+A deployed dependency is actually delivered with the application
+or system that uses it, while a non-deployed dependency
+is only needed at the time of development (e.g., for testing)
+but is not a part of the artifact that is eventually released
+and operated in a production environment.
 
-Transitive dependency (kikas2017, pashchenko2018)
+\blankl
+kikas2017
 
+Packages:
+We define packages as a reusable code or set of components that can be included in other applications by using dependency management tools. Packages are published in repositories and are available to everyone.
+
+Applications:
+Applications are projects that make use of packages, are not published as a package and thus can not be used in other projects as a dependency.
+
+Versions:
+Packages and applications can have multiple versions distinguished by version numbers.
+
+Dependency:
+A package can depend on another package. If package A depends on package B we say that A has a dependency (A is a dependent of B) and B has a reverse dependency (B has a dependent). Applications can have dependencies but since they are not published as a reusable package they cannot have reverse dependencies.
+
+Direct or transitive dependency:
+A project has a direct dependency if a package on which the project depends, and which it needs to be built, is directly included in the project. A project can have a transitive dependencies on packages that are not needed for the project itself but needed for the direct dependencies included in the project to work. Transitive dependencies can be included through multiple levels of dependencies.
+
+Dependency network:
+A dependency network is composed of packages, applications, and dependency relations between them.
+
+Ecosystem:
+An ecosystem is the set of packages and applications involved in the dependency network.
+
+\blankl
+FASTEN:
+
+Package(Library) is a reusable unit of code with machine-readable information for the package manager. A package usually has many versions which are referred to as releases. In the FASTEN project, a package is referred to as Library in a graph representation. In this report, we will use package and library as interchangeable.
+
+Release(Version) is a specific version of a package. It usually contains a manifest file with metadata. By accessing the manifest file, package manager knows how to identify a release and how to build, configure and deploy it.In the FASTEN projects, it is referred to as Version in a graph representation. In this report, we will use release and version interchangeable.
+
+Package manager is a collection of software tools that can manage the life cycle of packages for software reuse. A package manager can resolve required dependencies as specified in the dependency manifest file (e.g. POM.xml in Maven) and download, install, remove, or upgrade packages accordingly.
+
+Package repository is a central place to store package definitions, metadata, and source codes or binaries. In the FASTEN project, for example Maven Central Repository, Python Package Index, and Ultimate Debian Database are considered package repositories and referred to as Forge in a graph representation.
+
+A dependency is a release that is used by another package release(the dependent release).
+
+\blankl
 Halted dependency (pashchenko2018): Dependency in which the server library is no longer updated. This means that if a vulnerability is detected in this library, it will not be fixed.
 
+\blankl
 Bloated dependency (soto2020comprehensive): Direct or transitive dependency that is included when compiling the application, but it is not really used by the code of the application.
 
+\blankl
 Deployed / non-deployed dependency (pashchenko2018)
-
-Dependency network (kikas2017)
-
-Ecosystem (kikas2017)
 
 \reminder{}
 
