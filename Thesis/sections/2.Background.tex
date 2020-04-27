@@ -3,92 +3,81 @@
 In this chapter we present the background information needed for this thesis. In addition, we also define some terminology that is going to be used in throughout the thesis.
 
 \section{Terminology}
+In this section, we are going to review the terms used in the related literature, comparing which terms are used in which papers. Then, we will explain the differences in both, the words and the meaning. Finally, we will specify the terms used in this thesis and their definition.
 
-\reminder{This is only to remember the terms from the literature}
+\begin{table}[htb!]
+    \begin{center}
+    \begin{tabular}{|l|c|c|c|c|}
+    \hline
+    Term & \cite{pashchenko2018vulnerable} & \cite{kikas2017structure} & \cite{fasten2019survey} & \cite{soto2020comprehensive} \\
+    \hline
+    Library                           & x &   & x & x \\
+    Package                           &   & x & x &   \\
+    Application                       &   & x &   &   \\
+    Project                           & x & x &   & x \\
+    \hline
+    Version                           &   & x & x & x \\
+    Instance                          & x &   &   &   \\
+    Release                           &   &   & x &   \\
+    Artifact                          &   &   &   & x \\
+    \hline
+    Package manager                   &   &   & x & x \\
+    Package repository                &   &   & x &   \\
+    \hline
+    Dependency                        & x & x & x & x \\
+    Reverse dependency                &   & x &   &   \\
+    Inherited dependency              &   &   &   & x \\
+    Direct/Transitive dependency      & x & x & x & x \\
+    Direct/Indirect dependency        &   &   & x &   \\
+    Deployed/non-deployed dependency  & x &   & x &   \\
+    Own/third-party dependency        & x &   &   &   \\
+    Halted dependency                 & x &   & x &   \\
+    Bloated dependency                &   &   &   & x \\
+    \hline
+    Dependency tree                   & x &   &   & x \\
+    Dependency network                &   & x & x &   \\
+    Ecosystem                         &   & x &   &   \\
+    \hline
+    \end{tabular}
+    \end{center}
+    \caption{Terminology from the literature}
+    \label{table:terminology}
+\end{table}
 
-\blankl
-pashchenko2018
+\blankls
+First, we are going to discuss the differences between the first four terms of the table. A library is a unit of software, which is distributed separatedly, and can be reused in other software components. The term library is in some cases substituted by the term package. The term application is used to differentiate the software components that are available in repositories to be reused (libraries) and those that are not (applications) \cite{kikas2017structure}.
+The term project, is used in different papers with different meanings. Pashchenko et al. \cite{pashchenko2018vulnerable} use it to refer to a group of libraries that are developed or maintained by the same team of developers. Kikas et al. \cite{kikas2017structure} use it to refer to both library and application. Finally, Soto-Valero et al. use it to refer to Maven Projects.
 
-A library is a separately distributed software component,
-which typically consists of a logically grouped set of classes
-(objects) or methods (functions). To avoid any ambiguity, we
-refer to a specific version of a library as a library instance.
+Each library, available in a package repository, can have different versions. A part from the word version, the literature also uses the terms instance and release, but with the same meaning. Artifact, is used by Soto-Valero et al. to refer to a Maven Artifact, which corresponds to a version of a Maven Project.
 
-A dependency is a library instance, some functionality of
-which is used by another library instance (the dependent
-library instance).
+The papers that specifically define package manager or package repository in the terminology, it is because these tools have an important role in the research.
 
-A dependency is direct if it is directly invoked from the
-dependent library instance.
+When describing the relationship in which a library uses another, all the papers use the term dependency. Then, depending on the focus of the research of each paper, different types of dependencies are defined.
 
-A dependency tree is a representation of a software library
-instance and its dependencies where each node is a library
-instance and edges connect dependent library instances to
-their direct dependencies.
+\unsure{Should I explain all the different types of dependencies here, or only those that I will use during the thesis?}
 
-A transitive dependency is connected to the root library instance
-of a dependency tree through a path with more than
-one edge.
-
-A project is a set of libraries developed and/or maintained
-together by a group of developers. Dependencies belonging
-to the same project of the dependent library instance are own
-dependencies, while library instances maintained by other
-projects are third-party dependencies.
-
-A deployed dependency is actually delivered with the application
-or system that uses it, while a non-deployed dependency
-is only needed at the time of development (e.g., for testing)
-but is not a part of the artifact that is eventually released
-and operated in a production environment.
-
-\blankl
-kikas2017
-
-Packages:
-We define packages as a reusable code or set of components that can be included in other applications by using dependency management tools. Packages are published in repositories and are available to everyone.
-
-Applications:
-Applications are projects that make use of packages, are not published as a package and thus can not be used in other projects as a dependency.
-
-Versions:
-Packages and applications can have multiple versions distinguished by version numbers.
-
-Dependency:
-A package can depend on another package. If package A depends on package B we say that A has a dependency (A is a dependent of B) and B has a reverse dependency (B has a dependent). Applications can have dependencies but since they are not published as a reusable package they cannot have reverse dependencies.
-
-Direct or transitive dependency:
-A project has a direct dependency if a package on which the project depends, and which it needs to be built, is directly included in the project. A project can have a transitive dependencies on packages that are not needed for the project itself but needed for the direct dependencies included in the project to work. Transitive dependencies can be included through multiple levels of dependencies.
-
-Dependency network:
-A dependency network is composed of packages, applications, and dependency relations between them.
-
-Ecosystem:
-An ecosystem is the set of packages and applications involved in the dependency network.
+Finally, the terms dependency tree and dependency network are used to refer to the graph created by the dependencies, in which the library versions are the nodes and the dependencies are the edges. The ecosystem includes all the libraries and applications involved in the dependency network.
 
 \blankl
-FASTEN:
+Based on the terminology discussed above, we define the terms that are used within this thesis.
 
-Package(Library) is a reusable unit of code with machine-readable information for the package manager. A package usually has many versions which are referred to as releases. In the FASTEN project, a package is referred to as Library in a graph representation. In this report, we will use package and library as interchangeable.
+\begin{itemize}
+  \item \textbf{Library:} A software artefact distributed individually. It can have different implementations distinguished by versions.
 
-Release(Version) is a specific version of a package. It usually contains a manifest file with metadata. By accessing the manifest file, package manager knows how to identify a release and how to build, configure and deploy it.In the FASTEN projects, it is referred to as Version in a graph representation. In this report, we will use release and version interchangeable.
+  \item \textbf{Version:} A version of a library. Contains an implementation of the library. Each version has a specific metadata associated to build the version sucessfully. Among other data, it specifies which versions of other libraries is it using.
 
-Package manager is a collection of software tools that can manage the life cycle of packages for software reuse. A package manager can resolve required dependencies as specified in the dependency manifest file (e.g. POM.xml in Maven) and download, install, remove, or upgrade packages accordingly.
+  \item \textbf{Dependency:} When a library version uses a version of another library, it creates a relationship between the versions of the two libraries, a dependency. In particular, the first library version depends on the second one.
 
-Package repository is a central place to store package definitions, metadata, and source codes or binaries. In the FASTEN project, for example Maven Central Repository, Python Package Index, and Ultimate Debian Database are considered package repositories and referred to as Forge in a graph representation.
+  \item \textbf{Direct and transitive dependencies:} A direct dependency is when a library version directly uses a version of another library. A transitive dependency is given when a library version uses another one indirectly, through other library versions that it depends on.
 
-A dependency is a release that is used by another package release(the dependent release).
+  \item \textbf{Halted dependencies:} A dependency with a library has not been updated (a new version released) for a much longer time than the usual release interval is considered a halted dependency.
 
-\blankl
-Halted dependency (pashchenko2018): Dependency in which the server library is no longer updated. This means that if a vulnerability is detected in this library, it will not be fixed.
+  \item \textbf{Bloated dependencies:} A dependency is bloated when it is included in the dependency set of a library version, but it is not really used at any time. This could happen with both, direct and transitive dependencies, for different reasons.
 
-\blankl
-Bloated dependency (soto2020comprehensive): Direct or transitive dependency that is included when compiling the application, but it is not really used by the code of the application.
+  \item \textbf{Dependency network:} Graph that represents the dependencies between library versions. In a dependency network, the library versions are the nodes, and the dependencies between them are the edges.
 
-\blankl
-Deployed / non-deployed dependency (pashchenko2018)
-
-\reminder{}
+  \item \textbf{Ecosystem:} A set of libraries that have versions with dependencies. When the libraries are updated (new versions), the ecosystem evolves.
+\end{itemize}
 
 \section{Dependency management}
 
