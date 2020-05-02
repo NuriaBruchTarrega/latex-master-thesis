@@ -4,6 +4,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{enumitem}
 \usepackage{color}
+
 \newcommand{\cn}[1]{\textsuperscript{\color{red} ~[citation needed](#1)~}}
 
 \title{Measuring the degree of library dependency}
@@ -113,13 +114,15 @@ Having one metric measure more than one of these types of connections is not rec
 THIS IS A HUGE TODO
 
 \paragraph{Criterion 6: Inheritance (Special cases)}
-Within this criterion, there are three aspects to decide about: how, if at all, does the metric distinguish between inheritance-based coupling and noninheritance-based coupling? If the metric counts method invocations, does it account for polymorphism? And finally, what defines if a method or attribute is part of a class or not? This questions are going to be discussed and answered by using Figure \cn{acabar i afegir}
+Within this criterion, there are three aspects to decide about: how, if at all, does the metric distinguish between inheritance-based coupling and noninheritance-based coupling? If the metric counts method invocations, does it account for polymorphism? And finally, what defines if a method or attribute is part of a class or not? This questions are going to be discussed and answered by using Figure \ref{fig:specialcases}, based on the work from Briand et al. \cite{briand1999unified}.
 
-First, how does the metric treat inheritance? This question has several possible answers: Only counts inheritance, only counts non-inheritance, counts both separately, or counts both without distinction.
-
-The next question is how does the metric treat polymorphism. Does it account for the methods that are overridden in descendants of the class, a call to a class creates coupling with the descendants as well?
-
-Lastly, it is necessary to define what makes a method or attribute part of a class. Is it when the method or attribute is implemented in the class, or when the method or attribute can be referenced from an instance of the class.
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[height=4.5cm]{img/specialcases.png}
+\caption{Example of coupling special cases}
+\label{fig:specialcases}
+\end{center}
+\end{figure}
 
 
 \section{Evaluation Setup}
