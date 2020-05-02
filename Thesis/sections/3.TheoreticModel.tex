@@ -15,6 +15,9 @@ Following the definition of stability stated by Briand et al. \cite{briand1999un
 
 However, in the use case of this thesis, the differentiation between stable and unstable classes is not enough. The goal is not to measure the coupling with all stable classes since these include types provided by the programming language and the standard libraries of the language. In order to answer RQ1, the coupling will only be measured with classes that are part of other open-source libraries.
 
+\paragraph{Direct and indirect coupling:}
+To decide which option we want to define for this criterion, we need to distinguish two alternative scenarios in which we want to measure coupling: Direct dependencies and transitive dependencies. When measuring direct dependencies, we want to measure only direct coupling between the sets of classes, whereas for transitive dependencies it is necessary to measure indirect coupling. Hence, we will define two metrics for each type of connection relevant for this case: One for direct dependencies and another one for transitive dependencies.
+
 \paragraph{Granularity of the measure:}
 In this criterion, there are two aspects to define. The domain level of the measure, and how the metric counts the connections. First, we are going to discuss the domain level. Briand et al. define the following levels:
 
@@ -33,11 +36,6 @@ In this case, the goal is to measure the coupling between the set of classes of 
 Next, we define how the metric has to count connections. The options for counting connections defined by Briand et al. are explained in section \ref{section:bg-coupling}, in Table \ref{table:counting-connections}. The options B), D), E), and F), are not useful for this research. These options count the distinct items at the other end of the connection, not considering how many times those items are at the other end of the connection. The differences between these options are the granularity of the measure and the fact that E) considers indirect coupling.
 
 The two other options are A) and C), which count individual connections. The difference between A and C is the domain level at which the connections are counted. The option C) counts the connections as in A), but adding up the result for each method or attribute of a class. Since the level of the domain of the metrics is not class but set of classes, a new option for counting connections is defined. The definition is created following the same style as Briand et al.: \textit{Add up the number of connections counted as in C) for each class of the set of classes}.
-
-\paragraph{Direct and indirect coupling:}
-To decide which option we want to define for this criterion, we need to distinguish two alternative scenarios in which we want to measure coupling: Direct dependencies and transitive dependencies. When measuring direct dependencies, we want to measure only direct coupling between the sets of classes, whereas for transitive dependencies it is necessary to measure indirect coupling. Hence, we will define at least two metrics: One for direct dependencies and another one for transitive dependencies.
-
-
 
 \paragraph{Type of connection:}
 With this criterion, it is defined which type of connection creates coupling between the two items, previously defined as two separate sets of classes. There are several and clearly distinguished mechanisms that can create coupling, as defined by Briand et al. \cite{briand1999unified}, listed below.
@@ -77,15 +75,25 @@ All the metrics that are going to be used to measure the dependencies between li
 
 \begin{table}[h]
     \begin{center}
-    \begin{tabular}{|l|l|l|l|l|l|}
+    \begin{tabular}{|l|l|l|l|l|l|l|l|l|}
     \hline
-    \rot{Metric} & \rot{Types of connection} & \rot{Domain of measure} & \rot{Counting connections   } & \rot{Direct/Indirect} & \rot{Inheritance} \\ \hline
-    \#1 & a & set of classes & G & Direct & both \\\hline
-    \#2 & a & set of classes & G & Direct & both \\\hline
-    \#3 & a & set of classes & G & Direct & both \\\hline
-    \#4 & a & set of classes & G & Direct & both \\\hline
-    \#5 & a & set of classes & G & Direct & both \\\hline
-    \#6 & a & set of classes & G & Direct & both \\\hline
+    \rot{Metric} & \rot{Type of connection} & \rot{Locus of impact} & \rot{Domain of measure} & \rot{Counting connections   } & \rot{Direct/Indirect} & \rot{Inheritance} & \rot{Polymorphism} & \rot{Item belongs to class} \\ \hline
+    \hline
+    \#1   & 1 & Import & Library & G & Direct   & Both, no distinction & Yes & Referenced \\\hline
+    \#2   & 2 & Import & Library & G & Direct   & Both, no distinction & Yes & Referenced \\\hline
+    \#3   & 3 & Import & Library & G & Direct   & Both, no distinction & Yes & Referenced \\\hline
+    \#4   & 4 & Import & Library & G & Direct   & Both, no distinction & Yes & Referenced \\\hline
+    \#5   & 5 & Import & Library & G & Direct   & Both, no distinction & Yes & Referenced \\\hline
+    \#6   & 6 & Import & Library & G & Direct   & Both, no distinction & Yes & Referenced \\\hline
+    \#7   & 7 & Import & Library & G & Direct   & Both, no distinction & Yes & Referenced \\\hline
+    \hline
+    \#8   & 1 & Import & Library & G & Indirect & Both, no distinction & Yes & Referenced \\\hline
+    \#9   & 2 & Import & Library & G & Indirect & Both, no distinction & Yes & Referenced \\\hline
+    \#10  & 3 & Import & Library & G & Indirect & Both, no distinction & Yes & Referenced \\\hline
+    \#11  & 4 & Import & Library & G & Indirect & Both, no distinction & Yes & Referenced \\\hline
+    \#12  & 5 & Import & Library & G & Indirect & Both, no distinction & Yes & Referenced \\\hline
+    \#13  & 6 & Import & Library & G & Indirect & Both, no distinction & Yes & Referenced \\\hline
+    \#14  & 7 & Import & Library & G & Indirect & Both, no distinction & Yes & Referenced \\\hline
     \end{tabular}
     \end{center}
     \caption{Criteria of the set of metrics}

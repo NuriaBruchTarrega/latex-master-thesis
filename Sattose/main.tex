@@ -3,8 +3,8 @@
 \usepackage{twocolpceurws}
 \usepackage[utf8]{inputenc}
 \usepackage{enumitem}
-
-
+\usepackage{color}
+\newcommand{\cn}[1]{\textsuperscript{\color{red} ~[citation needed](#1)~}}
 
 \title{Measuring the degree of library dependency}
 
@@ -55,7 +55,7 @@ Based on the problem statement described, we define the following research quest
   \item \textbf{RQ2:} How can we measure the effort required to replace a dependency with another dependency with a different library?
 \end{itemize}
 
-\section{Background}
+\section{Background}\label{section:Background}
 There are six main groups of coupling metrics \cite{poshyvanyk2006conceptual}: structural, dynamic, evolutionary and logical, information entropy approach, conceptual, and domain-specific. The most largely studied by the literature is the structural coupling, and it is the type of coupling measured in this research.
 
 Briand et al. \cite{briand1999unified} defined a unified framework for coupling metrics, based on three previously existing frameworks. In their work, they specify are six criteria that define the type of coupling that a metric calculates. 1) The type of connection, which is the mechanism that creates coupling. 2) The locus of impact, or from which element of the relationship is the coupling being measured: the one that uses another element (import), or the one that is being used (export). 3) The granularity of the measure, which includes two aspects: the domain level (e.g. method, class, system), and how the metric counts the connections between the two elements (e.g. count each connection individually or binary evaluation of the connection between two elements). 4) The stability of the server, the server represents the element used by the other one in the relationship. The stability of the server is determined by the element being or not subject to modifications in the project at hand. 5) Direct/Indirect coupling, if the metric accounts for indirect relationships, or only measures the direct ones. 6) Inheritance, this criterion specifies how certain special cases (e.g. inheritance and polymorphism) affect the coupling between two elements.
@@ -63,10 +63,63 @@ Briand et al. \cite{briand1999unified} defined a unified framework for coupling 
 \section{Related Work}
 Soto-Valero et al. \cite{soto2020comprehensive} conducted a study of bloated dependencies. Bloated dependencies are included in the dependency set of a project, either direct or transitive, but there is no real dependency since the libraries are unused. They developed the tool \textit{DepClean}, which analyses the dependencies of Java artifacts, to define which are bloated and to generate an alternative dependency file without bloated dependencies. Pashchenko et al. \cite{pashchenko2018vulnerable} propose a method to analyze dependencies in which they distinguish between own and third-party libraries, as well as deployed and non-deployed dependencies. In addition, they remark the increased risk related to halted dependencies, since the libraries related to these dependencies are not updated.
 
-Hejderup et al. \cite{hejderup2018software} propose a technique to represent software ecosystems at a function level, a versioned call based dependency network. This call-level dependency graph, in contrast with a package-level dependency graph, allows performing a more detailed evaluation of the dependencies. The graph is used to analyze how the bugs and vulnerabilities spread across the dependency network. In another study Hejderup et al. \cite{hejderup2018software} define an approach, named Präzi, to generate call-level dependency networks. In particular, they implement this approach for the Rust ecosystem and discuss all the perils affecting the soundness and precision of Präzi. They conclude that RustPräzi is three times more precise than the package-level dependency graphs.
+Hejderup et al. \cite{hejderup2018software} propose a technique to represent software ecosystems at a function level, a versioned call based dependency network. This call-level dependency graph, in contrast with a package-level dependency graph, allows performing a more detailed evaluation of the dependencies. The graph is used to analyze how the bugs and vulnerabilities spread across the dependency network. In another study Hejderup et al. \cite{hejderup2018prazi} define an approach, named Präzi, to generate call-level dependency networks. In particular, they implement this approach for the Rust ecosystem and discuss all the perils affecting the soundness and precision of Präzi. They conclude that RustPräzi is three times more precise than the package-level dependency graphs.
 
 \section{Dependency evaluation model}
-To define the metrics to be used, we have evaluated the six criteria previously described to formulate the definition of coupling that we want to measure. As described in the introduction, the coupling will be measured at a library level, with the goal of measuring each one of the connections (criterion 3). The coupling is evaluated from the point of view of the library that depends on another one (import, criterion 2). With this project, we want to evaluate two types of dependencies: direct and transitive, therefore there will be different metrics for both types of coupling (criterion 5). Since the third-party libraries are unlikely to be modified because of the evaluated library, the server is stable (criterion 4). % Here it is missing criteria 1 and 6. Which still have to be discussed.
+The first steps towards a creating a model to measure the dependencies between libraries is to define which meaning of coupling is involved in these depenencies. Therefore, we will use the framework explained in section \ref{section:Background}, from Briand et al. \cite{briand1999unified}. When deciding about the 6 criteria specified in the framework, the order of the decisions is important, since some criteria may directly discard some options of other criteria. Hence, we are going to start by those criteria that are clearly defined by the problem statement.
+
+\paragraph{Criterion 2: Locus of impact}
+According to the description of the problem, the goal of this measurement is to know how much a library depends on another. Therefore, the point of view of this evaluation is from the library that uses another one. Hence, the locus of impact of the coupling to be measured in this thesis is \textbf{import}.
+
+\paragraph{Criterion 4: Stability of the server}
+Briand et al. \cite{briand1999unified} define stable classes as \textit{"Classes that are not subject to change in the project at hand"}. Therefore, we are going to measure coupling from non-stable classes to stable classes.
+However, the separation between stable and unstable classes is not enough. The goal is not to measure the coupling with all stable classes since these include classes such as types provided by the programming language and standard libraries. Therefore, the coupling will only be measured with \textbf{stable classes} that are part of other third-party open-source libraries.
+
+\paragraph{Criterion 5: Direct and indirect coupling}
+To decide which option we want to define for this criterion, we need to distinguish two alternative scenarios in which we want to measure coupling: Direct dependencies and transitive dependencies. For the initial approach, we are going to focus on the direct dependencies only. Therefore, the metrics are going to measure \textbf{direct coupling} only. However, the metrics defined to measure direct coupling can be extended to consider indirect coupling.
+
+\paragraph{Criterion 3: Granularity of the measure}
+In this criterion, there are two aspects to define. The domain level of the measure, and how the metric counts the connections. First, we are going to discuss the domain level. Briand et al. define the following levels:
+
+\begin{itemize}[noitemsep]
+  \item Attribute
+  \item Method
+  \item Class
+  \item Set of classes
+  \item System
+\end{itemize}
+
+In this case, the goal is to measure the coupling between the set of classes of the client library and the set of classes of the server library. However, in order to maintain consistency, we rename the domain level set of classes as \textbf{library} for the rest of the paper. To maintain the precision of the measurement, the calculation of coupling for a more coarse-grained level, such as library, is done by aggregating the coupling of the more fine-grained domains.
+
+Next, we define how the metrics count the connections. The options for counting connections defined in the framework, are based on two options for the domain levels method and attribute: counting individual connections (option A), and count the items at the other end of the connection (option B). Since the goal is to measure the degree of dependency, we need to focus on option A, since it counts the number of connections. Based on option A, Briand et al. define option C: "Add up the number of connections counted as in A) for each method or attribute of the class". Based on option C, we define the following option for counting connections at the library level: \textbf{Add up the number of connections counted as in C) for each class of the library}.
+
+\paragraph{Criterion 1: Type of connection}
+With this criterion, it is defined which type of connection creates coupling between the two items, the two libraries. There are several and clearly distinguished mechanisms that can create coupling \cite{briand1999unified}, listed below.
+
+Given class \textit{a} that belongs to library \textit{A}, and class \textit{b} that belongs to library \textit{B}...
+
+\begin{enumerate}[noitemsep,leftmargin=*]
+  \item ... class \textit{a} has an attribute of type \textit{b} (Relationship of aggregation).
+  \item ... method of class \textit{a} has a parameter of type \textit{b} or has return type \textit{b}.
+  \item ... method of class \textit{a} has a local variable of type \textit{b}.
+  \item ... method of class \textit{a} calls a method which has a parameter of type \textit{b}.
+  \item ... method of class \textit{a} references attribute of class \textit{b}.
+  \item ... method of class \textit{a} invokes method of class \textit{b}.
+  \item ... class \textit{a} and class \textit{b} have a relationship such as \textit{uses} or \textit{consists-of}.
+\end{enumerate}
+
+Having one metric measure more than one of these types of connections is not recommended. To begin with, the strengths of every type of connection have to be justified: Has one connection of type 5 the same strength as a connection of type 6? Also, it is not possible to know how much of the coupling is created by which type of connection. Therefore, all chosen types of connections are going to be measured by different metrics. To decide which types of connections to measure, since all of them create coupling between libraries, we have decided to review the literature on coupling metrics, to understand which connections are the most measured and why.
+
+THIS IS A HUGE TODO
+
+\paragraph{Criterion 6: Inheritance (Special cases)}
+Within this criterion, there are three aspects to decide about: how, if at all, does the metric distinguish between inheritance-based coupling and noninheritance-based coupling? If the metric counts method invocations, does it account for polymorphism? And finally, what defines if a method or attribute is part of a class or not? This questions are going to be discussed and answered by using Figure \cn{acabar i afegir}
+
+First, how does the metric treat inheritance? This question has several possible answers: Only counts inheritance, only counts non-inheritance, counts both separately, or counts both without distinction.
+
+The next question is how does the metric treat polymorphism. Does it account for the methods that are overridden in descendants of the class, a call to a class creates coupling with the descendants as well?
+
+Lastly, it is necessary to define what makes a method or attribute part of a class. Is it when the method or attribute is implemented in the class, or when the method or attribute can be referenced from an instance of the class.
 
 
 \section{Evaluation Setup}
