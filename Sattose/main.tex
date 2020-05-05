@@ -179,8 +179,13 @@ DC(c',L') --- Descendants of class \textit{c'} (\textit{c'} included) implemente
 \section{Conclusion and Next Steps}
 
 
-\subsection{Next steps}
+The first step, will be to perform the theoretical validation of the metrics. This will be done by validating that the proposed metrics fulfill certain properties. For example, Briand et al. \cite{briand1999unified} define five properties of the coupling metrics. Besides, the applicable subset of the set of metrics defined by Meneely et al. \cite{meneely2013validating} will also be validated.
 
+Implement a proof of concept (PoC) to calculate the metrics. The PoC will be done by using the state-of-the-art call-level graphs of the FASTEN project. This project has the goal of ..., and the first step is to generate fine grained call-graphs to be able to perform a detailed evaluation of the dependencies with open-source libraries.
+
+Once the PoC is working and it has been used with a relevant number of libraries, we will evaluate the results. Various types of evaluations will be performed: First, evaluation of the PoC itself, by analysing the runtime complexity of the implementation. Then, the metrics will be compared in order to determine the correlation between these. In addition, some experiments will be conducted, comparing the effort invested in updating a library, when adopting a  new dependency version.
+
+Then, the work will be focused on the second research question. First, we will study the different cases of dependency replacement, and how each of these cases may affect a project. Then, for each case, we will determine how which part of the code is affected as well as the applicable methods to calculate the needed effort to implement the replacement of the dependency. Finally, we will validate the proposed method by comparing the real effort invested in a replacement with the effort estimated by our model.
 
 \bibliographystyle{alpha}
 \bibliography{res}
