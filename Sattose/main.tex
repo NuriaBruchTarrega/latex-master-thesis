@@ -98,23 +98,6 @@ In this case, the goal is to measure the coupling between the set of classes of 
 
 Next, we define how the metrics count the connections. The options for counting connections defined in the framework, are based on two options for the domain levels method and attribute: counting individual connections (option A), and count the items at the other end of the connection (option B). Since the goal is to measure the degree of dependency, we need to focus on option A, since it counts the number of connections. Based on option A, Briand et al. define option C: "Add up the number of connections counted as in A) for each method or attribute of the class". Based on option C, we define the following option for counting connections at the library level: \textbf{Add up the number of connections counted as in C) for each class of the library}.
 
-\subsection{Criterion 1: Type of connection}
-With this criterion, it is defined which type of connection creates coupling between the two items, the two libraries. There are several and clearly distinguished mechanisms that can create coupling \cite{briand1999unified}, listed below.
-
-Given class \textit{a} that belongs to library \textit{A}, and class \textit{b} that belongs to library \textit{B}...
-
-\begin{enumerate}[noitemsep,leftmargin=*]
-  \item ... class \textit{a} has an attribute of type \textit{b} (Relationship of aggregation).
-  \item ... method of class \textit{a} has a parameter of type \textit{b} or has return type \textit{b}.
-  \item ... method of class \textit{a} has a local variable of type \textit{b}.
-  \item ... method of class \textit{a} calls a method which has a parameter of type \textit{b}.
-  \item ... method of class \textit{a} references attribute of class \textit{b}.
-  \item ... method of class \textit{a} invokes method of class \textit{b}.
-  \item ... class \textit{a} and class \textit{b} have a relationship such as \textit{uses} or \textit{consists-of}.
-\end{enumerate}
-
-Having one metric measure more than one of these types of connections is not recommended. To begin with, the strengths of every type of connection have to be justified: Has one connection of type 5 the same strength as a connection of type 6? Also, it is not possible to know how much of the coupling is created by which type of connection. Therefore, all chosen types of connections are going to be measured by different metrics. To decide which types of connections to measure, since all of them create coupling between libraries, we have decided to review the literature on coupling metrics, to understand which connections are the most measured and why. After the review, we have concluded that the type of connection most used is 6, only one of the reviewed papers did not consider this type of connection. The following two types of connection more used are 2 and 1. Hence, we have decided to use for the initial metric of this work, \textbf{type 6 method invocations}.
-
 \subsection{Criterion 6: Inheritance}
 Within this criterion, there are three aspects to decide about: how, if at all, does the metric distinguish between inheritance-based coupling and noninheritance-based coupling? If the metric counts method invocations, does it account for polymorphism? And finally, what defines if a method or attribute is part of a class or not? This questions are going to be discussed and answered by using Figure \ref{fig:specialcases}, based on the work from Briand et al. \cite{briand1999unified}. The discussion is focused on method calls for simplicity, but it can also be translated to attribute accesses.
 
@@ -135,6 +118,25 @@ The last line of \texttt{mc} calls the method \texttt{m2} from an object of type
 Then, if we focus on the method \texttt{ma} of \texttt{ClassA}, we see that it calls \texttt{m1} in an object of type \texttt{Class1}. However, the dynamic assignation of types, can make this object be of type \texttt{Class2} and \texttt{Class3}. Does this method call create coupling with \texttt{Class2} and \texttt{Class3}? If we consider the previous discussion on how to assign methods, this call only creates coupling with \texttt{Class1}, since it is the only class with an implementation of \texttt{m1}. The next example, however, is different.
 
 In this last case, \texttt{mb} calls \texttt{m2}, which is overridden in \texttt{Class2}. Does this create coupling with \texttt{Class2}? In other words, do we account for all possible polymorphic method invocations? If we consider the case in which the implementation of \texttt{m2} in \texttt{Class2} changes, this may affect the way \texttt{ClassA} uses it, and therefore changes may be needed. Thus, we consider that it is necessary to \textbf{account for polymorphism}.
+
+\subsection{Criterion 1: Type of connection}
+With this criterion, it is defined which type of connection creates coupling between the two items, the two libraries. There are several and clearly distinguished mechanisms that can create coupling \cite{briand1999unified}, listed below.
+
+Given class \textit{a} that belongs to library \textit{A}, and class \textit{b} that belongs to library \textit{B}...
+
+\begin{enumerate}[noitemsep,leftmargin=*]
+  \item ... class \textit{a} has an attribute of type \textit{b} (Relationship of aggregation).
+  \item ... method of class \textit{a} has a parameter of type \textit{b} or has return type \textit{b}.
+  \item ... method of class \textit{a} has a local variable of type \textit{b}.
+  \item ... method of class \textit{a} calls a method which has a parameter of type \textit{b}.
+  \item ... method of class \textit{a} references attribute of class \textit{b}.
+  \item ... method of class \textit{a} invokes method of class \textit{b}.
+  \item ... class \textit{a} and class \textit{b} have a relationship such as \textit{uses} or \textit{consists-of}.
+\end{enumerate}
+
+Having one metric measure more than one of these types of connections is not recommended. To begin with, the strengths of every type of connection have to be justified: Has one connection of type 5 the same strength as a connection of type 6? Also, it is not possible to know how much of the coupling is created by which type of connection. Therefore, all chosen types of connections are going to be measured by different metrics. To decide which types of connections to measure, since all of them create coupling between libraries, we have decided to review the literature on coupling metrics, to understand which connections are the most measured and why. After the review, we have concluded that the type of connection most used is 6, only one of the reviewed papers did not consider this type of connection. The following two types of connection more used are 2 and 1. Hence, we have decided to use for the initial metric of this work, \textbf{type 6: method invocations}.
+
+However, there is the possibility that a class has an attribute of another class, but never calls a method that belongs to that class. In Figure \ref{fig:specialcases}, it could happen if \texttt{ClassB} only ever called \texttt{obj2.m1}. Counting only method invocations would mean that there is no dependency between \texttt{ClassB} and \texttt{Class2}. Hence, it is at least necessary to create another metric that counts \textbf{type 1: aggregation coupling}.
 
 \section{Formal definition of the metrics}
 Based on the characteristics of coupling described on the previous section, we define three coupling metrics. The difference between these metrics is the type of connection considered.
