@@ -131,7 +131,7 @@ Having one metric measure more than one of these types of connections is not rec
 However, there is the possibility that a class has an attribute of another class, but never calls a method that belongs to that class. In Figure \ref{fig:specialcases}, it could happen if \texttt{ClassB} only ever called \texttt{obj2.m1}. Counting only method invocations would mean that there is no dependency between \texttt{ClassB} and \texttt{Class2}. Hence, it is at least necessary to create another metric that counts \textbf{type 1: aggregation coupling}.
 
 \section{Formal definition of the metrics}
-Based on the characteristics of coupling described on the previous section, we define three coupling metrics. The difference between these metrics is the type of connection considered.
+Based on the characteristics of coupling described on the previous section, we define two coupling metrics. The difference between these metrics is the type of connection measured.
 
 \subsection{Metric 1: Method invocation coupling}
 \[
@@ -144,14 +144,14 @@ Based on the characteristics of coupling described on the previous section, we d
 
 \textit{MIC(L, L')} measures the method invocation coupling between library \textit{L} and library \textit{L'}, where \textit{L} is the client and \textit{L'} is the server. \textit{C(L)} is the set of classes implemented in \textit{L}, and \textit{M(c)} is the set of methods implemented in class \textit{c}.
 
-\textit{indMI(m, L')} counts each of the calls (individual connections) from method \textit{m} to methods implemented in \textit{L'}. \textit{SIM(m)} is the set of methods invoked by \textit{m} and implemented in a stable class (a class not included in \textit{L}). \textit{numI(m, m')} corresponds to the number of times that \textit{m} invokes \textit{m'}, and \textit{PM(m',L')} is the number of polymorphic methods of \textit{m'} implemented in \textit{L'}.
+\textit{indMI(m, L')} counts each of the calls (individual connections) from method \textit{m} to methods implemented in \textit{L'}. \textit{SIM(m)} is the set of methods invoked by \textit{m} and implemented in a stable class (a class not implemented in \textit{L}). \textit{numI(m, m')} corresponds to the number of times that \textit{m} invokes \textit{m'}, and \textit{PM(m',L')} is the number of polymorphic methods of \textit{m'} implemented in \textit{L'}.
 
 \subsection{Metric 2: Aggregation coupling}
 \[
   AC(L,L') = \sum_{c \in C(L)}^{} \sum_{c' \in AT(c)}^{} NA(c, c')*DC(c', L')
 \]
 
-\textit{AC(L,L')} measures the aggregation coupling between library \textit{L} and library \textit{L'}, where \textit{L} is the client and \textit{L'} is the server. \textit{SAT(c)} is the set of the types of the attributes of class \textit{c}. \textit{NA(c,c')} is the number of attributes of type \textit{c'} in class \textit{c}, and \textit{DC(c',L')} corresponds to the number of descendants of \textit{c'} (including \textit{c'}) implemented in \textit{L'}.
+\textit{AC(L,L')} measures the aggregation coupling between library \textit{L} and library \textit{L'}, where \textit{L} is the client and \textit{L'} is the server. \textit{SAT(c)} is the set of the stable types of the attributes in class \textit{c}. \textit{NA(c,c')} is the number of attributes of type \textit{c'} declared in class \textit{c}, and \textit{DC(c',L')} corresponds to the number of descendants of \textit{c'} (including \textit{c'}) implemented in \textit{L'}.
 
 %\section{Evaluation Setup}
 % We are going to develop a proof-of-concept tool in order to calculate the proposed metrics to measure the dependencies. In this tool, the metrics are going to be calculated from call-level dependency graphs, which will contain the dependency network of the evaluated library.
