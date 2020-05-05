@@ -116,7 +116,7 @@ Given class \textit{a} that belongs to library \textit{A}, and class \textit{b} 
 Having one metric measure more than one of these types of connections is not recommended. To begin with, the strengths of every type of connection have to be justified: Has one connection of type 5 the same strength as a connection of type 6? Also, it is not possible to know how much of the coupling is created by which type of connection. Therefore, all chosen types of connections are going to be measured by different metrics. To decide which types of connections to measure, since all of them create coupling between libraries, we have decided to review the literature on coupling metrics, to understand which connections are the most measured and why. After the review, we have concluded that the type of connection most used is 6, only one of the reviewed papers did not consider this type of connection. The following two types of connection more used are 2 and 1. Hence, we have decided to use for the initial metric of this work, \textbf{type 6 method invocations}.
 
 \subsection{Criterion 6: Inheritance}
-Within this criterion, there are three aspects to decide about: how, if at all, does the metric distinguish between inheritance-based coupling and noninheritance-based coupling? If the metric counts method invocations, does it account for polymorphism? And finally, what defines if a method or attribute is part of a class or not? This questions are going to be discussed and answered by using Figure \ref{fig:specialcases}, based on the work from Briand et al. \cite{briand1999unified}.
+Within this criterion, there are three aspects to decide about: how, if at all, does the metric distinguish between inheritance-based coupling and noninheritance-based coupling? If the metric counts method invocations, does it account for polymorphism? And finally, what defines if a method or attribute is part of a class or not? This questions are going to be discussed and answered by using Figure \ref{fig:specialcases}, based on the work from Briand et al. \cite{briand1999unified}. The discussion is focused on method calls for simplicity, but it can also be translated to attribute accesses.
 
 \begin{figure}[ht]
 \begin{center}
@@ -137,6 +137,7 @@ Then, if we focus on the method \texttt{ma} of \texttt{ClassA}, we see that it c
 In this last case, \texttt{mb} calls \texttt{m2}, which is overridden in \texttt{Class2}. Does this create coupling with \texttt{Class2}? In other words, do we account for all possible polymorphic method invocations? If we consider the case in which the implementation of \texttt{m2} in \texttt{Class2} changes, this may affect the way \texttt{ClassA} uses it, and therefore changes may be needed. Thus, we consider that it is necessary to \textbf{account for polymorphism}.
 
 \section{Formal definition of the metrics}
+Based on the characteristics of coupling described on the previous section, we define three coupling metrics. The difference between these metrics is the type of connection considered.
 
 \subsection{Metric 1: Method invocation coupling}
 \[
@@ -177,13 +178,13 @@ DC(c',L') --- Descendants of class \textit{c'} (\textit{c'} included) implemente
 
 
 \section{Conclusion and Next Steps}
+TODO: Conclusion
 
+The first next step, will be to define the metrics to measure transitive dependencies. Then, we will perform the theoretical validation of the metrics. This will be done by validating that the proposed metrics fulfill certain properties. For example, Briand et al. \cite{briand1999unified} define five properties of the coupling metrics. Besides, the applicable subset of the set of metrics defined by Meneely et al. \cite{meneely2013validating} will also be validated.
 
-The first step, will be to perform the theoretical validation of the metrics. This will be done by validating that the proposed metrics fulfill certain properties. For example, Briand et al. \cite{briand1999unified} define five properties of the coupling metrics. Besides, the applicable subset of the set of metrics defined by Meneely et al. \cite{meneely2013validating} will also be validated.
+Another part of the work will be to implement a proof of concept (PoC) to calculate the metrics. The PoC will be done by using the versioned call-level graphs of the FASTEN project, in order to give a result as precise as possible. This project has the goal of ..., and the first step is to generate fine grained call-graphs to be able to perform a detailed evaluation of the dependencies with open-source libraries.
 
-Implement a proof of concept (PoC) to calculate the metrics. The PoC will be done by using the state-of-the-art call-level graphs of the FASTEN project. This project has the goal of ..., and the first step is to generate fine grained call-graphs to be able to perform a detailed evaluation of the dependencies with open-source libraries.
-
-Once the PoC is working and it has been used with a relevant number of libraries, we will evaluate the results. Various types of evaluations will be performed: First, evaluation of the PoC itself, by analysing the runtime complexity of the implementation. Then, the metrics will be compared in order to determine the correlation between these. In addition, some experiments will be conducted, comparing the effort invested in updating a library, when adopting a  new dependency version.
+Once the PoC is working and it has been used with a relevant number of libraries, we will evaluate the results. Various types of evaluations will be performed: First, evaluation of the PoC itself, by analysing the runtime complexity of the implementation. Then, the metrics will be compared in order to determine the correlation between these. In addition, some experiments will be conducted, comparing the effort invested in updating a depenendcy with the coupling of the dependency.
 
 Then, the work will be focused on the second research question. First, we will study the different cases of dependency replacement, and how each of these cases may affect a project. Then, for each case, we will determine how which part of the code is affected as well as the applicable methods to calculate the needed effort to implement the replacement of the dependency. Finally, we will validate the proposed method by comparing the real effort invested in a replacement with the effort estimated by our model.
 
