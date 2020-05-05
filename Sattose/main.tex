@@ -124,6 +124,45 @@ Within this criterion, there are three aspects to decide about: how, if at all, 
 \end{center}
 \end{figure}
 
+In Figure \ref{fig:specialcases}, the method \texttt{mc} of \texttt{ClassB} calls the method \texttt{ma} of \texttt{ClassA}. Since \texttt{ClassB} inherits from \texttt{ClassA}, this is known as inheritance-based coupling. In the case that the two involved classes where part of different libraries, this connection would create coupling between the libraries. However, should this connection be considered as a special case and count it separatedly from the rest? To answer this question, we look at it from the point of view of our problem statement: Is it more or less dificult to maintain inheritance-based coupling than non-inheritance-based coupling? The answer is no, if there is a change in an inherited method that a class is using, it will require the same maintenance effort than in the case the method is not inherited. Therefore, our metrics are going to \textbf{include inheritance-based coupling without distinction}.
+
+The next line of the same method, makes a call to \texttt{m1}, from an object of type \texttt{Class2}. However, this method is not implemented in \texttt{Class2}, but in \texttt{Class1}. With which classes does this call create coupling? From a maintenance perspective, if the method is updated in \texttt{Class1}, this will probably require updates in \texttt{ClassB} as well. Furthermore, if \texttt{Class2} is \cn{HELLO DO THIS}
+
+The last line of \texttt{mc} calls the method \texttt{m2} from an object of type \texttt{Class2}. This method, inherited from \texttt{Class1}, is overridden in \texttt{Class2}. Therefore, this creates coupling with \texttt{Class2}, but does it create coupling with \texttt{Class1}? \cn{HELLO DO THIS}
+
+Then, if we focus on the method \texttt{ma} of \texttt{ClassA}, we see that it calls \texttt{m1} in an object of type \texttt{Class1}. However, the dynamic assignation of types, can make this object be of type \texttt{Class2} and \texttt{Class3}. Does this method call create coupling with \texttt{Class2} and \texttt{Class3}? \cn{HELLO DO THIS}.
+
+Finally, a similar case happens with method \texttt{mb}, the difference is that in this case it calls \texttt{m2}, which in \texttt{Class2} is overridden. Does this create coupling with \texttt{Class2}? In other words, do we account for all possible polymorphic method invocations? If we consider the case in which the implementation of \texttt{m2} in \texttt{Class2} changes, this may affect the way \texttt{ClassA} uses it, and therefore changes may be needed. Thus, we consider that it is necessary to \textbf{account for polymorphism}.
+
+\section{Formal definition of the metrics}
+
+\subsection{Metric 1: Method invocation coupling}
+\[
+  MIC(L, L') = \sum_{c \in C(L)}^{} \sum_{m \in M(c)}^{} indMI(m, L')
+\]
+
+\[
+  indMI(m, L') = \sum_{m' \in SIM(m)}^{} NI(m, m')*PM(m', L')
+\]
+
+C(L) --- Classes of library \textit{L}
+
+M(c) --- Methods implemented in class \textit{c}
+
+SIM(m) --- Set of stable methods invoked in \textit{m}
+
+NI(m, m') --- Number of invokations of \textit{m'} in \textit{m}
+
+PM(m', L') --- Number of polymorphic methods of \textit{m'} implemented in library \textit{L'}
+
+\subsection{Metric 2: Aggregation coupling}
+\[
+  AC(L,L') = \sum_{c \in C(L)}^{} \sum_{c' \in AT(c)}^{} NA(c, c')*DC(c', L')
+\]
+
+AT(c) --- Set of stable attribute types of class \textit{c}.
+
+NA(c, c') --- Number of attributes of type \textit{c'} in class \textit{c}.
 
 \section{Evaluation Setup}
 % We are going to develop a proof-of-concept tool in order to calculate the proposed metrics to measure the dependencies. In this tool, the metrics are going to be calculated from call-level dependency graphs, which will contain the dependency network of the evaluated library.
