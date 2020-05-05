@@ -70,20 +70,20 @@ Pashchenko et al. \cite{pashchenko2018vulnerable} propose a method to analyze de
 % Potser aixo hauria d'anar fora i ja esta
 %Hejderup et al. \cite{hejderup2018software} propose a technique to represent software ecosystems at a function level, a versioned call based dependency network. This call-level dependency graph, in contrast with a package-level dependency graph, allows performing a more detailed evaluation of the dependencies. The graph is used to analyze how the bugs and vulnerabilities spread across the dependency network. In another study Hejderup et al. \cite{hejderup2018prazi} define an approach, named Präzi, to generate call-level dependency networks. In particular, they implement this approach for the Rust ecosystem and discuss all the perils affecting the soundness and precision of Präzi. They conclude that RustPräzi is three times more precise than the package-level dependency graphs.
 
-\section{Dependency evaluation model}
+\section{Definition of coupling}
 The first steps towards a creating a model to measure the dependencies between libraries is to define which meaning of coupling is involved in these depenencies. Therefore, we will use the framework explained in section \ref{section:Background}, from Briand et al. \cite{briand1999unified}. When deciding about the 6 criteria specified in the framework, the order of the decisions is important, since some criteria may directly discard some options of other criteria. Hence, we are going to start by those criteria that are clearly defined by the problem statement.
 
-\paragraph{Criterion 2: Locus of impact}
+\subsection{Criterion 2: Locus of impact}
 According to the description of the problem, the goal of this measurement is to know how much a library depends on another. Therefore, the point of view of this evaluation is from the library that uses another one. Hence, the locus of impact of the coupling to be measured in this thesis is \textbf{import}.
 
-\paragraph{Criterion 4: Stability of the server}
+\subsection{Criterion 4: Stability of the server}
 Briand et al. \cite{briand1999unified} define stable classes as \textit{"Classes that are not subject to change in the project at hand"}. Therefore, we are going to measure coupling from non-stable classes to stable classes.
 However, the separation between stable and unstable classes is not enough. The goal is not to measure the coupling with all stable classes since these include classes such as types provided by the programming language and standard libraries. Therefore, the coupling will only be measured with \textbf{stable classes} that are part of other third-party open-source libraries.
 
-\paragraph{Criterion 5: Direct and indirect coupling}
+\subsection{Criterion 5: Direct and indirect coupling}
 To decide which option we want to define for this criterion, we need to distinguish two alternative scenarios in which we want to measure coupling: Direct dependencies and transitive dependencies. For the initial approach, we are going to focus on the direct dependencies only. Therefore, the metrics are going to measure \textbf{direct coupling} only. However, the metrics defined to measure direct coupling can be extended to consider indirect coupling.
 
-\paragraph{Criterion 3: Granularity of the measure}
+\subsection{Criterion 3: Granularity of the measure}
 In this criterion, there are two aspects to define. The domain level of the measure, and how the metric counts the connections. First, we are going to discuss the domain level. Briand et al. define the following levels:
 
 \begin{itemize}[noitemsep]
@@ -98,7 +98,7 @@ In this case, the goal is to measure the coupling between the set of classes of 
 
 Next, we define how the metrics count the connections. The options for counting connections defined in the framework, are based on two options for the domain levels method and attribute: counting individual connections (option A), and count the items at the other end of the connection (option B). Since the goal is to measure the degree of dependency, we need to focus on option A, since it counts the number of connections. Based on option A, Briand et al. define option C: "Add up the number of connections counted as in A) for each method or attribute of the class". Based on option C, we define the following option for counting connections at the library level: \textbf{Add up the number of connections counted as in C) for each class of the library}.
 
-\paragraph{Criterion 1: Type of connection}
+\subsection{Criterion 1: Type of connection}
 With this criterion, it is defined which type of connection creates coupling between the two items, the two libraries. There are several and clearly distinguished mechanisms that can create coupling \cite{briand1999unified}, listed below.
 
 Given class \textit{a} that belongs to library \textit{A}, and class \textit{b} that belongs to library \textit{B}...
@@ -113,16 +113,14 @@ Given class \textit{a} that belongs to library \textit{A}, and class \textit{b} 
   \item ... class \textit{a} and class \textit{b} have a relationship such as \textit{uses} or \textit{consists-of}.
 \end{enumerate}
 
-Having one metric measure more than one of these types of connections is not recommended. To begin with, the strengths of every type of connection have to be justified: Has one connection of type 5 the same strength as a connection of type 6? Also, it is not possible to know how much of the coupling is created by which type of connection. Therefore, all chosen types of connections are going to be measured by different metrics. To decide which types of connections to measure, since all of them create coupling between libraries, we have decided to review the literature on coupling metrics, to understand which connections are the most measured and why.
+Having one metric measure more than one of these types of connections is not recommended. To begin with, the strengths of every type of connection have to be justified: Has one connection of type 5 the same strength as a connection of type 6? Also, it is not possible to know how much of the coupling is created by which type of connection. Therefore, all chosen types of connections are going to be measured by different metrics. To decide which types of connections to measure, since all of them create coupling between libraries, we have decided to review the literature on coupling metrics, to understand which connections are the most measured and why. After the review, we have concluded that the type of connection most used is 6, only one of the reviewed papers did not consider this type of connection. The following two types of connection more used are 2 and 1. Hence, we have decided to use for the initial metric of this work, \textbf{type 6 method invocations}.
 
-THIS IS A HUGE TODO
-
-\paragraph{Criterion 6: Inheritance (Special cases)}
+\subsection{Criterion 6: Inheritance}
 Within this criterion, there are three aspects to decide about: how, if at all, does the metric distinguish between inheritance-based coupling and noninheritance-based coupling? If the metric counts method invocations, does it account for polymorphism? And finally, what defines if a method or attribute is part of a class or not? This questions are going to be discussed and answered by using Figure \ref{fig:specialcases}, based on the work from Briand et al. \cite{briand1999unified}.
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[height=4.5cm]{img/specialcases.png}
+\includegraphics[height=4.4cm]{img/specialcases.png}
 \caption{Example of coupling special cases}
 \label{fig:specialcases}
 \end{center}
@@ -168,7 +166,9 @@ AT(c) --- Set of stable attribute types of class \textit{c}.
 
 NA(c, c') --- Number of attributes of type \textit{c'} in class \textit{c}.
 
-\section{Evaluation Setup}
+DC(c',L') --- Descendants of class \textit{c'} (\textit{c'} included) implemented in library \textit{L'}.
+
+%\section{Evaluation Setup}
 % We are going to develop a proof-of-concept tool in order to calculate the proposed metrics to measure the dependencies. In this tool, the metrics are going to be calculated from call-level dependency graphs, which will contain the dependency network of the evaluated library.
 
 
@@ -176,7 +176,8 @@ NA(c, c') --- Number of attributes of type \textit{c'} in class \textit{c}.
 
 
 
-\section{Conclusion}
+\section{Conclusion and Next Steps}
+
 
 \subsection{Next steps}
 
