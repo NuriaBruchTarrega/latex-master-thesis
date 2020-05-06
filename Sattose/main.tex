@@ -131,7 +131,7 @@ Having one metric measure more than one of these types of connections is not rec
 However, there is the possibility that a class has an attribute of another class, but never calls a method that belongs to that class. In Figure \ref{fig:specialcases}, it could happen if \texttt{ClassB} only ever called \texttt{obj2.m1}. Counting only method invocations would mean that there is no dependency between \texttt{ClassB} and \texttt{Class2}. Hence, it is at least necessary to create another metric that counts \textbf{type 1: aggregation coupling}.
 
 \section{Formal definition of the metrics}
-Based on the characteristics of coupling described on the previous section, we define two coupling metrics. The difference between these metrics is the type of connection measured.
+Based on the characteristics of coupling described in the previous section, we define two coupling metrics. The difference between these metrics is the type of connection measured.
 
 \subsection{Metric 1: Method invocation coupling}
 \[
@@ -166,11 +166,10 @@ TODO: Conclusion
 
 The following step, will be to define the metrics to measure transitive dependencies. Then, we will perform the theoretical validation of the metrics. This will be done by validating that the proposed metrics fulfill certain properties. For example, Briand et al. \cite{briand1999unified} define five properties of the coupling metrics. Besides, the applicable subset of the set of metrics defined by Meneely et al. \cite{meneely2013validating} will also be validated.
 
-Another part of the work will involve implementing a proof of concept tool (PoC) to calculate the metrics. The PoC will be done by using versioned call-level graphs of the FASTEN project, to obtain a result as precise and fine-grained as possible. This project has the goal of ..., and the first step is to generate fine grained call-graphs to be able to perform a detailed evaluation of the dependencies with open-source libraries.
+Another part of the work will involve implementing a proof of concept tool (PoC) to calculate the metrics. The PoC will be done by using versioned call-level graphs, to obtain a result as precise and fine-grained as possible.
+Once the PoC is working and it has been used with a relevant set of libraries, we will evaluate the results. Various types of evaluations will be conducted: First, evaluation of the PoC itself, by analyzing the runtime complexity of the implementation. Then, the metrics will be compared in order to determine the correlation between these. In addition, some experiments will be conducted, comparing the effort invested in updating and maintaining a dependency with the associated coupling.
 
-Once the PoC is working and it has been used with a relevant set of libraries, we will evaluate the results. Various types of evaluations will be conducted: First, evaluation of the PoC itself, by analysing the runtime complexity of the implementation. Then, the metrics will be compared in order to determine the correlation between these. In addition, some experiments will be conducted, comparing the effort invested in updating and maintaining a depenendcy with the associated coupling.
-
-Then, the work will be focused on the second research question. First, we will study the different cases of dependency replacement, and how each of these cases may affect a project. Then, for each case, we will determine how it affects the code as well as the applicable methods to calculate the needed effort to implement the replacement of the dependency. Finally, we will validate the proposed method by comparing the real effort invested in a replacement with the effort estimated by our model.
+Then, the work will be focused on the second research question. First, we will study the different cases of dependency replacement and how each of these cases may affect a project. Then, for each case, we will determine how it affects the code. Besides, we will research the applicable methods to calculate the needed effort to implement the replacement of the dependency. Finally, we will validate the proposed method by comparing the real effort invested in a replacement with the effort estimated by our model.
 
 \bibliographystyle{alpha}
 \bibliography{res}
