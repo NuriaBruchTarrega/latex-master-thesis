@@ -33,17 +33,17 @@ This is the abstract
 
 
 \section{Introduction}
-At present, there are many open-source libraries available for all developers to reuse the features that these libraries implement. This practice is becoming more and more popular since it allows to reuse previously developed code, and helps developers avoid implementing the same functionalities multiple times.
+At present, there are many open-source libraries available for all developers to reuse the features that these libraries implement. This practice is becoming more and more popular since it allows the reuse of previously developed code and, therefore, helps developers avoid implementing the same functionalities multiple times.
 
 When a developer uses an open-source library in a software product, it creates a dependency between the product and the library. This implies that a significant number of products depend on open-source libraries, and it adds the task of managing these dependencies to the maintenance tasks of the product. How to maintain the dependencies is not a trivial task, and it is one of the problems that the field of software engineering is trying to solve \cite{kula2014visualizing}.
 
-The management and maintenance of the dependencies of a project is an important task. Open-source libraries, just like any other software product, can have security vulnerabilities that may affect the products that depend on these libraries. For example, some vulnerabilities can become security problems that can have a negative impact in terms of integrity, privacy or availability.
+The management and maintenance of the dependencies of a project is an important task. Open-source libraries, just like any other software product, can have security vulnerabilities that may affect the products that depend on these libraries. For example, some vulnerabilities can become security problems that can have a negative impact in terms of integrity, privacy, or availability.
 
-Currently, developers have at their disposal package managers, to ease the task of managing the dependencies of their products. However, the dependency management available in these package managers only evaluate if a dependency exists or not and a more detailed risk evaluation is missing \cite{hejderup2018prazi}. There is no way to evaluate how much a product depends on a library.
+Currently, developers have at their disposal package managers, to ease the task of managing the dependencies of their products. However, the dependency management available in these package managers only evaluates if a dependency exists or not and a more detailed risk evaluation is missing \cite{hejderup2018prazi}. There is no way to evaluate how much a product depends on a library.
 
 Furthermore, it could happen that the developers of a project decide to replace one of the dependencies of the product with another one. This could happen in case a library has vulnerabilities or is deprecated, to prevent the vulnerabilities from affecting the project. However, replacing a dependency could be a costly process. It involves identifying which parts of the project are affected by the dependency, and which parts of the library are being used and need replacement.
 
-Therefore, this thesis has the aim to perform a more detailed evaluation of the dependencies. A set of metrics will be proposed to measure the dependencies between software products and the open-source libraries these use. In addition, we want to propose a way to measure the effort that would be required to replace a dependency with a new one. We are going to define a method to estimate effort considering which parts of the code are affected by the dependency.
+Therefore, this thesis has the goal of performing a more detailed evaluation of the dependencies. A set of metrics will be proposed to measure the dependencies between software products and the open-source libraries these use. In addition, we want to propose a way to measure the effort that would be required to replace a dependency with a new one. We are going to define a method to estimate effort considering which parts of the code are affected by the dependency.
 
 \subsection{Research questions}
 Based on the problem statement described, we define the following research questions:
@@ -51,7 +51,7 @@ Based on the problem statement described, we define the following research quest
 \begin{itemize}[noitemsep]
   \item \textbf{RQ1:} \textit{How can we measure the degree of source code dependency between two libraries?}
 
-  The goal of this research question is to define the metrics to measure a dependency. We focus on coupling metrics, which have been used for many years, in particular for Object-Oriented systems. The main difference is that these metrics have been used to measure coupling within a software product, and not between different software products.
+  The goal of this research question is to define the metrics to measure dependency. We focus on coupling metrics, which have been used for many years, in particular for Object-Oriented systems. The key difference is that these metrics have been used to measure coupling within a software product, and not between different software products.
 
   \item \textbf{RQ2:} How can we measure the effort required to replace a dependency with another dependency with a different library?
 \end{itemize}
