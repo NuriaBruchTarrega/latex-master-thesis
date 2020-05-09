@@ -170,36 +170,34 @@ Based on the characteristics of coupling described in the previous section, we d
 This metric measures the dependency between two libraries, one acting as client ($L_c$) and the other as server ($L_s$), based on the method invocations from $L_c$ to $L_s$. Based on the criterion 3 discussed in the previous section, this metric is calculated for each of the classes implemented in $L_c$, and for each of the methods implemented in these classes. For each method invocation made by the methods implemented in $L_c$, we count only the ones that are implemented in stable classes (not implemented in $L_c$). Then, according to criterion 6 it is necessary to take into account all the polymorphic implementations of the invoked method that are implemented in $L_s$. It is important to remark, that according to criterion 3, the metric should count each individual invocation, not the number of invoked methods.
 
 \begin{equation}
-    MIC(L_c, L_s) = \sum_{m_c \in M(L_c)} indMI(m_c, L_s)
+\verb|MIC|(L_c, L_s) = \sum_{m_c \in \verb|M|(L_c)} \verb|nII|(m_c, L_s)
 \end{equation}
 
 \begin{equation}
-\begin{aligned}
-    indMI(m_c, L_s) = &\sum_{m_s \in SIM(m_c)}\\& nMI(m_c, m_s)*nPM(m_s, L_s)
-\end{aligned}
+%\begin{aligned}
+   \verb|nII|(m_c, L_s) = \sum_{m_s \in \verb|SIM|(m_c)} \verb|nI|(m_c, m_s)*\verb|nP|(m_s, L_s)
+%\end{aligned}
 \end{equation}
 
 \begin{equation}
-    nPM(m_s, L_s) = |PM(m_s) \cap M(L_s)|
+    \verb|nP|(m_s, L_s) = |\verb|PM|(m_s) \cap \verb|M|(L_s)|
 \end{equation}
 
 $MIC(L_c, L_s)$ measures the method invocation coupling between library $L_c$ and library $L_s$, where $L_c$ is the client and $L_s$ is the server. $M(L_s)$ is the set of methods implemented in $L_c$.
 
-$indMI(m_c, L_s)$ counts each of the calls (individual connections) from method $m_c$ to methods implemented in $L_s$. $SIM(m_c)$ is the set of methods invoked by $m_c$ and implemented in a stable class (a class not implemented in $L_c$). $numI(m_c, m_s)$ corresponds to the number of times that $m_c$ invokes $m_s$.
+$nII(m_c, L_s)$ counts each of the calls (individual connections) from method $m_c$ to methods implemented in $L_s$. $SIM(m_c)$ is the set of methods invoked by $m_c$ and implemented in a stable class (a class not implemented in $L_c$). $nI(m_c, m_s)$ corresponds to the number of times that $m_c$ invokes $m_s$.
 
-$nPM(m_s,L_s)$ calculates the number of polymorphic implementations of $m_s$ implemented in $L_s$. $PM(m_s)$ is the set of polymorphic implementations of $m_s$.
+$nP(m_s,L_s)$ calculates the number of polymorphic implementations of $m_s$ implemented in $L_s$. $PM(m_s)$ is the set of polymorphic implementations of $m_s$.
 
 \subsection{Metric 2: Aggregation coupling}
 The process for this metric is similar to the one of the first metric. However, in this case, the metric counts the number of times in which a class of $L_c$ has an attribute which type is a class implemented in $L_s$. Therefore, the metric will be calculated for each class implemented in $L_c$, we consider only those attributes types that are stable classes (not implemented in $L_c$). According to criterion 6, in this case, to account for polymorphism we count all the descendants of the class that are implemented in $L_s$.
 
 \begin{equation}
-\begin{aligned}
-  AC(L_c,L_s) = &\sum_{c_c \in C(L_c)} \sum_{c_s \in SAT(c_c)}\\& NA(c_c, c_s)*nDC(c_s, L_s)
-\end{aligned}
+  \verb|AC|(L_c,L_s) = \sum_{c_c \in \verb|C|(L_c)} \sum_{c_s \in \verb|SAT|(c_c)} \verb|NA|(c_c, c_s)*\verb|nDC|(c_s, L_s)
 \end{equation}
 
 \begin{equation}
-    nDC(c_s, L_s) = |DC(c_s) \cap C(L_s)|
+    \verb|nDC|(c_s, L_s) = |\verb|DC|(c_s) \cap \verb|C|(L_s)|
 \end{equation}
 
 $AC(L,L')$ measures the aggregation coupling between library $L_c$ and library $L_s$. $C(L_c)$ is the set of classes implemented in $L_c$, and $SAT(c_c)$ the set of the stable types of the attributes in class $c_c$. $NA(c_c,c_s)$ is the number of attributes of type $c_s$ declared in class $c_c$.
