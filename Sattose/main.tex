@@ -6,6 +6,14 @@
 \usepackage{color}
 \usepackage{amsmath}
 
+\usepackage{pgfplots}
+%\pgfplotsset{width=7cm,compat=1.8}
+\usepackage{tikz}
+\usepackage{tikzscale}
+\usepackage{pgfplotstable}
+\renewcommand*{\familydefault}{\sfdefault}
+\usepackage{sfmath}
+
 \newcommand{\cn}[1]{\textsuperscript{\color{red} ~[citation needed](#1)~}}
 
 \title{Measuring the impact of library dependency on maintenance}
@@ -203,7 +211,15 @@ According to criterion 6, in this case, to account for polymorphism we count all
 
 \section{Preliminary Results}
 
+The preliminary results have been obtained by the means of a PoC implemented in java using the library \textit{javassist} to analyze bytecode. We have used Maven to download the client libraries and the server libraries that are part of the dependency tree of the client libraries. It is worth pointing out that the current implementation does not yet detect polymorphy when calculating \texttt{MIC}, and it does not find the descendants when calculating \texttt{AC}.
 
+After using the PoC with some example libraries, we have observed the following:
+
+There are dependencies for which both metrics have value 0. This could mean the library is not using the dependency, and it has a bloated dependency \cite{soto2020comprehensive}. However, other reasons may explain this result. To begin with, the client library could use the server library but with a \textit{type of connection} not measured by \texttt{MIC} or \texttt{AC}, this could mean that new metrics could be relevant. Moreover, it is possible to relocate a server library in the jar file of the client library during the build, which is not yet detected by our PoC.
+
+In addition, we have found that for some transitive dependencies, there is coupling measured by \texttt{MIC} or \texttt{AC}. This indicates that the client library directly uses the transitive dependency. This could be due to the fact that our implementation determines the class in which the method is implemented. Therefore, could happen that a direct dependency inherits a method from another library, and this is the method used by the client library.
+
+Finally, when comparing both metrics, we have found that most of the dependencies that have coupling measured by \texttt{AC} also have coupling measured by \texttt{MIC}. In only one case a dependency has $\verb|AC| = 1$ and $\verb|MIC| = 0$. However, we have observed many cases in which a dependency has $\verb|MIC| > 0$ and $\verb|AC| = 0$.
 
 \section{Conclusion and Next Steps}
 With this initial work on the research, we have defined the first two metrics to measure the degree of library dependency. To do so, we have used the framework defined by Briand et al. to formulate the definition of coupling to be measured. The framework has been extended to adapt it to the use case of dependencies between libraries. The result is the definition of two metrics which measure different types of connection between libraries: method invocations and aggregation.
