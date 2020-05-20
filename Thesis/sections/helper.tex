@@ -1,0 +1,49 @@
+\begin{table}[p]
+    \begin{center}
+    \begin{tabular}{|l|l|l|l|l|l|l|}
+    \hline
+    \rot{Metric} & \rot{Inheritance} & \rot{Locus of impact} & \rot{Type of connection} & \rot{Domain of measure} & \rot{Counting connections   } & \rot{Indirect coupling} \\ \hline \hline
+    %CBO           & both  & both    & 5, 6  & class               & F     & no      \\
+    %CBO'          & no    & both    & 5, 6  & class               & F     & no      \\
+    \hline
+    %$RFC_\alpha$  & both  & import  & 6     & class               & E     & depends \\
+    %RFC           & both  & import  & 6     & class               & E     & no      \\
+    %RFC'          & both  & import  & 6     & class               & E     & yes     \\
+    \hline
+    MPC           & both  & import  & 6     & class               & C     & no      \\
+    \hline
+    DAC           & both  & import  & 1     & class               & C     & no      \\
+    %DAC'          & both  & import  & 1     & class               & D     & no      \\
+    \hline
+    %COF           & no    & both    & 5, 6  & system              & F     & no      \\
+    \hline
+    ICP           & both  & import  & 6     & method, class, set  & A, C  & no      \\
+    %IH-ICP        & only  & import  & 6     & method, class, set  & A, C  & no      \\
+    %NIH-ICP       & no    & import  & 6     & method, class, set  & A, C  & no      \\
+    \hline
+    %IFCAIC        & no    & import  & 1     & class               & C     & no      \\
+    ACAIC         & only  & import  & 1     & class               & C     & no      \\
+    OCAIC         & no    & import  & 1     & class               & C     & no      \\
+    %FCAEC         & no    & export  & 1     & class               & C     & no      \\
+    %DCAEC         & only  & export  & 1     & class               & C     & no      \\
+    %OCAEC         & no    & export  & 1     & class               & C     & no      \\
+    \hline
+    %IFCMIC        & no    & import  & 2     & class               & C     & no      \\
+    %ACMIC         & only  & import  & 2     & class               & C     & no      \\
+    %OCMIC         & no    & import  & 2     & class               & C     & no      \\
+    %FCMEC         & no    & export  & 6     & class               & C     & no      \\
+    %DCMEC         & only  & export  & 6     & class               & C     & no      \\
+    %OCMEC         & no    & export  & 6     & class               & C     & no      \\
+    \hline
+    OMMIC         & no    & import  & 6     & class               & C     & no      \\
+    %IFMMIC        & no    & import  & 6     & class               & C     & no      \\
+    AMMIC         & only  & import  & 6     & class               & C     & no      \\
+    %OMMEC         & no    & export  & 6     & class               & C     & no      \\
+    %FMMEC         & no    & export  & 6     & class               & C     & no      \\
+    %DMMEC         & only  & export  & 6     & class               & C     & no      \\
+    \hline
+    \end{tabular}
+    \end{center}
+    \caption{Coupling metrics comparison}
+    \label{table:coupling-metrics}
+\end{table}
