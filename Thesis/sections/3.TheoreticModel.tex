@@ -224,11 +224,42 @@ Let $L_c$ be a client library and $c_1, c_2 \in L_c$ two classes from $L_c$. Let
 \end{equation*}
 
 \paragraph{Property 1: Nonnegativity}
+This metric counts the number of method invocations from the client library ($L_c$) to the server library ($L_s$). The metric is based on aggregating all the calls from the method aggregation level, to the library aggregation level. The aggregation strategy is sumation, therefore the metric could only be negative if a method could have a negative number of invocations to methods of the server library. Therefore, given that $nI(m_c, m_s) \ge 0$ in addition, the number of polymorphic implementations of a method in a library cannot be less than zero ($nP(m_s, L_s) \ge 0$).
 
+\begin{equation*}
+   nI(m_c, m_s) \ge 0 \land nP(m_s, L_s) \ge 0 \implies nI(m_c, m_s) * nP(m_s, L_s) \ge 0 \implies nII(m_c, L_s) \ge 0
+\end{equation*}
+
+\begin{equation*}
+   nII(m_c, L_s) \ge 0 \implies MIC(L_c, L_s) \ge 0
+\end{equation*}
+
+\blankls
+Therefore, \textit{Property 1} holds for Direct Method Invocation Coupling.
 
 \paragraph{Property 2: Null value}
+Following the description of the property, it is necessary to prove that: $R(L_c, L_s) = 0 \implies MIC(L_c, L_s) = 0$. Let $L_c$ be a client library and $L_s$ be a server library. For every $m_c \in M(L_c)$ and $m_s \in M(L_s)$ we have that:
+
+\begin{equation*}
+   R(L_c, L_s) = 0 \implies nI(m_c, m_s) = 0 \implies nI(m_c, m_s) * nP(m_s, L_s) = 0 \implies nII(m_c, L_s) = 0
+\end{equation*}
+
+\begin{equation*}
+   nII(m_c, L_s) = 0 \implies MIC(L_c, L_s) = 0
+\end{equation*}
+
+\blankls
+Therefore, \textit{Property 2} holds for Direct Method Invocation Coupling.
 
 \paragraph{Property 3: Monotonicity}
+Let $c \in C(L_c)$ be a class of the client library $L_c$, and $L_c'$ be a client library identical to $L_c$, but $c$ has been replaced by $c'$. Prove that $R(c, L_s) \subseteq R(c', L_s) \implies MIC(L_c, L_s) \le MIC(L_c', L_s)$. Given $m_c \in M(c)$ any method implemented in class $c$ and $m_c' \in M(c')$ the same method $m_c$ but implemented in $c'$, we have that:
+
+\begin{equation*}
+   R(m_c, L_s) \subseteq R(m_c', L_s) \implies \forall m_s \in SIM(m_c)  nI(m_c, m_s) \le nI(m_c', m_s) \implies nII(m_c, L_s) \le nII(m_c', L_s) \implies MIC(L_c, L_s) \le MIC(L_c', L_s)
+\end{equation*}
+
+\blankls
+Therefore, \textit{Property 3} holds for Direct Method Invocation Coupling.
 
 \paragraph{Property 4: Merging of classes}
 
