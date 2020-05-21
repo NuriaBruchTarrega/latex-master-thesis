@@ -181,63 +181,91 @@ classes implemented in $L_s$ ($\verb|C|(L_s)$). Finally, to count the  individua
 
 
 \subsection{Theoretical validation of the metrics (RQ1.5)}
-The theoretical validation of the metrics consists in demonstrating the properties of the metrics. The theoretical validation is necessary, since it proves that the metrics share some properties with the attribute these are measuring, in this case coupling. In particular, for coupling metrics there are five properties defined by Briand et al. \cite{briand1996property} which have been largely used by the literature \cn{Some examples}. These properties are the following:
+The theoretical validation of the metrics consists in demonstrating the properties of the metrics. The theoretical validation is necessary, since it proves that the metrics share some properties with the attribute these are measuring, in this case coupling. In particular, for coupling metrics there are five properties defined by Briand et al. \cite{briand1996property} which have been largely used by the literature \cn{Some examples}.
+
+For the description of the properties, we use $Coupling(L_c, L_s)$ to refer to any of the metrics defined in the previous section. The description of the metrics is based on the description done by Briand et al. which was done for coupling metrics that measure the coupling within an element, or coupling between an element and all the other elements with which it has some kind of relationship. Therefore, the description have been adapted for coupling metrics that measure coupling between two different elements. In addition, since all the defined metrics measure import coupling, the definitions of the properties are focused on import coupling.
 
 \paragraph{Property 1: Nonnegativity}
-The coupling between two libraries cannot be negative. $Coupling(L_c, L_s) \ge 0$
+Since coupling refers to the amount of relationship between the two libraries it is expected not to be negative.
+
+Let $L_c$ be a client library and $L_s$ be a server library. The coupling between the two libraries cannot be negative. $Coupling(L_c, L_s) \ge 0$
 
 \paragraph{Property 2: Null value}
-The coupling between two libraries is null if there is no relation from the client library to the server library ($InterR(L_c) = \emptyset \implies Coupling(L_c, L_s) = 0$).
+Coupling is expected to be null (zero) when there is not a single import relationship between the client and the server libraries.
 
-\paragraph{Property 3: Monotonicity} Let $L_c$ be a library, and $c \in L_c$ be a class in $L_c$. If we modify class $c$ to form a new class $c'$ which is identical to $c$ except that $InterR(c) \subseteq Inter(c')$. For example, we have added some import relationships in $c$. Let $L_c'$ be a library identical to $L_c$ except that $c$ has been replaced by $c'$. Then, $Coupling(L_c, L_s) \le Coupling(L_c', L_s)$
+Let $L_c$ be a client library and $L_s$ be a server library. The coupling between the two libraries is null if the set of import relationships from $L_c$ to $L_s$ ($R(L_c, L_s)$) is empty. Therefore, $R(L_c, L_s) = \emptyset \implies Coupling(L_c, L_s) = 0$.
 
-\paragraph{Property 4: Merging of classes} Let $L_c$ be a client library and $c_1, c_2 \in L_c$ two classes from $L_c$. Let $c'$ be the class that is the union of  $c_1$ and $c_2$, and $L_c'$ be the library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. Then, $Coupling(c_1) + Coupling(c_2) \ge Coupling(c')$ and $Coupling(C) \ge Coupling(C')$.
+\paragraph{Property 3: Monotonicity}
+According to the quality of coupling, it is expected that if more relationships are added between the libraries, coupling does not decrease.
 
-\paragraph{Property 5: Merging of unconnected classes} Let $L_c$ be a client library and $c_1, c_2 \in L_c$ two classes from $L_c$. Let $c'$ be the class that is the union of  $c_1$ and $c_2$, and $L_c'$ be the library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. If there are no relationships between $c_1$ and $c_2$, then, $Coupling(c_1) + Coupling(c_2) \ge Coupling(c')$ and $Coupling(C) \ge Coupling(C')$.
+Let $L_c$ be a client library, $L_s$ be a server library, and $c \in L_c$ be a class in $L_c$. If we modify class $c$ to form a new class $c'$ which is identical to $c$ except that $R(c, L_s) \subseteq R(c', L_s)$. For example, some method invocations have been added from $c$ to classes implemented in $L_s$. Let $L_c'$ be a library identical to $L_c$ but in which $c$ has been replaced by $c'$. Then, $Coupling(L_c, L_s) \le Coupling(L_c', L_s)$
+
+\paragraph{Property 4: Merging of classes}
+It is expected that if two classes of an system are merged, the coupling does not increase. This property is specifically relevant for when the coupling is measured within a system, if two classes are merged, the coupling between the two classes is substracted from the coupling of the system. However, for the case of the coupling between two libraries, the fact that two classes of the client library are merged would not modify the coupling between the libraries.
+
+Let $L_c$ be a client library, $L_s$ be a server library, and $c_1, c_2 \in L_c$ two classes from $L_c$. Let $c'$ be the class that results when merging  $c_1$ and $c_2$, and $L_c'$ be the library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. Then, $Coupling(c_1, L_s) + Coupling(c_2, L_s) \ge Coupling(c', L_s)$ and $Coupling(C, L_s) \ge Coupling(C', L_s)$.
+
+\paragraph{Property 5: Merging of unconnected classes}
+It is expected that if two classes of a system, which have no relationship are merged, the coupling of the system will stay the same. Since the class that results of the merging, will have the same number of relationships with other classes as the original two. Again, this property is relevant when measuring the coupling of a system, since merging classes makes a difference.
+
+Let $L_c$ be a client library and $c_1, c_2 \in L_c$ two classes from $L_c$. Let $c'$ be the class that is the union of  $c_1$ and $c_2$, and $L_c'$ be the library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. If there are no relationships between $c_1$ and $c_2$, then, $Coupling(c_1) + Coupling(c_2) \ge Coupling(c')$ and $Coupling(C) \ge Coupling(C')$.
 
 \subsubsection{Direct method invocation coupling}
-\paragraph{Nonnegativity}
+\begin{equation*}
+\verb|MIC|(L_c, L_s) =\!\!\!\!\! \sum_{m_c \in \verb|M|(L_c)} \verb|nII|(m_c, L_s)
+\end{equation*}
 
-\paragraph{Null value}
+\begin{equation*}
+   \verb|nII|(m_c, L_s) =\!\!\! \sum_{m_s \in \verb|SIM|(m_c)} \verb|nI|(m_c, m_s)*\verb|nP|(m_s, L_s)
+\end{equation*}
 
-\paragraph{Monotonicity}
+\begin{equation*}
+    \verb|nP|(m_s, L_s) = |\verb|PM|(m_s) \cap \verb|M|(L_s)|
+\end{equation*}
 
-\paragraph{Merging of classes}
+\paragraph{Property 1: Nonnegativity}
 
-\paragraph{Merging of unconnected classes}
+
+\paragraph{Property 2: Null value}
+
+\paragraph{Property 3: Monotonicity}
+
+\paragraph{Property 4: Merging of classes}
+
+\paragraph{Property 5: Merging of unconnected classes}
 
 \subsubsection{Direct aggregation coupling}
-\paragraph{Nonnegativity}
+\paragraph{Property 1: Nonnegativity}
 
-\paragraph{Null value}
+\paragraph{Property 2: Null value}
 
-\paragraph{Monotonicity}
+\paragraph{Property 3: Monotonicity}
 
-\paragraph{Merging of classes}
+\paragraph{Property 4: Merging of classes}
 
-\paragraph{Merging of unconnected classes}
+\paragraph{Property 5: Merging of unconnected classes}
 
 \subsubsection{Transitive method invocation coupling}
-\paragraph{Nonnegativity}
+\paragraph{Property 1: Nonnegativity}
 
-\paragraph{Null value}
+\paragraph{Property 2: Null value}
 
-\paragraph{Monotonicity}
+\paragraph{Property 3: Monotonicity}
 
-\paragraph{Merging of classes}
+\paragraph{Property 4: Merging of classes}
 
-\paragraph{Merging of unconnected classes}
+\paragraph{Property 5: Merging of unconnected classes}
 
 \subsubsection{Transitive aggregation coupling}
-\paragraph{Nonnegativity}
+\paragraph{Property 1: Nonnegativity}
 
-\paragraph{Null value}
+\paragraph{Property 2: Null value}
 
-\paragraph{Monotonicity}
+\paragraph{Property 3: Monotonicity}
 
-\paragraph{Merging of classes}
+\paragraph{Property 4: Merging of classes}
 
-\paragraph{Merging of unconnected classes}
+\paragraph{Property 5: Merging of unconnected classes}
 
 \section{Dependency replacement effort}
 \begin{comment}
