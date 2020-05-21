@@ -175,6 +175,69 @@ classes implemented in $L_s$ ($\verb|C|(L_s)$). Finally, to count the  individua
     \verb|nDC|(c_s, L_s) = |\verb|DC|(c_s) \cap \verb|C|(L_s)|
 \end{equation*}
 
+\paragraph{Metric 3: Transitive method invocation coupling (TMIC)}
+
+\paragraph{Metric 4: Transitive aggregation coupling (TAC)}
+
+
+\subsection{Theoretical validation of the metrics (RQ1.5)}
+The theoretical validation of the metrics consists in demonstrating the properties of the metrics. The theoretical validation is necessary, since it proves that the metrics share some properties with the attribute these are measuring, in this case coupling. In particular, for coupling metrics there are five properties defined by Briand et al. \cite{briand1996property} which have been largely used by the literature \cn{Some examples}. These properties are the following:
+
+\paragraph{Property 1: Nonnegativity}
+The coupling between two libraries cannot be negative. $Coupling(L_c, L_s) \ge 0$
+
+\paragraph{Property 2: Null value}
+The coupling between two libraries is null if there is no relation from the client library to the server library ($InterR(L_c) = \emptyset \implies Coupling(L_c, L_s) = 0$).
+
+\paragraph{Property 3: Monotonicity} Let $L_c$ be a library, and $c \in L_c$ be a class in $L_c$. If we modify class $c$ to form a new class $c'$ which is identical to $c$ except that $InterR(c) \subseteq Inter(c')$. For example, we have added some import relationships in $c$. Let $L_c'$ be a library identical to $L_c$ except that $c$ has been replaced by $c'$. Then, $Coupling(L_c, L_s) \le Coupling(L_c', L_s)$
+
+\paragraph{Property 4: Merging of classes} Let $L_c$ be a client library and $c_1, c_2 \in L_c$ two classes from $L_c$. Let $c'$ be the class that is the union of  $c_1$ and $c_2$, and $L_c'$ be the library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. Then, $Coupling(c_1) + Coupling(c_2) \ge Coupling(c')$ and $Coupling(C) \ge Coupling(C')$.
+
+\paragraph{Property 5: Merging of unconnected classes} Let $L_c$ be a client library and $c_1, c_2 \in L_c$ two classes from $L_c$. Let $c'$ be the class that is the union of  $c_1$ and $c_2$, and $L_c'$ be the library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. If there are no relationships between $c_1$ and $c_2$, then, $Coupling(c_1) + Coupling(c_2) \ge Coupling(c')$ and $Coupling(C) \ge Coupling(C')$.
+
+\subsubsection{Direct method invocation coupling}
+\paragraph{Nonnegativity}
+
+\paragraph{Null value}
+
+\paragraph{Monotonicity}
+
+\paragraph{Merging of classes}
+
+\paragraph{Merging of unconnected classes}
+
+\subsubsection{Direct aggregation coupling}
+\paragraph{Nonnegativity}
+
+\paragraph{Null value}
+
+\paragraph{Monotonicity}
+
+\paragraph{Merging of classes}
+
+\paragraph{Merging of unconnected classes}
+
+\subsubsection{Transitive method invocation coupling}
+\paragraph{Nonnegativity}
+
+\paragraph{Null value}
+
+\paragraph{Monotonicity}
+
+\paragraph{Merging of classes}
+
+\paragraph{Merging of unconnected classes}
+
+\subsubsection{Transitive aggregation coupling}
+\paragraph{Nonnegativity}
+
+\paragraph{Null value}
+
+\paragraph{Monotonicity}
+
+\paragraph{Merging of classes}
+
+\paragraph{Merging of unconnected classes}
 
 \section{Dependency replacement effort}
 \begin{comment}
