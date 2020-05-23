@@ -1,12 +1,63 @@
 % !TEX root = ..\main.tex
 \chapter{Proof of Concept}\label{ch:PoC}
-
-\section{Call-level Dependency Graph Network}
 % Here I should consider that which ever graph generator I finally use, the way it is created and its accuracy is going to affect the results of my experiment. It should appear in threats to validity.
 
-% The FASTEN project has a tool called fastensource that downloads a project and all its dependencies. Also, there is another tool that detects if a project has been updated. The documentation of these tools is in the file: Fasten: Code Sourcing Process
+\section{Maven Dependencies}
+The PoC implemented during this thesis project, analyses java libraries, and more specifically those available in the Maven Central Repository. Furthermore, the dependencies of the analysed libraries should also be available in Maven for the analysis to be possible.
 
-\section{Measuring coupling metrics}
+Therefore, the PoC is influenced by the dependency management implemented in Maven. In particular, it is important to differentiate the different types of dependencies existing in Maven, and the characteristics that these can have.
+
+The configuration of a Maven Project, and therefore, its dependencies as well is done in the \textit{Project Object Model (POM)} file. A part from defining the dependencies of a project, the POM file also contains the description of the project itself and the build plugins that it uses.
+
+A profect is defined by the following parameters:
+
+\begin{itemize}
+  \item \textbf{GroupID:} The identifier of the group or company that developed the project.
+  \item \textbf{ArtifactID:} The identifier of the project itself.
+  \item \textbf{Version:} The version of the implementation of the project.
+  \item \textbf{Packaging:} The packaging method that the project uses. Although other packaging methods are available, in the PoC uses \textit{jar} files to analyze the bytecode.
+\end{itemize}
+
+In the PoC implementation the parameters \textit{GroupID}, \textit{ArtifactID}, and \textit{Version} are used to identify the library to analyze as well as all the dependencies, these three identifiers are known as the \textit{GAV}.
+
+! In Maven cyclic dependencies can happen. It is usually between packages of the same group, which are usually updated at the same time.
+
+! In order to solve dependencies, the same algorithm that maven uses is used by the PoC. (Check this)
+
+\subsection{Module hierarchy}
+A Maven Project can be configured using two different strategies. First, as a single module, which means that it will only have one \textit{POM} file and that only one packagin will result of the build of the project. The second option is to create a multi-module project. In this case the project has multiple \textit{POM} files, these \textit{POM} files can have a defined hierarchy in which there is a parent \textit{POM} that has children \textit{POMs}, these children will \textit{inherit} dependencies from the parent file.
+
+\subsection{Dependencies and DependencyManagement}
+There are two sections in a \textit{POM} file which are used for dependency management purposes: \texttt{dependencies} and \texttt{dependencyMangement}.
+
+The \texttt{dependencyManagement} section is used in multi-module projects. It allows to define certain dependency information (e.g. the version of the artifacts). It is used in the parent \textit{POM} to simplify the dependency definition of the children files.
+
+In the \texttt{dependencies} section is where the dependencies are declared. If a parent file has dependencies declared in this section, these will always be inherited by the children files.
+
+\subsection{Scope of the dependencies}
+One of the main mechanisms that the Maven dependency manager offers is the dependency scope, which is specified for each dependency included in a \textit{pom} file. Each type of scope defines how the propagation as transitive dependencies works. There are 6 different scopes:
+
+\begin{itemize}
+  \item \textbf{Compile:} The default scope, all direct dependencies without an specified scope, have compile scope. This dependencies are available in the classpath of the library, and will be propagated as transitive dependencies to the projects that depend on the current library.
+
+  \item \textbf{Provided:} This scope type means that the dependency is expected to be provided by the JDK or the container during runtime. The dependencies with scope provided are not transitive, and only available in the classpath on compilation and test.
+
+  \item \textbf{Runtime:} In this case, the dependency is only needed during the execution, and therefore not necessary during compilation. It is available in the classpath during runtime and test.
+
+  \item \textbf{Test:} This scope specifies a dependency that is only used for testing purposes. It is available in the classpath during test and execution.
+
+  \item \textbf{System:} Similar to provided, but it is necessary to indicate the path to the jar of the dependency. This may cause problems if the build is done in a machine where the indicated path does not match the actual one.
+
+  \item \textbf{Import:} This scope is only available for dependencies declared in the section \textit{dependencyMangement} and with specified type \textit{pom}. It inidicates that the dependency should be replaced with the dependencies declared in its pom. Therefore, these dependencies are actually replaced and do not affect transitity.
+\end{itemize}
+
+\subsection{Optional dependencies and exclusions}
+In Maven it is possible to declare dependencies as optional. The main use case for this is when a project is not divided in sub-modules and certain dependencies are only used in certain parts of the project and it is possible that these parts are not used. Declaring the dependency as optional, allows to save both space and memory when the dependency is not used.
+
+Another feature of the Maven dependency management is the dependency exclusions. This feature is available again with the goal of saving memory and space that is used by transitive dependencies. It is possible that certain transitive dependencies, are not really needed by your project (for example if your project does not use the part of the direct dependency that needs the transitive dependency). In this case, it is possible to specify the exclusion of transitive dependencies, which are not going to be included in the compilation of the project.
+
+
+\section{Measuring coupling metrics (RQ1.3)}
 
 \section{Measuring replacement effort estimation}
 
