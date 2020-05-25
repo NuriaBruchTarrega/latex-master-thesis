@@ -20,21 +20,17 @@ A profect is defined by the following parameters:
 
 In the PoC implementation the parameters \textit{GroupID}, \textit{ArtifactID}, and \textit{Version} are used to identify the library to analyze as well as all the dependencies, these three identifiers are known as the \textit{GAV}.
 
-! In Maven cyclic dependencies can happen. It is usually between packages of the same group, which are usually updated at the same time.
-
-! In order to solve dependencies, the same algorithm that maven uses is used by the PoC. (Check this)
-
-\subsection{Module hierarchy}
+\paragraph{Module hierarchy}
 A Maven Project can be configured using two different strategies. First, as a single module, which means that it will only have one \textit{POM} file and that only one packagin will result of the build of the project. The second option is to create a multi-module project. In this case the project has multiple \textit{POM} files, these \textit{POM} files can have a defined hierarchy in which there is a parent \textit{POM} that has children \textit{POMs}, these children will \textit{inherit} dependencies from the parent file.
 
-\subsection{Dependencies and DependencyManagement}
+\paragraph{Dependencies and DependencyManagement}
 There are two sections in a \textit{POM} file which are used for dependency management purposes: \texttt{dependencies} and \texttt{dependencyMangement}.
 
 The \texttt{dependencyManagement} section is used in multi-module projects. It allows to define certain dependency information (e.g. the version of the artifacts). It is used in the parent \textit{POM} to simplify the dependency definition of the children files.
 
 In the \texttt{dependencies} section is where the dependencies are declared. If a parent file has dependencies declared in this section, these will always be inherited by the children files.
 
-\subsection{Scope of the dependencies}
+\paragraph{Scope of the dependencies}
 One of the main mechanisms that the Maven dependency manager offers is the dependency scope, which is specified for each dependency included in a \textit{pom} file. Each type of scope defines how the propagation as transitive dependencies works. There are 6 different scopes:
 
 \begin{itemize}
@@ -51,11 +47,16 @@ One of the main mechanisms that the Maven dependency manager offers is the depen
   \item \textbf{Import:} This scope is only available for dependencies declared in the section \textit{dependencyMangement} and with specified type \textit{pom}. It inidicates that the dependency should be replaced with the dependencies declared in its pom. Therefore, these dependencies are actually replaced and do not affect transitity.
 \end{itemize}
 
-\subsection{Optional dependencies and exclusions}
+\paragraph{Optional dependencies and exclusions}
 In Maven it is possible to declare dependencies as optional. The main use case for this is when a project is not divided in sub-modules and certain dependencies are only used in certain parts of the project and it is possible that these parts are not used. Declaring the dependency as optional, allows to save both space and memory when the dependency is not used.
 
-Another feature of the Maven dependency management is the dependency exclusions. This feature is available again with the goal of saving memory and space that is used by transitive dependencies. It is possible that certain transitive dependencies, are not really needed by your project (for example if your project does not use the part of the direct dependency that needs the transitive dependency). In this case, it is possible to specify the exclusion of transitive dependencies, which are not going to be included in the compilation of the project.
+Another feature of the Maven dependency management is the dependency exclusions. This feature is available again with the goal of saving part of the memory and space used by transitive dependencies. When a certain transitive dependency, is not used in your project, for example if your project does not use the part of a direct dependency that needs the transitive dependency, it is possible to specify the exclusion of the transitive dependency. The excluded dependency is not going to be included in the dependency treee of the project.
 
+\paragraph{Cyclic dependencies}
+! In Maven cyclic dependencies can happen. It is usually between packages of the same group, which are usually updated at the same time.
+
+\paragraph{How dependencies are solved}
+! In order to solve dependencies, the same algorithm that maven uses is used by the PoC. (Check this)
 
 \section{Measuring coupling metrics (RQ1.3)}
 
