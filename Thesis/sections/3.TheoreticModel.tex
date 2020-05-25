@@ -133,8 +133,44 @@ All the metrics that are going to be used to measure the dependencies between li
 \subsection{Formal definition of the metrics (RQ1.2)}\label{section:defMetrics}
 
 \subsubsection{Revisiting existing metrics}
-MIC is the sum of OMMIC and AMMIC, which is also the same as ICP at set level, and the same as MPC (?). AC is the sum of ACAIC and OCAIC, which is also the same as DAC (?).
+Once we have defined the coupling that is going to be measured by each of the metrics, we can compare it with the existing coupling metrics, according to Table \ref{table:coupling-metrics} in Section \ref{section:bg-coupling}.
 
+\paragraph{Metric 1}
+To compare the coupling defined for metric 1 with the existing metrics, we focus on the metrics with the following characteristics:
+
+\begin{itemize}
+  \item Type of connection: 6, method invocations
+  \item Locus of impact: import
+  \item Direct or indirect coupling: direct
+  \item Counting connections: count individual connections (option A or C).
+\end{itemize}
+
+The metrics that share this characteristics are: \textit{MPC}, the group \textit{ICP}, and the metrics \textit{AMMIC}, \textit{IFMMIC} and \textit{OMMIC} from the suite of metrics by Briand et al.. However, \textit{MPC} does not consider polymorphic implementations of the called methods. \textit{IFMMIC} is a metric formulated specifically for C++ \cite{briand1997investigation}, and therefore is not useful for our model.
+
+From the group of metrics \textit{ICP}, the metric \textit{ICP} is the one that considers both, inheritance and non-inheritance coupling, and therefore, shares definition of coupling with our metric 1. Nevertheless, according to the definition of \textit{ICP}, the coupling created by each method call is weighted by the number of parameters of the called method, which is not going to be done for our metric 1.
+
+Finally, the metrics \textit{AMMIC} and \textit{OMMIC} use the same definition of coupling as metric 1 except that \textit{AMMIC} counts the method invocations to antecesors and \textit{OMMIC} to other classes. Therefore, metric 1 is the sum of \textit{AMMIC} and \textit{OMMIC} but aggregated to the library aggregation level instead of class level.
+
+\paragraph{Metric 2}
+In the case of metric 2, we focus on the metrics with the following characteristics:
+
+\begin{itemize}
+  \item Type of connection: 1, attribute of type server class, aggregation coupling
+  \item Locus of impact: import
+  \item Direct or indirect coupling: direct
+  \item Counting connections: count individual connections (option A or C).
+\end{itemize}
+
+According to Table \ref{table:coupling-metrics}, the metrics that share these characteristics are \textit{DAC}, and from the suite of metrics by Briand et al. the metrics \textit{IFCAIC}, \textit{ACAIC} and \textit{OCAIC}. However, \textit{IFCAIC} is an extension for C++, and will not be considered.
+
+According to the definition of \textit{DAC} it counts the number of attributes of a class that have any other class as type. Therefore, instead of calculating the coupling between two classes, calculates the coupling of a class with every other class. However, metric 2 is used at library level, and to calculate coupling between two libraries instead of the coupling of one library with all the others.
+
+Finally, \textit{ACAIC} and \textit{OCAIC} consider aggregation coupling with antecesors and others respectively. Therefore, metric 2 is the sum of these two metrics, but aggregated to library aggregation level, since the metrics are designed for class level.
+
+\paragraph{Metric 3}
+The transitive metrics are going to be new.
+
+\paragraph{Metric 4}
 The transitive metrics are going to be new.
 
 
