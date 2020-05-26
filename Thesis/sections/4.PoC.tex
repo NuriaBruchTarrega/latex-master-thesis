@@ -60,8 +60,18 @@ In order to resolve the dependencies, Maven uses the \textit{POM} file and scope
 The PoC follows the same strategy to resolve the dependencies of the client library.
 
 \section{Measuring coupling metrics (RQ1.3)}
+There are several techniques that could have been used to implement the PoC that calculates the different metrics proposed.
+
+\begin{itemize}
+  \item Bytecode analysis
+  \item Source code analysis
+  \item Call-level dependency graph
+\end{itemize}
+
+After an initial try, source code analysis has been discarded. The reason is the following: since the source-code analysis was done by obtaining the code from \textit{GitHub}, the code was more updated than the last version of the library available in Maven Central. Therefore, the dependencies that belonged to the same project were also more updated than the last version in Maven Central, and therefore Maven was not capable of resolving the dependencies. Furthermore, in case it was possible to resolve the dependencies, to account for polymorphism and inheritance, the source code of the dependencies was also needed, but not available.
 
 \subsection{Bytecode analysis}
+The first PoC implementation to calculate the proposed coupling metrics uses bytecode analysis.
 
 \paragraph{Aether}
 
