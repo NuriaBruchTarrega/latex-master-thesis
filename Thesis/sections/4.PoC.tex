@@ -70,10 +70,17 @@ There are several techniques that could have been used to implement the PoC that
 
 After an initial try, source code analysis has been discarded. The reason is the following: since the source-code analysis was done by obtaining the code from \textit{GitHub}, the code was more updated than the last version of the library available in Maven Central. Therefore, the dependencies that belonged to the same project were also more updated than the last version in Maven Central, and therefore Maven was not capable of resolving the dependencies. Furthermore, in case it was possible to resolve the dependencies, to account for polymorphism and inheritance, the source code of the dependencies was also needed, but not available.
 
+The option of call-level dependency graphs is useful for the metrics that measure the type of connection 6 (method invocation). However, the information needed for the type of connection: 1 (aggregation coupling), is not contained in the call-level graphs. Therefore, the initial approach to develop this PoC has been bytecode analysis.
+
 \subsection{Bytecode analysis}
-The first PoC implementation to calculate the proposed coupling metrics uses bytecode analysis.
+The first PoC implementation to calculate the proposed coupling metrics uses bytecode analysis. The implementation is supported by the libraries \textit{javassist}\footnote{\url{http://www.javassist.org/}}, and \textit{Aether}\footnote{\url{https://wiki.eclipse.org/Aether/What_Is_Aether}}
 
 \paragraph{Aether}
+Aether is a library created by Eclipse, which allows to fetch Maven artifacts from different repositories. In addition, it is also used to resolve the dependencies of a library, and create the dependency tree.
+
+In the PoC, it has been used for the initial steps. The request to calculate the metrics receives the identifiers of the library to analyze (\textit{GroupID}, \textit{ArtifactID}, and \textit{version}). Aether fetches the library \textit{jar} and \textit{POM} files from the Maven Central Repository.
+
+Then, once the artifact is obtained, \textit{Aether} is used to resolve the dependencies of the artifact. The dependency tree of the artifact is visited, and each of the dependencies are also obtained, in order to have the \textit{jar} files to analyze as well.
 
 \paragraph{javassist}
 
