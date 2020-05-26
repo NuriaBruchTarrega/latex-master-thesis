@@ -145,27 +145,27 @@ To compare the coupling defined for metric 1 with the existing metrics, we focus
   \item Counting connections: count individual connections (option A or C).
 \end{itemize}
 
-The metrics that share this characteristics are: \textit{MPC}, the group \textit{ICP}, and the metrics \textit{AMMIC}, \textit{IFMMIC} and \textit{OMMIC} from the suite of metrics by Briand et al.. However, \textit{MPC} does not consider polymorphic implementations of the called methods. \textit{IFMMIC} is a metric formulated specifically for C++ \cite{briand1997investigation}, and therefore is not useful for our model.
+The metrics that share these characteristics are \textit{MPC}, the group \textit{ICP}, and the metrics \textit{AMMIC}, \textit{IFMMIC} and \textit{OMMIC} from the suite of metrics by Briand et al.. However, \textit{MPC} does not consider polymorphic implementations of the called methods. \textit{IFMMIC} is a metric formulated specifically for C++ \cite{briand1997investigation} and therefore is not useful for our model.
 
-From the group of metrics \textit{ICP}, the metric \textit{ICP} is the one that considers both, inheritance and non-inheritance coupling, and therefore, shares definition of coupling with our metric 1. Nevertheless, according to the definition of \textit{ICP}, the coupling created by each method call is weighted by the number of parameters of the called method, which is not going to be done for our metric 1.
+From the group of metrics \textit{ICP}, the metric \textit{ICP}  considers both inheritance and non-inheritance coupling and therefore shares the definition of coupling with our metric 1. Nevertheless, according to the definition of \textit{ICP}, the coupling created by each method call is weighted by the number of parameters of the called method. In this aspect, it differs from metric 1.
 
-Finally, the metrics \textit{AMMIC} and \textit{OMMIC} use the same definition of coupling as metric 1 except that \textit{AMMIC} counts the method invocations to antecesors and \textit{OMMIC} to other classes. Therefore, metric 1 is the sum of \textit{AMMIC} and \textit{OMMIC} but aggregated to the library aggregation level instead of class level.
+Finally, the metrics \textit{AMMIC} and \textit{OMMIC} use the same definition of coupling as metric 1 except that \textit{AMMIC} counts the method invocations to ancestors and \textit{OMMIC} to other classes. Therefore, metric 1 is the sum of \textit{AMMIC} and \textit{OMMIC} but aggregated to the library aggregation level instead of class level.
 
 \paragraph{Metric 2}
 In the case of metric 2, we focus on the metrics with the following characteristics:
 
 \begin{itemize}
-  \item Type of connection: 1, attribute of type server class, aggregation coupling
+  \item Type of connection: 1, client class contains an attribute of type server class, aggregation coupling
   \item Locus of impact: import
   \item Direct or indirect coupling: direct
-  \item Counting connections: count individual connections (option A or C).
+  \item Counting connections: count individual connections (option A or C)
 \end{itemize}
 
-According to Table \ref{table:coupling-metrics}, the metrics that share these characteristics are \textit{DAC}, and from the suite of metrics by Briand et al. the metrics \textit{IFCAIC}, \textit{ACAIC} and \textit{OCAIC}. However, \textit{IFCAIC} is an extension for C++, and will not be considered.
+According to Table \ref{table:coupling-metrics}, the metrics that share these characteristics are \textit{DAC}, and from the suite of metrics by Briand et al. the metrics \textit{IFCAIC}, \textit{ACAIC} and \textit{OCAIC}. However, \textit{IFCAIC} is an extension for C++ and will not be considered.
 
-According to the definition of \textit{DAC} it counts the number of attributes of a class that have any other class as type. Therefore, instead of calculating the coupling between two classes, calculates the coupling of a class with every other class. However, metric 2 is used at library level, and to calculate coupling between two libraries instead of the coupling of one library with all the others.
+According to the definition of \textit{DAC}, it counts the number of attributes of a class that have any other class as type. Therefore, instead of calculating the coupling between two classes, it calculates the coupling of a class with every other class. However, metric 2 is used at the library level, and to calculate coupling between two libraries instead of the coupling of one library with all the others.
 
-Finally, \textit{ACAIC} and \textit{OCAIC} consider aggregation coupling with antecesors and others respectively. Therefore, metric 2 is the sum of these two metrics, but aggregated to library aggregation level, since the metrics are designed for class level.
+Finally, \textit{ACAIC} and \textit{OCAIC} consider aggregation coupling with ancestors and others respectively. Therefore, metric 2 is the sum of these two metrics, but aggregated to library aggregation level, since the metrics are designed for class level.
 
 \paragraph{Metric 3}
 The transitive metrics are going to be new.
@@ -217,12 +217,12 @@ classes implemented in $L_s$ ($\verb|C|(L_s)$). Finally, to count the  individua
 
 
 \subsection{Theoretical validation of the metrics (RQ1.5)}
-The theoretical validation of the metrics consists in demonstrating the properties of the metrics. The theoretical validation is necessary, since it proves that the metrics share some properties with the attribute these are measuring, in this case coupling. In particular, for coupling metrics there are five properties defined by Briand et al. \cite{briand1996property} which have been largely used by the literature \cn{Some examples}.
+The theoretical validation of the metrics consists of demonstrating the properties of the metrics. The theoretical validation is necessary since it proves that the metrics share some properties with the attribute these are measuring, in this case coupling. In particular, for coupling metrics there are five properties defined by Briand et al. \cite{briand1996property} which have been largely used by the literature \cn{Some examples}.
 
-For the description of the properties, we use $Coupling(L_c, L_s)$ to refer to any of the metrics defined in the previous section. The description of the metrics is based on the description done by Briand et al. which was done for coupling metrics that measure the coupling within an element, or coupling between an element and all the other elements with which it has some kind of relationship. Therefore, the description have been adapted for coupling metrics that measure coupling between two different elements. In addition, since all the defined metrics measure import coupling, the definitions of the properties are focused on import coupling.
+For the description of the properties, we use $Coupling(L_c, L_s)$ to refer to any of the metrics defined in the previous section. The description of the metrics is based on the description done by Briand et al. which was done for coupling metrics that measure the coupling within an element, or coupling between an element and all the other elements with which it has some type of relationship. Therefore, the description has been adapted for coupling metrics that measure coupling between two different elements. In addition, since all the defined metrics measure import coupling, the definitions of the properties are focused on import coupling.
 
 \paragraph{Property 1: Nonnegativity}
-Since coupling refers to the amount of relationship between the two libraries it is expected not to be negative.
+Since coupling refers to the number of relationship between the two libraries it is expected not to be negative.
 
 Let $L_c$ be a client library and $L_s$ be a server library. The coupling between the two libraries cannot be negative. $Coupling(L_c, L_s) \ge 0$
 
@@ -237,30 +237,19 @@ According to the quality of coupling, it is expected that if more relationships 
 Let $L_c$ be a client library, $L_s$ be a server library, and $c \in L_c$ be a class in $L_c$. If we modify class $c$ to form a new class $c'$ which is identical to $c$ except that $R(c, L_s) \subseteq R(c', L_s)$. For example, some method invocations have been added from $c$ to classes implemented in $L_s$. Let $L_c'$ be a library identical to $L_c$ but in which $c$ has been replaced by $c'$. Then, $Coupling(L_c, L_s) \le Coupling(L_c', L_s)$
 
 \paragraph{Property 4: Merging of classes}
-It is expected that if two classes of an system are merged, the coupling does not increase. This property is specifically relevant for when the coupling is measured within a system, if two classes are merged, the coupling between the two classes is substracted from the coupling of the system. However, for the case of the coupling between two libraries, the fact that two classes of the client library are merged would not modify the coupling between the libraries.
+It is expected that if two classes of a system are merged, the coupling does not increase. This property is specifically relevant for when the coupling is measured within a system. If two classes are merged, the coupling between the two classes is subtracted from the coupling of the system. However, for the case of the coupling between two libraries, the fact that two classes of the client library are merged would not modify the coupling between the libraries.
 
 Let $L_c$ be a client library, $L_s$ be a server library, and $c_1, c_2 \in L_c$ two classes from $L_c$. Let $c'$ be the class that results when merging  $c_1$ and $c_2$, and $L_c'$ be the library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. Then, $Coupling(c_1, L_s) + Coupling(c_2, L_s) \ge Coupling(c', L_s)$ and $Coupling(C, L_s) \ge Coupling(C', L_s)$.
 
 \paragraph{Property 5: Merging of unconnected classes}
-It is expected that if two classes of a system, which have no relationship are merged, the coupling of the system will stay the same. Since the class that results of the merging, will have the same number of relationships with other classes as the original two. Again, this property is relevant when measuring the coupling of a system, since merging classes makes a difference.
+It is expected that if two classes of a system, which have no relationship are merged, the coupling of the system will stay the same. Since the class that results of the merging will have the same number of relationships with other classes as the original two. Again, this property is relevant when measuring the coupling of a system, since merging classes makes a difference.
 
 Let $L_c$ be a client library and $c_1, c_2 \in L_c$ two classes from $L_c$. Let $c'$ be the class that is the union of  $c_1$ and $c_2$, and $L_c'$ be the library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. If there are no relationships between $c_1$ and $c_2$, then, $Coupling(c_1) + Coupling(c_2) \ge Coupling(c')$ and $Coupling(C) \ge Coupling(C')$.
 
 \subsubsection{Direct method invocation coupling}
-\begin{equation*}
-\verb|MIC|(L_c, L_s) =\!\!\!\!\! \sum_{m_c \in \verb|M|(L_c)} \verb|nII|(m_c, L_s)
-\end{equation*}
-
-\begin{equation*}
-   \verb|nII|(m_c, L_s) =\!\!\! \sum_{m_s \in \verb|SIM|(m_c)} \verb|nI|(m_c, m_s)*\verb|nP|(m_s, L_s)
-\end{equation*}
-
-\begin{equation*}
-    \verb|nP|(m_s, L_s) = |\verb|PM|(m_s) \cap \verb|M|(L_s)|
-\end{equation*}
 
 \paragraph{Property 1: Nonnegativity}
-This metric counts the number of method invocations from the client library ($L_c$) to the server library ($L_s$). The metric is based on aggregating all the calls from the method aggregation level, to the library aggregation level. The aggregation strategy is sumation, therefore the metric could only be negative if a method could have a negative number of invocations to methods of the server library. Therefore, given that $nI(m_c, m_s) \ge 0$ in addition, the number of polymorphic implementations of a method in a library cannot be less than zero ($nP(m_s, L_s) \ge 0$).
+This metric counts the number of method invocations from the client library ($L_c$) to the server library ($L_s$). The metric is based on aggregating all the calls from the method aggregation level, to the library aggregation level. The aggregation strategy is summation, therefore the metric could only be negative if a method could have a negative number of invocations to methods of the server library. Therefore, given that $nI(m_c, m_s) \ge 0$ in addition, the number of polymorphic implementations of a method in a library cannot be less than zero ($nP(m_s, L_s) \ge 0$).
 
 \begin{equation*}
    nI(m_c, m_s) \ge 0 \land nP(m_s, L_s) \ge 0 \implies nI(m_c, m_s) * nP(m_s, L_s) \ge 0 \implies nII(m_c, L_s) \ge 0

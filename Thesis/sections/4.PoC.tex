@@ -3,13 +3,13 @@
 % Here I should consider that which ever graph generator I finally use, the way it is created and its accuracy is going to affect the results of my experiment. It should appear in threats to validity.
 
 \section{Maven Dependencies}
-The PoC implemented during this thesis project analyses java libraries, and more specifically those available in the \textit{Maven Central Repository}\footnote{\url{https://repo1.maven.org/maven2/}}. Furthermore, all the dependencies of the analysed libraries should also be available in Maven for the analysis to be possible.
+The PoC implemented during this thesis project analyses java libraries and more specifically those available in the \textit{Maven Central Repository}\footnote{\url{https://repo1.maven.org/maven2/}}. Furthermore, all the dependencies of the analyzed libraries should also be available in Maven for the analysis to be possible.
 
-Therefore, the PoC is influenced by the dependency management implemented in Maven. In particular, it is important to understand the different types of dependencies existing in Maven, and the characteristics that these can have.
+Therefore, the PoC is influenced by the dependency management implemented in Maven. In particular, it is important to understand the different types of dependencies existing in Maven and the characteristics that these can have.
 
-The configuration of a Maven Project, including the dependency management, is done in the \textit{Project Object Model (POM)} file. A part from defining the dependencies of a project, the POM file contains the description of the project itself and the build plugins that it uses.
+The configuration of a Maven Project, including the dependency management, is done in the \textit{Project Object Model (POM)} file. Apart from defining the dependencies of a project, the POM file contains the description of the project itself and the build plugins that it uses.
 
-A profect is defined by the following parameters:
+A project is defined by the following parameters:
 
 \begin{itemize}
   \item \textbf{GroupID:} The identifier of the group or company that developed the project.
@@ -21,41 +21,41 @@ A profect is defined by the following parameters:
 In the PoC implementation the parameters \textit{GroupID}, \textit{ArtifactID}, and \textit{Version} are used to identify the library to analyze as well as all the dependencies.
 
 \paragraph{Module hierarchy}
-A Maven Project can be configured using two different strategies. First, as a single module, which means that it will only have one \textit{POM} file and that only one packagin will result of the build of the project. The second option is to create a multi-module project. In this case the project has multiple \textit{POM} files, these \textit{POM} files can have a defined hierarchy in which there is a parent \textit{POM} that has children \textit{POMs}, these children will \textit{inherit} dependencies from the parent file. In this PoC, a module with a \textit{POM} file, even if it has a parent module, is considered a library, since it can be used in a different library as an individual dependency.
+A Maven Project can be configured using two different strategies. First, as a single module, which means that it will only have one \textit{POM} file and that only one packaging will result in the build of the project. The second option is to create a multi-module project. In this case, the project has multiple \textit{POM} files. These \textit{POM} files can have a defined hierarchy in which there is a parent \textit{POM} that has children \textit{POMs}, these children will \textit{inherit} dependencies from the parent file. In this PoC, a module with a \textit{POM} file, even if it has a parent module, is considered a library, since it can be used in a different library as an individual dependency.
 
 \paragraph{Dependencies and DependencyManagement}
-There are two sections in a \textit{POM} file which are used for dependency management purposes: \texttt{dependencies} and \texttt{dependencyMangement}.
+There are two sections in a \textit{POM} file that are used for dependency management purposes: \texttt{dependencies} and \texttt{dependencyManagement}.
 
-The \texttt{dependencyManagement} section is used in multi-module projects. It allows to define certain dependency information (e.g. the version of the artifacts). It is used in the parent \textit{POM} to simplify the dependency definition of the children files.
+The \texttt{dependencyManagement} section is used in multi-module projects. It is used to define certain dependency information (e.g. the version of the artifacts). It is used in the parent \textit{POM} to simplify the dependency definition of the children files.
 
-In the \texttt{dependencies} section is where the dependencies are declared. If a parent file has dependencies declared in this section, these will always be inherited by the children files.
+In the \texttt{dependencies} section is where the dependencies are declared. If a parent file has dependencies declared in this section, these will always be inherited by the children's files.
 
 Maven uses these both sections to resolve the dependencies of a library.
 
 \paragraph{Scope of the dependencies}
-One of the main mechanisms that the Maven dependency manager offers is the dependency scope, which is specified for each dependency included in a \textit{POM} file. The scope of a direct dependency affects how the transitive dependencies are treated, a part from import. There are 6 different scopes:
+One of the main mechanisms that the Maven dependency manager offers is the dependency scope, which is specified for each dependency included in a \textit{POM} file. The scope of a direct dependency affects how the transitive dependencies are treated, apart from the scope import. There are 6 different scopes:
 
 \begin{itemize}
-  \item \textbf{Compile:} The default scope, all direct dependencies without an specified scope, have compile scope. This dependencies are available in the classpath of the library, and will be propagated as transitive dependencies to the libraries that depend on the current library.
+  \item \textbf{Compile:} The default scope, all direct dependencies without a specified scope, have compile scope. These dependencies are available in the classpath of the library and will be propagated as transitive dependencies to the libraries that depend on the current library.
 
-  \item \textbf{Provided:} This scope type means that the dependency is expected to be provided by the JDK or the container during runtime. The dependencies with scope provided do not propagate transitive dependencies, and are only available in the classpath on compilation and test.
+  \item \textbf{Provided:} This scope type means that the dependency is expected to be provided by the JDK or the container during runtime. The dependencies with scope provided do not propagate transitive dependencies and are only available in the classpath on compilation and test.
 
   \item \textbf{Runtime:} In this case, the dependency is only needed during the execution, and therefore not necessary during compilation. It is available in the classpath during runtime and test. Runtime dependencies are propagated as transitive dependencies.
 
-  \item \textbf{Test:} This scope specifies a dependency that is only used for testing purposes. It is available in the classpath during test and execution. Test dependencies do not propagate as transitive dependencies.
+  \item \textbf{Test:} This scope specifies a dependency that is only used for testing purposes. It is available in the classpath during test and execution phases. Test dependencies do not propagate as transitive dependencies.
 
-  \item \textbf{System:} Similar to provided, but it is necessary to indicate the path to the jar of the dependency. This may cause problems if the build is done in a machine where the indicated path does not match the actual one. This scope is not transitive.
+  \item \textbf{System:} Similar to \textit{provided}, but it is necessary to indicate the path to the jar of the dependency. This may cause problems if the build is done in a machine where the indicated path does not match the actual one. This scope is not transitive.
 
-  \item \textbf{Import:} This scope is only available for dependencies declared in the section \textit{dependencyMangement} and with specified type \textit{pom}. It inidicates that the dependency should be replaced with the dependencies declared in its pom. Therefore, these dependencies are actually replaced and do not affect transitity.
+  \item \textbf{Import:} This scope is only available for dependencies declared in the section \textit{DependencyManagement} and with specified type \textit{pom}. It indicates that the dependency should be replaced with the dependencies declared in its pom. Therefore, these dependencies are actually replaced and do not affect transitivity.
 \end{itemize}
 
 \paragraph{Optional dependencies and exclusions}
-In Maven it is possible to declare dependencies as \textit{optional}. The main use case for this is when a project is not divided in sub-modules and certain dependencies are only used in certain parts of the project and it is possible to use the project without using these parts. Declaring the dependency as optional, allows to save both space and memory when the dependency is not used.
+In Maven it is possible to declare dependencies as \textit{optional}. The main use case for this is when a project is not divided into sub-modules and certain dependencies are only used in certain parts of the project. In this case, it might be possible to use the project without using these parts, and the dependency might not be necessary. Declaring the dependency as optional allows to save both space and memory when the dependency is not used.
 
-Another feature of the Maven dependency management is the dependency \textit{exclusions}. This feature has the goal of saving part of the memory and space used by transitive dependencies. When a certain transitive dependency is not used in your project, for example if your project does not use the part of a direct dependency that needs the transitive dependency, it is possible to specify the exclusion of the transitive dependency. The excluded dependency is not going to be included in the dependency tree of the project, and will not be imported in the classpath of the library.
+Another feature of the dependency management available in Maven is the dependency \textit{exclusions}. This feature has the goal of saving part of the memory and space used by transitive dependencies. When a certain transitive dependency is not used in your project it is possible to specify the exclusion of the transitive dependency. This could be useful in case you use only a part of a direct dependency which does not need the transitive dependency. The excluded dependency is not going to be included in the dependency tree of the project and will not be imported in the classpath of the library.
 
 \paragraph{Dependency resolution}
-In order to resolve the dependencies, Maven uses the \textit{POM} file and scopes in a recursive manner to create the dependency tree. However, there is another aspect to dependency resolution, which is the version of each of the dependencies. It is possible that a dependency tree contains the same dependency more than once, and maybe with different versions. Maven uses the dependency mediation algorithm to resolve the version of the dependencies. The strategy that the algorithm follows is the "nearest definition" which consists on choosing the version of the dependency that is closer to the root in the dependency tree. If one artifact is declared twice with different versions and in the same level, the dependency mediation will choose the version of the first declaration of the dependency.
+In order to resolve the dependencies, Maven uses the \textit{POM} file and scopes in a recursive manner to create the dependency tree. However, there is another aspect of dependency resolution, which is the version of each of the dependencies. It is possible that a dependency tree contains the same dependency more than once, and maybe with different versions. Maven uses the dependency mediation algorithm to resolve the version of the dependencies. The strategy that the algorithm follows is the "nearest definition" which consists of choosing the version of the dependency that is closer to the root in the dependency tree. If one artifact is declared twice with different versions and in the same level, the dependency mediation will choose the version of the first declaration of the dependency.
 
 The PoC follows the same strategy to resolve the dependencies of the client library.
 
