@@ -85,13 +85,46 @@ Then, once the artifact is obtained, \textit{Aether} is used to resolve the depe
 \paragraph{Javassist}
 Once the jars of the client library and all its dependencies are available, the first step is to join all the \textit{.class} files in a \texttt{ClassPool} object, which is the main object of \textit{Javassist}. Once the \texttt{ClassPool} is created, it is used to obtain the classes from the client library, from which the different metrics are calculated.
 
-\paragraph{Direct Method Invocation Coupling}
+\paragraph{Direct Method Invocation Coupling} % Something about the bridge methods?
 To calculate this first metric, the PoC tool iterates through all the classes of the client library. For each class, the behaviors are obtained. In the \textit{Javassist} terminology, the behaviors include both methods and constructors.
 
 Then, the tool iterates through all the behaviors, and calls the method \texttt{instrument}. The main use case of this method is to modify the bytecode of the method, it receives an \texttt{ExprEditor} object, which is a class that can be extended to implement the methods for editing the bytecode. In this case the methods overridden are \texttt{edit(MethodCall mc)} and \texttt{edit(ConstructorCall cc)}. These methods will be called for each method call and constructor call, respectively, existing in the bytecode of the method. Therefore, these methods are used to check if the call is done to an external library, and in case it is, consider the call for the metric calculation.
 
+\begin{figure}[h!]
+\begin{lstlisting}[escapeinside={(*}{*)}]
+micMap = new Map(ServerMethod, int)
+clientClasses = classPoolManager.getClientLibraryClasses()
+
+for each c in clientClasses
+  behaviors = c.getDeclaredBehaviors()
+  for each b in behaviors
+    for each invocation in b
+      sm = invocation.getMethod()
+      sc = sm.getDeclaringClass()
+      if (classPoolManager.belongsToClientLibrary(sc))
+        micMap.update(sc, +1)
+\end{lstlisting}
+\caption{Pseudo-code of the algorithm to calculate MIC}
+\label{fig:algorithm-mic}
+\end{figure}
+
 \paragraph{Direct Aggregation Coupling}
 The initial strategy for this second metric is similar to the previous one. The implementation iterates through all the classes of the client library. Then, for each one, all the fields declared in the class. Next, each of the fields containing a generic type are parsed apart. All the types involved in the field are obtained and computed individually. All the simple types obtained, if the declaring class is found in a server library, are included in the calculation of the metric.
+
+\begin{figure}[h!]
+\begin{lstlisting}[escapeinside={(*}{*)}]
+acMap = new Map(ServerClass, int)
+clientClasses = classPoolManager.getClientLibraryClasses()
+
+for each c in clientClasses
+  fields = c.getDeclaredFields()
+  for each f in fields
+    if (classPoolManager.belongsToClientLibrary(f))
+      acMap.update(f, +1)
+\end{lstlisting}
+\caption{Pseudo-code of the algorithm to calculate AC}
+\label{fig:algorithm-ac}
+\end{figure}
 
 \paragraph{Polymorphy and descendants}
 

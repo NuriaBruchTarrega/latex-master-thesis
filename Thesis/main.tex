@@ -102,6 +102,29 @@
 %\newcommandx{\ana}[2][1=]{\todo[linecolor=rblu,backgroundcolor=ryel,bordercolor=rred,#1]{#2}}
 %\newcommandx{\paco}[2][1=]{\todo[author=Paco,linecolor=blue,backgroundcolor=white,bordercolor=red,#1]{#2}}
 
+\definecolor{lstgrey}{rgb}{0.95,0.95,0.95}
+\usepackage{listings}
+\lstset{
+    language=Java,
+    frame=single,
+    backgroundcolor=\color{lstgrey},
+    basicstyle=\small\ttfamily,
+    captionpos=b,
+    tabsize=2,
+    commentstyle=\color{gray},              % Comments font
+    numbers=left,                           % Line nums position
+    numberstyle=\tiny,                      % Line-numbers fonts
+    % stepnumber=1,                           % Step between two line-numbers
+    % numbersep=5pt,                          % How far are line-numbers from code
+    tabsize=2,                              % Default tab size
+    captionpos=b,                           % Caption-position = bottom
+    breaklines=true,                        % Automatic line breaking?
+    breakatwhitespace=false,                % Automatic breaks only at whitespace?
+    showspaces=false,                       % Dont make spaces visible
+    showtabs=false,                         % Dont make tabls visible
+    columns=flexible,                       % Column format
+}
+
 \NewDocumentCommand{\rot}{O{90} O{1em} m}{\makebox[#2][l]{\rotatebox{#1}{#3}}}
 
 \newcommand{\cn}[1]{\textsuperscript{\color{red} ~[citation needed]#1~}}
