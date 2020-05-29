@@ -263,18 +263,11 @@ The other option is that there is a method $m_s \in SIM(m_c)$ such that $nP(m_s,
 Therefore, the initial assumtion is not true, and \textit{Property 1: Nonnegativity} holds for the metric $MIC$.
 
 \paragraph{Property 2: Null value}
-Following the description of the property, it is necessary to prove that: $R(L_c, L_s) = 0 \implies MIC(L_c, L_s) = 0$. Let $L_c$ be a client library and $L_s$ be a server library. For every $m_c \in M(L_c)$ and $m_s \in M(L_s)$, following the formal definition of the metric, we have that:
+Assuming that property 2 does not hold for metric $MIC$, there is a client library $L_c$ and a server library $L_s$ such that have no relationship ($R(L_c, L_s) = 0$) and $MIC(L_c, L_s) 	\neq 0$. Based on the proof done for the property \textit{Nonnegativity}, we know that $MIC(L_c, L_s) \ge 0$. Therefore, $MIC(L_c, L_s) > 0$. Hence, there is a client method $m_c \in M(L_c)$ such that $nII(m_c, L_s) > 0$.
 
-\begin{equation*}
-   R(L_c, L_s) = 0 \implies nI(m_c, m_s) = 0 \implies nI(m_c, m_s) * nP(m_s, L_s) = 0 \implies nII(m_c, L_s) = 0
-\end{equation*}
+Thus, there is a server method $m_s \in SIM(m_c)$, such that $nI(m_c, m_s) > 0$ and $nP(m_s, L_s) > 0$. Therefore, the method $m_s$ is called at least one time by the method $m_c$ from the client library $L_c$, and at the same time is implemented by the server library $L_s$, which means that there is a relationship between $L_c$ and $L_s$, which contradicts the original assumption that $R(L_c, L_s) = 0$.
 
-\begin{equation*}
-   nII(m_c, L_s) = 0 \implies MIC(L_c, L_s) = 0
-\end{equation*}
-
-\blankls
-Therefore, \textit{Property 2} holds for Direct Method Invocation Coupling.
+Consequently, the \textit{Property 2: Null value} holds for metric $MIC$.
 
 \paragraph{Property 3: Monotonicity}
 Let $c \in C(L_c)$ be a class of the client library $L_c$, and $L_c'$ be a client library identical to $L_c$, but $c$ has been replaced by $c'$. Prove that $R(c, L_s) \subseteq R(c', L_s) \implies MIC(L_c, L_s) \le MIC(L_c', L_s)$. Given $m_c \in M(c)$ any method implemented in class $c$ and $m_c' \in M(c')$ the same method $m_c$ but implemented in $c'$, we have that:
