@@ -289,6 +289,13 @@ Therefore, \textit{Property 3} holds for Direct Method Invocation Coupling.
 
 \subsubsection{Direct aggregation coupling}
 \paragraph{Property 1: Nonnegativity}
+We assume that the metric $AC$ does not have the property nonnegativity, therefore there is a client library $L_c$ and a server library $L_s$ such that $AC(L_c, L_s) < 0$. Then, there is a client class $c_c \in C(L_c)$ and a server class $c_s \in SAT(c_c)$ such that either $NA(c_c, c_s)$ or $nDC(c_s, L_s)$ have a negative value.
+
+Let's assume that $NA(c_c, c_s) < 0$. This means that the $c_s$ is a class that is included in the set of stable classes declared as fields in $c_c$ ($c_s \in SAT(c_c)$) and, at the same time is declared a negative number of times, which is a contradiction.
+
+Therefore, $nDC(c_s, L_s)$ has to be negative. $nDC(c_s, L_s)$ corresponds to the cardinality of the intersection between two sets. Even if the two sets do not share any element, the intersection will be the empty set, and the cardinality will be zero. Hence, $nDC(c_s, L_s)$ cannot have a negative value, and the initial assumption is false.
+
+In conclusion, the \textit{property 1: Nonnegativity} holds for the metric $AC$.
 
 \paragraph{Property 2: Null value}
 
