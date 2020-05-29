@@ -318,6 +318,11 @@ Let $L_c$ be a client library that includes the classes $c_1$ and $c_2$. Let $c'
 Thus, either $c_1$ or $c_2$ contain an attribute of type $c_s$, such that $c_s$ is implemented in $L_s$ and it is not included $c'$. This creates a contradition with the initial affirmation $R(c_1, L_s) \subseteq R(c', L_s) \land R(c_2, L_s) \subseteq R(c', L_s)$, since the declaration of an attribute of type $c_s$ is included in $R(c_1, L_s)$ or $R(c_2, L_s)$. Therefore, property 4 holds for metric AC.
 
 \paragraph{Property 5: Merging of unconnected classes}
+Let $L_c$ be a client library and $L_s$ be a server library. Let $c_1$ and $c_2$ be classes implemented in $L_c$, such that $R(c_1, L_s) \cap R(c_2, L_s) = \emptyset$. Let $c'$ be a class such that $c_1 + c_2 = c'$. Therefore, $R(c_1, L_s) + R(c_2, L_s) = R(c', L_s)$. Let $L_c'$ be a client library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. We assume that the metric AC does not fulfill property 5.
+
+Therefore, $AC(L_c, L_s) \neq AC(L_c', L_s)$. According to property 4, it cannot happen that $AC(L_c, L_s) < AC(L_c', L_s)$. Therefore, $AC(L_c, L_s) > AC(L_c', L_s)$. The only way this is if there is an attribute of type $c_s$ declared in $c_1$ or $c_2$ and implemented in $L_s$, such that is not included in $c'$. This creates a contradition with the initial affirmation that $R(c_1, L_s) + R(c_2, L_s) = R(c', L_s)$.
+
+Therefore, metric AC fulfills \textit{Property 5: merging of unconnected classes}.
 
 \subsubsection{Transitive method invocation coupling}
 \paragraph{Property 1: Nonnegativity}
