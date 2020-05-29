@@ -282,6 +282,11 @@ Let $L_c$ be a client library that includes the classes $c_1$ and $c_2$. Let $c'
 Therefore, there is a method $m_c$ which is implemented in $c_1$ or $c_2$ such that contains a call to a method $m_s$ which does not exist in any of the methods implemented in $c'$. This is a contradition with the initial affirmation $R(c_1, L_s) \subseteq R(c', L_s) \land R(c_2, L_s) \subseteq R(c', L_s)$. Therefore, property 4 holds for metric MIC.
 
 \paragraph{Property 5: Merging of unconnected classes}
+Let $L_c$ be a client library and $L_s$ be a server library. Let $c_1$ and $c_2$ be classes implemented in $L_c$, such that $R(c_1, L_s) \cap R(c_2, L_s) = \emptyset$. Let $c'$ be a class such that $c_1 + c_2 = c'$. Therefore, $R(c_1, L_s) + R(c_2, L_s) = R(c', L_s)$. Let $L_c'$ be a client library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. We assume that the metric MIC does not fulfill property 5.
+
+Therefore, $MIC(L_c, L_s) \neq MIC(L_c', L_s)$. According to property 4, $MIC(L_c, L_s)$ cannot be less than $MIC(L_c', L_s)$. Thus, $MIC(L_c, L_s) > MIC(L_c', L_s)$. This means that there is a $m_c$ implemented in $c_1$ or $c_2$ that contains an invocation to a method $m_s$ implemented in $L_s$, which is not included in $c'$. This contradicts that $R(c_1, L_s) + R(c_2, L_s) = R(c', L_s)$.
+
+Therefore, \textit{Property 5} holds for metric MIC.
 
 \subsubsection{Direct aggregation coupling}
 \paragraph{Property 1: Nonnegativity}
@@ -311,7 +316,6 @@ Therefore, \textit{Property 3} holds for the metric AC.
 Let $L_c$ be a client library that includes the classes $c_1$ and $c_2$. Let $c'$ be a class such that $c_1 + c_2 = c'$ and $L_c'$ be a client library identical to $L_c$ but where $c_1$ and $c_2$ have been replaced by $c'$. We assume that the property merging of classes does not hold for metric AC,. Therefore, $R(c_1, L_s) \subseteq R(c', L_s) \land R(c_2, L_s) \subseteq R(c', L_s)$ and, also $AC(L_c, L_s) > AC(L_c', L_s)$.
 
 Thus, either $c_1$ or $c_2$ contain an attribute of type $c_s$, such that $c_s$ is implemented in $L_s$ and it is not included $c'$. This creates a contradition with the initial affirmation $R(c_1, L_s) \subseteq R(c', L_s) \land R(c_2, L_s) \subseteq R(c', L_s)$, since the declaration of an attribute of type $c_s$ is included in $R(c_1, L_s)$ or $R(c_2, L_s)$. Therefore, property 4 holds for metric AC.
-
 
 \paragraph{Property 5: Merging of unconnected classes}
 
