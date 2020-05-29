@@ -308,6 +308,10 @@ This means that there is a server class $c_s \in SAT(c_c)$, that is implemented 
 Therefore, \textit{Property 3} holds for the metric AC.
 
 \paragraph{Property 4: Merging of classes}
+Let $L_c$ be a client library that includes the classes $c_1$ and $c_2$. Let $c'$ be a class such that $c_1 + c_2 = c'$ and $L_c'$ be a client library identical to $L_c$ but where $c_1$ and $c_2$ have been replaced by $c'$. We assume that the property merging of classes does not hold for metric AC,. Therefore, $R(c_1, L_s) \subseteq R(c', L_s) \land R(c_2, L_s) \subseteq R(c', L_s)$ and, also $AC(L_c, L_s) > AC(L_c', L_s)$.
+
+Thus, either $c_1$ or $c_2$ contain an attribute of type $c_s$, such that $c_s$ is implemented in $L_s$ and it is not included $c'$. This creates a contradition with the initial affirmation $R(c_1, L_s) \subseteq R(c', L_s) \land R(c_2, L_s) \subseteq R(c', L_s)$, since the declaration of an attribute of type $c_s$ is included in $R(c_1, L_s)$ or $R(c_2, L_s)$. Therefore, property 4 holds for metric AC.
+
 
 \paragraph{Property 5: Merging of unconnected classes}
 
