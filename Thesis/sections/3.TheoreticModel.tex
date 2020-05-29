@@ -263,7 +263,7 @@ The other option is that there is a method $m_s \in SIM(m_c)$ such that $nP(m_s,
 Therefore, the initial assumtion is not true, and \textit{Property 1: Nonnegativity} holds for the metric $MIC$.
 
 \paragraph{Property 2: Null value}
-Assuming that property 2 does not hold for metric $MIC$, there is a client library $L_c$ and a server library $L_s$ such that have no relationship ($R(L_c, L_s) = 0$) and $MIC(L_c, L_s) 	\neq 0$. Based on the proof done for the property \textit{Nonnegativity}, we know that $MIC(L_c, L_s) \ge 0$. Therefore, $MIC(L_c, L_s) > 0$. Hence, there is a client method $m_c \in M(L_c)$ such that $nII(m_c, L_s) > 0$.
+Assuming that property 2 does not hold for metric $MIC$, there is a client library $L_c$ and a server library $L_s$ such that have no relationship ($R(L_c, L_s) = 0$) and $MIC(L_c, L_s)	\neq 0$. Based on the proof done for the property \textit{Nonnegativity}, we know that $MIC(L_c, L_s) \ge 0$. Therefore, $MIC(L_c, L_s) > 0$. Hence, there is a client method $m_c \in M(L_c)$ such that $nII(m_c, L_s) > 0$.
 
 Thus, there is a server method $m_s \in SIM(m_c)$, such that $nI(m_c, m_s) > 0$ and $nP(m_s, L_s) > 0$. Therefore, the method $m_s$ is called at least one time by the method $m_c$ from the client library $L_c$, and at the same time is implemented by the server library $L_s$, which means that there is a relationship between $L_c$ and $L_s$, which contradicts the original assumption that $R(L_c, L_s) = 0$.
 
@@ -289,7 +289,7 @@ Therefore, \textit{Property 3} holds for Direct Method Invocation Coupling.
 
 \subsubsection{Direct aggregation coupling}
 \paragraph{Property 1: Nonnegativity}
-We assume that the metric $AC$ does not have the property nonnegativity, therefore there is a client library $L_c$ and a server library $L_s$ such that $AC(L_c, L_s) < 0$. Then, there is a client class $c_c \in C(L_c)$ and a server class $c_s \in SAT(c_c)$ such that either $NA(c_c, c_s)$ or $nDC(c_s, L_s)$ have a negative value.
+We assume that the metric $AC$ does not have the property nonnegativity. Thus, there is a client library $L_c$ and a server library $L_s$ such that $AC(L_c, L_s) < 0$. Then, there is a client class $c_c \in C(L_c)$ and a server class $c_s \in SAT(c_c)$ such that either $NA(c_c, c_s)$ or $nDC(c_s, L_s)$ have a negative value.
 
 Let's assume that $NA(c_c, c_s) < 0$. This means that the $c_s$ is a class that is included in the set of stable classes declared as fields in $c_c$ ($c_s \in SAT(c_c)$) and, at the same time is declared a negative number of times, which is a contradiction.
 
@@ -298,6 +298,9 @@ Therefore, $nDC(c_s, L_s)$ has to be negative. $nDC(c_s, L_s)$ corresponds to th
 In conclusion, the \textit{property 1: Nonnegativity} holds for the metric $AC$.
 
 \paragraph{Property 2: Null value}
+If we assume that property 2 does not hold for metric $AC$, there has to be a client library $L_c$ and a server library $L_s$ such that have no relationship ($R(L_c, L_s) = 0$) and $AC(L_c, L_s)	\neq 0$. Since $AC$ has the property \textit{Nonnegativity}, the result cannot be negative, which means that $AC(L_c, L_s) > 0$. Hence, there is a client class $c_c \in C(L_c)$ and a server class $c_s \in SAT(c_c)$ such that $NA(c_c, c_s) > 0$ and $nDC(c_s, L_s) > 0$. This means that the class $c_s$ is at the same time declared at least once by the client class $c_c$ ($NA(c_c, c_s) > 0$) and is implemented in the server library $L_s$. However, this would create a relationship between $L_c$ and $L_s$, which contradicts the original assumption.
+
+ Therefore, the \textit{Property 2: Null value} holds for metric \textit{AC}.
 
 \paragraph{Property 3: Monotonicity}
 
