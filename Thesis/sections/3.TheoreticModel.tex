@@ -277,6 +277,9 @@ Let's assume that the metric AC does not fulfill the property monotonicity, this
 Therefore, \textit{Property 3} holds for the metric MIC.
 
 \paragraph{Property 4: Merging of classes}
+Let $L_c$ be a client library that includes the classes $c_1$ and $c_2$. Let $c'$ be a class such that $c_1 + c_2 = c'$ and $L_c'$ be a client library identical to $L_c$ but where $c_1$ and $c_2$ have been replaced by $c'$. If we assume that the property merging of classes does not hold for metric MIC, it would mean that $R(c_1, L_s) \subseteq R(c', L_s) \land R(c_2, L_s) \subseteq R(c', L_s)$ and at the same time $MIC(L_c, L_s) > MIC(L_c', L_s)$.
+
+Therefore, there is a method $m_c$ which is implemented in $c_1$ or $c_2$ such that contains a call to a method $m_s$ which does not exist in any of the methods implemented in $c'$. This is a contradition with the initial affirmation $R(c_1, L_s) \subseteq R(c', L_s) \land R(c_2, L_s) \subseteq R(c', L_s)$. Therefore, property 4 holds for metric MIC.
 
 \paragraph{Property 5: Merging of unconnected classes}
 
