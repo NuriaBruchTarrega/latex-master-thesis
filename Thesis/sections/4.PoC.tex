@@ -92,7 +92,7 @@ To calculate this first metric, the PoC tool iterates through all the classes of
 
 Then, the tool iterates through all the behaviors (line 6), and calls the method \texttt{instrument}. The main use case of this method is to modify the bytecode of the method, it receives an \texttt{ExprEditor} object, which is a class that can be extended to implement the methods for editing the bytecode. In this case the methods overridden are \texttt{edit(MethodCall mc)} and \texttt{edit(ConstructorCall cc)}. These methods will be called for each method call or constructor call, existing in the bytecode of the method (line 7). Therefore, these methods are used to check if the call is done to an external library (line 10), and in case it is, add the call to the metric calculation (line 11).
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
 micMap = new Map(ServerMethod, int)
 clientClasses = classPoolManager.getClientLibraryClasses()
@@ -115,7 +115,7 @@ The pseudo-code in Figure \ref{fig:algorithm-ac} represents the algorithm used t
 
 The initial strategy for this second metric is similar to the previous one. The implementation iterates through all the classes of the client library (line 4). Then, for each one, all the fields declared in the class (line 6). Next, each of the fields containing a generic type are parsed apart (line 7). All the types involved in the field are obtained and treated individually (line 9). All the simple fields, if the implementation of the class is found in a server library (line 12), are included in the calculation of the metric (line 13).
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
 acMap = new Map(ServerClass, int)
 clientClasses = classPoolManager.getClientLibraryClasses()
