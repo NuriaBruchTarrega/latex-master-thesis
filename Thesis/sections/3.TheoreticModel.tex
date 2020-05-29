@@ -296,7 +296,13 @@ If we assume that property 2 does not hold for metric $AC$, there has to be a cl
  Therefore, the \textit{Property 2: Null value} holds for metric \textit{AC}.
 
 \paragraph{Property 3: Monotonicity}
+Let $L_c$ be a client library that contains class $c_c$, and let $c_c'$ be a class identical to $c_c$ but more relationships with the server library $L_s$. Then, $R(c_c, L_s) \subseteq R(c_c', L_s)$. Let $L_c'$ be a client library identical to $L_c$ but in which the class $c_c$ has been replaced by $c_c'$. Therefore, $R(L_c, L_s) \subseteq R(L_c', L_s)$.
 
+If we assume that the metric AC does not fulfill this property, means that $AC(L_c, L_s) > AC(L_c', L_s)$. The only difference between these two calculations is the result of the calculation for $c_c$ and $c_c'$. Therefore, $\sum_{c_s \in SAT(c_c)} NA(c_c, c_s) * nDC(c_s, L_s) > \sum_{c_s \in SAT(c_c')} NA(c_c', c_s) * nDC(c_s, L_s)$.
+
+This means that there is a server class $c_s \in SAT(c_c)$, that is implemented in $L_s$ ($nDC(c_s, L_s) > 0$) such that $NA(c_c, c_s) > NA(c_c', c_s)$. This contradicts the original assumption that $c_c'$ is constructed from $c_c$ but with additional relationships with $L_s$. $NA(c_c, c_s)$ will only be greater than $NA(c_c', c_s)$ if there is an attribute of type $c_s$ in $c_c$ (which is a relationship between $c_c$ and $L_s$) that does not exist in $c_c'$.
+
+Therefore, \textit{Property 3} holds for the metric AC.
 
 \paragraph{Property 4: Merging of classes}
 
