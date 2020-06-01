@@ -169,10 +169,10 @@ According to the definition of \textit{DAC}, it counts the number of attributes 
 Finally, \textit{ACAIC} and \textit{OCAIC} consider aggregation coupling with ancestors and others respectively. Therefore, metric 2 is the sum of these two metrics, but aggregated to library aggregation level, since the metrics are designed for class level.
 
 \paragraph{Metric 3}
-The transitive metrics are going to be new.
+Most of the metrics in Table \ref{table:coupling-metrics} measure only direct coupling. The only one that does not measure only direct coupling is the metric \textit{RFC'}, which consists on the transitive closure of the metric \textit{RFC}. This metric, just as in the case of \textit{Metric 3} counts method invocations. However, the counting strategy is different, since \textit{RFC'} counts the number of distinct elements at the other end of the connection, but not how many times the elements are there. Therefore, the metric defined for metric 3 is going to be different from all the metrics described in Table \ref{table:coupling-metrics}.
 
 \paragraph{Metric 4}
-The transitive metrics are going to be new.
+As previously explained, the only metric in \ref{table:coupling-metrics} that considers indirect coupling is \textit{RFC'}. However, the metric \textit{RFC'} and the \textit{Metric 4} do not even share the type of connection that is counted, these being method invocations and attributes defined in a class respectively. Hence, a new metric is created for \textit{Metric 4}.
 
 
 \subsubsection{Defining the metrics}\label{subsec:metric-definition}
