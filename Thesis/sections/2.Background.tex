@@ -80,6 +80,56 @@ Based on the terminology discussed above, we define the terms that are used with
 \end{itemize}
 
 \section{Dependency management}
+There are several dependency managers existing. In this thesis, we will be analyzing Java libraries, and in particular we will use projects existing in the Maven ecosystem, \textit{Maven Central Repository}\footnote{\url{https://repo1.maven.org/maven2/}}. Therefore, the dependency manager used is the one included in Maven. This section contains the description of different aspects of Maven, including the different types of dependencies and how are these declared.
+
+\subsection{Maven Dependencies}
+The configuration of a Maven Project, including the dependency management, is done in the \textit{Project Object Model (POM)} file. Apart from defining the dependencies of a project, the POM file contains the description of the project itself and the build plugins that it uses.
+
+A project is defined by the following parameters:
+
+\begin{itemize}
+  \item \textbf{GroupID:} The identifier of the group or company that developed the project.
+  \item \textbf{ArtifactID:} The identifier of the project itself.
+  \item \textbf{Version:} The version of the implementation of the project.
+  \item \textbf{Packaging:} The packaging method that the project uses. Although other packaging methods are available, \textit{jar} files are the default ones, and can be used to analyze the bytecode of the libraries.
+\end{itemize}
+
+\paragraph{Module hierarchy}
+A Maven Project can be configured using two different strategies. First, as a single module, which means that it will only have one \textit{POM} file and that only one packaging will result in the build of the project. The second option is to create a multi-module project. In this case, the project has multiple \textit{POM} files. These \textit{POM} files can have a defined hierarchy in which there is a parent \textit{POM} that has children \textit{POMs}, these children will \textit{inherit} dependencies from the parent file. In this PoC, a module with a \textit{POM} file, even if it has a parent module, is considered a library, since it can be used in a different library as an individual dependency.
+
+\paragraph{Dependencies and DependencyManagement}
+There are two sections in a \textit{POM} file that are used for dependency management purposes: \texttt{dependencies} and \texttt{dependencyManagement}.
+
+The \texttt{dependencyManagement} section is used in multi-module projects. It is used to define certain dependency information (e.g. the version of the artifacts). It is used in the parent \textit{POM} to simplify the dependency definition of the children files.
+
+In the \texttt{dependencies} section is where the dependencies are declared. If a parent file has dependencies declared in this section, these will always be inherited by the children's files.
+
+Maven uses these both sections of the \textit{POM} file to resolve the dependencies of a library.
+
+\paragraph{Scope of the dependencies}
+One of the main mechanisms that the Maven dependency manager offers is the dependency scope, which is specified for each dependency included in a \textit{POM} file. The scope of a direct dependency affects how the transitive dependencies are treated, apart from the scope import. There are 6 different scopes:
+
+\begin{itemize}
+  \item \textbf{Compile:} The default scope, all direct dependencies without a specified scope, have compile scope. These dependencies are available in the classpath of the library and will be propagated as transitive dependencies to the libraries that depend on the current library.
+
+  \item \textbf{Provided:} This scope type means that the dependency is expected to be provided by the JDK or the container during runtime. The dependencies with scope provided do not propagate transitive dependencies and are only available in the classpath on compilation and test.
+
+  \item \textbf{Runtime:} In this case, the dependency is only needed during the execution, and therefore not necessary during compilation. It is available in the classpath during runtime and test. Runtime dependencies are propagated as transitive dependencies.
+
+  \item \textbf{Test:} This scope specifies a dependency that is only used for testing purposes. It is available in the classpath during test and execution phases. Test dependencies do not propagate as transitive dependencies.
+
+  \item \textbf{System:} Similar to \textit{provided}, but it is necessary to indicate the path to the jar of the dependency. This may cause problems if the build is done in a machine where the indicated path does not match the actual one. This scope is not transitive.
+
+  \item \textbf{Import:} This scope is only available for dependencies declared in the section \textit{DependencyManagement} and with specified type \textit{pom}. It indicates that the dependency should be replaced with the dependencies declared in its pom. Therefore, these dependencies are actually replaced and do not affect transitivity.
+\end{itemize}
+
+\paragraph{Optional dependencies and exclusions}
+In Maven it is possible to declare dependencies as \textit{optional}. The main use case for this is when a project is not divided into sub-modules and certain dependencies are only used in certain parts of the project. In this case, it might be possible to use the project without using these parts, and the dependency might not be necessary. Declaring the dependency as optional allows to save both space and memory when the dependency is not used.
+
+Another feature of the dependency management available in Maven is the dependency \textit{exclusions}. This feature has the goal of saving part of the memory and space used by transitive dependencies. When a certain transitive dependency is not used in your project it is possible to specify the exclusion of the transitive dependency. This could be useful in case you use only a part of a direct dependency which does not need the transitive dependency. The excluded dependency is not going to be included in the dependency tree of the project and will not be imported in the classpath of the library.
+
+\paragraph{Dependency resolution}
+In order to resolve the dependencies, Maven uses the \textit{POM} file and scopes in a recursive manner to create the dependency tree. However, there is another aspect of dependency resolution, which is the version of each of the dependencies. It is possible that a dependency tree contains the same dependency more than once, and maybe with different versions. Maven uses the dependency mediation algorithm to resolve the version of the dependencies. The strategy that the algorithm follows is the "nearest definition" which consists of choosing the version of the dependency that is closer to the root in the dependency tree. If one artifact is declared twice with different versions and in the same level, the dependency mediation will choose the version of the first declaration of the dependency.
 
 \section{Coupling}\label{section:bg-coupling}
 When assessing the quality of software, there are many aspects that are considered and measured. One of these, in particular for Object-Oriented systems, is coupling. Coupling measures the degree of dependency between two different parts of a system. In the literature of coupling metrics, these have been used to measure the dependency of the elements of the same system, or to give an overview of the coupling within a system. However, in this thesis we measure the coupling, or degree of dependency, between two different systems.

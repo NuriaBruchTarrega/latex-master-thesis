@@ -1,63 +1,10 @@
 % !TEX root = ..\main.tex
 \chapter{Proof of Concept}\label{ch:PoC}
-% Here I should consider that which ever graph generator I finally use, the way it is created and its accuracy is going to affect the results of my experiment. It should appear in threats to validity.
+% Furthermore, all the dependencies of the analyzed libraries should also be available in Maven for the analysis to be possible.
 
-\section{Maven Dependencies}
-The PoC implemented during this thesis project analyses java libraries and more specifically those available in the \textit{Maven Central Repository}\footnote{\url{https://repo1.maven.org/maven2/}}. Furthermore, all the dependencies of the analyzed libraries should also be available in Maven for the analysis to be possible.
+% In the PoC implementation the parameters \textit{GroupID}, \textit{ArtifactID}, and \textit{Version} are used to identify the library to analyze as well as all the dependencies.
 
-Therefore, the PoC is influenced by the dependency management implemented in Maven. In particular, it is important to understand the different types of dependencies existing in Maven and the characteristics that these can have.
-
-The configuration of a Maven Project, including the dependency management, is done in the \textit{Project Object Model (POM)} file. Apart from defining the dependencies of a project, the POM file contains the description of the project itself and the build plugins that it uses.
-
-A project is defined by the following parameters:
-
-\begin{itemize}
-  \item \textbf{GroupID:} The identifier of the group or company that developed the project.
-  \item \textbf{ArtifactID:} The identifier of the project itself.
-  \item \textbf{Version:} The version of the implementation of the project.
-  \item \textbf{Packaging:} The packaging method that the project uses. Although other packaging methods are available, the PoC uses \textit{jar} files to analyze the bytecode of the libraries.
-\end{itemize}
-
-In the PoC implementation the parameters \textit{GroupID}, \textit{ArtifactID}, and \textit{Version} are used to identify the library to analyze as well as all the dependencies.
-
-\paragraph{Module hierarchy}
-A Maven Project can be configured using two different strategies. First, as a single module, which means that it will only have one \textit{POM} file and that only one packaging will result in the build of the project. The second option is to create a multi-module project. In this case, the project has multiple \textit{POM} files. These \textit{POM} files can have a defined hierarchy in which there is a parent \textit{POM} that has children \textit{POMs}, these children will \textit{inherit} dependencies from the parent file. In this PoC, a module with a \textit{POM} file, even if it has a parent module, is considered a library, since it can be used in a different library as an individual dependency.
-
-\paragraph{Dependencies and DependencyManagement}
-There are two sections in a \textit{POM} file that are used for dependency management purposes: \texttt{dependencies} and \texttt{dependencyManagement}.
-
-The \texttt{dependencyManagement} section is used in multi-module projects. It is used to define certain dependency information (e.g. the version of the artifacts). It is used in the parent \textit{POM} to simplify the dependency definition of the children files.
-
-In the \texttt{dependencies} section is where the dependencies are declared. If a parent file has dependencies declared in this section, these will always be inherited by the children's files.
-
-Maven uses these both sections to resolve the dependencies of a library.
-
-\paragraph{Scope of the dependencies}
-One of the main mechanisms that the Maven dependency manager offers is the dependency scope, which is specified for each dependency included in a \textit{POM} file. The scope of a direct dependency affects how the transitive dependencies are treated, apart from the scope import. There are 6 different scopes:
-
-\begin{itemize}
-  \item \textbf{Compile:} The default scope, all direct dependencies without a specified scope, have compile scope. These dependencies are available in the classpath of the library and will be propagated as transitive dependencies to the libraries that depend on the current library.
-
-  \item \textbf{Provided:} This scope type means that the dependency is expected to be provided by the JDK or the container during runtime. The dependencies with scope provided do not propagate transitive dependencies and are only available in the classpath on compilation and test.
-
-  \item \textbf{Runtime:} In this case, the dependency is only needed during the execution, and therefore not necessary during compilation. It is available in the classpath during runtime and test. Runtime dependencies are propagated as transitive dependencies.
-
-  \item \textbf{Test:} This scope specifies a dependency that is only used for testing purposes. It is available in the classpath during test and execution phases. Test dependencies do not propagate as transitive dependencies.
-
-  \item \textbf{System:} Similar to \textit{provided}, but it is necessary to indicate the path to the jar of the dependency. This may cause problems if the build is done in a machine where the indicated path does not match the actual one. This scope is not transitive.
-
-  \item \textbf{Import:} This scope is only available for dependencies declared in the section \textit{DependencyManagement} and with specified type \textit{pom}. It indicates that the dependency should be replaced with the dependencies declared in its pom. Therefore, these dependencies are actually replaced and do not affect transitivity.
-\end{itemize}
-
-\paragraph{Optional dependencies and exclusions}
-In Maven it is possible to declare dependencies as \textit{optional}. The main use case for this is when a project is not divided into sub-modules and certain dependencies are only used in certain parts of the project. In this case, it might be possible to use the project without using these parts, and the dependency might not be necessary. Declaring the dependency as optional allows to save both space and memory when the dependency is not used.
-
-Another feature of the dependency management available in Maven is the dependency \textit{exclusions}. This feature has the goal of saving part of the memory and space used by transitive dependencies. When a certain transitive dependency is not used in your project it is possible to specify the exclusion of the transitive dependency. This could be useful in case you use only a part of a direct dependency which does not need the transitive dependency. The excluded dependency is not going to be included in the dependency tree of the project and will not be imported in the classpath of the library.
-
-\paragraph{Dependency resolution}
-In order to resolve the dependencies, Maven uses the \textit{POM} file and scopes in a recursive manner to create the dependency tree. However, there is another aspect of dependency resolution, which is the version of each of the dependencies. It is possible that a dependency tree contains the same dependency more than once, and maybe with different versions. Maven uses the dependency mediation algorithm to resolve the version of the dependencies. The strategy that the algorithm follows is the "nearest definition" which consists of choosing the version of the dependency that is closer to the root in the dependency tree. If one artifact is declared twice with different versions and in the same level, the dependency mediation will choose the version of the first declaration of the dependency.
-
-The PoC follows the same strategy to resolve the dependencies of the client library.
+%  The PoC follows the same strategy to resolve the dependencies of the client library as the Maven dependency manager.
 
 \section{Measuring coupling metrics (RQ1.3)}
 There are several techniques that could have been used to implement the PoC that calculates the different metrics proposed.
@@ -68,6 +15,7 @@ There are several techniques that could have been used to implement the PoC that
   \item Call-level dependency graph
 \end{itemize}
 
+% TODO: reread and update. The source code can be obtained from Maven as well, so this is not really true.
 After an initial try, source code analysis has been discarded. The reason is the following: since the source-code analysis was done by obtaining the code from \textit{GitHub}, the code was more updated than the last version of the library available in Maven Central. Therefore, the dependencies that belonged to the same project were also more updated than the last version in Maven Central, and therefore Maven was not capable of resolving the dependencies. Furthermore, in case it was possible to resolve the dependencies, to account for polymorphism and inheritance, the source code of the dependencies was also needed, but not available.
 
 The option of call-level dependency graphs is useful for the metrics that measure the type of connection 6 (method invocation). However, the information needed for the type of connection: 1 (aggregation coupling), is not contained in the call-level graphs. Therefore, the initial approach to develop this PoC has been bytecode analysis.
@@ -76,7 +24,7 @@ The option of call-level dependency graphs is useful for the metrics that measur
 The first PoC implementation to calculate the proposed coupling metrics uses bytecode analysis. The implementation is supported by the libraries \textit{Javassist}\footnote{\url{http://www.javassist.org/}}, and \textit{Aether}\footnote{\url{https://wiki.eclipse.org/Aether/What_Is_Aether}}.
 
 \paragraph{Aether}
-Aether is a library created by Eclipse, which allows to fetch Maven artifacts from different repositories. In addition, it is also used to resolve the dependencies of a library, and create the dependency tree.
+Aether is a library created by Eclipse, which allows to fetch Maven artifacts from different repositories. In addition, it is also used to resolve the dependencies of a library, and create the dependency tree. % TODO: aether uses the same strategy to resolve dependencies as the Maven dependency manager. Right?
 
 In the PoC, it has been used for the initial steps. The request to calculate the metrics receives the identifiers of the library to analyze (\textit{GroupID}, \textit{ArtifactID}, and \textit{version}). Aether fetches the library \textit{jar} and \textit{POM} files from the Maven Central Repository.
 
@@ -85,7 +33,7 @@ Then, once the artifact is obtained, \textit{Aether} is used to resolve the depe
 \paragraph{Javassist}
 Once the jars of the client library and all its dependencies are available, the first step is to join all the \textit{.class} files in a \texttt{ClassPool} object, which is the main object of \textit{Javassist}. Once the \texttt{ClassPool} is created, it is used to obtain the classes from the client library, from which the different metrics are calculated.
 
-\paragraph{Direct Method Invocation Coupling} % Something about the bridge methods?
+\paragraph{Direct Method Invocation Coupling} % TODO: Something about the bridge methods?
 The pseudo-code in Figure \ref{fig:algorithm-mic} represents the algorithm used to calculate the metric MIC. The output of the algorithm is a map of the times a \texttt{ServerMethod} has been called. The class \texttt{ServerMethod} contains the method, class and library, and it is used later on to find the polymorphic implementations of the method, as well as to aggregate the metric to the library level.
 
 To calculate this first metric, the PoC tool iterates through all the classes of the client library (line 4). For each class, the behaviors are obtained (line 5). In the \textit{Javassist} terminology, the behaviors include both methods and constructors.
@@ -136,12 +84,6 @@ for each c in clientClasses
 \end{figure}
 
 \paragraph{Polymorphy and descendants}
-
-
-\subsection{Call-level dependency graph}
-
-
-\section{Measuring replacement effort estimation}
 
 \section{Visualization}
 %Read kula2014 for this part, it describes the parts of the visualization, considering good and bad points of each visualization option. In addition, they also evaulate if the visualization is useful with certain scenarios.
