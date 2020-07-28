@@ -1,9 +1,9 @@
 % !TEX root = ..\main.tex
-\chapter{Theoretic Model}\label{ch:TheoreticModel}
+\chapter{Dependency evaluation model}\label{ch:TheoreticModel}
 
-\section{Dependency evaluation model}
 
-\subsection{Definition of coupling (RQ1.1)}\label{section:defCoupling}
+
+\section{Definition of coupling (RQ1.1)}\label{section:defCoupling}
 % IMPORTANT: Difference between direct and indirect coupling. Detecting Indirect Coupling Yang et al. 2005
 To measure the degree of dependency, we are going to define the characteristics of the coupling of the dependencies with a project. Following the six criteria in the framework defined by Briand et al. \cite{briand1999unified}, described in Section \ref{section:bg-coupling}, we are going to define the coupling to measure.
 
@@ -130,6 +130,8 @@ All the metrics that are going to be used to measure the dependencies between li
     \label{table:metric-characteristics}
 \end{table}
 
+\section{Direct Dependencies}
+
 \subsection{Formal definition of the metrics (RQ1.2)}\label{section:defMetrics}
 In this section, there is the formulation of the formal definition of the metrics. However, before the definitions, there is a brief discussion in which the definition of coupling of the proposed metrics are compared with the existing metrics in the literature described in Section \ref{section:bg-coupling}.
 
@@ -168,14 +170,7 @@ According to the definition of \textit{DAC}, it counts the number of attributes 
 
 Finally, \textit{ACAIC} and \textit{OCAIC} consider aggregation coupling with ancestors and others respectively. Therefore, metric 2 is the sum of these two metrics, but aggregated to library aggregation level, since the metrics are designed for class level.
 
-\paragraph{Metric 3}
-Most of the metrics in Table \ref{table:coupling-metrics} measure only direct coupling. The only one that does not measure only direct coupling is the metric \textit{RFC'}, which consists on the transitive closure of the metric \textit{RFC}. This metric, just as in the case of \textit{Metric 3} counts method invocations. However, the counting strategy is different, since \textit{RFC'} counts the number of distinct elements at the other end of the connection, but not how many times the elements are there. Therefore, the metric defined for metric 3 is going to be different from all the metrics described in Table \ref{table:coupling-metrics}.
-
-\paragraph{Metric 4}
-As previously explained, the only metric in \ref{table:coupling-metrics} that considers indirect coupling is \textit{RFC'}. However, the metric \textit{RFC'} and the \textit{Metric 4} do not even share the type of connection that is counted, these being method invocations and attributes defined in a class respectively. Hence, a new metric is created for \textit{Metric 4}.
-
-
-\subsubsection{Defining the metrics}\label{subsec:metric-definition}
+\subsubsection{Formal definition}\label{subsec:metric-definition}
 \paragraph{Metric 1: Direct method invocation coupling (MIC)}
 The $\verb|MIC|$ metric measures the dependency between two libraries, one acting as client ($L_c$) and the other as server ($L_s$).%, based on the method invocations from $L_c$ to $L_s$.
 Based on the criterion 3 discussed in Section~\ref{section:defCoupling}, this metric is calculated for each of the classes implemented in $L_c$, and for each of the methods implemented $\verb|M|(L_c)$ in these classes. For each implemented method  $m_c \in \verb|M|(L_c)$, we count the number of individual invocations to a method of $L_s$, denoted $\verb|nII|(m_c,L_s)$. For each method invocation made by the methods implemented in $L_c$, we count only the ones that are implemented in stable classes (not implemented in $L_c$). The set of stable methods invoked is denoted $\verb|SIM|(m_c)$.
@@ -212,12 +207,7 @@ classes implemented in $L_s$ ($\verb|C|(L_s)$). Finally, to count the  individua
     \verb|nDC|(c_s, L_s) = |\verb|DC|(c_s) \cap \verb|C|(L_s)|
 \end{equation*}
 
-\paragraph{Metric 3: Transitive method invocation coupling (TMIC)}
-
-\paragraph{Metric 4: Transitive aggregation coupling (TAC)}
-
-
-\subsection{Theoretical validation of the metrics (RQ1.5)}
+\subsection{Theoretical validation (RQ1.5)}
 The theoretical validation of the metrics consists of demonstrating the properties of the metrics. The theoretical validation is necessary since it proves that the metrics share some properties with the attribute these are measuring, in this case coupling. In particular, for coupling metrics there are five properties defined by Briand et al. \cite{briand1996property} which have been largely used by the literature \cite{poshyvanyk2006conceptual, allen1999measuring, zhao2004measuring}.
 
 For the description of the properties, we use $Coupling(L_c, L_s)$ to refer to any of the metrics defined in the previous section. The description of the metrics is based on the description done by Briand et al. which was done for coupling metrics that measure the coupling within an element, or coupling between an element and all the other elements with which it has some type of relationship. Therefore, the description has been adapted for coupling metrics that measure coupling between two different elements. In addition, since all the defined metrics measure import coupling, the definitions of the properties are focused on import coupling.
@@ -325,6 +315,35 @@ Therefore, $AC(L_c, L_s) \neq AC(L_c', L_s)$. According to property 4, it cannot
 
 Therefore, metric AC fulfills \textit{Property 5: merging of unconnected classes}.
 
+\section{Transitive Dependencies}
+\subsection{Formal definition of the metrics (RQ1.2)}\label{section:defMetricsTransitive}
+In order to define the coupling for transitive metrics, other factors have to be taken into account which are not needed for the direct metrics.
+
+\paragraph{Reachability}
+To measure the transitive dependencies, only those methods or classes of the transitive dependencies that are \textit{reachable} from the analysed client library. A method call is reachable if there is a path from the client library to the method. For example, in Figure \ref{fig:reachability}, there is no path from \texttt{Lib1} (the client library) to the method \texttt{Method10}. Therefore, \texttt{Method10} is not reachable and the call from \texttt{Method8} to \texttt{Method10} will not be considered when measuring the transitive dependency between \texttt{Lib1} and \texttt{Lib3}, in the case of method invocation coupling.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/Reachability.png}
+\caption{Example reachability}
+\label{fig:reachability}
+\end{center}
+\end{figure}
+
+\paragraph{Propagation Factor}
+The propagation represents how the impact of a change can spread across dependencies. In Figure \ref{fig:reachability}, a change in Method3 would affect directly the client  library (Lib1). However, a change in Method7, affects first Method3, and then it can spread to Method1, in case it is not mitigated in Method3. This possible mitigation is accounted for by the Propagation Factor.
+
+\subsubsection{Revisiting existing metrics}
+
+\subsubsection{Formal definition}
+
+\paragraph{Metric 3: Transitive method invocation coupling (TMIC)}
+The metric \texttt{TMIC} calculates the method invocation coupling between a client library ($L_c$) and a server library which do not have a direct dependency. For each method in the client library ($m_c \in M(L_c)$),
+
+\paragraph{Metric 4: Transitive aggregation coupling (TAC)}
+
+\subsection{Theoretical validation (RQ1.5)}
+
 \subsubsection{Transitive method invocation coupling}
 \paragraph{Property 1: Nonnegativity}
 
@@ -347,7 +366,6 @@ Therefore, metric AC fulfills \textit{Property 5: merging of unconnected classes
 
 \paragraph{Property 5: Merging of unconnected classes}
 
-\section{Dependency replacement effort}
 \begin{comment}
 \subsection{Defining the taxonomy of package replacement (\textbf{RQ2.2})}
 
