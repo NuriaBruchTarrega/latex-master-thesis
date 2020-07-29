@@ -344,7 +344,31 @@ The propagation represents how the impact of a change can spread across dependen
 \subsubsection{Formal definition}
 
 \paragraph{Metric 3: Transitive method invocation coupling (TMIC)}
-The metric \texttt{TMIC} calculates the method invocation coupling between a client library ($L_c$) and a server library which do not have a direct dependency. For each method in the client library ($m_c \in M(L_c)$),
+If we look at how the metric \texttt{MIC} is calculated, it could be sumarized as: find all the methods in Ls that are reachable from Lc. Then, for each one, count how many method calls exist in Lc that reach this method, and sum up the results.
+
+The idea for the metric \texttt{TMIC} is similar: find all the reachable methods of Ls from Lc. For each of the reachable methods, count how many method calls in Lc can result in the execution of the reachable method, and sum up the result.
+
+The metric \texttt{TMIC} is going to be explained by the means of an example. \texttt{TMIC} calculates the method invocation coupling between a client library ($L_c$) and a server library ($L_s$) which do not have a direct dependency. To illustrate this, we take as example, the dependency tree in Figure \ref{fig:dependency-tree}, in which $L_c$ would be \textit{Lib1} and $L_s$ would be \textit{Lib6}. We also define the list of libraries that represent the path between $L_c$ and $L_s$, $PathLib(L_c, L_s)$. In this case, this list contains \textit{Lib3}, \textit{Lib4}, and \textit{Lib6}.
+
+% TODO: pensar si vull posar la foto a un lateral amb text al voltant.
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.4\textwidth]{figures/Thesis - Dependency Tree.png}
+  \caption{Dependency tree}
+\label{fig:dependency-tree}
+\end{figure}
+
+The calculation of this metric is divided in two main steps. The first one consists on, for each method in the client library ($m_c \in M(L_c)$), find all the method calls to methods belonging to the first library in $PathLib(L_c, L_s)$, the called methods are the reachable methods of the library.
+
+Steps:
+
+- Find all the calls to methods that belong to libraries in PathLib(Lc, Ls) from Lc.
+- For each method called, follow the call-graph in the library where it is defined.
+    - If the call graph includes a call to another library included in PathLib(Lc, Ls), include it in the reachable methods of the library.
+    - If the call graph includes a call to the library Ls, add it to the reachable methods of Ls.
+- Once all the libraries in PathLib(Lc, Ls) have been visited, we have a set with all the reachable methods of Ls from Lc.
+
+ Then, for each reachable method of the libraries in the set $PathLib(L_c, L_s)$, we follow the call-graph that it creates by obtaining all the method calls done in the
 
 \paragraph{Metric 4: Transitive aggregation coupling (TAC)}
 
