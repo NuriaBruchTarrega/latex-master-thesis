@@ -6,11 +6,13 @@
 \subsection{Context}
 At present, there are many open-source libraries available for all developers to reuse the features that these libraries implement. This practice is becoming more and more popular since it allows to reuse previously developed code, and helps developers avoid implementing the same functionalities multiple times.
 
-When a developer uses an open-source library in a project, it creates a dependency between the application and the library. This implies that a significant number of projects depend on other open-source projects, and it adds the task of managing these dependencies to the maintenance tasks of the project. How to maintain the dependencies is not a trivial task, and it is one of the problems that the field of software engineering is trying to solve \cite{kula2014visualizing}.
+When a developer uses an open-source library in a project, it creates a dependency between the project and the library. This implies that a significant number of projects depend on other open-source projects, and it adds the task of managing these dependencies to the maintenance tasks of the project. How to maintain the dependencies is not a trivial task, and it is one of the problems that the field of software engineering is trying to solve \cite{kula2014visualizing}.
 
 The management and maintenance of the dependencies of a project is an important task. Open-source libraries, just like any other software project, can have security vulnerabilities that may affect the projects that depend on these libraries. For example, some vulnerabilities can become security problems that can have a negative impact in terms of integrity, privacy or availability.
 
-\blankl
+% TODO: afegir algo sobre el impacte dels canvis
+
+\blankl % Pensar si segueixo posant aixo en cas que no faci la pregunta dos
 Currently, developers have at their disposal package managers, to ease the task of managing the dependencies of their projects. However, the dependency management available in these package managers only evaluate if a dependency exists or not and a more detailed risk evaluation is missing \cite{hejderup2018prazi}. There is no way to evaluate how much a project depends on a library.
 
 Furthermore, it could happen that the developers of a project decide to replace one of the dependencies of the project with another one. This could happen in case a library has vulnerabilities or is deprecated, to prevent the vulnerabilities from affecting the project. However, replacing a dependency could be a costly process. It involves identifying which parts of the project are affected by the dependency, and which parts of the library are being used and need replacement.
@@ -72,11 +74,6 @@ This second question is in the case that it is necessary to replace the dependen
   Finally, as in RQ1.5, it is necessary to validate the method used to measure effort, both empirically and theorically. Case studies are used for the empirical validation, comparing the real effort with the estimated one.
 \end{itemize}
 
-\blankl
-\textbf{RQ3:} \textit{How can the degree of the dependency and the effort needed to replace a software product be aggregated?}
-
-This last Research Question is meant to aggregate the research done in RQ1 and RQ2.
-
 \subsection{Research method}
 The main research method that is going to be employed during this project is \textit{Technical Action Research} (TAR) \cite{wieringa2012technical}.
 This research method is artifact-based, which means that the first step is to produce the artifact meant to be used in certain situations envisioned by the researcher. The testing of this artifact, to see if it is effective in these situations, is done through a number of iterations. First, under ideal conditions, and then changing the experiments step by step to reach a real-world situation. These iterations, in the context of this project, are going to be limited due to the existing deadlines. However, there is the option of continuing with this part of the work in the future.
@@ -87,7 +84,7 @@ In addition, the research will also include controlled experiments. These experi
 \blankl
 Some of the most difficult parts of this research are the validation and adaptation of the coupling metrics.
 First, the validation since there is not a unique way to do it, but rather a wide variety of criteria and approaches. Therefore, conducting a complete validation is a complex task as it is not possible to validate every aspect of the metric.
-In addition, even though the metrics that are going to be used to measure coupling between software products already exist, they are going to be adapted. In order to use the metrics for coupling between packages, it is necessary to define the aggregation method of the metrics. These changes of the metrics could be complex for some of them. However, there are many metrics that could be used, and the ones that cannot be adapted could serve as an indication of the types of dependencies that could exist when adapting other metrics.
+In addition, even though the metrics that are going to be used to measure coupling between software products already exist, they are going to be adapted. In order to use the metrics for coupling between packages, it is necessary to define the aggregation method of the metrics. These changes of the metrics could be complex.
 
 \blankl
 After the formal definition and theoretical validation of the metrics for both, the coupling measurement and the estimation effort, to replace a library, a Proof-of-Concept (PoC) will be made. With this PoC, the metrics will be calculated for the projects given to the PoC. Once the PoC is ready, the empirical validation will be carried out for each of the metrics, by conducting controlled experiments and case studies as elaborated above.
@@ -100,7 +97,7 @@ Considering the current state of the art in the domain of this thesis project, t
 	\item Applying coupling metrics to measure the coupling between two different software products, redefining the meaning and usage. Therefore, creating a methodology to measure the dependencies in a project.
   \blankls
 
-	\item Proposing a model to calculate the effort needed to replace a library usage from a software product.\blankls
+	\item Creating specific metrics for both direct and transitive library dependencies.\blankls
 
 	\item Evaluation and validation of the proposed metrics and model, by the means of a proof-of-concept tool to calculate the metrics.
 \end{enumerate}
@@ -153,7 +150,7 @@ To calculate the metrics with the PoC, it is necessary to create a dependency gr
 
 Ultimately, the metrics used in this project will have to be validated. There is not a unique way to validate metrics which is globally accepted and used. Therefore, various approaches will be adopted to validate the metrics as holistically as possible. In the paper \cite{srinivasan2014software}, Srinivasan et al. explain that there are two fundamental approaches for metric validation: \textit{theoretically} and \textit{empirically}. Therefore, to provide a check of validity that is as broad as possible, a mixture of these two approaches will be used during this project.
 
-For the theoretical validity of the coupling metrics, these are validated according to the \textit{Mathematical Properties of Measures for Coupling} \cite{srinivasan2014software}. In addition, Meneely et al. \cite{meneely2013validating} describe a set of 47 validation criteria for metrics. The time limit of the project does not allow for a complete validation of all the metrics. Consequently, a sub-set of these criteria are used to validate the metrics, both the coupling and effort metrics.
+For the theoretical validity of the coupling metrics, these are validated according to the \textit{Mathematical Properties of Measures for Coupling} \cite{srinivasan2014software}.
 The empirical validation of the metrics is carried out by the means of case studies. For instance, the predicted effort corresponds to the real required effort, within a certain error window.
 
 \section{Outline}
