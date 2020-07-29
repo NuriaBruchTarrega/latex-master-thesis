@@ -334,6 +334,9 @@ To measure the transitive dependencies, only those methods or classes of the tra
 The propagation represents how the impact of a change can spread across dependencies. In Figure \ref{fig:reachability}, a change in Method3 would affect directly the client  library (Lib1). However, a change in Method7, affects first Method3, and then it can spread to Method1, in case it is not mitigated in Method3. This possible mitigation is accounted for by the Propagation Factor.
 
 \subsubsection{Revisiting existing metrics}
+In the set of metrics reviewed by Briand et al. there is only one metric that does count indirect coupling, $RFC'$ (see Table \ref{table:coupling-metrics}). This metric also counts inheritance-based coupling and it is focused on the client element, just as the metrics 3 and 4 of this work. However, $RFC'$ is calculated at the class aggregation level, whereas the metric for this work are calculated at the library level. Furthermore, the strategy to count connections is E, which means that it counts the number of elements with which the class has a connection, not how many connections.
+
+Therefore, both metrics 3 and 4 are going to be different from the ones reviewed by Briand et al. \cite{briand1999unified}.
 
 \subsubsection{Formal definition}
 
