@@ -91,7 +91,35 @@ for each c in clientClasses
 \label{fig:algorithm-ac}
 \end{figure}
 
-\paragraph{Polymorphy and descendants}
+\paragraph{Inheritance}
+Once the two algorithms (Figures \ref{fig:algorithm-mic} and \ref{fig:algorithm-ac}) are finished, in order to follow the definition of the metrics as specified in section \ref{subsec:metric-definition} the hierarchies in the server libraries are visited. For the metric \texttt{MIC} all the polymorphic implementations of the behaviors are found, and for the metric \texttt{AC} all the descendants of the classes.
+
+The algorithms to find the descendants and the polymorphic implementations of the methods, are used with each one of the libraries with which the client library has a direct dependency, and for which coupling was found, either \texttt{MIC} or \texttt{AC}.
+
+The pseudo-code used to find the polymorphic implementations of the methods can be found in Figure \ref{fig:algorithm-polymorphy}. The process is as follows: First, iterate through all the classes of the server library, given its \texttt{DependencyTreeNode} (line 5). Then, it iterates through the behaviors in the map contained in \texttt{ReachableBehaviors}. If the current library class is a descendant of the class containing the reachable behavior (line 8), and it contains a behavior with the same signature as the reachable behavior (line 9), a polymorphic implementation of the behavior has been found. Therefore, the found behavior is added to the \texttt{ReachableMethods} with the same set of \texttt{BehaviorCall} as the reachable behavior (line 11).
+
+\begin{figure}[ht!]
+\begin{lstlisting}[escapeinside={(*}{*)}]
+serverLibrary = dependencyTreeNode.getLibrary()
+reachableBehaviorsMap = dependencyTreeNode.getReachableBehaviors()
+serverLibraryClasses = classPoolManager.getLibraryClasses(serverLibrary)
+
+for each serverClass in serverLibraryClasses
+  for each reachableBehavior in reachableBehaviorsMap
+    declaringClass = reachableBehavior.getDeclaringClass()
+    if (serverClass.isSubClassOf(declaringClass))
+      if (serverClass.containsBehavior(reachableBehavior.getSignature()))
+        serverBehavior = serverClass.getBehavior(reachableBehavior.getSignature())
+        dependencyTreeNode.addReachableBehavior(serverBehavior, reachableBehavior.getBehaviorCalls())
+\end{lstlisting}
+\caption{Pseudo-code of the algorithm to find polymorphic implementations}
+\label{fig:algorithm-polymorphy}
+\end{figure}
+
+The process to find descendants in the case of the metric \texttt{AC} is the same as the one in Figure \ref{fig:algorithm-polymorphy}, but iterating over the \texttt{reachableClassesMap} instead of the \texttt{reachableBehaviorsMap}. Therefore, if the server class is sub-class of a reachable class, it is added to the \texttt{ReachableClasses} of the library.
+
+\blankl
+As can be observed in the previous explanation of how the detection of inheritance is done, in this PoC implementation, it is not detected if a class is extended in the client library instead of in the server library.\todo{Find out how often does this happen}
 
 \section{Visualization}
 %Read kula2014 for this part, it describes the parts of the visualization, considering good and bad points of each visualization option. In addition, they also evaulate if the visualization is useful with certain scenarios.
