@@ -1,6 +1,5 @@
 % !TEX root = ../main.tex
 \chapter{Proof of Concept}\label{ch:PoC}
-% Furthermore, all the dependencies of the analyzed libraries should also be available in Maven for the analysis to be possible.
 
 % Right now I'm only measuring dependencies in the scope compile and provided. It might be nice to also add dependencies in scope test, but the connections to those dependencies are problably not method calls, but rather other types of connections such as annotations.
 
@@ -29,6 +28,14 @@ Then, once the artifact of the client library is obtained, \textit{Aether} is us
 
 \paragraph{Javassist}
 Once the jars of the client library and all its dependencies are available, the first step is to join all the \textit{.class} files in a \texttt{ClassPool} object, which is the main object of \textit{Javassist}. Once the \texttt{ClassPool} is created, it is used to obtain the classes from the client library, from which the different metrics are calculated.
+
+\subsubsection{Implementation Classes}
+\paragraph{Model of the dependency tree}
+In order to represent the dependency tree of the client library, the implementation uses the class \texttt{DependencyTreeNode}. Each \texttt{DependencyTreeNode} contains the information of the library it represents, namely \textit{groupID}, \textit{artifactID}, and \textit{version}. Also, each \texttt{DependencyTreeNode} has a \texttt{List} of \texttt{DependencyTreeNode}, which are the children of the current library in the dependency tree.
+
+To store all the information about the metrics, each \texttt{DependencyTreeNode} has, in addition, two fields: \texttt{ReachableBehaviors}, \texttt{ReachableClasses}, for metrics \texttt{MIC} and \texttt{AC}, respectively. \texttt{ReachableBehaviors} is a map, containing for each reachable method or constructor (behavior) of the server library, a \texttt{Set} with all the method calls from which it is reachable. In the same way, \texttt{ReachableClasses} is a map, in which for each reachable class of a server library, there is a \texttt{Set} of all the field declarations from which the class is reachable.
+
+\unsure{add class diagram of the model?}
 
 \subsubsection{Direct Method Invocation Coupling}
 The pseudo-code in Figure \ref{fig:algorithm-mic} represents the algorithm used to calculate the metric MIC for each one of the direct dependencies of a given client library. The output of the algorithm is a map containing the set of \texttt{MethodCalls} that call each \texttt{CtMethod}. The map is generated for each one of the direct dependencies and stored in the \texttt{DependencyTreeNode} of the library.
