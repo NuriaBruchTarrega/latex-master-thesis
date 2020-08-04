@@ -125,7 +125,7 @@ As can be observed in the previous explanation of how the detection of inheritan
 Until now, in this chapter, it has been described how the implementation works for the backend part. In this section, however, we are going to explain how the visualization of the tool has been designed and implemented.
 For each part of the visualization, we are going to discuss different visual aspects of the visualization following the structure used by Kula et al. \cite{kula2014visualizing}. However, since the tool implemented for this thesis is meant to be interactive, we have added a new aspects, interactivity. These visual aspects are: Layout, shape, color, and interaction.
 
-\subsection{Dependency Tree}
+\subsection{Dependency Tree}\label{sec:visualization-dependency-tree}
 The goal for the first visualization element is to provide an overview of the dependency tree of the client library, after being resolved with the Maven algorithm. In this overview, the maintainer should be able to see the degree of dependency with each of the dependencies of the client library. Furthermore, the unused dependencies should be easily identifiable. % And maybe also the most used ones.
 \todo{add example image}
 
@@ -149,8 +149,19 @@ There are two ways to select a node. The first one is by clicking the node. The 
 The second type of interaction has been implemented to display some additional information of the nodes. When a user hovers over a node, a \textit{tooltip} appears. The \textit{tooltip} contains two tables displaying, for each metric, the value measured and the distance at which the value was measured.
 
 \subsection{Distribution per class}
+With the first visualization, the user has an overview of the dependency tree. However, there is no way the user can have more detailed information about a specific library of the dependency tree. Therefore, and making use of the node selection implemented in the visualization described in section \ref{sec:visualization-dependency-tree}, we have created a visualization to display how the distribution of the dependency among the classes of the client library.\todo{Add example visualization}
 
 \paragraph{Layout}
+The chosen layout for this visualization is a multi-chart. The chart contains two values for each represented class: the calculated \texttt{MIC} and the calculated \texttt{AC}.\reminder{And TMIC, TAC? Maybe I should also use the propagation formula here} Only the classes for which at least one of the two metrics is measured appear in the chart. \reminder{I could also sort the classes by some of the metrics, or make the chart scrollable to avoid very thin bars}
+
 \paragraph{Shape}
+The shape chosed for this chart is the bar. The line was discarded since, it is not the goal to show any kind of progression between the different classes. Hence, the chart used is a multi-barchart.
+At the x-axis of the chart, only the simple names of the classes are displayed, in order to avoid having too much text in the chart. In the y-axis, there is a numeric scale, which corresponds to the measured \texttt{MIC} and \texttt{AC}.
+
 \paragraph{Color}
+To follow the palette used for the rest of the frontend of this tool, the bars displaying the \texttt{MIC} value have \textit{deep-purple} color, while the bars displaying the \texttt{AC} value are \textit{pink}.
+
 \paragraph{Interaction}
+This visualization appears and disappears according to the node selection of the dependency tree visualization.
+
+In addition, if the user hovers over a column, a tooltip appears. This tooltip contains the values of the measured metrics (since these values are not displayed in the chart). In addition, it also contains the fully-qualified name of the class, to indicate the user where to find the class.
