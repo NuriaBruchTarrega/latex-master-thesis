@@ -1,10 +1,8 @@
-% !TEX root = ..\main.tex
+% !TEX root = ../main.tex
 \chapter{Proof of Concept}\label{ch:PoC}
 % Furthermore, all the dependencies of the analyzed libraries should also be available in Maven for the analysis to be possible.
 
-% In the PoC implementation the parameters \textit{GroupID}, \textit{ArtifactID}, and \textit{Version} are used to identify the library to analyze as well as all the dependencies.
-
-%  The PoC follows the same strategy to resolve the dependencies of the client library as the Maven dependency manager.
+% Right now I'm only measuring dependencies in the scope compile and provided. It might be nice to also add dependencies in scope test, but the connections to those dependencies are problably not method calls, but rather other types of connections such as annotations.
 
 \section{Measuring coupling metrics (RQ1.3)}
 There are several techniques that could have been used to implement the PoC that calculates the different metrics proposed.
@@ -16,43 +14,44 @@ There are several techniques that could have been used to implement the PoC that
 \end{itemize}
 
 % TODO: reread and update. The source code can be obtained from Maven as well, so this is not really true.
-After an initial try, source code analysis has been discarded. The reason is the following: since the source-code analysis was done by obtaining the code from \textit{GitHub}, the code was more updated than the last version of the library available in Maven Central. Therefore, the dependencies that belonged to the same project were also more updated than the last version in Maven Central, and therefore Maven was not capable of resolving the dependencies. Furthermore, in case it was possible to resolve the dependencies, to account for polymorphism and inheritance, the source code of the dependencies was also needed, but not available.
+After an initial try, source code analysis has been discarded. The reason is that the source code is needed for both the client library, and all its dependencies. Although Maven can provide the source code for some of the artifacts, it is not available as often as the bytecode.
 
-The option of call-level dependency graphs is useful for the metrics that measure the type of connection 6 (method invocation). However, the information needed for the type of connection: 1 (aggregation coupling), is not contained in the call-level graphs. Therefore, the initial approach to develop this PoC has been bytecode analysis.
+The option of call-level dependency graphs is useful for the metrics that measure the type of connection 6 (method invocation). However, the information needed for the type of connection: 1 (aggregation coupling), is not contained in the call-level graphs. Therefore, the initial approach to develop this PoC has been bytecode analysis. Furthermore, obtaining the call-graphs of the complete dependency tree has not been possible, since creating this types of fine-grained call-graphs is still a work in progress.
 
 \subsection{Bytecode analysis}
-The first PoC implementation to calculate the proposed coupling metrics uses bytecode analysis. The implementation is supported by the libraries \textit{Javassist}\footnote{\url{http://www.javassist.org/}}, and \textit{Aether}\footnote{\url{https://wiki.eclipse.org/Aether/What_Is_Aether}}.
+The PoC implementation to calculate the proposed coupling metrics uses bytecode analysis. The implementation is supported by the libraries \textit{Javassist}\footnote{\url{http://www.javassist.org/}}, and \textit{Aether}\footnote{\url{https://wiki.eclipse.org/Aether/What_Is_Aether}}.
 
 \paragraph{Aether}
-Aether is a library created by Eclipse, which allows to fetch Maven artifacts from different repositories. In addition, it is also used to resolve the dependencies of a library, and create the dependency tree. % TODO: aether uses the same strategy to resolve dependencies as the Maven dependency manager. Right?
+Aether is a library created by Eclipse, which allows to fetch Maven artifacts from different repositories. In addition, it is also used to resolve the dependencies of a library, and create the dependency tree. To create the dependency tree, Aether uses the same strategy to resolve the dependencies as Maven.
 
 In the PoC, it has been used for the initial steps. The request to calculate the metrics receives the identifiers of the library to analyze (\textit{GroupID}, \textit{ArtifactID}, and \textit{version}). Aether fetches the library \textit{jar} and \textit{POM} files from the Maven Central Repository.
 
-Then, once the artifact is obtained, \textit{Aether} is used to resolve the dependencies of the artifact. The dependency tree of the artifact is visited, and each of the dependencies are also obtained, in order to have the \textit{jar} files to analyze as well.
+Then, once the artifact of the client library is obtained, \textit{Aether} is used to resolve the dependencies of the artifact. The dependency tree of the artifact is visited, and each of the dependencies are also obtained, in order to have the \textit{jar} files to analyze as well. In addition, the dependency tree calculated with Aether is also used to create a custom dependency tree with the class \texttt{DependencyTreeNode} which is used to store the needed data about each of the libraries during the process of calculating the metrics.
 
 \paragraph{Javassist}
 Once the jars of the client library and all its dependencies are available, the first step is to join all the \textit{.class} files in a \texttt{ClassPool} object, which is the main object of \textit{Javassist}. Once the \texttt{ClassPool} is created, it is used to obtain the classes from the client library, from which the different metrics are calculated.
 
-\paragraph{Direct Method Invocation Coupling} % TODO: Something about the bridge methods?
-The pseudo-code in Figure \ref{fig:algorithm-mic} represents the algorithm used to calculate the metric MIC. The output of the algorithm is a map of the times a \texttt{ServerMethod} has been called. The class \texttt{ServerMethod} contains the method, class and library, and it is used later on to find the polymorphic implementations of the method, as well as to aggregate the metric to the library level.
+\subsubsection{Direct Method Invocation Coupling}
+The pseudo-code in Figure \ref{fig:algorithm-mic} represents the algorithm used to calculate the metric MIC for each one of the direct dependencies of a given client library. The output of the algorithm is a map containing the set of \texttt{MethodCalls} that call each \texttt{CtMethod}. The map is generated for each one of the direct dependencies and stored in the \texttt{DependencyTreeNode} of the library.
 
-To calculate this first metric, the PoC tool iterates through all the classes of the client library (line 4). For each class, the behaviors are obtained (line 5). In the \textit{Javassist} terminology, the behaviors include both methods and constructors.
+The class \texttt{CtMethod} represents a method, it contains the information about the method itself, and about the class that contains the method. Each of the \texttt{CtMethod} are used later on to find the polymorphic implementations of the method, as well as to calculate the transitive dependencies.
 
-Then, the tool iterates through all the behaviors (line 6), and calls the method \texttt{instrument}. The main use case of this method is to modify the bytecode of the method, it receives an \texttt{ExprEditor} object, which is a class that can be extended to implement the methods for editing the bytecode. In this case the methods overridden are \texttt{edit(MethodCall mc)} and \texttt{edit(ConstructorCall cc)}. These methods will be called for each method call or constructor call, existing in the bytecode of the method (line 7). Therefore, these methods are used to check if the call is done to an external library (line 10), and in case it is, add the call to the metric calculation (line 11).
+To calculate this first metric, the PoC tool iterates through all the classes of the client library (line 3). For each class, the behaviors are obtained (line 4). In the \textit{Javassist} terminology, the behaviors include both methods and constructors.
+
+Then, the tool iterates through all the behaviors (line 5), and calls the method \texttt{instrument}. The main use case of this method is to modify the bytecode of the method. The method \texttt{instrument} receives an \texttt{ExprEditor} object, which is a class that can be extended to implement the methods for editing the bytecode, which are empty by default. For this metric, the overridden methods are \texttt{edit(MethodCall mc)} and \texttt{edit(ConstructorCall cc)}. These methods will be called for each method call or constructor call, existing in the bytecode of the method (line 6). In the implementation of this methods, it is checked if the behavior called belongs to an external library (line 9). In case it does, the call is added to the map of the external library (line 10).
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
-micMap = new Map(ServerMethod, int)
 clientClasses = classPoolManager.getClientLibraryClasses()
 
 for each c in clientClasses
   behaviors = c.getDeclaredBehaviors()
   for each b in behaviors
-    for each invocation in b
-      sm = invocation.getMethod()
+    for each methodCall in b
+      sm = methodCall.getMethod()
       sc = sm.getDeclaringClass()
       if (classPoolManager.belongsToClientLibrary(sc))
-        micMap.update(sc, +1)
+        dependencyTree.addCall(sc, methodCall)
 \end{lstlisting}
 \caption{Pseudo-code of the algorithm to calculate MIC}
 \label{fig:algorithm-mic}
@@ -61,23 +60,24 @@ for each c in clientClasses
 \paragraph{Direct Aggregation Coupling}
 The pseudo-code in Figure \ref{fig:algorithm-ac} represents the algorithm used to calculate the metric AC. The output of the algorithm is a map of the times a \texttt{ServerClass} has been called. The class \texttt{ServerClass} contains the class and library where each field has been implemented, and it is used later on to find the descendants of the class, and to aggregate the metric to the library level.
 
-The initial strategy for this second metric is similar to the previous one. The implementation iterates through all the classes of the client library (line 4). Then, for each one, all the fields declared in the class (line 6). Next, each of the fields containing a generic type are parsed apart (line 7). All the types involved in the field are obtained and treated individually (line 9). All the simple fields, if the implementation of the class is found in a server library (line 12), are included in the calculation of the metric (line 13).
+The initial strategy for this second metric is similar to the previous one. The implementation iterates through all the classes of the client library (line 3). Then, for each one, all the fields declared in the class (line 5). Next, each of the fields containing a generic type are parsed apart (line 6). All the types involved in the field are obtained and treated individually (line 8). All the simple fields, if the implementation of the class is found in a server library (line 13), are included in the calculation of the metric (line 14).
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
-acMap = new Map(ServerClass, int)
 clientClasses = classPoolManager.getClientLibraryClasses()
 
 for each c in clientClasses
   fields = c.getDeclaredFields()
-  for each f in fields
-    if (f.containsGeneric())
-      types = getAllTypes(f)
-      for each t in types
-        if (classPoolManager.belongsToClientLibrary(t))
-          acMap.update(t, +1)
-    else if (classPoolManager.belongsToClientLibrary(f))
-      acMap.update(f, +1)
+  for each field in fields
+    if (field.containsGeneric())
+      classes = getAllClasses(f)
+      for each class in classes
+        if (classPoolManager.belongsToClientLibrary(class))
+          acMap.update(class, field)
+    else
+      class = f.getType()
+      if (classPoolManager.belongsToClientLibrary(class))
+      acMap.update(class, field)
 \end{lstlisting}
 \caption{Pseudo-code of the algorithm to calculate AC}
 \label{fig:algorithm-ac}
