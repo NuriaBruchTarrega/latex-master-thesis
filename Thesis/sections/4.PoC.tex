@@ -38,13 +38,15 @@ To store all the information about the metrics, each \texttt{DependencyTreeNode}
 \unsure{add class diagram of the model?}
 
 \subsubsection{Direct Method Invocation Coupling}
-The pseudo-code in Figure \ref{fig:algorithm-mic} represents the algorithm used to calculate the metric MIC for each one of the direct dependencies of a given client library. The output of the algorithm is a map containing the set of \texttt{MethodCalls} that call each \texttt{CtMethod}. The map is generated for each one of the direct dependencies and stored in the \texttt{DependencyTreeNode} of the library.
+The pseudo-code in Figure \ref{fig:algorithm-mic} represents the algorithm used to calculate the metric MIC for each one of the direct dependencies of a given client library. The output of the algorithm is a map containing the set of \texttt{MethodCalls} that call each \texttt{CtBehavior}. The map is generated for each one of the direct dependencies and stored in the \texttt{DependencyTreeNode} of each library.
 
 The class \texttt{CtMethod} represents a method, it contains the information about the method itself, and about the class that contains the method. Each of the \texttt{CtMethod} are used later on to find the polymorphic implementations of the method, as well as to calculate the transitive dependencies.
 
 To calculate this first metric, the PoC tool iterates through all the classes of the client library (line 3). For each class, the behaviors are obtained (line 4). In the \textit{Javassist} terminology, the behaviors include both methods and constructors.
 
-Then, the tool iterates through all the behaviors (line 5), and calls the method \texttt{instrument}. The main use case of this method is to modify the bytecode of the method. The method \texttt{instrument} receives an \texttt{ExprEditor} object, which is a class that can be extended to implement the methods for editing the bytecode, which are empty by default. For this metric, the overridden methods are \texttt{edit(MethodCall mc)} and \texttt{edit(ConstructorCall cc)}. These methods will be called for each method call or constructor call, existing in the bytecode of the method (line 6). In the implementation of this methods, it is checked if the behavior called belongs to an external library (line 9). In case it does, the call is added to the map of the external library (line 10).
+Then, the tool iterates through all the behaviors (line 5), and calls the method \texttt{instrument}. The main use case of this method is to modify the bytecode of the method. The method \texttt{instrument} receives an \texttt{ExprEditor} object, which is a class that can be extended to implement the methods for editing the bytecode, which are empty by default. To calculate this metric, the overridden methods are \texttt{edit(MethodCall mc)}, \texttt{edit(ConstructorCall cc)}, and \texttt{edit(NewExpr ne)}. These methods will be called for each method call or constructor call, existing in the bytecode of the method (line 6). The constructor calls in the form of \texttt{this()} or \texttt{super()} are captured by the method \texttt{edit(ConstructorCall cc)}. Whereas the constructor calls in the form of \texttt{new Object()} are captured by \texttt{edit(NewExpr ne)}.
+
+For each captured call to a behavior, it is checked if the called behavior belongs to a server library (line 9). In case it does, the call is added to the \texttt{ReachableBehaviors} map of the server library (line 10).
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -52,21 +54,21 @@ clientClasses = classPoolManager.getClientLibraryClasses()
 
 for each c in clientClasses
   behaviors = c.getDeclaredBehaviors()
-  for each b in behaviors
-    for each methodCall in b
-      sm = methodCall.getMethod()
-      sc = sm.getDeclaringClass()
-      if (classPoolManager.belongsToClientLibrary(sc))
-        dependencyTree.addCall(sc, methodCall)
+  for each behavior in behaviors
+    for each behaviorCall in behavior
+      serverMethod = behaviorCall.getMethod()
+      serverClass = serverMethod.getDeclaringClass()
+      if (classPoolManager.belongsToClientLibrary(serverClass))
+        dependencyTreeNode.addReachableBehavior(serverMethod, behaviorCall)
 \end{lstlisting}
 \caption{Pseudo-code of the algorithm to calculate MIC}
 \label{fig:algorithm-mic}
 \end{figure}
 
 \paragraph{Direct Aggregation Coupling}
-The pseudo-code in Figure \ref{fig:algorithm-ac} represents the algorithm used to calculate the metric AC. The output of the algorithm is a map of the times a \texttt{ServerClass} has been called. The class \texttt{ServerClass} contains the class and library where each field has been implemented, and it is used later on to find the descendants of the class, and to aggregate the metric to the library level.
+The pseudo-code in Figure \ref{fig:algorithm-ac} represents the algorithm used to calculate the metric AC. The output of the algorithm is a map containing for each \texttt{CtClass} of the server library, the set of \texttt{CtField} that are of the type of the \texttt{CtClass}. The class \texttt{CtClass} represents a class and contains the information of the class and the library where it is implemented. \texttt{CtClass} is used later on to find the descendants of the class, and to calculate the metric \texttt{TAC} for the transitive dependencies.
 
-The initial strategy for this second metric is similar to the previous one. The implementation iterates through all the classes of the client library (line 3). Then, for each one, all the fields declared in the class (line 5). Next, each of the fields containing a generic type are parsed apart (line 6). All the types involved in the field are obtained and treated individually (line 8). All the simple fields, if the implementation of the class is found in a server library (line 13), are included in the calculation of the metric (line 14).
+The algorithm for this second metric is similar to the previous one. The implementation iterates through all the classes of the client library (line 3). Then, for each class, it iterates through all the declared fields (line 5). Next, each of the fields containing a generic type are parsed separatedly (line 6), to obtain all the types icluded in the generic  (line 7), which are treated individually (line 8). All the simple fields, if the implementation of the class is found in a server library (line 13), are included in the calculation of the metric (line 14).
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -76,14 +78,14 @@ for each c in clientClasses
   fields = c.getDeclaredFields()
   for each field in fields
     if (field.containsGeneric())
-      classes = getAllClasses(f)
-      for each class in classes
-        if (classPoolManager.belongsToClientLibrary(class))
-          acMap.update(class, field)
+      serverClasses = getAllClasses(field)
+      for each serverClass in serverClasses
+        if (classPoolManager.belongsToClientLibrary(serverClass))
+          dependencyTreeNode.addClass(serverClass, field)
     else
-      class = f.getType()
-      if (classPoolManager.belongsToClientLibrary(class))
-      acMap.update(class, field)
+      serverClass = field.getType()
+      if (classPoolManager.belongsToClientLibrary(serverClass))
+      dependencyTreeNode.addReachableClass(serverClass, field)
 \end{lstlisting}
 \caption{Pseudo-code of the algorithm to calculate AC}
 \label{fig:algorithm-ac}
