@@ -52,8 +52,8 @@ For each captured call to a behavior, it is checked if the called behavior belon
 \begin{lstlisting}[escapeinside={(*}{*)}]
 clientClasses = classPoolManager.getClientLibraryClasses()
 
-for each c in clientClasses
-  behaviors = c.getDeclaredBehaviors()
+for each clientClass in clientClasses
+  behaviors = clientClass.getDeclaredBehaviors()
   for each behavior in behaviors
     for each behaviorCall in behavior
       serverBehavior = behaviorCall.getBehavior()
