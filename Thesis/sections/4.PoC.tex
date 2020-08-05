@@ -38,9 +38,9 @@ To store all the information about the metrics, each \texttt{DependencyTreeNode}
 \unsure{add class diagram of the model?}
 
 \subsubsection{Direct Method Invocation Coupling}
-The pseudo-code in Figure \ref{fig:algorithm-mic} represents the algorithm used to calculate the metric MIC for each one of the direct dependencies of a given client library. The output of the algorithm is a map containing the set of \texttt{MethodCalls} that call each \texttt{CtBehavior}. The map is generated for each one of the direct dependencies and stored in the \texttt{DependencyTreeNode} of each library.
+The pseudo-code in Figure \ref{fig:algorithm-mic} represents the algorithm used to calculate the metric MIC for each one of the direct dependencies of a given client library. The output of the algorithm is a map containing the set of \texttt{BehaviorCalls} that call each \texttt{CtBehavior}. The map is generated for each one of the direct dependencies and stored in the \texttt{DependencyTreeNode} of each library.
 
-The class \texttt{CtMethod} represents a method, it contains the information about the method itself, and about the class that contains the method. Each of the \texttt{CtMethod} are used later on to find the polymorphic implementations of the method, as well as to calculate the transitive dependencies.
+The class \texttt{CtBehavior} represents a method, it contains the information about the method itself, and about the class that contains the method. Each of the \texttt{CtMethod} are used later on to find the polymorphic implementations of the method, as well as to calculate the transitive dependencies.
 
 To calculate this first metric, the PoC tool iterates through all the classes of the client library (line 3). For each class, the behaviors are obtained (line 4). In the \textit{Javassist} terminology, the behaviors include both methods and constructors.
 
@@ -56,16 +56,16 @@ for each c in clientClasses
   behaviors = c.getDeclaredBehaviors()
   for each behavior in behaviors
     for each behaviorCall in behavior
-      serverMethod = behaviorCall.getMethod()
-      serverClass = serverMethod.getDeclaringClass()
+      serverBehavior = behaviorCall.getBehavior()
+      serverClass = serverBehavior.getDeclaringClass()
       if (classPoolManager.belongsToClientLibrary(serverClass))
-        dependencyTreeNode.addReachableBehavior(serverMethod, behaviorCall)
+        dependencyTreeNode.addReachableBehavior(serverBehavior, behaviorCall)
 \end{lstlisting}
 \caption{Pseudo-code of the algorithm to calculate MIC}
 \label{fig:algorithm-mic}
 \end{figure}
 
-\paragraph{Direct Aggregation Coupling}
+\subsubsection{Direct Aggregation Coupling}
 The pseudo-code in Figure \ref{fig:algorithm-ac} represents the algorithm used to calculate the metric AC. The output of the algorithm is a map containing for each \texttt{CtClass} of the server library, the set of \texttt{CtField} that are of the type of the \texttt{CtClass}. The class \texttt{CtClass} represents a class and contains the information of the class and the library where it is implemented. \texttt{CtClass} is used later on to find the descendants of the class, and to calculate the metric \texttt{TAC} for the transitive dependencies.
 
 The algorithm for this second metric is similar to the previous one. The implementation iterates through all the classes of the client library (line 3). Then, for each class, it iterates through all the declared fields (line 5). Next, each of the fields containing a generic type are parsed separatedly (line 6), to obtain all the types icluded in the generic  (line 7), which are treated individually (line 8). All the simple fields, if the implementation of the class is found in a server library (line 13), are included in the calculation of the metric (line 14).
@@ -96,7 +96,7 @@ Once the two algorithms (Figures \ref{fig:algorithm-mic} and \ref{fig:algorithm-
 
 The algorithms to find the descendants and the polymorphic implementations of the methods, are used with each one of the libraries with which the client library has a direct dependency, and for which coupling was found, either \texttt{MIC} or \texttt{AC}.
 
-The pseudo-code used to find the polymorphic implementations of the methods can be found in Figure \ref{fig:algorithm-polymorphy}. The process is as follows: First, iterate through all the classes of the server library, given its \texttt{DependencyTreeNode} (line 5). Then, it iterates through the behaviors in the map contained in \texttt{ReachableBehaviors}. If the current library class is a descendant of the class containing the reachable behavior (line 8), and it contains a behavior with the same signature as the reachable behavior (line 9), a polymorphic implementation of the behavior has been found. Therefore, the found behavior is added to the \texttt{ReachableMethods} with the same set of \texttt{BehaviorCall} as the reachable behavior (line 11).
+The pseudo-code used to find the polymorphic implementations of the methods can be found in Figure \ref{fig:algorithm-polymorphy}. The process is as follows: First, iterate through all the classes of the server library, given its \texttt{DependencyTreeNode} (line 5). Then, it iterates through the behaviors in the map contained in \texttt{ReachableBehaviors}. If the current library class is a descendant of the class containing the reachable behavior (line 8), and it contains a behavior with the same signature as the reachable behavior (line 9), a polymorphic implementation of the behavior has been found. Therefore, the found behavior is added to the \texttt{ReachableBehaviors} with the same set of \texttt{BehaviorCall} as the reachable behavior (line 11).
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -120,6 +120,102 @@ The process to find descendants in the case of the metric \texttt{AC} is the sam
 
 \blankl
 As can be observed in the previous explanation of how the detection of inheritance is done, in this PoC implementation, it is not detected if a class is extended in the client library instead of in the server library.\todo{Find out how often does this happen}
+
+\subsubsection{Transitive Method Invocation Coupling}
+
+\begin{figure}[ht!]
+\begin{lstlisting}[escapeinside={(*}{*)}]
+toVisit = queue(clientLibraryNode.getChildren())
+
+while (!toVisit.isEmpty())
+  visiting = toVisit.poll()
+  if (visiting.hasReachableBehaviors())
+    findPolymorphicImplementations(visiting.getReachableBehaviors())
+  if (visiting.hasChildren())
+    calculateTransitiveMIC(visiting)
+  toVisit.add(visiting.getChildren())
+\end{lstlisting}
+\caption{Pseudo-code of the algorithm to find polymorphic implementations}
+\label{fig:tree-iterating-tmic}
+\end{figure}
+
+\begin{figure}[ht!]
+\begin{lstlisting}[escapeinside={(*}{*)}]
+reachableBehaviors = visitingTreeNode.getReachableBehaviors()
+
+for each reachableBehavior in reachableBehaviors
+  behaviorsToVisit = queue(reachableBehavior)
+  visitedBehaviors = empty set
+  while (!behaviorsToVisit.isEmpty())
+    visitingBehavior = behaviorsToVisit.poll()
+    if (visitedBehaviors.contains(visitingBehavior)) continue
+    visitedBehaviors.add(visitingBehavior)
+
+    for each behaviorCall in visitingBehavior
+      calledBehavior = behaviorCall.getBehavior()
+      calledClass = calledBehavior.getDeclaringClass()
+      if (classPoolManager.isStandardClass(calledClass))
+        continue
+      else if (classPoolManager.isClassInDependency(calledClass, visitingLibrary))
+        visitingLibrary.addReachableBehaviorToDependency(calledClass)
+      else // calledClass is in current library
+        behaviorsToVisit.add(calledBehavior)
+\end{lstlisting}
+\caption{Pseudo-code of the algorithm to find polymorphic implementations}
+\label{fig:calculate-tmic}
+\end{figure}
+
+\subsubsection{Transitive Aggregation Coupling}
+
+\begin{figure}[ht!]
+\begin{lstlisting}[escapeinside={(*}{*)}]
+toVisit = clientLibraryNode.getChildren()
+
+while (!toVisit.isEmpty())
+  visiting = toVisit.poll()
+  if (visiting.hasReachableClasses())
+    findPolymorphicImplementations(visiting.getReachableClasses())
+  if (visiting.hasChildren())
+    calculateTransitiveAC(visiting)
+  toVisit.add(visiting.getChildren())
+\end{lstlisting}
+\caption{Pseudo-code of the algorithm to find polymorphic implementations}
+\label{fig:tree-iterating-tac}
+\end{figure}
+
+\begin{figure}[ht!]
+\begin{lstlisting}[escapeinside={(*}{*)}]
+reachableClasses = visitingTreeNode.getReachableClasses()
+
+for each reachableClass in reachableClasses
+  classesToVisit = queue(reachableClass)
+  visitedClasses = empty set
+  while (!classesToVisit.isEmpty())
+    visitingClass = classesToVisit.poll()
+    if (visitedClasses.contains(visitingClass)) continue
+    visitedClasses.add(visitingClass)
+
+    fields = visitingClass.getDeclaredFields()
+    for each field in fields
+      if (field.containsGeneric())
+        classesInField = getAllClasses(field)
+        for each classInField in classesInFIeld
+          if (classPoolManager.isStandardClass(classInField)) continue
+          else if (classPoolManager.isClassInDependency(classInField, visitingLibrary))
+            visitingLibrary.addReachableClassToDependency(classInField)
+          else // classInField is in current library
+            classesToVisit.add(classInField)
+      else
+        classInField = field.getType()
+        if (classPoolManager.isStandardClass(classInField)) continue
+        else if (classPoolManager.isClassInDependency(classInField, visitingLibrary))
+          visitingLibrary.addReachableClassToDependency(classInField)
+        else // classInField is in current library
+          classesToVisit.add(classInField)
+\end{lstlisting}
+\caption{Pseudo-code of the algorithm to find polymorphic implementations}
+\label{fig:calculate-tac}
+\end{figure}
 
 \section{Visualization}
 Until now, in this chapter, it has been described how the implementation works for the backend part. In this section, however, we are going to explain how the visualization of the tool has been designed and implemented.
