@@ -30,6 +30,7 @@ Then, once the artifact of the client library is obtained, \textit{Aether} is us
 Once the jars of the client library and all its dependencies are available, the first step is to join all the \textit{.class} files in a \texttt{ClassPool} object, which is the main object of \textit{Javassist}. Once the \texttt{ClassPool} is created, it is used to obtain the classes from the client library, from which the different metrics are calculated.
 
 \subsubsection{Implementation Classes}
+\reminder{maybe add descrption of some other classes used in the implementation (e.g. calculators or inheritance detectors)}
 \paragraph{Model of the dependency tree}
 In order to represent the dependency tree of the client library, the implementation uses the class \texttt{DependencyTreeNode}. Each \texttt{DependencyTreeNode} contains the information of the library it represents, namely \textit{groupID}, \textit{artifactID}, and \textit{version}. Also, each \texttt{DependencyTreeNode} has a \texttt{List} of \texttt{DependencyTreeNode}, which are the children of the current library in the dependency tree.
 
@@ -228,6 +229,8 @@ for each reachableClass in reachableClasses
 \caption{Pseudo-code of the algorithm to find polymorphic implementations}
 \label{fig:calculate-tac}
 \end{figure}
+
+\todo{An explanation of what does the implementation do when an abstract method/class or interface is found in the call graph is still missing}
 
 \subsubsection{Propagation Formula}
 - Explain that for each reachable method/class stored in the DependencyTreeNodes, the distance at which this method/class is reachable is also stored.
