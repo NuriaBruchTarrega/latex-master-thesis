@@ -127,6 +127,7 @@ The calculation of the Transitive Method Invocation Coupling takes place after c
 
 To calculate the metric for every dependency in the tree, the dependency tree is traversed using a \textit{breadth-first search (BFS)} on the \texttt{DependencyTreeNode}. The algorithm starts with the direct dependencies, since the client library node has already been used for the calculation of \texttt{MIC}. The traversing of a branch finishes either when a node does not have more children, or when no reachable methods have been found in a library. The pseudo-code of the implemented algorithm can be found in Figure \ref{fig:tree-traversing-tmic}.
 
+For each \texttt{DependencyTreeNode} visited, the method \texttt{calculateTransitiveMIC} is executed. The pseudo-code of this method can be found in Figure \ref{fig:calculate-tmic}, which is going to be explained below.
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -143,8 +144,6 @@ while (!toVisit.isEmpty())
 \caption{Pseudo-code of the algorithm to find polymorphic implementations}
 \label{fig:tree-traversing-tmic}
 \end{figure}
-
-
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -171,6 +170,12 @@ for each reachableBehavior in reachableBehaviors
 \caption{Pseudo-code of the algorithm to find polymorphic implementations}
 \label{fig:calculate-tmic}
 \end{figure}
+
+The first step is to obtain all the reachable behaviors of the \texttt{DependencyTreeNode} that is being visited (line 1). For each one of these behaviors (line 3), the call graph of the behavior is going to be followed, to find all the reachable behaviors of the dependencies of the library that is being visited.
+
+A queue of the behaviors that have to be visited is created, containing only the current reachable behavior (line 4). In addition, a set of all the behaviors that have already been visited is also created (line 5) to avoid infinite loops.
+
+For each behavior in the queue, all the \texttt{behaviorCall} are visited (line 11). Then, there are three different cases that could occurr. First, if the called behavior is implemented in a standard class, the call is ignored (line 14). Also, if the called behavior is implemented in a dependency of the current library, the behavior is added to the reachable behaviors of the dependency (line 16). Finally, the last option is the called behavior is implemented in the current library, in which case it is added to the queue of behaviors to visit (line 19). This way all the entire call graph of the reachable behaviors is visited.
 
 \subsubsection{Transitive Aggregation Coupling}
 
