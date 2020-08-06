@@ -180,6 +180,8 @@ For each behavior in the queue, all the \texttt{behaviorCall} are visited (line 
 
 \subsubsection{Transitive Aggregation Coupling}
 
+The calculation of the Transitive Aggregation Coupling is very similar to the calculation of the Transitive Method Invocation Coupling but using the reachable classes instead of the reachable behaviors. The pseudo-code of the \textit{BFS} for the \texttt{TAC} is in Figure \ref{fig:tree-traversing-tac}\reminder{is this pseudo-code really necessary?}.
+
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
 toVisit = queue(clientLibraryNode.getChildren())
@@ -195,6 +197,8 @@ while (!toVisit.isEmpty())
 \caption{Pseudo-code of the \textit{BFS} used for \texttt{TAC}}
 \label{fig:tree-traversing-tac}
 \end{figure}
+
+The implementation of the method \texttt{calculateTransitiveAC} also follows a similar strategy as the \texttt{calculateTransitiveMIC}, but instead of following the call grpahs of the reachable methods, it follows the field declarations of the classes. The pseudo-code can be found in Figure \ref{fig:calculate-tac}.
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -229,6 +233,10 @@ for each reachableClass in reachableClasses
 \caption{Pseudo-code of the algorithm to calculate \texttt{TMIC}}
 \label{fig:calculate-tac}
 \end{figure}
+
+For each reachable class of the current library (line 3), a queue is create with all the classes to be visited (line 4). The queue is declared containing only the current reachable class. To avoid visiting multiple times the same classes, a set with all the visited classes is also maintained (line 5). When a class is visited, all the fields declared in the class are obtained. For each of the declared fields, just as in the calculation of \texttt{AC} (Figure \ref{fig:algorithm-ac}), the fields containing generic signature are parsed, to obtain all the types included in the field (line 14).
+
+Then, for each type in the fields, a similar process as the one described in the \texttt{TMIC} metric is done. If the type is implemented in a standard class, it is ignored. Whereas if the type is implemented in a class of a dependency of the current library, is added to the reachable classes of the dependencies. Finally, if the type is implemented in the current library, it is added to the queue of classes to visit.
 
 \todo{An explanation of what does the implementation do when an abstract method/class or interface is found in the call graph is still missing}
 
