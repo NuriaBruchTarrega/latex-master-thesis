@@ -347,10 +347,10 @@ The propagation represents how the impact of a change can spread across dependen
 \todo{decide what to call each formula and whether to use indirect or transitive or something else}
 If we look at how the metric \texttt{MIC} is calculated, it could be sumarized as: find all the methods in $L_s$ that are reachable from $L_c$. Then, for each one, count how many method calls exist in $L_c$ that reach this method, and sum up the results. The main difference between \texttt{MIC} and \texttt{TMIC} is that the calls in $L_c$ will not directly execute a reachable method of $L_s$. The execution of a method in $L_s$ is indirect, since $L_s$ is not a direct dependency of $L_c$.
 
-Therefore, to calculate the indirect coupling between two libraries $\verb|IMIC|(L_c, L_s)$ is calculated in the following manner. For each method from $L_s$ that is reachable from $L_c$ ($rm \in \verb|RM|(L_c,L_s)$), we count the number of method invocations in $L_c$ from which $rm$ is reachable, $\verb|nIR|(rm, L_c)$. The number of method invocations is multiplied by the number of polymorphic implementations of $rm$ in $L_s$ ($\verb|nDC|(rm, L_s)$).
+Therefore, the indirect coupling between two libraries $\verb|IMIC|(L_c, L_s)$ is calculated in the following manner. For each method from $L_s$ that is reachable from $L_c$ ($rm \in \verb|RM|(L_c,L_s)$), we count the number of method invocations in $L_c$ from which $rm$ is reachable, $\verb|nIR|(rm, L_c)$. The number of method invocations is multiplied by the number of polymorphic implementations of $rm$ in $L_s$ ($\verb|nDC|(rm, L_s)$).
 
 \begin{equation*}
-  \verb|IMIC|(L_c,L_s) = \sum_{rm \in \verb|RM|(L_c,L_s)} \verb|nIR|(rm,L_c) * \verb|nDC|(rm, L_s)
+  \verb|IMIC|(L_c,L_s) = \sum_{rm \in \verb|RM|(L_c,L_s)} \verb|nIR|(rm,L_c) * \verb|nP|(rm, L_s)
 \end{equation*}
 
 However, this formula does not consider propagation at all. Therefore, it is necessary to take into account the distance between $L_c$ and $L_s$. In addition, it could happen that $L_s$ is reachable from $L_c$ at different distances. For instance, if $L_s$ appeared twice in the dependency tree of $L_c$, this is is the case in Figure \ref{fig:dependency-tree} if we take \textit{Lib1} as $L_c$ and \textit{Lib4} as $L_s$.
@@ -371,6 +371,18 @@ The Transitive Method Invocation Coupling ($\verb|TMIC|(L_c,L_s)$), will be meas
 \end{equation*}
 
 \paragraph{Metric 4: Transitive aggregation coupling (TAC)}
+In the case of aggregation coupling for the transitive dependencies ($\verb|IAC|(L_c,L_s)$), it is calculated in the following way. For each class of $L_s$ that is reachable from $L_c$ through field declarations ($rc \in \verb|RC|(L_c,L_s)$), count all the field declarations from which it is reachable ($\verb|nFR|(rc,L_c)$), and multiply it by the number of descendants of the reachable class ($\verb|nDC|(rm, L_s)$).
+
+\begin{equation*}
+  \verb|IAC|(L_c,L_s) = \sum_{rc \in \verb|RC|(L_c,L_s)} \verb|nFR|(rc,L_c) * \verb|nDC|(rm, L_s)
+\end{equation*}
+
+\todo{This formula will not be final until I have been able to measure it, so let's not look too much at it just yet :)}
+Just as in the case of \texttt{TMIC}, the distance between $L_c$ and $L_s$ should be considered. Therefore, for each distance, we take the number measured by $\verb|IAC|(L_c,L_s, distance)$, and multiply it by a propagation factor \verb|PF| to the power of the distance.
+
+\begin{equation*}
+  \verb|TAC|(L_c,L_s) = \sum_{distance} \verb|IAC|(L_c,L_s, distance) * \verb|PF|^{distance}
+\end{equation*}
 
 \subsection{Theoretical validation (RQ1.5)}
 
