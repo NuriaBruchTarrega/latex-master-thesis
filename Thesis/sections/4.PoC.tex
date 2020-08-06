@@ -142,7 +142,7 @@ while (!toVisit.isEmpty())
       calculateTransitiveMIC(visiting)
       toVisit.add(visiting.getChildren())
 \end{lstlisting}
-\caption{Pseudo-code of the algorithm to find polymorphic implementations}
+\caption{Pseudo-code of the \textit{BFS} used for \texttt{TMIC}}
 \label{fig:tree-traversing-tmic}
 \end{figure}
 
@@ -168,7 +168,7 @@ for each reachableBehavior in reachableBehaviors
       else // calledClass is in current library
         behaviorsToVisit.add(calledBehavior)
 \end{lstlisting}
-\caption{Pseudo-code of the algorithm to find polymorphic implementations}
+\caption{Pseudo-code of the algorithm to calculate \texttt{TMIC}}
 \label{fig:calculate-tmic}
 \end{figure}
 
@@ -192,8 +192,8 @@ while (!toVisit.isEmpty())
       calculateTransitiveAC(visiting)
       toVisit.add(visiting.getChildren())
 \end{lstlisting}
-\caption{Pseudo-code of the algorithm to find polymorphic implementations}
-\label{fig:tree-iterating-tac}
+\caption{Pseudo-code of the \textit{BFS} used for \texttt{TAC}}
+\label{fig:tree-traversing-tac}
 \end{figure}
 
 \begin{figure}[ht!]
@@ -226,7 +226,7 @@ for each reachableClass in reachableClasses
         else // classInField is in current library
           classesToVisit.add(classInField)
 \end{lstlisting}
-\caption{Pseudo-code of the algorithm to find polymorphic implementations}
+\caption{Pseudo-code of the algorithm to calculate \texttt{TMIC}}
 \label{fig:calculate-tac}
 \end{figure}
 
