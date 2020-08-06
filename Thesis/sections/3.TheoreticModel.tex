@@ -322,9 +322,9 @@ In this section, the metrics to measure transtive dependencies are going to be d
 \subsubsection{Revisiting existing metrics}
 In the set of metrics reviewed by Briand et al. there is only one metric that does count indirect coupling, $RFC'$ (see Table \ref{table:coupling-metrics}). This metric also counts inheritance-based coupling and it is focused on the client element, just as the metrics 3 and 4 of this work. However, $RFC'$ is calculated at the class aggregation level, whereas the metric for this work are calculated at the library level. Furthermore, the strategy to count connections is E, which means that it counts the number of elements with which the class has a connection, not how many connections.
 
-Therefore, both metrics 3 and 4 are going to be different from the ones reviewed by Briand et al. \cite{briand1999unified}.
+Therefore, both metrics 3 and 4 are going to be different from those reviewed by Briand et al. \cite{briand1999unified}.
 
-\subsubsection{Concepts related to transitive dependencies}
+\subsubsection{Concepts related to transitive dependencies}\improvement{should this go in background instead?}
 In order to define the coupling for transitive metrics, other factors have to be taken into account which are not needed for the direct metrics.
 
 \paragraph{Reachability}
@@ -344,31 +344,31 @@ The propagation represents how the impact of a change can spread across dependen
 \subsubsection{Formal definition}
 
 \paragraph{Metric 3: Transitive method invocation coupling (TMIC)}
-If we look at how the metric \texttt{MIC} is calculated, it could be sumarized as: find all the methods in Ls that are reachable from Lc. Then, for each one, count how many method calls exist in Lc that reach this method, and sum up the results.
+\todo{decide what to call each formula and whether to use indirect or transitive or something else}
+If we look at how the metric \texttt{MIC} is calculated, it could be sumarized as: find all the methods in $L_s$ that are reachable from $L_c$. Then, for each one, count how many method calls exist in $L_c$ that reach this method, and sum up the results. The main difference between \texttt{MIC} and \texttt{TMIC} is that the calls in $L_c$ will not directly execute a reachable method of $L_s$. The execution of a method in $L_s$ is indirect, since $L_s$ is not a direct dependency of $L_c$.
 
-The idea for the metric \texttt{TMIC} is similar: find all the reachable methods of Ls from Lc. For each of the reachable methods, count how many method calls in Lc can result in the execution of the reachable method, and sum up the result.
+Therefore, to calculate the indirect coupling between two libraries $\verb|IMIC|(L_c, L_s)$ is calculated in the following manner. For each method from $L_s$ that is reachable from $L_c$ ($rm \in \verb|RM|(L_c,L_s)$), we count the number of method invocations in $L_c$ from which $rm$ is reachable, $\verb|nIR|(rm, L_c)$. The number of method invocations is multiplied by the number of polymorphic implementations of $rm$ in $L_s$ ($\verb|nDC|(rm, L_s)$).
 
-The metric \texttt{TMIC} is going to be explained by the means of an example. \texttt{TMIC} calculates the method invocation coupling between a client library ($L_c$) and a server library ($L_s$) which do not have a direct dependency. To illustrate this, we take as example, the dependency tree in Figure \ref{fig:dependency-tree}, in which $L_c$ would be \textit{Lib1} and $L_s$ would be \textit{Lib6}. We also define the list of libraries that represent the path between $L_c$ and $L_s$, $PathLib(L_c, L_s)$. In this case, this list contains \textit{Lib3}, \textit{Lib4}, and \textit{Lib6}.
+\begin{equation*}
+  \verb|IMIC|(L_c,L_s) = \sum_{rm \in \verb|RM|(L_c,L_s)} \verb|nIR|(rm,L_c) * \verb|nDC|(rm, L_s)
+\end{equation*}
 
-% TODO: pensar si vull posar la foto a un lateral amb text al voltant.
+However, this formula does not consider propagation at all. Therefore, it is necessary to take into account the distance between $L_c$ and $L_s$. In addition, it could happen that $L_s$ is reachable from $L_c$ at different distances. For instance, if $L_s$ appeared twice in the dependency tree of $L_c$, this is is the case in Figure \ref{fig:dependency-tree} if we take \textit{Lib1} as $L_c$ and \textit{Lib4} as $L_s$.
+
 \begin{figure}[ht]
-\centering
-\includegraphics[width=.4\textwidth]{figures/Thesis - Dependency Tree.png}
-  \caption{Dependency tree}
+\begin{center}
+\includegraphics[width=0.4\textwidth]{figures/Thesis - Dependency Tree.png}
+\caption{Example dependency tree}
 \label{fig:dependency-tree}
+\end{center}
 \end{figure}
 
-The calculation of this metric is divided in two main steps. The first one consists on, for each method in the client library ($m_c \in M(L_c)$), find all the method calls to methods belonging to the first library in $PathLib(L_c, L_s)$, the called methods are the reachable methods of the library.
+Therefore, the previous formula for $|IMIC|(L_c,L_s)$ will be measured for a certain reachability distance. \todo{This formula will not be final until I have been able to measure it, so let's not look too much at it just yet :)}
+The Transitive Method Invocation Coupling ($\verb|TMIC|(L_c,L_s)$), will be measured as follows. For each distance at which there is coupling between $L_c$ and $L_s$, sum up the coupling measured by $\verb|IMIC|(L_c,L_s, distance)$, multiplied by a propagation factor ($\verb|PF|$) to the power of the distance. Where $\verb|PF| \in (0,1)$.
 
-Steps:
-
-- Find all the calls to methods that belong to libraries in PathLib(Lc, Ls) from Lc.
-- For each method called, follow the call-graph in the library where it is defined.
-    - If the call graph includes a call to another library included in PathLib(Lc, Ls), include it in the reachable methods of the library.
-    - If the call graph includes a call to the library Ls, add it to the reachable methods of Ls.
-- Once all the libraries in PathLib(Lc, Ls) have been visited, we have a set with all the reachable methods of Ls from Lc.
-
- Then, for each reachable method of the libraries in the set $PathLib(L_c, L_s)$, we follow the call-graph that it creates by obtaining all the method calls done in the
+\begin{equation*}
+  \verb|TMIC|(L_c,L_s) = \sum_{distance} \verb|IMIC|(L_c,L_s, distance) * \verb|PF|^{distance}
+\end{equation*}
 
 \paragraph{Metric 4: Transitive aggregation coupling (TAC)}
 
@@ -395,50 +395,3 @@ Steps:
 \paragraph{Property 4: Merging of classes}
 
 \paragraph{Property 5: Merging of unconnected classes}
-
-\begin{comment}
-\subsection{Defining the taxonomy of package replacement (\textbf{RQ2.2})}
-
-Before starting the measurement of package replacement, it is important to specify which kind of replacement is being studied. Therefore, we have defined a classification of the possible scenarios.
-
-First, Kula et al. \cite{kula2014visualizing} in their study about the visualization of the evolution of library dependency, identify four distinct behabiours. Namely, adopter, idler, updater and dropper. In addition, Kikas et al. \cite{kikas2017structure} when studying the evolution of software ecosystems, define two different types of update, explicit and implicit. Considering this two classifications, we have created the following classification:
-
-\begin{table}[ht!]
-    \begin{center}
-    \begin{tabularx}{\textwidth}{|X|l|l|}
-      \hline
-      Description & Kula et al. & Kikas et al. \\
-      \hline\hline
-      Add new package dependency & adopter & - \\
-      \hline
-      Maintain package dependency in new application version & idler & - \\
-      \hline
-      Manual update of dependent package version & updater & explicit package update \\
-      \hline
-      Automatic update of dependent package version & updater & implicit package update \\
-      \hline
-      Change a dependency from one package to another & dropper \& adopter & - \\
-      \hline
-      Remove dependency with a package & dropper & - \\
-      \hline
-    \end{tabularx}
-    \end{center}
-    \caption{Taxonomy of depdendency evolution}
-    \label{table:taxonomy-dependency}
-\end{table}
-
-\blankls
-In this classification, we have added the scenario in which a dependency is dropped and substituted by another one. When looking at the terminology defined by Kula et al. it would mean dropping a package, and adopting a new one at the same time. This situation could be given due to libraries that are not maintained longer. These libraries, are usually marked as deprecated, indicating that there is no team updating it anymore. The dependencies created with these libraries, are called halted libraries \cite{pashchenko2018vulnerable}.
-
-Vulneriabilities created by halted dependencies have to be mitigated with a different and more costly strategy. There are different options to mitigate the vulnerabilities, listed below:
-
-\begin{itemize}
-  \item Replace with a library with the same API. Therefore, the replacement would only involve changing the name of the library in the calls to it.
-
-  \item Replace with a library in which the API is different, with different parameters needed for the calls. In this case, the replacement would involve the entire methods (units) in which the library is used.
-
-  \item Creating a new library. The replacement of this library with this option involves developing the functionalities that were used from the original library.
-
-  \item Contribute to the library. In this case, the effort would be related to the amount of code that needs to be changed in order to fix the bug that is causing the vulnerability.
-\end{itemize}
-\end{comment}
