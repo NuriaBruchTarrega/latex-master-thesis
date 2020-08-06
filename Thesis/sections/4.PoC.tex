@@ -123,6 +123,11 @@ As can be observed in the previous explanation of how the detection of inheritan
 
 \subsubsection{Transitive Method Invocation Coupling}
 
+The calculation of the Transitive Method Invocation Coupling takes place after calculating Method Invocation Coupling for the direct dependencies of the client library. The reachable methods found in these dependencies are used as a base to calculate the Transitive Method Invocation Coupling.
+
+To calculate the metric for every dependency in the tree, the dependency tree is traversed using a \textit{breadth-first search (BFS)} on the \texttt{DependencyTreeNode}. The algorithm starts with the direct dependencies, since the client library node has already been used for the calculation of \texttt{MIC}. The traversing of a branch finishes either when a node does not have more children, or when no reachable methods have been found in a library. The pseudo-code of the implemented algorithm can be found in Figure \ref{fig:tree-traversing-tmic}.
+
+
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
 toVisit = queue(clientLibraryNode.getChildren())
@@ -136,8 +141,10 @@ while (!toVisit.isEmpty())
   toVisit.add(visiting.getChildren())
 \end{lstlisting}
 \caption{Pseudo-code of the algorithm to find polymorphic implementations}
-\label{fig:tree-iterating-tmic}
+\label{fig:tree-traversing-tmic}
 \end{figure}
+
+
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
