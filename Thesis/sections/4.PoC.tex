@@ -138,9 +138,9 @@ while (!toVisit.isEmpty())
   visiting = toVisit.poll()
   if (visiting.hasReachableBehaviors())
     findPolymorphicImplementations(visiting.getReachableBehaviors())
-  if (visiting.hasChildren())
-    calculateTransitiveMIC(visiting)
-  toVisit.add(visiting.getChildren())
+    if (visiting.hasChildren())
+      calculateTransitiveMIC(visiting)
+      toVisit.add(visiting.getChildren())
 \end{lstlisting}
 \caption{Pseudo-code of the algorithm to find polymorphic implementations}
 \label{fig:tree-traversing-tmic}
@@ -182,15 +182,15 @@ For each behavior in the queue, all the \texttt{behaviorCall} are visited (line 
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
-toVisit = clientLibraryNode.getChildren()
+toVisit = queue(clientLibraryNode.getChildren())
 
 while (!toVisit.isEmpty())
   visiting = toVisit.poll()
   if (visiting.hasReachableClasses())
-    findPolymorphicImplementations(visiting.getReachableClasses())
-  if (visiting.hasChildren())
-    calculateTransitiveAC(visiting)
-  toVisit.add(visiting.getChildren())
+    findDescendants(visiting.getReachableClasses())
+    if (visiting.hasChildren())
+      calculateTransitiveAC(visiting)
+      toVisit.add(visiting.getChildren())
 \end{lstlisting}
 \caption{Pseudo-code of the algorithm to find polymorphic implementations}
 \label{fig:tree-iterating-tac}
