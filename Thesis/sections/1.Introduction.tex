@@ -4,74 +4,79 @@
 \section{Problem statement}
 
 \subsection{Context}
-At present, there are many open-source libraries available for all developers to reuse the features that these libraries implement. This practice is becoming more and more popular since it allows to reuse previously developed code, and helps developers avoid implementing the same functionalities multiple times.
+Currently, there are many open-source libraries available for developers to reuse the features that these libraries implement. This practice is becoming more and more popular since it allows to reuse previously developed code, and helps developers avoid implementing the same functionalities multiple times.
 
-When a developer uses an open-source library in a project, it creates a dependency between the project and the library. This implies that a significant number of projects depend on other open-source projects, and it adds the task of managing these dependencies to the maintenance tasks of the project. How to maintain the dependencies is not a trivial task, and it is one of the problems that the field of software engineering is trying to solve \cite{kula2014visualizing}.
+When a developer uses an open-source library in a project, it creates a dependency between the project and the library. This implies that a significant number of projects depend on other open-source projects, and it adds the task of managing these dependencies to the maintenance tasks of the project. How to maintain the dependencies is not a trivial task, and it is one of the problems that the field of software engineering is trying to solve \cite{kula2014visualizing}. \unsure{you might add some concrete examples of what 'maintain dependencies' means in practice (e.g. checking for issues, updating versions [which involves renewed testing, checking for code that needs to be updated, and making required changes where necessary)}
 
-The management and maintenance of the dependencies of a project is an important task. Open-source libraries, just like any other software project, can have security vulnerabilities that may affect the projects that depend on these libraries. For example, some vulnerabilities can become security problems that can have a negative impact in terms of integrity, privacy or availability.
+The management and maintenance of the dependencies of a project is an important task. Open-source libraries \unsure{"for example, ..."; you may also mention some other reasons for updating libs}, just like any other software project, can have security vulnerabilities that may affect the projects that depend on these libraries. For example, some vulnerabilities can become security problems that can have a negative impact in terms of integrity, privacy or availability.
 
 % TODO: afegir algo sobre el impacte dels canvis
 
 \blankl % Pensar si segueixo posant aixo en cas que no faci la pregunta dos
-Currently, developers have at their disposal package managers, to ease the task of managing the dependencies of their projects. However, the dependency management available in these package managers only evaluate if a dependency exists or not and a more detailed risk evaluation is missing \cite{hejderup2018prazi}. There is no way to evaluate how much a project depends on a library.
+Currently, developers have package managers at their disposal, to ease the task of managing the dependencies of their projects. However, the dependency management available in these package managers only evaluate if a dependency exists or not and a more detailed risk evaluation is missing \cite{hejderup2018prazi}. There is no way to evaluate how much a project depends on a library.
 
-Furthermore, it could happen that the developers of a project decide to replace one of the dependencies of the project with another one. This could happen in case a library has vulnerabilities or is deprecated, to prevent the vulnerabilities from affecting the project. However, replacing a dependency could be a costly process. It involves identifying which parts of the project are affected by the dependency, and which parts of the library are being used and need replacement.
+Furthermore, the developers of a project may decide to replace one of the dependencies of the project with another one. This could happen in case a library has vulnerabilities or is deprecated, to prevent the vulnerabilities from affecting the project. However, replacing a dependency could be a costly process. It involves identifying which parts of the project are affected by the dependency, and which parts of the library are being used and need replacement. \unsure{you may consider to also mention the challenge of indirect dependencies}
 
 \blankl
-Therefore, this thesis has the aim to perform a more detailed evaluation of the dependencies. A set of metrics is proposed to measure the dependencies between projects and the open-source libraries these use. In addition, we want to propose a way to measure the effort that would be required to replace a dependency with a new one. We are going to define a method to estimate effort considering which parts of the code are affected by the dependency.
+Therefore, this thesis has the aim to perform a more detailed evaluation of the dependencies. \unsure{make stronger (more specific) through "of the \textit{actual usage} of dependencies"?} A set of metrics is proposed to measure the dependencies between projects and the open-source \unsure{"(open-source)"; because the approach is not limited/specific to open source} libraries these use. \todo{}In addition, we want to propose a way to measure the effort that would be required to replace a dependency with a new one. We are going to define a method to estimate effort considering which parts of the code are affected by the dependency.\unsure{perhaps you can generalize this a bit to "to estimate the impact of replacing a dependency"; or just return to this sentence later when you know exactly what you achieved}
 
-\subsection{Host organization}
-This project is carried out in collaboration with the company \textit{Software Improvement Group (SIG)}, and it is motivated by the \textit{FASTEN} project \footnote{\url{https://www.fasten-project.eu/}}. The objective of this project is to improve the quality of open-source development environments to make them more secure and reliable. For this reason, the FASTEN project aims to analyze the software library dependencies that the projects have, in more detail. SIG is collaborating in the FASTEN project since the goals of the project, are aligned with those of SIG. The good maintenance of the dependencies of a project is also part of the heath and security of software applications.
+\subsection{The context of the project}
+This project has been carried out in collaboration with the company \textit{Software Improvement Group (SIG)}, and it is motivated by the \textit{FASTEN} project \footnote{\url{https://www.fasten-project.eu/}}. The objective of this project is to improve the quality of open-source development environments to make them more secure and reliable. For this reason, the FASTEN project aims to analyze the software library dependencies that the projects have in more detail. SIG is collaborating in the FASTEN project since the goals of the project, are aligned with those of SIG. \unsure{hmm, is this very useful info to the reader?}  Proper maintenance of the dependencies of a project is also part of the heath and security of software applications. \unsure{but perhaps this sentence can go to a previous paragraph?}
 
 \subsection{Research questions} % Here, I still have to think about the terminology used, because I am not sure about this "software product" thing.
+\unsure{about the software product thing: that seems fine, if you define this term beforehand (and use it consistently)}
 To tackle the problems described in the previous section, we specify the following research questions:
 
 \blankl
 \textbf{RQ1:} \textit{How can we measure the degree of source code dependency between two software products?}
 
-In order to define an approach to answer this question and to divide the question in different parts, we have defined the following subquestions:
+To define an approach to answer this question and to divide the question in different parts, we have defined the following subquestions:
 
 \begin{itemize}
   \item \textbf{RQ1.1:} \textit{What constitutes a dependency between two products?}
 
+\unsure{Make simpler and more direct: e.g. "The first step towards measuring the degree of dependency is to create a crisp definition of dependencies: including what types of connection between products are considered, and how can these be counted."}
   One of the first steps to find a way to measure the degree of dependency, it is to determine what creates a dependency. The type of connection between the products and how to count them, among other characteristics.
 
   \item \textbf{RQ1.2:} \textit{Which metrics can be used to measure the dependency?}
+  \unsure{ is 'metrics' the right term here? or is it e.g. 'code analysis'}
 
-  With this question, we investigate which existing coupling metrics could be used to measure dependency between software products. This implies evaluate the metrics according to the characteristics defined in the previous subquestion, to select the ones applicable for our case. In addition, it is also necessary to define how to adapt them to the new usage.
+  Investigate which existing coupling metrics could be used to measure dependency between software products. \todo{rephrase}This implies evaluate the metrics according to the characteristics defined in the previous subquestion, to select the ones applicable for our case. In addition, it is also necessary to define how to adapt them to the new usage.
 
   \item \textbf{RQ1.3:} \textit{How can we calculate the metrics?}
 
   With a defined set of metrics to use, it is necessary to calculate them, to have results to evaluate the metrics. This is done with a call-level dependency graph, as will be explained later on.
 
   \item \textbf{RQ1.4:} \textit{Which is the meaning of the metrics in this scenario?}
-
+\unsure{This should be done as part of RQ1.2, I think}
   After calculating the metrics in a project, there is a number as a result. But what is the meaning of the number? What is the meaning of the metric? The goal is to define the meaning of the metric, so a number gives actionable information.
 
   \item \textbf{RQ1.5:} \textit{How can we validate the proposed metrics?}
 
-  Finally, with the results, and the definition of the metrics, we have validated them. There are two approaches to do so, the theoretical and the empirical. The metrics will be validated using both approaches, as extensibly as time permits.
+  There are two approaches to validate the suitability of the metrics, the theoretical \unsure{actually, I am not sure I know what you mean by 'theoretical validation'? Is it e.g. conformance to rules that metrics should adhere to, such as defined by Weyuker  //   addressed in 1.3; perhaps move that part up , as 'background'} and the empirical. The metrics will be validated using both approaches.
 \end{itemize}
 
 \blankl
 \textbf{RQ2:} \textit{How can we measure the effort required to replace the use of a library in a software product?}
+\unsure{As I wrote above, you may consider to use the term 'impact of replacing': this includes the amount of effort required, but that consists of multiple factors: 1) how much code is to be replaced 2) is there a suitable alternative library with the same (or partially) functionality; if not, how much extra stuff needs to be created 3) how many different lib calls must be substituted? 4) in how many locations of the code must these lib calls be substituted? 5) how much effort is required for each substitution? 6) how much test automation is available (this reduces the risk)...}
 
-This second question is in the case that it is necessary to replace the dependency of the product with a different library. To do so, it could be useful to have an estimation of the effort needed to replace the library. To answer this question, we have defined the following subquestions:
+This second question applies to the cases where it is necessary to replace the dependency of the product with a different library. To do so, it could be useful to have an estimation of the effort needed to replace the library. To answer this question, we have defined the following subquestions:
 
 \begin{itemize}
   \item \textbf{RQ2.1:} \textit{What do we consider effort, which is the definition?}
 
-  There are many different definitions of effort in the literature. One of the most common ones is the man-hours. In this case we are going to define which one is the effort measured in this research.
+  There are many different definitions of effort in the literature. One of the most common ones is the hours of development effort. We are going to define which one is the effort measured in this research. \reminder{maybe rephrase this}
 
   \item \textbf{RQ2.2:} \textit{Which is the definition of replace a dependency?}
+  \unsure{What does it mean to replace" / "What is involve in. replacing}
 
-  There are many different cases which could be defined as replacing a dependency. Therefore, we are going to specify the taxonomy used to describe the types of library replacement, and from those types, determine which are the studied ones, and which are not.
+  There are several different forms of dependency replacement. Therefore, we are going to specify a taxonomy used to describe the types of library replacement, and select the relevant ones for further consideration in this thesis.
 
   \item \textbf{RQ2.3:} \textit{Which are the applicable methods to measure effort?}
   From all the methods and strategies to measure effort existing in the literature, we are going to chose which are the ones that measure the effort that we defined in RQ2.1, and are applicable to the specific situation defined in RQ2.2.
 
   \item \textbf{RQ2.4:} \textit{How can we validate the measurement of the effort?}
-  Finally, as in RQ1.5, it is necessary to validate the method used to measure effort, both empirically and theorically. Case studies are used for the empirical validation, comparing the real effort with the estimated one.
+  \todo{rephrase}Finally, as in RQ1.5, it is necessary to validate the method used to measure effort, both empirically and theorically \unsure{"theoretically" can you give an idea what that means in this context? should estimated effort also behave like a metric // this is answered later in 1.3}. Case studies are used for the empirical validation, comparing the real effort with the estimated one.
 \end{itemize}
 
 \subsection{Research method}
@@ -79,31 +84,32 @@ The main research method that is going to be employed during this project is \te
 This research method is artifact-based, which means that the first step is to produce the artifact meant to be used in certain situations envisioned by the researcher. The testing of this artifact, to see if it is effective in these situations, is done through a number of iterations. First, under ideal conditions, and then changing the experiments step by step to reach a real-world situation. These iterations, in the context of this project, are going to be limited due to the existing deadlines. However, there is the option of continuing with this part of the work in the future.
 
 \blankl
-In addition, the research will also include controlled experiments. These experiments will be conducted as the empirical part of the validation of the coupling metrics. Additionally, the empirical validation of the effort estimation is going to be achieved by the means of case studies. In these case studies, the estimated effort will be compared with the real effort that the change required.
+In addition, the research will also include controlled experiments \unsure{really? what form could those take}. These experiments will be conducted as the empirical part of the validation of the coupling metrics. Additionally, the empirical validation of the effort estimation is going to be achieved by the means of case studies. In these case studies, the estimated effort will be compared with the real effort that the change required. \unsure{this seems a bit ambitious; you may replace this with the application of the measurements to one or more concrete cases (systems)}
 
 \blankl
-Some of the most difficult parts of this research are the validation and adaptation of the coupling metrics.
+Some of the most difficult parts of this research \unsure{that's a bit strange to write, perhaps 'complex'} are the validation and adaptation \unsure{you have not mentioned adaptation before?
+} of the coupling metrics.
 First, the validation since there is not a unique way to do it, but rather a wide variety of criteria and approaches. Therefore, conducting a complete validation is a complex task as it is not possible to validate every aspect of the metric.
-In addition, even though the metrics that are going to be used to measure coupling between software products already exist, they are going to be adapted. In order to use the metrics for coupling between packages, it is necessary to define the aggregation method of the metrics. These changes of the metrics could be complex.
+In addition, even though the metrics that are going to be used to measure coupling between software products already exist, they are going to be adapted. In order to use the metrics for coupling between packages \unsure{new term}, it is necessary to define the aggregation method of the metrics.\unsure{ this is not so clear...}
 
 \blankl
 After the formal definition and theoretical validation of the metrics for both, the coupling measurement and the estimation effort, to replace a library, a Proof-of-Concept (PoC) will be made. With this PoC, the metrics will be calculated for the projects given to the PoC. Once the PoC is ready, the empirical validation will be carried out for each of the metrics, by conducting controlled experiments and case studies as elaborated above.
-The methodology for validating the metrics chosen during this research will be divided into two phases: a first phase of theoretical validation and a second one of empirical validation \cite{srinivasan2014software}.
+The methodology for validating the metrics chosen during this research will be divided into two phases: a first phase of theoretical validation and a second one of empirical validation \cite{srinivasan2014software}. \unsure{this was already described above (several times)}
 
 \section{Contributions}
 Considering the current state of the art in the domain of this thesis project, the main contributions made by this research are the following:
 
 \begin{enumerate}
-	\item Applying coupling metrics to measure the coupling between two different software products, redefining the meaning and usage. Therefore, creating a methodology to measure the dependencies in a project.
+	\item Applying coupling metrics to measure the coupling between two different software products, redefining the meaning \unsure{the meaning and usage of what?} and usage. Therefore, creating a methodology to measure the dependencies in a project. \unsure{??}
   \blankls
 
-	\item Creating specific metrics for both direct and transitive library dependencies.\blankls
+	\item Creating specific metrics for both direct and transitive library dependencies.\blankls \unsure{are these different from the coupling metrics above?}
 
 	\item Evaluation and validation of the proposed metrics and model, by the means of a proof-of-concept tool to calculate the metrics.
 \end{enumerate}
 
 \section{Scope}\label{section:scope} % I think this is the problem analysis, but I'm not so sure
-
+\unsure{is the background or related work?}
 \subsection{Quantifying the dependencies}
 To the best of our knowledge, there are no papers about measuring the degree of dependency between two separate projects. However, it is true that the degree of dependency between two classes or modules of the same project has already been measured many times, using coupling metrics \cite{briand1999unified}.
 
@@ -144,14 +150,14 @@ These metrics are going to be proposed as a first step to measure the degree of 
   - The impact of the change - inside the project.
 \end{comment}
 
-\subsection{Evaluation and validation}
+\subsection{Evaluation and validation} \unsure{what is the purpose of this section??? This feels a bit like 'the approach}
 This thesis includes the evaluation and validation of the proposed methodology to measure dependencies and estimate the effort to replace dependencies. To do so, it is necessary to use in practice the proposed measurements. Therefore, this research includes a Proof of Concept (PoC) to use the proposed model with real projects. Then, the metrics and estimations are validated using the results obtained with the PoC.
 To calculate the metrics with the PoC, it is necessary to create a dependency graph of the project that is going to be evaluated. This graph has to be a call-level dependency graph since we require a fine-grained analysis of the source code dependencies. Moreover, it has to represent the software ecosystem of the project considering the various versions of the libraries it depends on.
 
 Ultimately, the metrics used in this project will have to be validated. There is not a unique way to validate metrics which is globally accepted and used. Therefore, various approaches will be adopted to validate the metrics as holistically as possible. In the paper \cite{srinivasan2014software}, Srinivasan et al. explain that there are two fundamental approaches for metric validation: \textit{theoretically} and \textit{empirically}. Therefore, to provide a check of validity that is as broad as possible, a mixture of these two approaches will be used during this project.
 
 For the theoretical validity of the coupling metrics, these are validated according to the \textit{Mathematical Properties of Measures for Coupling} \cite{srinivasan2014software}.
-The empirical validation of the metrics is carried out by the means of case studies. For instance, the predicted effort corresponds to the real required effort, within a certain error window.
+The empirical validation of the metrics is carried out by the means of case studies. For instance, the predicted effort corresponds to the real required effort, within a certain error window. \unsure{this seems right, but different from 1.1.4?}
 
 \section{Outline}
 In Chapter \ref{ch:Background} we describe the background of this thesis based on the existing literature of the domain.
