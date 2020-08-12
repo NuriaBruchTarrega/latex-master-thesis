@@ -24,7 +24,7 @@ Therefore, this thesis has the aim to perform a more detailed evaluation of the 
 This project has been carried out in collaboration with the company \textit{Software Improvement Group (SIG)}, and it is motivated by the \textit{FASTEN} project \footnote{\url{https://www.fasten-project.eu/}}. The objective of this project is to improve the quality of open-source development environments to make them more secure and reliable. For this reason, the FASTEN project aims to analyze the software library dependencies that the projects have in more detail.
 
 \subsection{Research questions}
-\unsure{Still deciding whether to use software product, or libraries, how to introduce it. Because, for the PoC I am using only libraries available in Maven, but the model is meant to be used to measure the dependencies with any type of software product}
+\discussion{Still deciding whether to use software product, or libraries, how to introduce it. Because, for the PoC I am using only libraries available in Maven, but the model is meant to be used to measure the dependencies with any type of software product}
 To tackle the problems described in the previous section, we specify the following research questions:
 
 \blankl
@@ -79,32 +79,27 @@ The main research method that is going to be employed during this project is \te
 This research method is artifact-based, which means that the first step is to produce the artifact meant to be used in certain situations envisioned by the researcher. The testing of this artifact, to see if it is effective in these situations, is done through a number of iterations. First, under ideal conditions, and then changing the experiments step by step to reach a real-world situation. These iterations, in the context of this project, are going to be limited due to the existing deadlines. However, there is the option of continuing with this part of the work in the future.
 
 \blankl
-In addition, the research will also include controlled experiments \unsure{really? what form could those take}. These experiments will be conducted as the empirical part of the validation of the coupling metrics. Additionally, the empirical validation of the effort estimation is going to be achieved by the means of case studies. In these case studies, the estimated effort will be compared with the real effort that the change required. \unsure{this seems a bit ambitious; you may replace this with the application of the measurements to one or more concrete cases (systems)}
+In addition, the research will also include experiments. These experiments will be conducted as the empirical part of the validation of the metrics and of the proof-of-concept implementation. Additionally, the empirical validation of the effort estimation is going to be achieved by the means of case studies. In these case studies, the estimated effort will be compared with the real effort that the change required. \discussion{Lodewijk: this seems a bit ambitious; you may replace this with the application of the measurements to one or more concrete cases (systems)}
 
 \blankl
-Some of the most difficult parts of this research \unsure{that's a bit strange to write, perhaps 'complex'} are the validation and adaptation \unsure{you have not mentioned adaptation before?
-} of the coupling metrics.
+Some of the most complex parts of this research are the formulation and validation of the metrics to measure the dependencies.
 First, the validation since there is not a unique way to do it, but rather a wide variety of criteria and approaches. Therefore, conducting a complete validation is a complex task as it is not possible to validate every aspect of the metric.
-In addition, even though the metrics that are going to be used to measure coupling between software products already exist, they are going to be adapted. In order to use the metrics for coupling between packages \unsure{new term}, it is necessary to define the aggregation method of the metrics.\unsure{ this is not so clear...}
+In addition, even though some the metrics that are going to be considered to measure coupling between software products already exist, they are going to be adapted.
 
 \blankl
-After the formal definition and theoretical validation of the metrics for both, the coupling measurement and the estimation effort, to replace a library, a Proof-of-Concept (PoC) will be made. With this PoC, the metrics will be calculated for the projects given to the PoC. Once the PoC is ready, the empirical validation will be carried out for each of the metrics, by conducting controlled experiments and case studies as elaborated above.
-The methodology for validating the metrics chosen during this research will be divided into two phases: a first phase of theoretical validation and a second one of empirical validation \cite{srinivasan2014software}. \unsure{this was already described above (several times)}
+After the formal definition and theoretical validation of the metrics, a Proof-of-Concept (PoC) will be made. With this PoC, the metrics will be calculated for the projects given to the PoC. Once the PoC is ready, the empirical validation will be carried out for each of the metrics, by conducting experiments and case studies as elaborated above.
 
-\section{Contributions}
+\section{Contributions} % TODO: revisit when all the practical stuff is done
 Considering the current state of the art in the domain of this thesis project, the main contributions made by this research are the following:
 
 \begin{enumerate}
-	\item Applying coupling metrics to measure the coupling between two different software products, redefining the meaning \unsure{the meaning and usage of what?} and usage. Therefore, creating a methodology to measure the dependencies in a project. \unsure{??}
+	\item Applying coupling metrics to measure the coupling between two different software products, redefining the meaning and usage of the metrics. Creating a model to measure the direct and transitive dependencies of a software product.
   \blankls
-
-	\item Creating specific metrics for both direct and transitive library dependencies.\blankls \unsure{are these different from the coupling metrics above?}
 
 	\item Evaluation and validation of the proposed metrics and model, by the means of a proof-of-concept tool to calculate the metrics.
 \end{enumerate}
 
-\section{Scope}\label{section:scope} % I think this is the problem analysis, but I'm not so sure
-\unsure{is the background or related work?}
+\section{Scope}\label{section:scope}
 \subsection{Quantifying the dependencies}
 To the best of our knowledge, there are no papers about measuring the degree of dependency between two separate projects. However, it is true that the degree of dependency between two classes or modules of the same project has already been measured many times, using coupling metrics \cite{briand1999unified}.
 
@@ -134,7 +129,7 @@ These metrics are going to be proposed as a first step to measure the degree of 
 
 
 \subsection{Estimating the effort to replace a dependency}
-% Escriure alguna cosa aqui, quan hagi discutit quin dels efforts estem mesurant, com i perque.
+% Write after deciding what to do about it
 
 \begin{comment}
   In order to estimate the effort needed to replace a dependency in a project, there are different variables that need to be considered first:
