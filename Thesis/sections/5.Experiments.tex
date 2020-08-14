@@ -1,10 +1,32 @@
 % !TEX root = ..\main.tex
 \chapter{Experiments}\label{ch:Experiments}
 
-\section{Experiment 1: Validation of the PoC implementation}
+\section{Experiment 1: Validation of the PoC}
+The goal of this experiment is to provide validation of the implementation in the PoC. This is done with the results of the paper \textit{"A Comprehensive Study of Bloated Dependencies in the Maven Ecosystem"} by Soto-Valero et al. \cite{soto2020comprehensive}. In this work, a byte-code analysis is performed on Maven Artifacts to detect which of the dependencies of this artifacts are \textit{bloated}. Although the PoC created in this thesis does not perform exactly the same kind of analysis, we consider that a dependency is \textit{bloated} if all the metrics have value zero for that dependency.
+
 \subsection{Experimental set up}
-% A Bloated dependencies analizen calls, annotations i some other stuff
+Soto-Valero et al. perform a qualitative analysis, in which they analyze 31 libraries available as Maven artifacts. If \textit{bloated} dependencies are found during the analysis, a \textit{Pull Request} is made to the \textit{GitHub} repository of the artifact in which the \textit{bloated} dependencies are deleted from the \textit{pom} file.
+
+With the information in the paper, we collect the \textit{GroupId} and \textit{ArtifactId} of the 31 artifacts. Out of the 31, 2 could not be found in the \textit{Maven Repository Central}. For the other 29, the \textit{version} to use in the experiment is determined by finding the last version released before the experiment by Soto-Valero et al. was conducted - November of 2019.
+
+Of the 29 artifacts, X\todo{determine how many} could not be used with the PoC, because either the artifact itself or some dependency could not be downloaded from \textit{Maven Central}, leaving a set of X \todo{find out the number} libraries.
+
 % MDD: https://data.4tu.nl/articles/dataset/The_Maven_Dependency_Dataset/12698027
 \subsection{Execution}
 
+- New request set up
+
+- structure of the file in the request
+
+- structure of the result of the comparison
+
+\subsection{Results}
+
+- how many libraries have different results and why.
+
+- overall evaluation
+
+\section{Experiment 2: Validation of the direct metrics}
+\subsection{Experimental set up}
+\subsection{Execution}
 \subsection{Results}
