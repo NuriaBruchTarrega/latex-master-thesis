@@ -54,7 +54,15 @@ The papers that specifically define package manager or package repository in the
 
 When describing the relationship in which a library uses another, relevant literature uses the term dependency. However, different types of dependencies are defined depending on the paper and the reseach done.
 
-\todocontent{types of dependencies: I would say yes, give an overview of the variety of types of dependencies, but focus only on those you will be using (by having a subsection for each)}
+The dependencies declared in a library are always called direct dependencies, and those introduced by the direct dependencies are called transitive or indirect.
+
+There is also the distinction between deployed and non-deployed. The deployed ones are those included in the software product once it is in production, and the non-deployed ones are those used for development tasks (e.g. testing libraries).
+
+When considering the risk associated with a dependency, it is important to consider whether the library is own or third-party. An own dependency is maintained by the same team that develops the product that has the dependency.
+
+Another special case when considering risk is halted dependencies. These dependencies are not being updated anymore, which means that if a vulnerability is found, it is not going to be fixed.
+
+The last special type of dependency is the bloated dependency. These dependencies can be direct or not, but have the characteristic that the library is never used, and only increase the size of the dependency tree without need.
 
 Finally, the terms dependency tree and dependency network are used to refer to the graph created by the dependencies, in which the library versions are the nodes and the dependencies are the edges. The ecosystem includes all the libraries and applications involved in the dependency network.
 
@@ -70,9 +78,7 @@ Based on the terminology discussed above, we define the terms that are used with
 
   \item \textbf{Direct and transitive dependencies:} A direct dependency is when a library version directly uses a version of another library. A transitive dependency is given when a library version uses another one indirectly, through other library versions that it depends on.
 
-  \item \textbf{Halted dependencies:} A dependency with a library has not been updated (a new version released) for a much longer time than the usual release interval is considered a halted dependency.
-
-  \item \textbf{Bloated dependencies:} A dependency is bloated when it is included in the dependency set of a library version, but it is not really used at any time. This could happen with both, direct and transitive dependencies, for different reasons.
+  \item \textbf{Unused dependencies:} We have decided to use the term unused dependency, instead of bloated dependency since we find it easier to understand. A dependency is unused when it is included in the dependency set of a library version, but it is never reached from the library. This could happen with both, direct and transitive dependencies, for different reasons.
 
   \item \textbf{Dependency network:} Graph that represents the dependencies between library versions. In a dependency network, the library versions are the nodes, and the dependencies between them are the edges.
 
