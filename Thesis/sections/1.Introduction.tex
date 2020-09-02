@@ -24,51 +24,42 @@ This project has been carried out in collaboration with the company \textit{Soft
 To tackle the problems described in the previous section, we specify the following research questions:
 
 \blankl
-\textbf{RQ1:} \textit{How can we measure the degree of source code dependency between two software products?}
+\textbf{RQ1:} \textit{How can we measure the degree of code dependency between two software products with a direct dependency?}
 
-To define an approach to answer this question and to divide the question in different parts, we have defined the following subquestions:
+\blankls
+With this question, we want to propose a set of metrics to measure a dependency from the point of view of the product that has a dependency with another product. How much is it affected by the dependency.
 
 \begin{itemize}
   \item \textbf{RQ1.1:} \textit{What constitutes a dependency between two products?}
 
-  The first step to measure the degree of dependency, is to determine what creates a dependency. The type of connection between the products and how can these be counted, among other characteristics.
+  First, we need to determine what creates a dependency. The type of connection between the products and how can it be measured.
 
   \item \textbf{RQ1.2:} \textit{Which metrics can be used to measure the dependency?}
 
-  Investigate which existing metrics could be used to measure dependency between software products, or create new ones. Evaluate the candidate metrics according to the definition of dependency. In addition, it is also necessary to define how to adapt them to the new usage, and which is the meaning of the metrics in this new scenario, how are these actionable.
+  We propose metrics to measure the dependency described. Existing metrics are considered, as well as new ones.
 
-  \item \textbf{RQ1.3:} \textit{How can we calculate the metrics?}
+  \item \textbf{RQ1.3:} \textit{How can the proposed metrics be validated?}
 
-  With a defined set of metrics to use, it is necessary to calculate them, to have results to evaluate the metrics. There are various code analysis strategies to measure the metrics.
-
-  \item \textbf{RQ1.4:} \textit{How can we validate the proposed metrics?}
-
-  There are two approaches to validate the suitability of the metrics, the theoretical and the empirical. The metrics will be validated using both approaches.
+  There are many different approaches to validate metrics, some of which are used to carry out the validation of the proposed metrics.
 \end{itemize}
 
 \blankl
-\textbf{RQ2:} \textit{How can we measure the effort required to replace the use of a library in a software product?}
-\discussion{Lodewijk: As I wrote above, you may consider to use the term 'impact of replacing': this includes the amount of effort required, but that consists of multiple factors: 1) how much code is to be replaced 2) is there a suitable alternative library with the same (or partially) functionality; if not, how much extra stuff needs to be created 3) how many different lib calls must be substituted? 4) in how many locations of the code must these lib calls be substituted? 5) how much effort is required for each substitution? 6) how much test automation is available (this reduces the risk)...}
+\textbf{RQ2:} \textit{How can we measure the degree of code dependency between two software products with a transitive dependency?} \unsure{I'm not sure if I should phrase this question like this, or focusing on the differences: How should the measurements of the dependencies be adapted for the case of transitive dependencies}
 
-This second question applies to the cases where it is necessary to replace the dependency of the product with a different library. To do so, it could be useful to have an estimation of the effort needed to replace the library. To answer this question, we have defined the following subquestions:
+\blankls
+Transitive dependencies involve more factors than the direct dependencies. Therefore, the metrics proposed for the direct dependencies have to be adapted for the transitive ones.
 
-\begin{itemize}
-  \item \textbf{RQ2.1:} \textit{What do we consider effort, which is the definition?}
+\blankl
+\textbf{RQ3:} \textit{How can we mesure how much is a dependency used by a software product?}
 
-  There are many different definitions of effort in the literature. One of the most common ones is the hours of development effort. We are going to define which one is the effort measured in this research. \reminder{maybe rephrase this}
+\blankls
+For this question, we look at the dependency from a different perspective. In this case, we measure how much of the dependency is being used by the software product.
 
-  \item \textbf{RQ2.2:} \textit{What does it mean to replace a dependency?}
+\blankl
+\textbf{RQ4:} \textit{How can we visualize the metrics designed to model the software dependencies?}
 
-  There are several different forms of dependency replacement. Therefore, we are going to specify a taxonomy to describe the types of library replacement, and select the relevant ones for further consideration in this thesis.
-
-  \item \textbf{RQ2.3:} \textit{Which are the applicable methods to measure effort?}
-
-  From all the methods and strategies to measure effort existing in the literature, we are going to chose which are the ones that measure the effort defined in RQ2.1, and are applicable to the specific situation defined in RQ2.2.
-
-  \item \textbf{RQ2.4:} \textit{How can we validate the measurement of the effort?}
-
-  To validate the method used to measure effort, both empirically and theoretically. Case studies are used for the empirical validation, comparing the real effort with the estimated one.
-\end{itemize}
+\blankls
+We present a few visualization to see the metrics of the model. The visualizations are presented to software developers to discuss the usefulness and actionability.
 
 \subsection{Research method}
 The main research method that is going to be employed during this project is \textit{Technical Action Research} (TAR) \cite{wieringa2012technical}.
