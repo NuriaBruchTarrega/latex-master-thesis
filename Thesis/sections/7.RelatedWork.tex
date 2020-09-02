@@ -31,10 +31,10 @@ One of the main contributions of this research is a tool implementing the method
 However, Pashchenko et al. do not perform a call-level analysis of the dependencies, since their dependency resolution is based only on the \textit{POM} file of the libraries. Hence, the transitive dependencies that are not really used in the studied library are still counted.
 
 \paragraph{A Comprehensive Study of Bloated Dependencies in the Maven Ecosystem \cite{soto2020comprehensive}}
-Soto-Valero et al. conduct a study of the bloated dependencies. The bloated dependencies are those libraries that are included in the compilation of a software product, but that are not really used in the code of the product, neither directly or indirectly. These libraries can be directly included in the dependency declaration file, or included by transitivity or inheritance.
+Soto-Valero et al. conduct a study of the unused dependencies included in the dependency tree of Maven artifacts. These libraries can be directly included in the dependency declaration file, or included by transitivity or inheritance.
 
-One of the experiments conducted during the research, reported that a 75.1\% of the analyzed dependencies were bloated dependencies. In this experiment Soto-Valero et al. used their tool \texttt{DepClean}\footnote{\href{https://github.com/castor-software/depclean}{https://github.com/castor-software/depclean}} to analyze the dependencies of 9,639 Java artifacts from Maven Central.
-The tool \texttt{DepClean} analyses the dependencies of an artifact by creating a call graph of the API members of the libraries involved to define if a dependency is bloated or not.
+One of the experiments conducted during the research, reported that a 75.1\% of the analyzed dependencies were unused dependencies. In this experiment Soto-Valero et al. used their tool \texttt{DepClean}\footnote{\href{https://github.com/castor-software/depclean}{https://github.com/castor-software/depclean}} to analyze the dependencies of 9,639 Java artifacts from Maven Central.
+The tool \texttt{DepClean} analyses the dependencies of an artifact by creating a call graph of the API members of the libraries involved to define if a dependency is used or not.
 
 %\blankl
 % decan2018impact --> analysis of how the vulnerabilities in libraries affect the other libraries that depend on these, how the vulnerabilities are fixed, resolved, and updated in the dependent libraries.

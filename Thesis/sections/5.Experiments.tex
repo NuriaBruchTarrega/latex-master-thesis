@@ -5,7 +5,7 @@
 The goal of this experiment is to provide validation of the implementation in the PoC. This is done with the results of the paper \textit{"A Comprehensive Study of Bloated Dependencies in the Maven Ecosystem"} by Soto-Valero et al. \cite{soto2020comprehensive}. In this work, a byte-code analysis is performed on Maven Artifacts to detect which of the dependencies of this artifacts are \textit{bloated}. Although the PoC created in this thesis does not perform exactly the same kind of analysis, we consider that a dependency is \textit{bloated} if all the metrics have value zero for that dependency.
 
 \subsection{Experimental set up}
-Soto-Valero et al. perform a qualitative analysis, in which they analyze 31 libraries available as Maven artifacts. If \textit{bloated} dependencies are found during the analysis, a \textit{Pull Request} is made to the \textit{GitHub} repository of the artifact in which the \textit{bloated} dependencies are deleted from the \textit{pom} file.
+Soto-Valero et al. perform a qualitative analysis, in which they analyze 31 libraries available as Maven artifacts. If unused dependencies are found during the analysis, a \textit{Pull Request} is made to the \textit{GitHub} repository of the artifact in which the unused dependencies are deleted from the \textit{pom} file.
 
 With the information in the paper, we collect the \textit{GroupId} and \textit{ArtifactId} of the 31 artifacts. Out of the 31, 2 could not be found in the \textit{Maven Repository Central}. For the other 29, the \textit{version} to use in the experiment is determined by finding the last version released before the experiment by Soto-Valero et al. was conducted - November of 2019.
 
