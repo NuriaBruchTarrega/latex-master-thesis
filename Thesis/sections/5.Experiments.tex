@@ -27,6 +27,40 @@ Of the 29 artifacts, X\todo{determine how many} could not be used with the PoC, 
 - overall evaluation
 
 \section{Experiment 2: Validation of the direct metrics}
+
+Goal of the experiment: collect some real world data of the impact of a dependency in a project, and compare it with the metrics calculated.
+
+
 \subsection{Experimental set up}
+- Explain what is the MDD, and which schema it uses
+
+- Create new table with all the breaking changes, and the information about the two versions of the library, the previous to the change and the one that had the breaking change.
+
+- Create new table based on the table dependencies. Table containing a library (client) identified by group and artifact, for which two different versions of the library have a dependency with another library (server), with same artifact and group but different versions.
+
+- Match the server library of the second table with the libraries with breaking chages of the first table. This way, we have for each breaking change, the client libraries that have versions depdending on the version previous to the breaking change, and the version after the breaking change. This means that the client library has had to adapt to the breaking change, in case if was originally used.
+
+- From the result table, it happens that more than one version of the client library can depend on the same version of the server library, both previous and posterior to the change. That is why, a new filtered table is created, conatining for each breaking change, only the last version of the client library depending on the version previous to the change, and the first version of the client library depending on the version with the change.
+
+- Also, I filter out all the dependencies that belong to the same group, since the developments of these dependencies are probably synchronized, and the impact works differently (cite counting those that matter)
+
+\subsection{Execution}
+\subsection{Results}
+
+
+\reminder{The same dataset and strategy is going to be used for the transitive metrics. And, it could also be used for the percentage of usage. I have to develop a bit more on this}
+
+\section{Experiment 3: Validation of visualization}
+
+
+\subsection{Experimental set up}
+
+
+- Explain which stage of the visualization design is being validated, and why is domain expert interview a good idea.
+
+- Describe the different type of questions (topic, and open question or scaled...)
+
+- Explain the set up of the interviews (online, control to the interviewee when using the tool...)
+
 \subsection{Execution}
 \subsection{Results}
