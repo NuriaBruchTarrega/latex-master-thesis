@@ -4,17 +4,17 @@
 \section{Problem statement}
 
 \subsection{Context}
-Currently, there are many open-source libraries available for developers to reuse the features that these libraries implement. This practice is becoming more and more popular since it allows to reuse previously developed code, and helps developers avoid implementing the same functionalities multiple times.
+Currently, there are many open-source libraries available for developers to reuse the features that these libraries implement. This practice is becoming more and more popular since it allows the reuse of previously developed code and helps developers avoid implementing the same functionalities multiple times.
 
-When a developer uses an open-source library in a project, it creates a dependency between the project and the library. This implies that a significant number of projects depend on other open-source projects, and it adds the task of managing these dependencies to the maintenance tasks of the project.  Proper maintenance of the dependencies of a project is also part of the health and security of software applications, and it is one of the problems that the field of software engineering is trying to solve \cite{kula2014visualizing}. For instance, an update of a dependency can involve changing part of the code, if the update contains breaking changes \cite{Raemaekers2017}.
+When a developer uses an open-source library in a project, it creates a dependency between the project and the library. This implies that a significant number of projects depend on other open-source projects, and it adds the task of managing these dependencies to the maintenance tasks of the project. Proper maintenance of the dependencies of a project is also part of the health and security of software applications, and it is one of the problems that the field of software engineering is trying to solve \cite{kula2014visualizing}. For instance, an update of a dependency can involve changing part of the code, if the update contains breaking changes \cite{Raemaekers2017}.
 
-The management and maintenance of the dependencies of a project is an important task. External libraries, just like any other software product, can have security vulnerabilities that may affect the projects that depend on these libraries. For example, some vulnerabilities can become security problems that can have a negative impact in terms of integrity, privacy or availability.
-
-\blankl
-Currently, developers have package managers at their disposal, to ease the task of managing the dependencies of their projects. However, the dependency management available in these package managers only evaluate if a dependency exists or not and a more detailed evaluation is missing \cite{hejderup2018prazi}. For instance, here is no way to evaluate how much a project depends on a library.
+The management and maintenance of the dependencies of a project is an important task. External libraries, just like any other software product, can have security vulnerabilities that may affect the projects that depend on these libraries. For example, some vulnerabilities can become security problems that can have a negative impact in terms of integrity, privacy, or availability.
 
 \blankl
-Therefore, this thesis has the aim to create a model to evaluate the dependencies, in order to obtain information of the \textit{actual usage} of the dependencies. A set of metrics is proposed to measure the dependencies between projects and the dependencies these have. The metrics are designed to evaluate the dependencies according to two different perspectives, the code affected by the dependency, and how much of a dependency is used.
+Currently, developers have package managers at their disposal, to ease the task of managing the dependencies of their projects. However, the dependency management available in these package managers only evaluates if a dependency exists or not and a more detailed evaluation is missing \cite{hejderup2018prazi}. For instance, there is no way to evaluate how much a project depends on a library.
+
+\blankl
+Therefore, this thesis aims to create a model to evaluate the dependencies, in order to obtain information of the \textit{actual usage} of the dependencies. A set of metrics is proposed to measure the dependencies between projects and the dependencies these have. The metrics are designed to evaluate the dependencies according to two different perspectives, the code affected by the dependency, and how much of a dependency is used.
 
 \subsection{Host organization}
 This project has been carried out in collaboration with the company \textit{Software Improvement Group (SIG)}, and it is motivated by the \textit{FASTEN} project \footnote{\url{https://www.fasten-project.eu/}}. The objective of this project is to improve the quality of open-source development environments to make them more secure and reliable. For this reason, the FASTEN project aims to analyze the software library dependencies that the projects have in more detail.
@@ -27,7 +27,7 @@ To tackle the problems described in the previous section, we specify the followi
 \textbf{RQ1:} \textit{How can we measure the degree of code dependency between two software products with a direct dependency?}
 
 \blankls
-With this question, we want to propose a set of metrics to measure a dependency from the point of view of the product that has a dependency with another product. How much is it affected by the dependency.
+With this question, we want to propose a set of metrics to measure a dependency from the point of view of the product that has a dependency with another product. How much it is affected by the dependency.
 
 \begin{itemize}
   \item \textbf{RQ1.1:} \textit{What constitutes a dependency between two products?}
@@ -47,10 +47,10 @@ With this question, we want to propose a set of metrics to measure a dependency 
 \textbf{RQ2:} \textit{How can we measure the degree of code dependency between two software products with a transitive dependency?} \unsure{I'm not sure if I should phrase this question like this, or focusing on the differences: How should the measurements of the dependencies be adapted for the case of transitive dependencies}
 
 \blankls
-Transitive dependencies involve more factors than the direct dependencies. Therefore, the metrics proposed for the direct dependencies have to be adapted for the transitive ones.
+Transitive dependencies involve more factors than direct dependencies. Therefore, the metrics proposed for the direct dependencies have to be adapted for the transitive ones.
 
 \blankl
-\textbf{RQ3:} \textit{How can we mesure how much is a dependency used by a software product?}
+\textbf{RQ3:} \textit{How can we measure how much is a dependency used by a software product?}
 
 \blankls
 For this question, we look at the dependency from a different perspective. In this case, we measure how much of the dependency is being used by the software product.
@@ -59,11 +59,11 @@ For this question, we look at the dependency from a different perspective. In th
 \textbf{RQ4:} \textit{How can we visualize the metrics designed to model the software dependencies?}
 
 \blankls
-We present a few visualization to see the metrics of the model. The visualizations are presented to software developers to discuss the usefulness and actionability.
+We present a few visualizations to see the metrics of the model. The visualizations are presented to software developers to discuss the usefulness and actionability.
 
 \subsection{Research method}
 The main research method that is going to be employed during this project is \textit{Technical Action Research} (TAR) \cite{wieringa2012technical}.
-This research method is artifact-based, which means that the first step is to produce the artifact meant to be used in certain situations envisioned by the researcher. The testing of this artifact, to see if it is effective in these situations, is done through a number of iterations. First, under ideal conditions, and then changing the experiments step by step to reach a real-world situation. In the context of this master thesis, due to time constraints, performing multiple iterations is not possible. However, there is the option of continuing with this part of the work in the future.
+This research method is artifact-based, which means that the first step is to produce the artifact meant to be used in certain situations envisioned by the researcher. The testing of this artifact, to see if it is effective in these situations, is done through a number of iterations. First, under ideal conditions, and then changing the experiments step by step to reach a real-world situation. In the context of this master thesis, because of time constraints, performing multiple iterations is not possible. However, there is the option of continuing with this part of the work in the future.
 
 \blankl
 In addition, the research will also include experiments. These experiments will be conducted as the empirical part of the validation of the metrics and the proof-of-concept implementation of the model and the visualizations.
@@ -85,7 +85,7 @@ Considering the current state of the art in the domain of this thesis project, t
 In this research we propose a model for software dependencies, containing metrics to measure different aspects of the dependencies. We develop a proof-of-concept tool to calculate and visualize the model.
 
 \subsection{Quantifying the dependencies}
-To the best of our knowledge, there are no papers about measuring the degree of dependency between two separate projects. However, it is true that the degree of dependency between two classes or modules of the same project has already been measured many times, using coupling metrics \cite{briand1999unified}.
+To the best of our knowledge, there are no papers about measuring the degree of dependency between two separate projects. However, the degree of dependency between two classes or modules of the same project has already been measured many times, using coupling metrics \cite{briand1999unified}.
 
 Therefore, we propose re-using the already existing coupling metrics, meant to measure the coupling between units of the \textit{same} project and adapt them to measure coupling \textit{between} projects.
 
@@ -107,14 +107,14 @@ According to Poshyvanyk and Marcus in \cite{poshyvanyk2006conceptual}, there are
 \end{itemize}
 
 \blankl
-Since this research is aimed to be independent of the domain, the last cathegory is not considered in this thesis. Moreover, the evolutionary coupling is not possible to be applied in our context since it is very likely that the separate projects are not going to evolve at the same time, given that they are not developed by the same team. Finally, the research of this project, owing to the time limitation, is going to be centered on the structural metrics.
+Since this research is aimed to be independent of the domain, the last category is not considered in this thesis. Moreover, the evolutionary coupling is not possible to be applied in our context. It is very likely that the separate projects are not going to evolve at the same time, given that they are not developed by the same team. Finally, the research of this project, owing to the time limitation, is going to be centered on the structural metrics.
 
 These metrics are going to be proposed as a first step to measure the degree of library dependency. Nevertheless, the metrics can be extended and calculated more accurately by adding dynamic coupling and information entropy approach metrics in future work.
 
 \subsection{Proof-of-concept}
-Although the model proposed in this research is meant to be language-agnostic, the scope of the proof-of-concept is limited to Java. since the bytecode analysis performed by the proof-of-concept is limited to this programmming language.
+The model proposed in this research is meant to be language-agnostic. Nevertheless, the scope of the proof-of-concept is limited to Java, since the bytecode analysis performed by the proof-of-concept is limited to this programming language.
 
-In adition, since the implementation of the model is performed through bytecode analysis, the testing dependencies are out of the scope of the proof-of-concept.
+Besides, since the implementation performs bytecode analysis on jar files obtained from \textit{Maven Repository Central}, the testing dependencies are out of the scope of the proof-of-concept. Generally, the testing classes are not included in the jar files of the Maven artifacts.
 
 \subsection{Evaluation and validation}
 This thesis includes the evaluation and validation of the metrics included in the proposed model by using the proof-of-concept. Since there is not a unique way to validate metrics which is globally accepted and used various approaches are adopted. In the paper \cite{srinivasan2014software}, Srinivasan et al. explain that there are two fundamental approaches for metric validation: \textit{theoretically} and \textit{empirically}. Therefore, to provide a check of validity that is as broad as possible, a mixture of these two approaches will be used during this project. However, this research does not contain a full validation of the metrics, due to time constraints.
@@ -127,4 +127,4 @@ In Chapter \ref{ch:Background} we describe the background of this thesis based o
 Chapter \ref{ch:TheoreticModel} describes the metrics used to model the dependencies between software products.
 The theoretic model is used in Chapter \ref{ch:PoC}, which describes the creation of the proof-of-concept of this model.
 In Chapter \ref{ch:Experiments}, the set up and execution of the experiments is explained, and the results of the experiments are shown. These results are discussed in Chapter \ref{ch:Discussion}. Chapter \ref{ch:RelatedWork}, contains the work related to the domain of this thesis.
-Finally, we present our concluding remarks in Chapter \ref{ch:Conclusion}, as well as the future work.
+Finally, we present our concluding remarks in Chapter \ref{ch:Conclusion}, as well as future work.
