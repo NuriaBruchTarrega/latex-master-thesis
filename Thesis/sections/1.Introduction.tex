@@ -68,7 +68,7 @@ This research method is artifact-based, which means that the first step is to pr
 \blankl
 In addition, the research will also include experiments. These experiments will be conducted as the empirical part of the validation of the metrics and the proof-of-concept implementation of the model and the visualizations.
 
-\section{Contributions} % TODO: revisit when all the practical stuff is done
+\section{Contributions}
 Considering the current state of the art in the domain of this thesis project, the main contributions made by this research are the following:
 
 \begin{enumerate}
@@ -81,6 +81,9 @@ Considering the current state of the art in the domain of this thesis project, t
 \end{enumerate}
 
 \section{Scope}\label{section:scope}
+
+In this research we propose a model for software dependencies, containing metrics to measure different aspects of the dependencies. We develop a proof-of-concept tool to calculate and visualize the model.
+
 \subsection{Quantifying the dependencies}
 To the best of our knowledge, there are no papers about measuring the degree of dependency between two separate projects. However, it is true that the degree of dependency between two classes or modules of the same project has already been measured many times, using coupling metrics \cite{briand1999unified}.
 
@@ -106,29 +109,18 @@ According to Poshyvanyk and Marcus in \cite{poshyvanyk2006conceptual}, there are
 \blankl
 Since this research is aimed to be independent of the domain, the last cathegory is not considered in this thesis. Moreover, the evolutionary coupling is not possible to be applied in our context since it is very likely that the separate projects are not going to evolve at the same time, given that they are not developed by the same team. Finally, the research of this project, owing to the time limitation, is going to be centered on the structural metrics.
 
-These metrics are going to be proposed as a first step to measure the degree of library dependency. Nevertheless, the metrics can be extended and calculated more accurately by adding dynamic coupling and information entropy approach metrics if time permits or in future work.
+These metrics are going to be proposed as a first step to measure the degree of library dependency. Nevertheless, the metrics can be extended and calculated more accurately by adding dynamic coupling and information entropy approach metrics in future work.
 
+\subsection{Proof-of-concept}
+Although the model proposed in this research is meant to be language-agnostic, the scope of the proof-of-concept is limited to Java. since the bytecode analysis performed by the proof-of-concept is limited to this programmming language.
 
-\subsection{Estimating the effort to replace a dependency}
-% Write after deciding what to do about it
+In adition, since the implementation of the model is performed through bytecode analysis, the testing dependencies are out of the scope of the proof-of-concept.
 
-\begin{comment}
-  In order to estimate the effort needed to replace a dependency in a project, there are different variables that need to be considered first:
+\subsection{Evaluation and validation}
+This thesis includes the evaluation and validation of the metrics included in the proposed model by using the proof-of-concept. Since there is not a unique way to validate metrics which is globally accepted and used various approaches are adopted. In the paper \cite{srinivasan2014software}, Srinivasan et al. explain that there are two fundamental approaches for metric validation: \textit{theoretically} and \textit{empirically}. Therefore, to provide a check of validity that is as broad as possible, a mixture of these two approaches will be used during this project. However, this research does not contain a full validation of the metrics, due to time constraints.
 
-  - How much code do I need to change - estimate based on the usage of the Dependency
-  - Refactoring adjustment
-  - How many methods do I need to change.
-  - The impact of the change - inside the project.
-\end{comment}
-
-\subsection{Evaluation and validation} \unsure{what is the purpose of this section??? This feels a bit like 'the approach}
-This thesis includes the evaluation and validation of the proposed methodology to measure dependencies and estimate the effort to replace dependencies. To do so, it is necessary to use in practice the proposed measurements. Therefore, this research includes a Proof of Concept (PoC) to use the proposed model with real projects. Then, the metrics and estimations are validated using the results obtained with the PoC.
-To calculate the metrics with the PoC, it is necessary to create a dependency graph of the project that is going to be evaluated. This graph has to be a call-level dependency graph since we require a fine-grained analysis of the source code dependencies. Moreover, it has to represent the software ecosystem of the project considering the various versions of the libraries it depends on.
-
-Ultimately, the metrics used in this project will have to be validated. There is not a unique way to validate metrics which is globally accepted and used. Therefore, various approaches will be adopted to validate the metrics as holistically as possible. In the paper \cite{srinivasan2014software}, Srinivasan et al. explain that there are two fundamental approaches for metric validation: \textit{theoretically} and \textit{empirically}. Therefore, to provide a check of validity that is as broad as possible, a mixture of these two approaches will be used during this project.
-
-For the theoretical validity of the coupling metrics, these are validated according to the \textit{Mathematical Properties of Measures for Coupling} \cite{srinivasan2014software}.
-The empirical validation of the metrics is carried out by the means of case studies. For instance, the predicted effort corresponds to the real required effort, within a certain error window. \unsure{this seems right, but different from 1.1.4?}
+For the theoretical validity of the coupling metrics, these are validated according to the \textit{Mathematical Properties of Measures for Coupling} \cite{srinivasan2014software}. Also, a subset of the aspects presented by Meenely et al. \cite{meneely2013validating} are also used to validate all the metrics in the model.
+The empirical validation of the metrics is carried out by the means of case studies, comparing the impact that breaking changes in the APIs of a library has in the dependant projects with the measured metrics.
 
 \section{Outline}
 In Chapter \ref{ch:Background} we describe the background of this thesis based on the existing literature of the domain.
