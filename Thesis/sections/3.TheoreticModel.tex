@@ -175,19 +175,22 @@ Finally, \textit{ACAIC} and \textit{OCAIC} consider aggregation coupling with an
 The $\verb|MIC|$ metric measures the dependency between two libraries, one acting as client ($L_c$) and the other as server ($L_s$).
 Based on the granularity of the measure criterion discussed in Section~\ref{section:defCoupling}, this metric is calculated for each of the classes implemented in $L_c$, and for each of the methods implemented $\verb|M|(L_c)$ in these classes. For each implemented method  $m_c \in \verb|M|(L_c)$, we count the number of individual invocations to a method of $L_s$, denoted $\verb|nII|(m_c,L_s)$. For each method invocation made by the methods implemented in $L_c$, we count only the ones that are implemented in stable classes (not implemented in $L_c$). The set of stable methods invoked is denoted $\verb|SIM|(m_c)$.
 
-\begin{equation*}
+\begin{equation}
+\label{eqn:mic}
 \verb|MIC|(L_c, L_s) =\!\!\!\!\! \sum_{m_c \in \verb|M|(L_c)} \verb|nII|(m_c, L_s)
-\end{equation*}
+\end{equation}
 
 According to the criterion inheritance, it is necessary to take into account all the polymorphic implementations of the invoked method that are implemented in $L_s$. Therefore, we intersect the set of polymorphic implementations of an invoked method $\verb|PM|(m_s)$ with the set of methods $\verb|M|(L_s)$ implemented in $L_s$. Finally, to obtain the number of individual invocations, $\verb|nII|(m_c,L_s)$, we multiply the number of times a stable method ($m_s \in \verb|SIM|(m_c)$) has been invoked, $\verb|nI|(m_c, m_s)$ by the number of polymorphic implementations $\verb|nP|(m_s, L_s)$ of the method in $L_s$.
 
-\begin{equation*}
+\begin{equation}
+\label{eqn:mic-nii}
    \verb|nII|(m_c, L_s) =\!\!\! \sum_{m_s \in \verb|SIM|(m_c)} \verb|nI|(m_c, m_s)*\verb|nP|(m_s, L_s)
-\end{equation*}
+\end{equation}
 
-\begin{equation*}
+\begin{equation}
+\label{eqn:mic-np}
     \verb|nP|(m_s, L_s) = |\verb|PM|(m_s) \cap \verb|M|(L_s)|
-\end{equation*}
+\end{equation}
 
 \paragraph{Metric \#2: Direct aggregation coupling (\texttt{AC})}
 
@@ -196,13 +199,15 @@ The $\verb|AC|$ metric counts the number of times when a class of $L_c$ has an a
 To account for polymorphism (criterion 6), we count all the descendants of the class that are implemented in $L_s$. Therefore, we intersect the set of the class descendants, $\verb|DC|(c_s)$, with the set of
 classes implemented in $L_s$ ($\verb|C|(L_s)$). Finally, to count the  individual connections, we multiply the number of times a client class $c_c$ has an attribute of type the server class $c_s$ $\verb|NA|(c_c, c_s)$ by the number of class descendants (class included) implemented in $L_s$ ($\verb|nDC|(c_s,L_s)$).
 
-\begin{equation*}
+\begin{equation}
+\label{eqn:ac}
   \verb|AC|(L_c,L_s) = \!\!\!\!\sum_{c_c \in \verb|C|(L_c)} \sum_{c_s \in \verb|SAT|(c_c)} \!\!\!\!\verb|NA|(c_c, c_s)*\verb|nDC|(c_s, L_s)
-\end{equation*}
+\end{equation}
 
-\begin{equation*}
+\begin{equation}
+\label{eqn:ac-ndc}
     \verb|nDC|(c_s, L_s) = |\verb|DC|(c_s) \cap \verb|C|(L_s)|
-\end{equation*}
+\end{equation}
 
 \subsection{Theoretical validation (RQ1.4)}
 The theoretical validation of the metrics consists of demonstrating the properties of the metrics. The theoretical validation is necessary since it proves that the metrics share some properties with the attribute these are measuring, in this case coupling. In particular, for coupling metrics there are five properties defined by Briand et al. \cite{briand1996property} which have been largely used by the literature \cite{poshyvanyk2006conceptual, allen1999measuring, zhao2004measuring}.
@@ -345,9 +350,10 @@ If we look at how the metric $\verb|MIC|$ is calculated, it could be sumarized a
 
 Therefore, the indirect coupling between two libraries $\verb|IMIC|(L_c, L_s)$ is calculated in the following manner. For each method from $L_s$ that is reachable from $L_c$ ($rm \in \verb|RM|(L_c,L_s)$), we count the number of method invocations in $L_c$ from which $rm$ is reachable, $\verb|nIR|(rm, L_c)$. The number of method invocations is multiplied by the number of polymorphic implementations of $rm$ in $L_s$ ($\verb|nDC|(rm, L_s)$).
 
-\begin{equation*}
+\begin{equation}
+\label{eqn:imic}
   \verb|IMIC|(L_c,L_s) = \sum_{rm \in \verb|RM|(L_c,L_s)} \verb|nIR|(rm,L_c) * \verb|nP|(rm, L_s)
-\end{equation*}
+\end{equation}
 
 However, this formula does not consider propagation at all. Therefore, it is necessary to take into account the distance between $L_c$ and $L_s$. In addition, it could happen that $L_s$ is reachable from $L_c$ at different distances. For instance, if $L_s$ appeared twice in the dependency tree of $L_c$, this is is the case in Figure \ref{fig:dependency-tree} if we take \textit{Lib1} as $L_c$ and \textit{Lib4} as $L_s$.
 
@@ -362,23 +368,26 @@ However, this formula does not consider propagation at all. Therefore, it is nec
 Therefore, the previous formula for $|IMIC|(L_c,L_s)$ will be measured for a certain reachability distance. \todo{This formula will not be final until I have been able to measure it, so let's not look too much at it just yet :)}
 The Transitive Method Invocation Coupling ($\verb|TMIC|(L_c,L_s)$), will be measured as follows. For each distance at which there is coupling between $L_c$ and $L_s$, sum up the coupling measured by $\verb|IMIC|(L_c,L_s, distance)$, multiplied by a propagation factor ($\verb|PF|$) to the power of the distance. Where $\verb|PF| \in (0,1)$.
 
-\begin{equation*}
+\begin{equation}
+\label{eqn:tmic}
   \verb|TMIC|(L_c,L_s) = \sum_{distance} \verb|IMIC|(L_c,L_s, distance) * \verb|PF|^{distance}
-\end{equation*}
+\end{equation}
 
 \paragraph{Metric \#4: Transitive aggregation coupling (\texttt{TAC})}
 In the case of aggregation coupling for the transitive dependencies ($\verb|IAC|(L_c,L_s)$), it is calculated in the following way. For each class of $L_s$ that is reachable from $L_c$ through field declarations ($rc \in \verb|RC|(L_c,L_s)$), count all the field declarations from which it is reachable ($\verb|nFR|(rc,L_c)$), and multiply it by the number of descendants of the reachable class ($\verb|nDC|(rm, L_s)$).
 
-\begin{equation*}
+\begin{equation}
+\label{eqn:iac}
   \verb|IAC|(L_c,L_s) = \sum_{rc \in \verb|RC|(L_c,L_s)} \verb|nFR|(rc,L_c) * \verb|nDC|(rm, L_s)
-\end{equation*}
+\end{equation}
 
 \todo{This formula will not be final until I have been able to measure it, so let's not look too much at it just yet :)}
 Just as in the case of $\verb|TMIC|$, the distance between $L_c$ and $L_s$ should be considered. Therefore, for each distance, we take the number measured by $\verb|IAC|(L_c,L_s, distance)$, and multiply it by a propagation factor \verb|PF| to the power of the distance.
 
-\begin{equation*}
+\begin{equation}
+\label{eqn:tac}
   \verb|TAC|(L_c,L_s) = \sum_{distance} \verb|IAC|(L_c,L_s, distance) * \verb|PF|^{distance}
-\end{equation*}
+\end{equation}
 
 \subsection{Theoretical validation (RQ1.4)}
 
