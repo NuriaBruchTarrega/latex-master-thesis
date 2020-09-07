@@ -14,17 +14,17 @@ There are several techniques that could have been used to implement the PoC that
 
 After an initial try, source code analysis has been discarded. The reason for it is that the source code is needed for both the client library, and all its dependencies. Although Maven can provide the source code for some of the artifacts, it is not available as often as the bytecode.
 
-The option of call-level dependency graphs is useful for the metrics that measure the type of connection 6 (method invocation). However, the information needed for the type of connection: 1 (aggregation coupling), is not contained in the call-level graphs. Therefore, the approach to develop this PoC has been bytecode analysis. Furthermore, obtaining the call-graphs of the complete dependency tree has not been possible, since creating this types of fine-grained call-graphs is still a work in progress.
+The option of call-level dependency graphs is useful for the metrics that measure method invocations. However, the information needed to measure aggregation coupling, is not contained in the call-level graphs. Therefore, the approach to develop this PoC has been bytecode analysis. Furthermore, obtaining the call-graphs of the complete dependency tree h is still a work in progres within the FASTEN project.
 
 \subsection{Bytecode analysis}
-The PoC implementation to calculate the proposed coupling metrics uses bytecode analysis. The implementation is supported by the libraries \textit{Javassist}\footnote{\url{http://www.javassist.org/}}, and \textit{Aether}\footnote{\url{https://wiki.eclipse.org/Aether/What_Is_Aether}}.
+The PoC implementation to calculate the proposed coupling metrics uses bytecode analysis. The implementation is supported by the libraries  \textit{Aether}\footnote{\url{https://wiki.eclipse.org/Aether/What_Is_Aether}}, and \textit{Javassist}\footnote{\url{http://www.javassist.org/}}.
 
 \paragraph{Aether}
 Aether is a library created by Eclipse, which allows to fetch Maven artifacts from different repositories. In addition, it is also used to resolve the dependencies of a library, and create the dependency tree. To create the dependency tree, Aether uses the same strategy to resolve the dependencies as Maven.
 
 In the PoC, it has been used for the initial steps. The request to calculate the metrics receives the identifiers of the library to analyze (\textit{GroupID}, \textit{ArtifactID}, and \textit{version}). Aether fetches the library \textit{jar} and \textit{POM} files from the Maven Central Repository.
 
-Then, once the artifact of the client library is obtained, \textit{Aether} is used to resolve the dependencies of the artifact. For the calculation of the metrics to be possible, all the dependencies of the client library should also be available in Maven. The dependency tree of the artifact is visited, and each of the dependencies are also obtained, in order to have the \textit{jar} files to analyze as well. In addition, the dependency tree calculated with Aether is also used to create a custom dependency tree with the class \texttt{DependencyTreeNode} which is used to store the needed data about each of the libraries during the process of calculating the metrics.
+Once the artifact of the client library is obtained, \textit{Aether} is used to resolve the dependencies of the artifact. For the calculation of the metrics to be possible, all the dependencies of the client library should also be available in Maven. The dependency tree of the artifact is visited, and each of the dependencies are also obtained, in order to have the \textit{jar} files to analyze as well. In addition, the dependency tree calculated with Aether is also used to create a custom dependency tree with the class \texttt{DependencyTreeNode} which is used to store the needed data about each of the libraries during the process of calculating the metrics.
 
 \paragraph{Javassist}
 Once the jars of the client library and all its dependencies are available, the first step is to join all the \textit{.class} files in a \texttt{ClassPool} object, which is the main object of \textit{Javassist}. Once the \texttt{ClassPool} is created, it is used to obtain the classes from the client library, from which the different metrics are calculated.
@@ -36,7 +36,8 @@ In order to represent the dependency tree of the client library, the implementat
 
 To store all the information about the metrics, each \texttt{DependencyTreeNode} has, in addition, two fields: \texttt{ReachableBehaviors}, \texttt{ReachableClasses}, for metrics \texttt{MIC} and \texttt{AC}, respectively. \texttt{ReachableBehaviors} is a map, containing for each reachable method or constructor (behavior) of the server library, a \texttt{Set} with all the method calls from which it is reachable. In the same way, \texttt{ReachableClasses} is a map, in which for each reachable class of a server library, there is a \texttt{Set} of all the field declarations from which the class is reachable.
 
-\unsure{add class diagram of the model?}
+\unsure{add class diagram of the model? PoC design}
+\todocontent{Yes, add the diagram}
 
 \subsubsection{Direct Method Invocation Coupling}
 The pseudo-code in Figure \ref{fig:algorithm-mic} represents the algorithm used to calculate the metric MIC for each one of the direct dependencies of a given client library. The output of the algorithm is a map containing the set of \texttt{BehaviorCalls} that call each \texttt{CtBehavior}. The map is generated for each one of the direct dependencies and stored in the \texttt{DependencyTreeNode} of each library.
