@@ -243,25 +243,25 @@ Let $L_c$ be a client library and $c_1, c_2 \in L_c$ two classes from $L_c$. Let
 
 \paragraph{Property 1: Nonnegativity}
 If we assume that the metric $\verb|MIC|$ does not fulfill the property Nonnegativity, there should be a client library $L_s$ and a server library $L_c$ such that $\verb|MIC|(L_c, L_s) < 0$.
-According to the formula defined for the metric $\verb|MIC|$ in Section \ref{subsec:metric-definition}, this means that exists at least one client method $m_c \in \verb|M|(L_c)$ such that $\verb|nII|(m_c, L_c) < 0$, which opens two possibilities.
+According to the equation \ref{eqn:mic}, this means that exists at least one client method $m_c \in \verb|M|(L_c)$ such that $\verb|nII|(m_c, L_c) < 0$. Follow the equation of $\verb|nII|$ \ref{eqn:mic-nii}, this opens two possibilities.
 
 First, that there is a server method $m_s \in \verb|SIM|(m_c)$ such that $\verb|nI|(m_c, m_s) < 0$. However, $m_s$ is a method out of the set $\verb|SIM|(m_c)$ which is the set of stable methods invoked by $m_c$, which means that $\verb|nI|(m_c, m_s) > 0$ for all $m_s \in \verb|SIM|(m_c)$, therefore it is a contradiction.
 
-The other option is that there is a method $m_s \in \verb|SIM|(m_c)$ such that $\verb|nP|(m_s, L_s)$. $\verb|nP|(m_s, L_s)$ corresponds to the cardinality of the intersection between the set $\verb|PM|(m_s)$ and $\verb|M|(L_s)$. Therefore, the cardinality of the intersection has to be less than zero. However, the cardinality of the intersection is by definition greater or equal to zero. This constitutes a contradiction.
+The other option is that there is a method $m_s \in \verb|SIM|(m_c)$ such that $\verb|nP|(m_s, L_s) < 0$. $\verb|nP|(m_s, L_s)$, according to the equation \ref{eqn:mic-np}, corresponds to the cardinality of the intersection between the set $\verb|PM|(m_s)$ and $\verb|M|(L_s)$. Therefore, the cardinality of the intersection has to be less than zero. However, the cardinality of the intersection is by definition greater or equal to zero. This constitutes a contradiction.
 
 Therefore, the initial assumption is not true, and \textit{Nonnegativity} holds for the metric $\verb|MIC|$.
 
 \paragraph{Property 2: Null value}
-Assuming there is no null value for metric $\verb|MIC|$, there is a client library $L_c$ and a server library $L_s$ such that $\verb|R|(L_c, L_s) = 0$, and $\verb|MIC|(L_c, L_s)	\neq 0$. As non-negativity holds, we have that $\verb|MIC|(L_c, L_s) \ge 0$. Therefore, $\verb|MIC|(L_c, L_s) > 0$. Hence, there is a client method $m_c \in M(L_c)$ such that $\verb|nII|(m_c, L_s) > 0$.
+Assuming there is no null value for metric $\verb|MIC|$, there is a client library $L_c$ and a server library $L_s$ such that $\verb|R|(L_c, L_s) = 0$, and $\verb|MIC|(L_c, L_s)	\neq 0$. As non-negativity holds, we have that $\verb|MIC|(L_c, L_s) \ge 0$. Therefore, $\verb|MIC|(L_c, L_s) > 0$. Hence, following equation \ref{eqn:mic} there is a client method $m_c \in M(L_c)$ such that $\verb|nII|(m_c, L_s) > 0$.
 
-Thus, there is a server method $m_s \in \verb|SIM|(m_c)$, such that $\verb|nI|(m_c, m_s) > 0$ and $\verb|nP|(m_s, L_s) > 0$. Therefore, the method $m_s$ is called at least one time by the method $m_c$ from the client library $L_c$, and at the same time is implemented by the server library $L_s$, which means that there is a relationship between $L_c$ and $L_s$, which contradicts the original assumption that $\verb|R|(L_c, L_s) = 0$.
+Thus, according to equation \ref{eqn:mic-nii}, there is a server method $m_s \in \verb|SIM|(m_c)$, such that $\verb|nI|(m_c, m_s) > 0$ and $\verb|nP|(m_s, L_s) > 0$. Therefore, the method $m_s$ is called at least one time by the method $m_c$ from the client library $L_c$, and at the same time is implemented by the server library $L_s$, which means that there is a relationship between $L_c$ and $L_s$, which contradicts the original assumption that $\verb|R|(L_c, L_s) = 0$.
 
 Consequently, there is a \textit{null value} for metric $\verb|MIC|$.
 
 \paragraph{Property 3: Monotonicity}
 Let $L_c$ be a client library that contains class $c_c$, and let $c_c'$ be a class resulting from adding relationships with the server library $L_s$ to the class $c_c$. Then, $\verb|R|(c_c, L_s) \subseteq \verb|R|(c_c', L_s)$. Let $L_c'$ be a client library identical to $L_c$ but in which the class $c_c$ has been replaced by $c_c'$. Therefore, $\verb|R|(L_c, L_s) \subseteq \verb|R|(L_c', L_s)$.
 
-Let's assume that the $\verb|AC|$ metric does not fulfill the property monotonicity, this would mean that $\verb|MIC|(L_c, L_s) > \verb|MIC|(L_c', L_s)$. Since the only difference between $L_c$ and $L_c'$ is the substitution of $c_c$ by $c_c'$, then $\sum_{m_c \in \verb|M|(c_c)} \verb|nII|(m_c, L_s) > \sum_{m_c' \in \verb|M|(c_c')} \verb|nII|(m_c', L_s)$. Therefore, the methods of class $c_c$ have more individual invocations to $L_s$ than the methods from class $c_c'$. This contradicts the initial assumption that $\verb|R|(c_c, L_s) \subseteq \verb|R|(c_c', L_s)$.
+Let's assume that the $\verb|MIC|$ metric does not fulfill the property monotonicity, this would mean that $\verb|MIC|(L_c, L_s) > \verb|MIC|(L_c', L_s)$. Since the only difference between $L_c$ and $L_c'$ is the substitution of $c_c$ by $c_c'$, then $\sum_{m_c \in \verb|M|(c_c)} \verb|nII|(m_c, L_s) > \sum_{m_c' \in \verb|M|(c_c')} \verb|nII|(m_c', L_s)$ (see equation \ref{eqn:mic}). Therefore, the methods of class $c_c$ have more individual invocations to $L_s$ than the methods from class $c_c'$. This contradicts the initial assumption that $\verb|R|(c_c, L_s) \subseteq \verb|R|(c_c', L_s)$.
 
 Therefore, \textit{Monotonicity} holds for the metric $\verb|MIC|$.
 
