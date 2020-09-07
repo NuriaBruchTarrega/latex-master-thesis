@@ -136,10 +136,10 @@ All the metrics that are going to be used to measure the dependencies between li
 In this section, there is the formulation of the formal definition of the metrics. However, before the definitions, there is a brief discussion in which the definition of coupling of the proposed metrics are compared with the existing metrics in the literature described in Section \ref{section:bg-coupling}.
 
 \subsubsection{Revisiting existing metrics}
-Once we have defined the coupling that is going to be measured by each of the metrics, we can compare it with the existing coupling metrics, according to Table \ref{table:coupling-metrics} in Section \ref{section:bg-coupling}.
+Once we have defined the coupling that is going to be measured by each of the metrics (see Table \ref{table:metric-characteristics}), we can compare it with the existing coupling metrics, according to Table \ref{table:coupling-metrics} in Section \ref{section:bg-coupling}.
 
 \paragraph{Metric \#1}
-To compare the coupling defined for this first metric with the existing metrics, we focus on the ones that have the following characteristics:
+To compare the coupling defined for this first metric defined in Table \ref{table:metric-characteristics} with the existing metrics, we focus on the ones that have the following characteristics:
 
 \begin{itemize}
   \item Type of connection: method invocations (type 6 in Table \ref{table:types-connections})
@@ -155,7 +155,7 @@ From the group of metrics \textit{ICP}, the metric \textit{ICP}  considers both 
 Finally, the metrics \textit{AMMIC} and \textit{OMMIC} use the same definition of coupling as metric \#1 except that \textit{AMMIC} counts the method invocations to ancestors and \textit{OMMIC} to other classes. Therefore, metric \#1 is the sum of \textit{AMMIC} and \textit{OMMIC} but aggregated to the library aggregation level instead of class level.
 
 \paragraph{Metric \#2}
-In the case of the second, we focus on the metrics with the following characteristics:
+In the case of the second metric as defined in Table \ref{table:metric-characteristics}, we focus on the metrics with the following characteristics:
 
 \begin{itemize}
   \item Type of connection: client class contains an attribute of type server class, aggregation coupling (type 1 in Table \ref{table:types-connections})
@@ -171,7 +171,7 @@ According to the definition of \textit{DAC}, it counts the number of attributes 
 Finally, \textit{ACAIC} and \textit{OCAIC} consider aggregation coupling with ancestors and others respectively. Therefore, metric 2 is the sum of these two metrics, but aggregated to library aggregation level, since the metrics are designed for class level.
 
 \subsubsection{Formal definition}\label{subsec:metric-definition}
-\paragraph{Metric \#1: Direct method invocation coupling (MIC)}
+\paragraph{Metric \#1: Direct method invocation coupling (\texttt{MIC})}
 The $\verb|MIC|$ metric measures the dependency between two libraries, one acting as client ($L_c$) and the other as server ($L_s$).
 Based on the granularity of the measure criterion discussed in Section~\ref{section:defCoupling}, this metric is calculated for each of the classes implemented in $L_c$, and for each of the methods implemented $\verb|M|(L_c)$ in these classes. For each implemented method  $m_c \in \verb|M|(L_c)$, we count the number of individual invocations to a method of $L_s$, denoted $\verb|nII|(m_c,L_s)$. For each method invocation made by the methods implemented in $L_c$, we count only the ones that are implemented in stable classes (not implemented in $L_c$). The set of stable methods invoked is denoted $\verb|SIM|(m_c)$.
 
@@ -189,14 +189,11 @@ According to the criterion inheritance, it is necessary to take into account all
     \verb|nP|(m_s, L_s) = |\verb|PM|(m_s) \cap \verb|M|(L_s)|
 \end{equation*}
 
-\paragraph{Metric \#2: Direct aggregation coupling (AC)}
-%The process for this metric is similar to the one of the first metric. However, in this case,
-The $\verb|AC|$ metric counts the number of times when a class of $L_c$ has an attribute whose type is a class implemented in $L_s$. Therefore, the metric is calculated for each class implemented in $L_c$ ($\verb|C|(L_c)$). For each class, we consider only those attributes types that are stable classes (not implemented in $L_c$). The set of stable attribute types in a class $c$ %that are stable
-is $\verb|SAT|(c_c)$.
+\paragraph{Metric \#2: Direct aggregation coupling (\texttt{AC})}
 
-%According to criterion 6, in this case,
-To account for polymorphism (criterion 6), we count all the descendants of the class that are implemented in $L_s$. Therefore, we intersect the set %with the descendants of the class, $\verb|DC|(c_s)$, with the set of
-of the class descendants, $\verb|DC|(c_s)$, with the set of
+The $\verb|AC|$ metric counts the number of times when a class of $L_c$ has an attribute whose type is a class implemented in $L_s$. Therefore, the metric is calculated for each class implemented in $L_c$ ($\verb|C|(L_c)$). For each class, we consider only those attributes types that are stable classes (not implemented in $L_c$). The set of stable attribute types in a class $c$ is $\verb|SAT|(c_c)$.
+
+To account for polymorphism (criterion 6), we count all the descendants of the class that are implemented in $L_s$. Therefore, we intersect the set of the class descendants, $\verb|DC|(c_s)$, with the set of
 classes implemented in $L_s$ ($\verb|C|(L_s)$). Finally, to count the  individual connections, we multiply the number of times a client class $c_c$ has an attribute of type the server class $c_s$ $\verb|NA|(c_c, c_s)$ by the number of class descendants (class included) implemented in $L_s$ ($\verb|nDC|(c_s,L_s)$).
 
 \begin{equation*}
@@ -210,71 +207,71 @@ classes implemented in $L_s$ ($\verb|C|(L_s)$). Finally, to count the  individua
 \subsection{Theoretical validation (RQ1.4)}
 The theoretical validation of the metrics consists of demonstrating the properties of the metrics. The theoretical validation is necessary since it proves that the metrics share some properties with the attribute these are measuring, in this case coupling. In particular, for coupling metrics there are five properties defined by Briand et al. \cite{briand1996property} which have been largely used by the literature \cite{poshyvanyk2006conceptual, allen1999measuring, zhao2004measuring}.
 
-For the description of the properties, we use $Coupling(L_c, L_s)$ to refer to both \texttt{AC} and \texttt{MIC}, and $R(L_c, L_s)$ to refer to the set of relationships between $L_c$ and $L_s$. $Coupling(L_c, L_s)$ uses $R(L_c, L_s)$ to evaluate the coupling between the two elements, but the way it is used differs per metric. The description of the properties is based on the description done by Briand et al. \cite{briand1996property} which was meant for coupling metrics that measure the coupling within an element, or between an element and all the other elements. Therefore, the description has been adapted for metrics that measure coupling between two different elements. In addition, since all the defined metrics measure import coupling, the definitions of the properties are focused on import coupling.
+For the description of the properties, we use $\verb|Coupling|(L_c, L_s)$ to refer to both $\verb|AC|$ and $\verb|MIC|$, and $\verb|R|(L_c, L_s)$ to refer to the set of relationships between $L_c$ and $L_s$. $\verb|Coupling|(L_c, L_s)$ uses $\verb|R|(L_c, L_s)$ to evaluate the coupling between the two elements, but the way it is used differs per metric. The description of the properties is based on the description done by Briand et al. \cite{briand1996property} which was meant for coupling metrics that measure the coupling within an element, or between an element and all the other elements. Therefore, the description has been adapted for metrics that measure coupling between two different elements. In addition, since all the defined metrics measure import coupling, the definitions of the properties are focused on import coupling.
 
 \paragraph{Property 1: Nonnegativity}
 
-Let $L_c$ be a client library and $L_s$ be a server library. The coupling between the two libraries is non-negative. $Coupling(L_c, L_s) \ge 0$
+Let $L_c$ be a client library and $L_s$ be a server library. The coupling between the two libraries is non-negative. $\verb|Coupling|(L_c, L_s) \ge 0$
 
 \paragraph{Property 2: Null value}
 Coupling is expected to be null (zero) when there is not a single import relationship between the client and the server libraries.
 
-Let $L_c$ be a client library and $L_s$ be a server library. The coupling between the two libraries is null if the set of import relationships from $L_c$ to $L_s$, $R(L_c, L_s)$, is empty. Therefore, $R(L_c, L_s) = \emptyset \implies Coupling(L_c, L_s) = 0$.
+Let $L_c$ be a client library and $L_s$ be a server library. The coupling between the two libraries is null if the set of import relationships from $L_c$ to $L_s$, $\verb|R|(L_c, L_s)$, is empty. Therefore, $\verb|R|(L_c, L_s) = \emptyset \implies \verb|Coupling|(L_c, L_s) = 0$.
 
 \paragraph{Property 3: Monotonicity}
 Considering the definition of coupling, it is expected that when more relationships are added between the libraries, coupling does not decrease.
 
-Let $L_c$ be a client library, $L_s$ be a server library, and $c \in L_c$ be a class in $L_c$. If we modify class $c$ to form a new class $c'$ which is identical to $c$ except that $R(c, L_s) \subseteq R(c', L_s)$. For example, some method invocations have been added from $c$ to classes implemented in $L_s$. Let $L_c'$ be a library identical to $L_c$ but in which $c$ has been replaced by $c'$. Then, $Coupling(L_c, L_s) \le Coupling(L_c', L_s)$.
+Let $L_c$ be a client library, $L_s$ be a server library, and $c \in L_c$ be a class in $L_c$. If we modify class $c$ to form a new class $c'$ which is identical to $c$ except that $\verb|R|(c, L_s) \subseteq \verb|R|(c', L_s)$. For example, some method invocations have been added from $c$ to classes implemented in $L_s$. Let $L_c'$ be a library identical to $L_c$ but in which $c$ has been replaced by $c'$. Then, $\verb|Coupling|(L_c, L_s) \le \verb|Coupling|(L_c', L_s)$.
 
 \paragraph{Property 4: Merging of classes}
 The original definition of the property is created for metrics that measure coupling within a system, and therefore it is necessary to reformulate it. It is expected that if two classes of a system are merged, the coupling of the system does not increase. If two classes are merged, the coupling between the two classes is subtracted from the total coupling of the system.
 
 When considering the coupling between a client library and a server library, if two classes of the client library are merged, the coupling between the two libraries would not increase. It could decrease, dependending on how the refactoring is performed. If the classes share usage of the server library, it is possible that one of the usages is removed.
 
-Therefore, let $L_c$ be a client library, $L_s$ be a server library, and $c_1, c_2 \in L_c$ two classes from $L_c$. Let $c'$ be the class that results when merging  $c_1$ and $c_2$, and $L_c'$ be the library resulting from $L_c$ when $c_1$ and $c_2$ have been replaced by $c'$. Then, $Coupling(c_1, L_s) + Coupling(c_2, L_s) \ge Coupling(c', L_s)$ and $Coupling(C, L_s) \ge Coupling(C', L_s)$.
+Therefore, let $L_c$ be a client library, $L_s$ be a server library, and $c_1, c_2 \in L_c$ two classes from $L_c$. Let $c'$ be the class that results when merging  $c_1$ and $c_2$, and $L_c'$ be the library resulting from $L_c$ when $c_1$ and $c_2$ have been replaced by $c'$. Then, $\verb|Coupling|(c_1, L_s) + \verb|Coupling|(c_2, L_s) \ge \verb|Coupling|(c', L_s)$ and $\verb|Coupling|(C, L_s) \ge \verb|Coupling|(C', L_s)$.
 
 \paragraph{Property 5: Merging of unconnected classes}
 This property is a variation of the previous one, and it has to be adapted to the use case of this thesis as well. It is expected that the coupling of the system will stay the same if two classes of a system, which have no relationship, are merged. Since the class that results of the merging will have the same number of relationships with other classes as the original two.
 
 When measuring the coupling between a client library and a server library, the two unconnected classes are not using the server library in the same way. Therefore, none of the relationships with the server library can be merged when merging the two classes, and the coupling with the server library stays the same.
 
-Let $L_c$ be a client library and $c_1, c_2 \in L_c$ two classes from $L_c$. Let $c'$ be the class that is the union of  $c_1$ and $c_2$, and $L_c'$ be the library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. If there are no relationships between $c_1$ and $c_2$, then, $Coupling(c_1) + Coupling(c_2) \ge Coupling(c')$ and $Coupling(C) \ge Coupling(C')$.
+Let $L_c$ be a client library and $c_1, c_2 \in L_c$ two classes from $L_c$. Let $c'$ be the class that is the union of  $c_1$ and $c_2$, and $L_c'$ be the library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. If there are no relationships between $c_1$ and $c_2$, then, $\verb|Coupling|(c_1) + \verb|Coupling|(c_2) \ge \verb|Coupling|(c')$ and $\verb|Coupling|(C) \ge \verb|Coupling|(C')$.
 
 \subsubsection{Direct method invocation coupling}
 
 \paragraph{Property 1: Nonnegativity}
-If we assume that the metric \texttt{MIC} does not fulfill the property Nonnegativity, there should be a client library $L_s$ and a server library $L_c$ such that $MIC(L_c, L_s) < 0$.
-According to the formula defined for the metric $MIC$ in Section \ref{subsec:metric-definition}, this means that exists at least one client method $m_c \in M(L_c)$ such that $nII(m_c, L_c) < 0$, which opens two possibilities.
+If we assume that the metric $\verb|MIC|$ does not fulfill the property Nonnegativity, there should be a client library $L_s$ and a server library $L_c$ such that $\verb|MIC|(L_c, L_s) < 0$.
+According to the formula defined for the metric $\verb|MIC|$ in Section \ref{subsec:metric-definition}, this means that exists at least one client method $m_c \in \verb|M|(L_c)$ such that $\verb|nII|(m_c, L_c) < 0$, which opens two possibilities.
 
-First, that there is a server method $m_s \in SIM(m_c)$ such that $nI(m_c, m_s) < 0$. However, $m_s$ is a method out of the set $SIM(m_c)$ which is the set of stable methods invoked by $m_c$, which means that $nI(m_c, m_s) > 0$ for all $m_s \in SIM(m_c)$, therefore it is a contradiction.
+First, that there is a server method $m_s \in \verb|SIM|(m_c)$ such that $\verb|nI|(m_c, m_s) < 0$. However, $m_s$ is a method out of the set $\verb|SIM|(m_c)$ which is the set of stable methods invoked by $m_c$, which means that $\verb|nI|(m_c, m_s) > 0$ for all $m_s \in \verb|SIM|(m_c)$, therefore it is a contradiction.
 
-The other option is that there is a method $m_s \in SIM(m_c)$ such that $nP(m_s, L_s)$. $nP(m_s, L_s)$ corresponds to the cardinality of the intersection between the set $PM(m_s)$ and $M(L_s)$. Therefore, the cardinality of the intersection has to be less than zero. However, the cardinality of the intersection is by definition greater or equal to zero. This constitutes a contradiction.
+The other option is that there is a method $m_s \in \verb|SIM|(m_c)$ such that $\verb|nP|(m_s, L_s)$. $\verb|nP|(m_s, L_s)$ corresponds to the cardinality of the intersection between the set $\verb|PM|(m_s)$ and $\verb|M|(L_s)$. Therefore, the cardinality of the intersection has to be less than zero. However, the cardinality of the intersection is by definition greater or equal to zero. This constitutes a contradiction.
 
 Therefore, the initial assumption is not true, and \textit{Nonnegativity} holds for the metric $\verb|MIC|$.
 
 \paragraph{Property 2: Null value}
-Assuming there is no null value for metric $MIC$, there is a client library $L_c$ and a server library $L_s$ such that $R(L_c, L_s) = 0$, and $MIC(L_c, L_s)	\neq 0$. As non-negativity holds, we have that $MIC(L_c, L_s) \ge 0$. Therefore, $MIC(L_c, L_s) > 0$. Hence, there is a client method $m_c \in M(L_c)$ such that $nII(m_c, L_s) > 0$.
+Assuming there is no null value for metric $\verb|MIC|$, there is a client library $L_c$ and a server library $L_s$ such that $\verb|R|(L_c, L_s) = 0$, and $\verb|MIC|(L_c, L_s)	\neq 0$. As non-negativity holds, we have that $\verb|MIC|(L_c, L_s) \ge 0$. Therefore, $\verb|MIC|(L_c, L_s) > 0$. Hence, there is a client method $m_c \in M(L_c)$ such that $\verb|nII|(m_c, L_s) > 0$.
 
-Thus, there is a server method $m_s \in SIM(m_c)$, such that $nI(m_c, m_s) > 0$ and $nP(m_s, L_s) > 0$. Therefore, the method $m_s$ is called at least one time by the method $m_c$ from the client library $L_c$, and at the same time is implemented by the server library $L_s$, which means that there is a relationship between $L_c$ and $L_s$, which contradicts the original assumption that $R(L_c, L_s) = 0$.
+Thus, there is a server method $m_s \in \verb|SIM|(m_c)$, such that $\verb|nI|(m_c, m_s) > 0$ and $\verb|nP|(m_s, L_s) > 0$. Therefore, the method $m_s$ is called at least one time by the method $m_c$ from the client library $L_c$, and at the same time is implemented by the server library $L_s$, which means that there is a relationship between $L_c$ and $L_s$, which contradicts the original assumption that $\verb|R|(L_c, L_s) = 0$.
 
 Consequently, there is a \textit{null value} for metric $\verb|MIC|$.
 
 \paragraph{Property 3: Monotonicity}
-Let $L_c$ be a client library that contains class $c_c$, and let $c_c'$ be a class resulting from adding relationships with the server library $L_s$ to the class $c_c$. Then, $R(c_c, L_s) \subseteq R(c_c', L_s)$. Let $L_c'$ be a client library identical to $L_c$ but in which the class $c_c$ has been replaced by $c_c'$. Therefore, $R(L_c, L_s) \subseteq R(L_c', L_s)$.
+Let $L_c$ be a client library that contains class $c_c$, and let $c_c'$ be a class resulting from adding relationships with the server library $L_s$ to the class $c_c$. Then, $\verb|R|(c_c, L_s) \subseteq \verb|R|(c_c', L_s)$. Let $L_c'$ be a client library identical to $L_c$ but in which the class $c_c$ has been replaced by $c_c'$. Therefore, $\verb|R|(L_c, L_s) \subseteq \verb|R|(L_c', L_s)$.
 
-Let's assume that the AC metric does not fulfill the property monotonicity, this would mean that $MIC(L_c, L_s) > MIC(L_c', L_s)$. Since the only difference between $L_c$ and $L_c'$ is the substitution of $c_c$ by $c_c'$, then $\sum_{m_c \in M(c_c)} nII(m_c, L_s) > \sum_{m_c' \in M(c_c')} nII(m_c', L_s)$. Therefore, the methods of class $c_c$ have more individual invocations to $L_s$ than the methods from class $c_c'$. This contradicts the initial assumption that $R(c_c, L_s) \subseteq R(c_c', L_s)$.
+Let's assume that the $\verb|AC|$ metric does not fulfill the property monotonicity, this would mean that $\verb|MIC|(L_c, L_s) > \verb|MIC|(L_c', L_s)$. Since the only difference between $L_c$ and $L_c'$ is the substitution of $c_c$ by $c_c'$, then $\sum_{m_c \in \verb|M|(c_c)} \verb|nII|(m_c, L_s) > \sum_{m_c' \in \verb|M|(c_c')} \verb|nII|(m_c', L_s)$. Therefore, the methods of class $c_c$ have more individual invocations to $L_s$ than the methods from class $c_c'$. This contradicts the initial assumption that $\verb|R|(c_c, L_s) \subseteq \verb|R|(c_c', L_s)$.
 
 Therefore, \textit{Monotonicity} holds for the metric $\verb|MIC|$.
 
 \paragraph{Property 4: Merging of classes}
-Let $L_c$ be a client library that includes the classes $c_1$ and $c_2$. Let $c'$ be a class such that $c_1 + c_2 = c'$ and $L_c'$ be a client library identical to $L_c$ but where $c_1$ and $c_2$ have been replaced by $c'$. If we assume that the property merging of classes does not hold for metric MIC, it would mean that $R(c_1, L_s) \subseteq R(c', L_s) \land R(c_2, L_s) \subseteq R(c', L_s)$ and at the same time $MIC(L_c, L_s) > MIC(L_c', L_s)$.
+Let $L_c$ be a client library that includes the classes $c_1$ and $c_2$. Let $c'$ be a class such that $c_1 + c_2 = c'$ and $L_c'$ be a client library identical to $L_c$ but where $c_1$ and $c_2$ have been replaced by $c'$. If we assume that the property merging of classes does not hold for metric $\verb|MIC|$, it would mean that $\verb|R|(c_1, L_s) \subseteq \verb|R|(c', L_s) \land \verb|R|(c_2, L_s) \subseteq \verb|R|(c', L_s)$ and at the same time $\verb|MIC|(L_c, L_s) > \verb|MIC|(L_c', L_s)$.
 
-Therefore, there is a method $m_c$ which is implemented in $c_1$ or $c_2$ such that contains a call to a method $m_s$ which does not exist in any of the methods implemented in $c'$. This is a contradition with the initial affirmation $R(c_1, L_s) \subseteq R(c', L_s) \land R(c_2, L_s) \subseteq R(c', L_s)$. Therefore, the property \textit{Merging of classes} holds for metric $\verb|MIC|$.
+Therefore, there is a method $m_c$ which is implemented in $c_1$ or $c_2$ such that contains a call to a method $m_s$ which does not exist in any of the methods implemented in $c'$. This is a contradition with the initial affirmation $\verb|R|(c_1, L_s) \subseteq \verb|R|(c', L_s) \land \verb|R|(c_2, L_s) \subseteq \verb|R|(c', L_s)$. Therefore, the property \textit{Merging of classes} holds for metric $\verb|MIC|$.
 
 \paragraph{Property 5: Merging of unconnected classes}
-Let $L_c$ be a client library and $L_s$ be a server library. Let $c_1$ and $c_2$ be classes implemented in $L_c$, such that $R(c_1, L_s) \cap R(c_2, L_s) = \emptyset$. Let $c'$ be a class such that $c_1 + c_2 = c'$. Therefore, $R(c_1, L_s) + R(c_2, L_s) = R(c', L_s)$. Let $L_c'$ be a client library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. We assume that the metric MIC does not fulfill property 5.
+Let $L_c$ be a client library and $L_s$ be a server library. Let $c_1$ and $c_2$ be classes implemented in $L_c$, such that $\verb|R|(c_1, L_s) \cap \verb|R|(c_2, L_s) = \emptyset$. Let $c'$ be a class such that $c_1 + c_2 = c'$. Therefore, $\verb|R|(c_1, L_s) + \verb|R|(c_2, L_s) = \verb|R|(c', L_s)$. Let $L_c'$ be a client library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. We assume that the metric \verb|MIC| does not fulfill property 5.
 
-Therefore, $MIC(L_c, L_s) \neq MIC(L_c', L_s)$. According to property 4, $MIC(L_c, L_s)$ cannot be less than $MIC(L_c', L_s)$. Thus, $MIC(L_c, L_s) > MIC(L_c', L_s)$. This means that there is a $m_c$ implemented in $c_1$ or $c_2$ that contains an invocation to a method $m_s$ implemented in $L_s$, which is not included in $c'$. This contradicts that $R(c_1, L_s) + R(c_2, L_s) = R(c', L_s)$.
+Therefore, $\verb|MIC|(L_c, L_s) \neq \verb|MIC|(L_c', L_s)$. According to property 4, $\verb|MIC|(L_c, L_s)$ cannot be less than $\verb|MIC|(L_c', L_s)$. Thus, $\verb|MIC|(L_c, L_s) > \verb|MIC|(L_c', L_s)$. This means that there is a $m_c$ implemented in $c_1$ or $c_2$ that contains an invocation to a method $m_s$ implemented in $L_s$, which is not included in $c'$. This contradicts that $\verb|R|(c_1, L_s) + \verb|R|(c_2, L_s) = \verb|R|(c', L_s)$.
 
 Therefore, property \textit{Merging of unconnected classes} holds for metric $\verb|MIC|$.
 
@@ -289,39 +286,39 @@ Therefore, $\verb|nDC|(c_s, L_s)$ has to be negative. $\verb|nDC|(c_s, L_s)$ cor
 In conclusion, \textit{Nonnegativity} holds for the metric $\verb|AC|$.
 
 \paragraph{Property 2: Null value}
-If we assume that property 2 does not hold for metric $\verb|AC|$, there has to be a client library $L_c$ and a server library $L_s$ such that have no relationship ($\verb|R|(L_c, L_s) = 0$) and $\verb|AC|(L_c, L_s)	\neq 0$. Since $\verb|AC|$ has the property \textit{Nonnegativity}, the result cannot be negative, which means that $\verb|AC|(L_c, L_s) > 0$. Hence, there is a client class $c_c \in C(L_c)$ and a server class $c_s \in \verb|SAT|(c_c)$ such that $\verb|NA|(c_c, c_s) > 0$ and $\verb|nDC|(c_s, L_s) > 0$. This means that the class $c_s$ is at the same time declared at least once by the client class $c_c$ ($\verb|NA|(c_c, c_s) > 0$) and is implemented in the server library $L_s$. However, this would create a relationship between $L_c$ and $L_s$, which contradicts the original assumption.
+If we assume that property 2 does not hold for metric $\verb|AC|$, there has to be a client library $L_c$ and a server library $L_s$ such that have no relationship ($\verb|R|(L_c, L_s) = 0$) and $\verb|AC|(L_c, L_s)	\neq 0$. Since $\verb|AC|$ has the property \textit{Nonnegativity}, the result cannot be negative, which means that $\verb|AC|(L_c, L_s) > 0$. Hence, there is a client class $c_c \in \verb|C|(L_c)$ and a server class $c_s \in \verb|SAT|(c_c)$ such that $\verb|NA|(c_c, c_s) > 0$ and $\verb|nDC|(c_s, L_s) > 0$. This means that the class $c_s$ is at the same time declared at least once by the client class $c_c$ ($\verb|NA|(c_c, c_s) > 0$) and is implemented in the server library $L_s$. However, this would create a relationship between $L_c$ and $L_s$, which contradicts the original assumption.
 
  Therefore, the property \textit{Null value} holds for metric $\verb|AC|$.
 
 \paragraph{Property 3: Monotonicity}
 Let $L_c$ be a client library that contains class $c_c$, and let $c_c'$ be a class identical to $c_c$ but more relationships with the server library $L_s$. Then, $\verb|R|(c_c, L_s) \subseteq \verb|R|(c_c', L_s)$. Let $L_c'$ be a client library identical to $L_c$ but in which the class $c_c$ has been replaced by $c_c'$. Therefore, $\verb|R|(L_c, L_s) \subseteq \verb|R|(L_c', L_s)$.
 
-If we assume that the metric AC does not fulfill this property, means that $\verb|AC|(L_c, L_s) > \verb|AC|(L_c', L_s)$. The only difference between these two calculations is the result of the calculation for $c_c$ and $c_c'$. Therefore, $\sum_{c_s \in \verb|SAT|(c_c)} \verb|NA|(c_c, c_s) * \verb|nDC|(c_s, L_s) > \sum_{c_s \in \verb|SAT|(c_c')} \verb|NA|(c_c', c_s) * \verb|nDC|(c_s, L_s)$.
+If we assume that the metric $\verb|AC|$ does not fulfill this property, means that $\verb|AC|(L_c, L_s) > \verb|AC|(L_c', L_s)$. The only difference between these two calculations is the result of the calculation for $c_c$ and $c_c'$. Therefore, $\sum_{c_s \in \verb|SAT|(c_c)} \verb|NA|(c_c, c_s) * \verb|nDC|(c_s, L_s) > \sum_{c_s \in \verb|SAT|(c_c')} \verb|NA|(c_c', c_s) * \verb|nDC|(c_s, L_s)$.
 
-This means that there is a server class $c_s \in \verb|SAT|(c_c)$, that is implemented in $L_s$ ($\verb|nDC|(c_s, L_s) > 0$) such that $\verb|NA|(c_c, c_s) > \verb|NA|(c_c', c_s)$. This contradicts the original assumption that $c_c'$ is constructed from $c_c$ but with additional relationships with $L_s$. $\verb|NA|(c_c, c_s)$ will only be greater than $N\verb|NA|A(c_c', c_s)$ if there is an attribute of type $c_s$ in $c_c$ (which is a relationship between $c_c$ and $L_s$) that does not exist in $c_c'$.
+This means that there is a server class $c_s \in \verb|SAT|(c_c)$, that is implemented in $L_s$ ($\verb|nDC|(c_s, L_s) > 0$) such that $\verb|NA|(c_c, c_s) > \verb|NA|(c_c', c_s)$. This contradicts the original assumption that $c_c'$ is constructed from $c_c$ but with additional relationships with $L_s$. $\verb|NA|(c_c, c_s)$ will only be greater than $\verb|NA|(c_c', c_s)$ if there is an attribute of type $c_s$ in $c_c$ (which is a relationship between $c_c$ and $L_s$) that does not exist in $c_c'$.
 
 Therefore, \textit{Monotonicity} holds for the metric $\verb|AC|$.
 
 \paragraph{Property 4: Merging of classes}
-Let $L_c$ be a client library that includes the classes $c_1$ and $c_2$. Let $c'$ be a class such that $c_1 + c_2 = c'$ and $L_c'$ be a client library identical to $L_c$ but where $c_1$ and $c_2$ have been replaced by $c'$. We assume that the property merging of classes does not hold for metric AC,. Therefore, $\verb|R|(c_1, L_s) \subseteq \verb|R|(c', L_s) \land \verb|R|(c_2, L_s) \subseteq \verb|R|(c', L_s)$ and, also $\verb|AC|(L_c, L_s) > \verb|AC|(L_c', L_s)$.
+Let $L_c$ be a client library that includes the classes $c_1$ and $c_2$. Let $c'$ be a class such that $c_1 + c_2 = c'$ and $L_c'$ be a client library identical to $L_c$ but where $c_1$ and $c_2$ have been replaced by $c'$. We assume that the property merging of classes does not hold for metric $\verb|AC|$,. Therefore, $\verb|R|(c_1, L_s) \subseteq \verb|R|(c', L_s) \land \verb|R|(c_2, L_s) \subseteq \verb|R|(c', L_s)$ and, also $\verb|AC|(L_c, L_s) > \verb|AC|(L_c', L_s)$.
 
 Thus, either $c_1$ or $c_2$ contain an attribute of type $c_s$, such that $c_s$ is implemented in $L_s$ and it is not included $c'$. This creates a contradition with the initial affirmation $\verb|R|(c_1, L_s) \subseteq \verb|R|(c', L_s) \land \verb|R|(c_2, L_s) \subseteq \verb|R|(c', L_s)$, since the declaration of an attribute of type $c_s$ is included in $\verb|R|(c_1, L_s)$ or $\verb|R|(c_2, L_s)$. Therefore, \textit{Merging of classes} holds for metric $\verb|AC|$.
 
 \paragraph{Property 5: Merging of unconnected classes}
-Let $L_c$ be a client library and $L_s$ be a server library. Let $c_1$ and $c_2$ be classes implemented in $L_c$, such that $\verb|R|(c_1, L_s) \cap \verb|R|(c_2, L_s) = \emptyset$. Let $c'$ be a class such that $c_1 + c_2 = c'$. Therefore, $\verb|R|(c_1, L_s) + \verb|R|(c_2, L_s) = \verb|R|(c', L_s)$. Let $L_c'$ be a client library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. We assume that the metric AC does not fulfill property 5.
+Let $L_c$ be a client library and $L_s$ be a server library. Let $c_1$ and $c_2$ be classes implemented in $L_c$, such that $\verb|R|(c_1, L_s) \cap \verb|R|(c_2, L_s) = \emptyset$. Let $c'$ be a class such that $c_1 + c_2 = c'$. Therefore, $\verb|R|(c_1, L_s) + \verb|R|(c_2, L_s) = \verb|R|(c', L_s)$. Let $L_c'$ be a client library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. We assume that the metric $\verb|AC|$ does not fulfill property 5.
 
 Therefore, $\verb|AC|(L_c, L_s) \neq \verb|AC|(L_c', L_s)$. According to property 4, it cannot happen that $\verb|AC|(L_c, L_s) < \verb|AC|(L_c', L_s)$. Therefore, $\verb|AC|(L_c, L_s) > \verb|AC|(L_c', L_s)$. The only way this is if there is an attribute of type $c_s$ declared in $c_1$ or $c_2$ and implemented in $L_s$, such that is not included in $c'$. This creates a contradition with the initial affirmation that $\verb|R|(c_1, L_s) + \verb|R|(c_2, L_s) = \verb|R|(c', L_s)$.
 
 Therefore, metric $\verb|AC|$ fulfills \textit{Merging of unconnected classes}.
 
-\section{Transitive Dependencies}
+\section{Metrics for transitive dependencies}
 \subsection{Formal definition of the metrics (RQ1.2)}\label{section:defMetricsTransitive}
-In this section, the metrics to measure transtive dependencies will be described. First, the characteristics of the metrics, according to the criteria previously discussed, are compared to the exisiting metrics described in section \ref{section:bg-coupling}. Next, some concepts involved in the formulation of the transitive metrics are explained. Finally, both metrics for transitive dependencies are formally defined.
+In this section, the metrics to measure transtive dependencies will be described. First, the characteristics of the metrics, according to the criteria previously discussed and summarized in Table \ref{table:metric-characteristics}, are compared to the exisiting metrics described in section \ref{section:bg-coupling}. Next, some concepts involved in the formulation of the transitive metrics are explained. Finally, both metrics for transitive dependencies are formally defined.
 
 \subsubsection{Revisiting existing metrics}
-In the set of metrics reviewed by Briand et al. \cite{briand1999unified} there is only one metric that does count indirect coupling, $RFC'$ (see Table \ref{table:coupling-metrics}). This metric also counts inheritance-based coupling and it is focused on the client element, just as the metrics 3 and 4 of this work. However, $RFC'$ is calculated at the class aggregation level, whereas the metric for this work are calculated at the library level. Furthermore, the strategy to count connections is E, which means that it counts the number of elements with which the class has a connection, not how many connections.
+In the set of metrics reviewed by Briand et al. \cite{briand1999unified} there is only one metric that does count indirect coupling, $RFC'$ (see Table \ref{table:coupling-metrics}). This metric also counts inheritance-based coupling and it is focused on the client element, just as the metrics \#3 and \#4 defined in Table \ref{table:metric-characteristics}. However, $RFC'$ is calculated at the class aggregation level, whereas the metric for this work are calculated at the library level. Furthermore, the strategy to count connections is E, which means that it counts the number of elements with which the class has a connection, not how many connections.
 
-Therefore, both metrics 3 and 4 are going to be different from those reviewed by Briand et al. \cite{briand1999unified}.
+Therefore, both metrics \#3 and \#4 are going to be different from those reviewed by Briand et al. \cite{briand1999unified}.
 
 \subsubsection{Concepts related to transitive dependencies}\improvement{should this go in background instead?}
 In order to define the coupling for transitive metrics, other factors have to be taken into account which are not needed for the direct metrics.
@@ -342,9 +339,9 @@ The propagation represents how the impact of a change can spread across dependen
 
 \subsubsection{Formal definition}
 
-\paragraph{Metric 3: Transitive method invocation coupling (TMIC)}
+\paragraph{Metric \#3: Transitive method invocation coupling (\texttt{TMIC})}
 \todo{decide what to call each formula and whether to use indirect or transitive or something else}
-If we look at how the metric \texttt{MIC} is calculated, it could be sumarized as: find all the methods in $L_s$ that are reachable from $L_c$. Then, for each one, count how many method calls exist in $L_c$ that reach this method, and sum up the results. The main difference between \texttt{MIC} and \texttt{TMIC} is that the calls in $L_c$ will not directly execute a reachable method of $L_s$. The execution of a method in $L_s$ is indirect, since $L_s$ is not a direct dependency of $L_c$.
+If we look at how the metric $\verb|MIC|$ is calculated, it could be sumarized as: find all the methods in $L_s$ that are reachable from $L_c$. Then, for each one, count how many method calls exist in $L_c$ that reach this method, and sum up the results. The main difference between $\verb|MIC|$ and $\verb|TMIC|$ is that the calls in $L_c$ will not directly execute a reachable method of $L_s$. The execution of a method in $L_s$ is indirect, since $L_s$ is not a direct dependency of $L_c$.
 
 Therefore, the indirect coupling between two libraries $\verb|IMIC|(L_c, L_s)$ is calculated in the following manner. For each method from $L_s$ that is reachable from $L_c$ ($rm \in \verb|RM|(L_c,L_s)$), we count the number of method invocations in $L_c$ from which $rm$ is reachable, $\verb|nIR|(rm, L_c)$. The number of method invocations is multiplied by the number of polymorphic implementations of $rm$ in $L_s$ ($\verb|nDC|(rm, L_s)$).
 
@@ -369,7 +366,7 @@ The Transitive Method Invocation Coupling ($\verb|TMIC|(L_c,L_s)$), will be meas
   \verb|TMIC|(L_c,L_s) = \sum_{distance} \verb|IMIC|(L_c,L_s, distance) * \verb|PF|^{distance}
 \end{equation*}
 
-\paragraph{Metric 4: Transitive aggregation coupling (TAC)}
+\paragraph{Metric \#4: Transitive aggregation coupling (\texttt{TAC})}
 In the case of aggregation coupling for the transitive dependencies ($\verb|IAC|(L_c,L_s)$), it is calculated in the following way. For each class of $L_s$ that is reachable from $L_c$ through field declarations ($rc \in \verb|RC|(L_c,L_s)$), count all the field declarations from which it is reachable ($\verb|nFR|(rc,L_c)$), and multiply it by the number of descendants of the reachable class ($\verb|nDC|(rm, L_s)$).
 
 \begin{equation*}
@@ -377,7 +374,7 @@ In the case of aggregation coupling for the transitive dependencies ($\verb|IAC|
 \end{equation*}
 
 \todo{This formula will not be final until I have been able to measure it, so let's not look too much at it just yet :)}
-Just as in the case of \texttt{TMIC}, the distance between $L_c$ and $L_s$ should be considered. Therefore, for each distance, we take the number measured by $\verb|IAC|(L_c,L_s, distance)$, and multiply it by a propagation factor \verb|PF| to the power of the distance.
+Just as in the case of $\verb|TMIC|$, the distance between $L_c$ and $L_s$ should be considered. Therefore, for each distance, we take the number measured by $\verb|IAC|(L_c,L_s, distance)$, and multiply it by a propagation factor \verb|PF| to the power of the distance.
 
 \begin{equation*}
   \verb|TAC|(L_c,L_s) = \sum_{distance} \verb|IAC|(L_c,L_s, distance) * \verb|PF|^{distance}
