@@ -97,7 +97,7 @@ Within this criterion, there are three aspects to decide about: how, if at all, 
 In order to answer the first question, we focus on the method \texttt{mc} of \texttt{ClassB} in Figure \ref{fig:specialcases}. This method invokes \texttt{ma} of \texttt{ClassA}, inherited by \texttt{ClassB}.
 
 This is known as \textit{inheritance-based} coupling and is sometimes considered as a special case of coupling.
-When there is a change of an inherited method that a class uses, it  requires the same maintenance effort as the method that is not inherited. Therefore, our metrics  \textbf{include inheritance-based coupling without distinction}.
+When there is a change of an inherited method that a class uses, it  requires the same maintenance as the method that is not inherited. Therefore, our metrics  \textbf{include inheritance-based coupling without distinction}.
 
 % Next, we discuss about whether to account for polymorphism.
 In the case of the second question, polymorphism, we look at the methods of \texttt{ClassA}. This class contains an attribute of type \texttt{Class1}, which considering dynamic assignation of types could also be of type \texttt{Class2} or \texttt{Class3}.
