@@ -72,7 +72,7 @@ In addition, the research will also include experiments. These experiments will 
 Considering the current state of the art in the domain of this thesis project, the main contributions made by this research are the following:
 
 \begin{enumerate}
-	\item Creating a model for software dependencies including both, direct and transitive dependencies of a software product. The model includes modified coupling metrics to measure the coupling between two different software products, redefining the meaning and usage of the metrics.
+	\item Defining a model for software dependencies including both, direct and transitive dependencies of a software product. The model includes modified coupling metrics to measure the coupling between two different software products, redefining the meaning and usage of the metrics.
   \blankls
 
 	\item Evaluation and validation of the proposed metrics and model, by the means of a proof-of-concept tool to calculate the metrics.
@@ -85,7 +85,7 @@ Considering the current state of the art in the domain of this thesis project, t
 In this research we propose a model for software dependencies, containing metrics to measure different aspects of the dependencies. We develop a proof-of-concept tool to calculate and visualize the model.
 
 \subsection{Quantifying the dependencies}
-To the best of our knowledge, there are no papers about measuring the degree of dependency between two separate projects. However, the degree of dependency between two classes or modules of the same project has already been measured many times, using coupling metrics \cite{briand1999unified}.
+To the best of our knowledge, there are no references about measuring the degree of dependency between two separate projects. On the other hand, the degree of dependency between two classes or modules of the same project has already been measured, using coupling metrics \cite{briand1999unified}.
 
 Therefore, we propose re-using the already existing coupling metrics, meant to measure the coupling between units of the \textit{same} project and adapt them to measure coupling \textit{between} projects.
 
@@ -93,7 +93,7 @@ Therefore, we propose re-using the already existing coupling metrics, meant to m
 According to Poshyvanyk and Marcus in \cite{poshyvanyk2006conceptual}, there are six main groups of coupling metrics:
 
 \begin{itemize}
-  \item \textbf{Structural coupling metrics:} Measured directly from static source code analysis. Largely studied by the literature about coupling.
+  \item \textbf{Structural coupling metrics:} Measured directly from static source code analysis. Largely studied by the literature about coupling \cite{briand1999unified, poshyvanyk2006conceptual, briand1997investigation, eder1994coupling}.
 
   \item \textbf{Dynamic coupling measures:} Measured using dynamic code analysis. \textit{"Introduced as the refinement to existing coupling measures due to gaps in addressing polymorphism, dynamic binding, and the presence of unused code by static structural coupling measures"} \cite{poshyvanyk2006conceptual}.
 
