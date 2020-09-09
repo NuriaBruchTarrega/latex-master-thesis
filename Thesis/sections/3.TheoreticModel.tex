@@ -390,13 +390,7 @@ Just as in the case of $\verb|TMIC|$, the $\verb|distance|$ between $L_c$ and $L
 \subsection{Theoretical validation}
 
 \subsubsection{Transitive method invocation coupling}
-\begin{equation}
-  \verb|IMIC|(L_c,L_s) = \sum_{rm \in \verb|RM|(L_c,L_s)} \verb|nIR|(rm,L_c) * \verb|nP|(rm, L_s)
-\end{equation}
 
-\begin{equation}
-  \verb|TMIC|(L_c,L_s) = \sum_{distance} \verb|IMIC|(L_c,L_s, distance) * \verb|PF|^{distance}
-\end{equation}
 \paragraph{Property 1: Nonnegativity}
 Assume that nonnegativity does not hold for metric $\verb|TMIC|$. Then, there exists a client library $L_c$, and a server library $L_s$ such that $\verb|TMIC|(L_c, L_s) < 0$. According to equation \ref{eqn:tmic}, there is a $\verb|distance|$ for which either $\verb|IMIC|(L_c,L_s, \verb|distance|) < 0$ or $\verb|PF|^{\verb|distance|} < 0$. Since $\verb|distance|$ is a positive integer, and $\verb|PF| \in (0,1)$, the second option is not possible.
 
@@ -409,11 +403,30 @@ Assuming that $\verb|TMIC|$ does not fulfill property \textit{Null value}, there
 
 For $\verb|TMIC|(L_c, L_s) \neq 0$ to be true, according to equation \ref{eqn:imic}, there has to be a method $rm$ such that  $rm \in \verb|RM|(L_c,L_s)$. However, that would mean that $rm$ belongs to $L_s$, and is reachable from $L_c$, which constitutes a relation between $L_c$ and $L_s$, and contradicts $\verb|R|(L_c, L_s) = \emptyset$.
 
-Hence, the property \textit{null value} holds for metric $\verb|TMIC|$ . 
+Hence, the property \textit{null value} holds for metric $\verb|TMIC|$ .
 
 \paragraph{Property 3: Monotonicity}
+Let $L_c$ be a client library containing class $c_c$, and $c_c'$ be a class resulting from adding relationships with the server library $L_s$ to class $c_c$. Then, $\verb|R|(c_c, L_s) \subseteq \verb|R|(c_c', L_s)$. Let $L_c'$ be a client library resulting from replacing class $c_c$ by $c_c'$ in $L_c$. Therefore, $\verb|R|(L_c, L_s) \subseteq \verb|R|(L_c', L_s)$.
 
+If we assume that $\verb|TMIC|$ does not fulfill property \textit{Monotonicity}, it would be true that $\verb|TMIC|(L_c, L_s) > \verb|TMIC|(L_c', L_s)$. Therefore, for a certain distance, we have that $\verb|IMIC|(L_c,L_s) > \verb|IMIC|(L_c',L_s)$, which opens two possibilities. First, we have that $|\verb|RM|(L_c,L_s)| > |\verb|RM|(L_c',L_s)|$, which means that there are more methods from $L_s$ reachable from $L_c$ than from $L_c'$. This is not possible since, the only difference between $L_c$ and $L_c'$ is the substitution of class $c_c$ by class $c_c'$, which only adds relationships with $L_s$.
+
+The second option is that for a certain $rm \in \verb|RM|(L_c,L_s)$, and therefore also $rm \in \verb|RM|(L_c',L_s)$, such that   $\verb|nIR|(rm,L_c) > \verb|nIR|(rm,L_c')$. However, that means that in $L_c$ there are more method invocations that reach $rm$, than in $L_c'$. As discussed earlier, this constitutes a contradicion with the way $L_c'$ is created.
+
+Therefore, property 3 \textit{Monotonicity} holds for $\verb|TMIC|$.
+
+\begin{equation}
+  \verb|IMIC|(L_c,L_s) = \sum_{rm \in \verb|RM|(L_c,L_s)} \verb|nIR|(rm,L_c) * \verb|nP|(rm,L_s)
+\end{equation}
+
+\begin{equation}
+  \verb|TMIC|(L_c,L_s) = \sum_{distance} \verb|IMIC|(L_c,L_s, distance) * \verb|PF|^{distance}
+\end{equation}
 \paragraph{Property 4: Merging of classes}
+Let $L_c$ be a client library that includes the classes $c_1$ and $c_2$. Let $c'$ be a class such that $c_1 + c_2 = c'$ and $L_c'$ be a client library resulting from replacing $c_1$ and $c_2$ by $c'$ in $L_c$. If we assume that the property merging of classes does not hold for $\verb|TMIC|$, then $\verb|R|(c_1, L_s) \subseteq \verb|R|(c', L_s) \land \verb|R|(c_2, L_s) \subseteq \verb|R|(c', L_s)$ and $\verb|TMIC|(L_c, L_s) > \verb|TMIC|(L_c', L_s)$.
+
+Since the only difference between $L_c$ and $L_c'$ is the replacement of $c_1$ and $c_2$ by $c'$, there has to be a method invocation from $c_1$ or $c_2$ to a method $rm \in \verb|RM|(L_c,L_s)$, which is not included in $c'$. However, the method invocation has to be a relation included in $\verb|R|(c_1, L_s)$ or $\verb|R|(c_2, L_s)$, and we have that $\verb|R|(c_1, L_s) \subseteq \verb|R|(c', L_s) \land \verb|R|(c_2, L_s) \subseteq \verb|R|(c', L_s)$. Therefore it is a contradiction.
+
+Hence, the property \textit{Merging of classes} holds for $\verb|TMIC|$.
 
 \paragraph{Property 5: Merging of unconnected classes}
 
