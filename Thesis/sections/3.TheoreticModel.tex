@@ -1,7 +1,8 @@
 % !TEX root = ../main.tex
 \chapter{Dependency evaluation model}\label{ch:TheoreticModel}
 
-\section{Definition of coupling (RQ1.1)}\label{section:defCoupling}
+\section{Measuring the degree of dependency}\label{sect:degree-dependency}
+\subsection{Definition of coupling}\label{subsect:defCoupling}
 % IMPORTANT: Difference between direct and indirect coupling. Detecting Indirect Coupling Yang et al. 2005
 To measure the degree of dependency, we are going to define the characteristics of the coupling of the dependencies with a project. Following the six criteria in the framework defined by Briand et al. \cite{briand1999unified}, described in Section \ref{section:bg-coupling}, we are going to define the coupling to measure.
 
@@ -51,7 +52,7 @@ hypothesized to be the most relevant one \cite{briand1999unified}, therefore we 
 
 The second metric that we consider is \textbf{type 1: aggregation coupling}, for two main reasons. It is used as type 6 in the reviewed literature, and because in some cases, measuring method invocations may not be enough to understand how much maintenance a library dependency may need. There is the possibility that a class has an attribute of another class, but never calls a method that belongs to that class.
 
-The above-mentioned metrics are those that we initially consider in our work, and we will explain them in greater detail in Section~\ref{section:defMetrics}. Nevertheless, it might be necessary to include additional metrics, to account for other connection types.
+The above-mentioned metrics are those that we consider in our work, and we will explain them in greater detail in Section~\ref{section:defMetrics}. Nevertheless, it might be necessary to include additional metrics in the future, to account for other connection types.
 
 \paragraph{Criterion 2 - Locus of impact:}
 As explained in section \ref{section:bg-coupling}, Briand et al. \cite{briand1999unified} propose two options for the locus of impact: import and export. According to the definition of the problem, the goal of this measurement is to know how much a library depends on another. Therefore, the point of view of this evaluation is from the library that uses another one. Hence, the locus of impact of the coupling to be measured in this thesis is \textbf{import}. We measure the dependency from the point of view of the library that acts as a client of a server library.
@@ -126,10 +127,8 @@ All the metrics that are going to be used to measure the dependencies between li
     \label{table:metric-characteristics}
 \end{table}
 
-\section{Metrics for direct dependencies}
-
-\subsection{Formal definition of the metrics (RQ1.2)}\label{section:defMetrics}
-In this section, there is the formulation of the formal definition of the metrics. However, before the definitions, there is a brief discussion in which the definition of coupling of the proposed metrics are compared with the existing metrics in the literature described in Section \ref{section:bg-coupling}.
+\subsection{Metrics for direct dependencies}\label{section:defMetrics}
+In this section, there is the formulation of the formal definition of the metrics. However, before the definitions, there is a brief discussion in which the definition of coupling of the proposed metrics are compared with the existing metrics in the literature described in Section \ref{section:bg-coupling}. To end the section, the theoretical validation of the metrics is done by proving the five properties of coupling metrics.
 
 \subsubsection{Revisiting existing metrics}
 Once we have defined the coupling that is going to be measured by each of the metrics (see Table \ref{table:metric-characteristics}), we can compare it with the existing coupling metrics, according to Table \ref{table:coupling-metrics} in Section \ref{section:bg-coupling}.
@@ -170,7 +169,7 @@ Finally, \textit{ACAIC} and \textit{OCAIC} consider aggregation coupling with an
 
 \paragraph{Metric \#1: Direct method invocation coupling (\texttt{MIC})}
 The $\verb|MIC|$ metric measures the dependency between two libraries, one acting as client ($L_c$) and the other as server ($L_s$).
-Based on the granularity of the measure criterion discussed in Section~\ref{section:defCoupling}, this metric is calculated for each of the classes implemented in $L_c$, and for each of the methods implemented $\verb|M|(L_c)$ in these classes. For each implemented method  $m_c \in \verb|M|(L_c)$, we count the number of individual invocations to a method of $L_s$, denoted $\verb|nII|(m_c,L_s)$. For each method invocation made by the methods implemented in $L_c$, we count only the ones that are implemented in stable classes (not implemented in $L_c$). The set of stable methods invoked is denoted $\verb|SIM|(m_c)$.
+Based on the granularity of the measure criterion discussed in Section~\ref{subsect:defCoupling}, this metric is calculated for each of the classes implemented in $L_c$, and for each of the methods implemented $\verb|M|(L_c)$ in these classes. For each implemented method  $m_c \in \verb|M|(L_c)$, we count the number of individual invocations to a method of $L_s$, denoted $\verb|nII|(m_c,L_s)$. For each method invocation made by the methods implemented in $L_c$, we count only the ones that are implemented in stable classes (not implemented in $L_c$). The set of stable methods invoked is denoted $\verb|SIM|(m_c)$.
 
 \begin{equation}
 \label{eqn:mic}
@@ -206,7 +205,8 @@ classes implemented in $L_s$ ($\verb|C|(L_s)$). Finally, to count the  individua
     \verb|nDC|(c_s, L_s) = |\verb|DC|(c_s) \cap \verb|C|(L_s)|
 \end{equation}
 
-\subsection{Theoretical validation (RQ1.4)}
+\subsection{Theoretical validation}
+\unsure{Should I move the description of the properties to background, or is it fine here?}
 The theoretical validation of the metrics consists of demonstrating the properties of the metrics. The theoretical validation is necessary since it proves that the metrics share some properties with the attribute these are measuring, in this case coupling. In particular, for coupling metrics there are five properties defined by Briand et al. \cite{briand1996property} which have been largely used by the literature \cite{poshyvanyk2006conceptual, allen1999measuring, zhao2004measuring}.
 
 For the description of the properties, we use $\verb|Coupling|(L_c, L_s)$ to refer to both $\verb|AC|$ and $\verb|MIC|$, and $\verb|R|(L_c, L_s)$ to refer to the set of relationships between $L_c$ and $L_s$. $\verb|Coupling|(L_c, L_s)$ uses $\verb|R|(L_c, L_s)$ to evaluate the coupling between the two elements, but the way it is used differs per metric. The description of the properties is based on the description done by Briand et al. \cite{briand1996property} which was meant for coupling metrics that measure the coupling within an element, or between an element and all the other elements. Therefore, the description has been adapted for metrics that measure coupling between two different elements. In addition, since all the defined metrics measure import coupling, the definitions of the properties are focused on import coupling.
@@ -314,9 +314,8 @@ Therefore, $\verb|AC|(L_c, L_s) \neq \verb|AC|(L_c', L_s)$. According to propert
 
 Therefore, metric $\verb|AC|$ fulfills \textit{Merging of unconnected classes}.
 
-\section{Metrics for transitive dependencies}
-\subsection{Formal definition of the metrics (RQ1.2)}\label{section:defMetricsTransitive}
-In this section, the metrics to measure transtive dependencies will be described. First, the characteristics of the metrics, according to the criteria previously discussed and summarized in Table \ref{table:metric-characteristics}, are compared to the exisiting metrics described in section \ref{section:bg-coupling}. Next, some concepts involved in the formulation of the transitive metrics are explained. Finally, both metrics for transitive dependencies are formally defined.
+\subsection{Metrics for transitive dependencies}\label{subsect:defMetricsTransitive}
+In this section, the metrics to measure transtive dependencies will be described. First, the characteristics of the metrics, according to the criteria previously discussed and summarized in Table \ref{table:metric-characteristics}, are compared to the exisiting metrics described in section \ref{section:bg-coupling}. Next, some concepts involved in the formulation of the transitive metrics are explained. Then, there is a formal definition of the two metrics for transitive dependencies. Finally, the five properties of coupling metrics are demonstrated for the two metrics.
 
 \subsubsection{Revisiting existing metrics}
 In the set of metrics reviewed by Briand et al. \cite{briand1999unified} there is only one metric that does count indirect coupling, $RFC'$ (see Table \ref{table:coupling-metrics}). This metric also counts inheritance-based coupling and it is focused on the client element, just as the metrics \#3 and \#4 defined in Table \ref{table:metric-characteristics}. However, $RFC'$ is calculated at the class aggregation level, whereas the metric for this work are calculated at the library level. Furthermore, the strategy to count connections is E, which means that it counts the number of elements with which the class has a connection, not how many connections.
@@ -338,7 +337,7 @@ To measure the transitive dependencies, only those methods or classes of the tra
 \end{figure}
 
 \paragraph{Propagation Factor}
-The propagation represents how the impact of a change can spread across dependencies. In Figure \ref{fig:reachability}, a change in \texttt{Method3} would affect directly the client  library (\texttt{Lib1}). However, a change in \texttt{Method7}, affects first \texttt{Method3}, and then it can spread to \texttt{Method1}, in case it is not mitigated in \texttt{Method3}. This possible mitigation is accounted for by the Propagation Factor.
+The propagation represents how the impact of a change can spread across dependencies. In Figure \ref{fig:reachability}, a change in \texttt{Method3} would affect directly the client  library (\texttt{Lib1}). However, a change in \texttt{Method7}, affects first \texttt{Method3}, and then it can spread to \texttt{Method1}, in case it is not mitigated in \texttt{Method3}. This possible mitigation is accounted for by the \textit{Propagation Factor}.
 
 \subsubsection{Formal definition}
 
@@ -346,7 +345,7 @@ The propagation represents how the impact of a change can spread across dependen
 \todo{decide what to call each formula and whether to use indirect or transitive or something else}
 If we look at how the metric $\verb|MIC|$ is calculated, it could be sumarized as: find all the methods in $L_s$ that are reachable from $L_c$. Then, for each one, count how many method calls exist in $L_c$ that reach this method, and sum up the results. The main difference between $\verb|MIC|$ and $\verb|TMIC|$ is that the calls in $L_c$ will not directly execute a reachable method of $L_s$. The execution of a method in $L_s$ is indirect, since $L_s$ is not a direct dependency of $L_c$.
 
-Therefore, the indirect coupling between two libraries $\verb|IMIC|(L_c, L_s)$ is calculated in the following manner. For each method from $L_s$ that is reachable from $L_c$ ($rm \in \verb|RM|(L_c,L_s)$), we count the number of method invocations in $L_c$ from which $rm$ is reachable, $\verb|nIR|(rm, L_c)$. The number of method invocations is multiplied by the number of polymorphic implementations of $rm$ in $L_s$ ($\verb|nDC|(rm, L_s)$).
+Therefore, the indirect coupling between two libraries $\verb|IMIC|(L_c, L_s)$ is calculated in the following manner. For each method from $L_s$ that is reachable from $L_c$ throught method calls ($rm \in \verb|RM|(L_c,L_s)$), we count the number of method invocations in $L_c$ from which $rm$ is reachable, $\verb|nIR|(rm, L_c)$. The number of method invocations is multiplied by the number of polymorphic implementations of $rm$ in $L_s$ ($\verb|nDC|(rm, L_s)$).
 
 \begin{equation}
 \label{eqn:imic}
@@ -363,8 +362,9 @@ However, this formula does not consider propagation at all. Therefore, it is nec
 \end{center}
 \end{figure}
 
-Therefore, the previous formula for $|IMIC|(L_c,L_s)$ will be measured for a certain reachability distance. \todo{This formula will not be final until I have been able to measure it, so let's not look too much at it just yet :)}
+Therefore, the previous formula for $|IMIC|(L_c,L_s)$ will be measured for a certain reachability distance. \reminder{This formula will not be final until I have been able to measure it}
 The Transitive Method Invocation Coupling ($\verb|TMIC|(L_c,L_s)$), will be measured as follows. For each distance at which there is coupling between $L_c$ and $L_s$, sum up the coupling measured by $\verb|IMIC|(L_c,L_s, distance)$, multiplied by a propagation factor ($\verb|PF|$) to the power of the distance. Where $\verb|PF| \in (0,1)$.
+\unsure{Should this be to the power of (distance - 1)? This way, the distance = 1 (direct dependencies) are not mitigated by the propagation factor. Also, then distance = 2 (first level of transitivity) would only be mitigated once (which would correspond to the direct dependency)}
 
 \begin{equation}
 \label{eqn:tmic}
@@ -380,18 +380,31 @@ In the case of aggregation coupling for the transitive dependencies ($\verb|IAC|
 \end{equation}
 
 \todo{This formula will not be final until I have been able to measure it, so let's not look too much at it just yet :)}
-Just as in the case of $\verb|TMIC|$, the distance between $L_c$ and $L_s$ should be considered. Therefore, for each distance, we take the number measured by $\verb|IAC|(L_c,L_s, distance)$, and multiply it by a propagation factor \verb|PF| to the power of the distance.
+Just as in the case of $\verb|TMIC|$, the distance between $L_c$ and $L_s$ should be considered. Therefore, for each distance, we take the number measured by $\verb|IAC|(L_c,L_s, distance)$, and multiply it by a propagation factor $\verb|PF|$ to the power of the distance.
 
 \begin{equation}
 \label{eqn:tac}
   \verb|TAC|(L_c,L_s) = \sum_{distance} \verb|IAC|(L_c,L_s, distance) * \verb|PF|^{distance}
 \end{equation}
 
-\subsection{Theoretical validation (RQ1.4)}
+\subsection{Theoretical validation}
 
 \subsubsection{Transitive method invocation coupling}
+\begin{equation}
+\label{eqn:imic}
+  \verb|IMIC|(L_c,L_s) = \sum_{rm \in \verb|RM|(L_c,L_s)} \verb|nIR|(rm,L_c) * \verb|nP|(rm, L_s)
+\end{equation}
 
+\begin{equation}
+\label{eqn:tmic}
+  \verb|TMIC|(L_c,L_s) = \sum_{distance} \verb|IMIC|(L_c,L_s, distance) * \verb|PF|^{distance}
+\end{equation}
 \paragraph{Property 1: Nonnegativity}
+Assume that nonnegativity does not hold for metric $\verb|TMIC|$. Then, there exists a client library $L_c$, and a server library $L_s$ such that $\verb|TMIC|(L_c, L_s) < 0$. According to equation \ref{eqn:tmic}, there is a $distance$ for which either $\verb|IMIC|(L_c,L_s, distance) < 0$ or $\verb|PF|^{distance} < 0$. Since $distance$ is a positive integer, and $\verb|PF| \in (0,1)$, the second option is not possible.
+
+Let's assume that $\verb|IMIC|(L_c,L_s, distance) < 0$. Looking at the equation \ref{eqn:imic}, we see that there has to be at least one method, $rm$, from $L_s$ and reachable from $L_c$ ($rm \in \verb|RM|(L_c,L_s)$), such that $\verb|nIR|(rm,L_c) < 0$ or $\verb|nP|(rm, L_s) < 0$. Since $\verb|nP|(rm, L_s)$ corresponds to the number of polymorphic implementations of $rm$ in $L_s$, and we know that $rm$ belongs to $L_s$, then $\verb|nP|(rm, L_s) \geq 1$. Finally, for $\verb|nIR|(rm,L_c) < 0$ to be true, there should be less than zero method invocations in $L_c$ from which $rm$ is reachable. However, since $rm \in \verb|RM|(L_c,L_s)$, and $\verb|RM|(L_c,L_s)$ corresponds to the set of methods from $L_s$ that are reachable from $L_c$, we have that $\verb|nIR|(rm,L_c) \geq 1$, which constitutes a contradition.
+
+Therefore, the metric $\verb|TMIC|$ fulfills the property \textit{Nonnegativity}.
 
 \paragraph{Property 2: Null value}
 
