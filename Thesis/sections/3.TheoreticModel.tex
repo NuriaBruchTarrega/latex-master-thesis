@@ -271,7 +271,7 @@ Let $L_c$ be a client library that includes the classes $c_1$ and $c_2$. Let $c'
 Therefore, there is a method $m_c$ which is implemented in $c_1$ or $c_2$ such that contains a call to a method $m_s$ which does not exist in any of the methods implemented in $c'$. This is a contradition with the initial affirmation $\verb|R|(c_1, L_s) \subseteq \verb|R|(c', L_s) \land \verb|R|(c_2, L_s) \subseteq \verb|R|(c', L_s)$. Therefore, the property \textit{Merging of classes} holds for metric $\verb|MIC|$.
 
 \paragraph{Property 5: Merging of unconnected classes}
-Let $L_c$ be a client library and $L_s$ be a server library. Let $c_1$ and $c_2$ be classes implemented in $L_c$, such that $\verb|R|(c_1, L_s) \cap \verb|R|(c_2, L_s) = \emptyset$. Let $c'$ be a class such that $c_1 + c_2 = c'$. Therefore, $\verb|R|(c_1, L_s) + \verb|R|(c_2, L_s) = \verb|R|(c', L_s)$. Let $L_c'$ be a client library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. We assume that the metric \verb|MIC| does not fulfill this property.
+Let $L_c$ be a client library and $L_s$ be a server library. Let $c_1$ and $c_2$ be classes implemented in $L_c$, such that $\verb|R|(c_1, L_s) \cap \verb|R|(c_2, L_s) = \emptyset$. Let $c'$ be a class such that $c_1 + c_2 = c'$. Therefore, $\verb|R|(c_1, L_s) + \verb|R|(c_2, L_s) = \verb|R|(c', L_s)$. Let $L_c'$ be a client library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. We assume that the metric $\verb|MIC|$ does not fulfill this property.
 
 Therefore, $\verb|MIC|(L_c, L_s) \neq \verb|MIC|(L_c', L_s)$. According to property \textit{Merging of classes}, $\verb|MIC|(L_c, L_s)$ cannot be less than $\verb|MIC|(L_c', L_s)$. Thus, $\verb|MIC|(L_c, L_s) > \verb|MIC|(L_c', L_s)$. This means that there is a $m_c$ implemented in $c_1$ or $c_2$ that contains an invocation to a method $m_s$ implemented in $L_s$, which is not included in $c'$. This contradicts that $\verb|R|(c_1, L_s) + \verb|R|(c_2, L_s) = \verb|R|(c', L_s)$.
 
@@ -414,13 +414,6 @@ The second option is that for a certain $rm \in \verb|RM|(L_c,L_s)$, and therefo
 
 Therefore, property 3 \textit{Monotonicity} holds for $\verb|TMIC|$.
 
-\begin{equation}
-  \verb|IMIC|(L_c,L_s) = \sum_{rm \in \verb|RM|(L_c,L_s)} \verb|nIR|(rm,L_c) * \verb|nP|(rm,L_s)
-\end{equation}
-
-\begin{equation}
-  \verb|TMIC|(L_c,L_s) = \sum_{distance} \verb|IMIC|(L_c,L_s, distance) * \verb|PF|^{distance}
-\end{equation}
 \paragraph{Property 4: Merging of classes}
 Let $L_c$ be a client library that includes the classes $c_1$ and $c_2$. Let $c'$ be a class such that $c_1 + c_2 = c'$ and $L_c'$ be a client library resulting from replacing $c_1$ and $c_2$ by $c'$ in $L_c$. If we assume that the property merging of classes does not hold for $\verb|TMIC|$, then $\verb|R|(c_1, L_s) \subseteq \verb|R|(c', L_s) \land \verb|R|(c_2, L_s) \subseteq \verb|R|(c', L_s)$ and $\verb|TMIC|(L_c, L_s) > \verb|TMIC|(L_c', L_s)$.
 
@@ -429,6 +422,13 @@ Since the only difference between $L_c$ and $L_c'$ is the replacement of $c_1$ a
 Hence, the property \textit{Merging of classes} holds for $\verb|TMIC|$.
 
 \paragraph{Property 5: Merging of unconnected classes}
+Let $L_c$ be a client library and $L_s$ be a server library. Let $c_1$ and $c_2$ be classes implemented in $L_c$, such that $\verb|R|(c_1, L_s) \cap \verb|R|(c_2, L_s) = \emptyset$. Let $c'$ be a class such that $c_1 + c_2 = c'$. Therefore, $\verb|R|(c_1, L_s) + \verb|R|(c_2, L_s) = \verb|R|(c', L_s)$. Let $L_c'$ be a client library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. We assume that the metric $\verb|TMIC|$ does not fulfill this property.
+
+Therefore, $\verb|TMIC|(L_c, L_s) \neq \verb|TMIC|(L_c', L_s)$. According to property \textit{Merging of classes}, $\verb|TMIC|(L_c, L_s) \geq \verb|TMIC|(L_c', L_s)$. Hence, $\verb|TMIC|(L_c, L_s) > \verb|TMIC|(L_c', L_s)$.
+
+Then, there is a method invocation is $c_1$ or $c_2$ which is not included in $c$, which contradicts that $\verb|R|(c_1, L_s) + \verb|R|(c_2, L_s) = \verb|R|(c', L_s)$.
+
+We conclude that $\verb|TMIC|$ fulfills property \textit{Merging of unconnected classes}.
 
 \subsubsection{Transitive aggregation coupling}
 
