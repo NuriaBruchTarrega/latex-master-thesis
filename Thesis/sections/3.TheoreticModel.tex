@@ -252,7 +252,7 @@ The other option is that there is a method $m_s \in \verb|SIM|(m_c)$ such that $
 Therefore, the initial assumption is not true, and \textit{Nonnegativity} holds for the metric $\verb|MIC|$.
 
 \paragraph{Property 2: Null value}
-Assuming there is no null value for metric $\verb|MIC|$, there is a client library $L_c$ and a server library $L_s$ such that $\verb|R|(L_c, L_s) = 0$, and $\verb|MIC|(L_c, L_s)	\neq 0$. As non-negativity holds, we have that $\verb|MIC|(L_c, L_s) \ge 0$. Therefore, $\verb|MIC|(L_c, L_s) > 0$. Hence, following equation \ref{eqn:mic} there is a client method $m_c \in M(L_c)$ such that $\verb|nII|(m_c, L_s) > 0$.
+Assuming there is no null value for metric $\verb|MIC|$, there is a client library $L_c$ and a server library $L_s$ such that $\verb|R|(L_c, L_s) = \emptyset$, and $\verb|MIC|(L_c, L_s)	\neq 0$. As non-negativity holds, we have that $\verb|MIC|(L_c, L_s) \ge 0$. Therefore, $\verb|MIC|(L_c, L_s) > 0$. Hence, following equation \ref{eqn:mic} there is a client method $m_c \in M(L_c)$ such that $\verb|nII|(m_c, L_s) > 0$.
 
 Thus, according to equation \ref{eqn:mic-nii}, there is a server method $m_s \in \verb|SIM|(m_c)$, such that $\verb|nI|(m_c, m_s) > 0$ and $\verb|nP|(m_s, L_s) > 0$. Therefore, the method $m_s$ is called at least one time by the method $m_c$ from the client library $L_c$, and at the same time is implemented by the server library $L_s$, which means that there is a relationship between $L_c$ and $L_s$, which contradicts the original assumption that $\verb|R|(L_c, L_s) = 0$.
 
@@ -362,13 +362,13 @@ However, this formula does not consider propagation at all. Therefore, it is nec
 \end{center}
 \end{figure}
 
-Therefore, the previous formula for $|IMIC|(L_c,L_s)$ will be measured for a certain reachability distance. \reminder{This formula will not be final until I have been able to measure it}
-The Transitive Method Invocation Coupling ($\verb|TMIC|(L_c,L_s)$), will be measured as follows. For each distance at which there is coupling between $L_c$ and $L_s$, sum up the coupling measured by $\verb|IMIC|(L_c,L_s, distance)$, multiplied by a propagation factor ($\verb|PF|$) to the power of the distance. Where $\verb|PF| \in (0,1)$.
+Therefore, the previous formula for $|IMIC|(L_c,L_s)$ will be measured for a certain reachability $\verb|distance|$. \reminder{This formula will not be final until I have been able to measure it}
+The Transitive Method Invocation Coupling ($\verb|TMIC|(L_c,L_s)$), will be measured as follows. For each $\verb|distance|$ at which there is coupling between $L_c$ and $L_s$, sum up the coupling measured by $\verb|IMIC|(L_c,L_s, \verb|distance|)$, multiplied by a propagation factor ($\verb|PF|$) to the power of the $\verb|distance|$. Where $\verb|PF| \in (0,1)$.
 \unsure{Should this be to the power of (distance - 1)? This way, the distance = 1 (direct dependencies) are not mitigated by the propagation factor. Also, then distance = 2 (first level of transitivity) would only be mitigated once (which would correspond to the direct dependency)}
 
 \begin{equation}
 \label{eqn:tmic}
-  \verb|TMIC|(L_c,L_s) = \sum_{distance} \verb|IMIC|(L_c,L_s, distance) * \verb|PF|^{distance}
+  \verb|TMIC|(L_c,L_s) = \sum_{\verb|distance|} \verb|IMIC|(L_c,L_s, \verb|distance|) * \verb|PF|^{\verb|distance|}
 \end{equation}
 
 \paragraph{Metric \#4: Transitive aggregation coupling (\texttt{TAC})}
@@ -380,33 +380,36 @@ In the case of aggregation coupling for the transitive dependencies ($\verb|IAC|
 \end{equation}
 
 \todo{This formula will not be final until I have been able to measure it, so let's not look too much at it just yet :)}
-Just as in the case of $\verb|TMIC|$, the distance between $L_c$ and $L_s$ should be considered. Therefore, for each distance, we take the number measured by $\verb|IAC|(L_c,L_s, distance)$, and multiply it by a propagation factor $\verb|PF|$ to the power of the distance.
+Just as in the case of $\verb|TMIC|$, the $\verb|distance|$ between $L_c$ and $L_s$ should be considered. Therefore, for each $\verb|distance|$, we take the number measured by $\verb|IAC|(L_c,L_s, \verb|distance|)$, and multiply it by a propagation factor $\verb|PF|$ to the power of the $\verb|distance|$.
 
 \begin{equation}
 \label{eqn:tac}
-  \verb|TAC|(L_c,L_s) = \sum_{distance} \verb|IAC|(L_c,L_s, distance) * \verb|PF|^{distance}
+  \verb|TAC|(L_c,L_s) = \sum_{\verb|distance|} \verb|IAC|(L_c,L_s, \verb|distance|) * \verb|PF|^{\verb|distance|}
 \end{equation}
 
 \subsection{Theoretical validation}
 
 \subsubsection{Transitive method invocation coupling}
 \begin{equation}
-\label{eqn:imic}
   \verb|IMIC|(L_c,L_s) = \sum_{rm \in \verb|RM|(L_c,L_s)} \verb|nIR|(rm,L_c) * \verb|nP|(rm, L_s)
 \end{equation}
 
 \begin{equation}
-\label{eqn:tmic}
   \verb|TMIC|(L_c,L_s) = \sum_{distance} \verb|IMIC|(L_c,L_s, distance) * \verb|PF|^{distance}
 \end{equation}
 \paragraph{Property 1: Nonnegativity}
-Assume that nonnegativity does not hold for metric $\verb|TMIC|$. Then, there exists a client library $L_c$, and a server library $L_s$ such that $\verb|TMIC|(L_c, L_s) < 0$. According to equation \ref{eqn:tmic}, there is a $distance$ for which either $\verb|IMIC|(L_c,L_s, distance) < 0$ or $\verb|PF|^{distance} < 0$. Since $distance$ is a positive integer, and $\verb|PF| \in (0,1)$, the second option is not possible.
+Assume that nonnegativity does not hold for metric $\verb|TMIC|$. Then, there exists a client library $L_c$, and a server library $L_s$ such that $\verb|TMIC|(L_c, L_s) < 0$. According to equation \ref{eqn:tmic}, there is a $\verb|distance|$ for which either $\verb|IMIC|(L_c,L_s, \verb|distance|) < 0$ or $\verb|PF|^{\verb|distance|} < 0$. Since $\verb|distance|$ is a positive integer, and $\verb|PF| \in (0,1)$, the second option is not possible.
 
-Let's assume that $\verb|IMIC|(L_c,L_s, distance) < 0$. Looking at the equation \ref{eqn:imic}, we see that there has to be at least one method, $rm$, from $L_s$ and reachable from $L_c$ ($rm \in \verb|RM|(L_c,L_s)$), such that $\verb|nIR|(rm,L_c) < 0$ or $\verb|nP|(rm, L_s) < 0$. Since $\verb|nP|(rm, L_s)$ corresponds to the number of polymorphic implementations of $rm$ in $L_s$, and we know that $rm$ belongs to $L_s$, then $\verb|nP|(rm, L_s) \geq 1$. Finally, for $\verb|nIR|(rm,L_c) < 0$ to be true, there should be less than zero method invocations in $L_c$ from which $rm$ is reachable. However, since $rm \in \verb|RM|(L_c,L_s)$, and $\verb|RM|(L_c,L_s)$ corresponds to the set of methods from $L_s$ that are reachable from $L_c$, we have that $\verb|nIR|(rm,L_c) \geq 1$, which constitutes a contradition.
+Let's assume that $\verb|IMIC|(L_c,L_s, \verb|distance|) < 0$. Looking at the equation \ref{eqn:imic}, we see that there has to be at least one method, $rm$, from $L_s$ and reachable from $L_c$ ($rm \in \verb|RM|(L_c,L_s)$), such that $\verb|nIR|(rm,L_c) < 0$ or $\verb|nP|(rm, L_s) < 0$. Since $\verb|nP|(rm, L_s)$ corresponds to the number of polymorphic implementations of $rm$ in $L_s$, and we know that $rm$ belongs to $L_s$, then $\verb|nP|(rm, L_s) \geq 1$. Finally, for $\verb|nIR|(rm,L_c) < 0$ to be true, there should be less than zero method invocations in $L_c$ from which $rm$ is reachable. However, since $rm \in \verb|RM|(L_c,L_s)$, and $\verb|RM|(L_c,L_s)$ corresponds to the set of methods from $L_s$ that are reachable from $L_c$, we have that $\verb|nIR|(rm,L_c) \geq 1$, which constitutes a contradition.
 
 Therefore, the metric $\verb|TMIC|$ fulfills the property \textit{Nonnegativity}.
 
 \paragraph{Property 2: Null value}
+Assuming that $\verb|TMIC|$ does not fulfill property \textit{Null value}, there exists a client library $L_c$, and a server library $L_s$ such that $\verb|R|(L_c, L_s) = \emptyset$ and $\verb|TMIC|(L_c, L_s) \neq 0$.
+
+For $\verb|TMIC|(L_c, L_s) \neq 0$ to be true, according to equation \ref{eqn:imic}, there has to be a method $rm$ such that  $rm \in \verb|RM|(L_c,L_s)$. However, that would mean that $rm$ belongs to $L_s$, and is reachable from $L_c$, which constitutes a relation between $L_c$ and $L_s$, and contradicts $\verb|R|(L_c, L_s) = \emptyset$.
+
+Hence, the property \textit{null value} holds for metric $\verb|TMIC|$ . 
 
 \paragraph{Property 3: Monotonicity}
 
