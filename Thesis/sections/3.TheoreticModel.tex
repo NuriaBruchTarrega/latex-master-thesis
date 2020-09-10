@@ -448,9 +448,19 @@ Let's assume that $\verb|TAC|$ does not fulfill property \textit{Null value}. Th
 
 If $\verb|TAC|(L_c, L_s) \neq 0$ then, as stated in equation \ref{eqn:iac}, there has to be a class $rc$ such that  $rc \in \verb|RC|(L_c,L_s)$. However, if $rc \in \verb|RC|(L_c,L_s)$, then $rc$ belongs to $L_s$, and is reachable from $L_c$. This creates a relation between $L_c$ and $L_s$, and therefore contradicts $\verb|R|(L_c, L_s) = \emptyset$.
 
-In conclusion, the property \textit{Null value} holds for metric $\verb|TAC|$ .
+In conclusion, the property \textit{Null value} holds for metric $\verb|TAC|$.
 
 \paragraph{Property 3: Monotonicity}
+Assuming that property \textit{Monotonicity} does not hold for metric $\verb|TAC|$, let $L_c$ be a client library containing class $c_c$, and $L_s$ be a server library. Also, let $c_c'$ be the resulting class of adding new relationships with $L_s$ to class $c_c$. Then, $\verb|R|(c_c, L_s) \subseteq \verb|R|(c_c', L_s)$. Let $L_c'$ be the client library resulting from replacing class $c_c$ by $c_c'$ in $L_c$. Therefore, $\verb|R|(L_c, L_s) \subseteq \verb|R|(L_c', L_s)$.
+
+Since $\verb|TAC|$ does not fulfill property \textit{Monotonicity}, we have that $\verb|TAC|(L_c, L_s) > \verb|TAC|(L_c', L_s)$. Hence, for a certain distance, it is true that $\verb|IAC|(L_c,L_s) > \verb|IAC|(L_c',L_s)$, according to equation \ref{eqn:tac}. As equation \ref{eqn:iac} indicates, this can be true in two cases.
+
+The first option is $|\verb|RC|(L_c,L_s)| > |\verb|RC|(L_c',L_s)|$.
+In other words, there are more classes from $L_s$ reachable from $L_c$ than from $L_c'$. Since the only difference between $L_c$ and $L_c'$ is the replacement of class $c_c$ by $c_c'$, and according to the definition of class $c_c'$, this is not possible.
+
+Therefore, the last option is that there is a class $rc \in \verb|RC|(L_c,L_s) \land rm \in \verb|RM|(L_c',L_s)$, such that   $\verb|nFR|(rc,L_c) > \verb|nFR|(rc,L_c')$. This implies that the number of field declarations that reach $rc$ in $L_c$is greater than in $L_c'$, which is a contradicion with the definition of $L_c'$.
+
+Therefore, property \textit{Monotonicity} holds for $\verb|TAC|$.
 
 \paragraph{Property 4: Merging of classes}
 
