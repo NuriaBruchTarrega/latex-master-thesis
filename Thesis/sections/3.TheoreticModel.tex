@@ -444,6 +444,11 @@ Finally, if $\verb|nFR|(rc,L_c) < 0$ is true, there are less than zero field dec
 Therefore, the property \textit{Nonnegativity} holds for metric $\verb|TAC|$.
 
 \paragraph{Property 2: Null value}
+Let's assume that $\verb|TAC|$ does not fulfill property \textit{Null value}. Therefore, there exists a client library $L_c$, and a server library $L_s$ such that $\verb|R|(L_c, L_s) = \emptyset$ and $\verb|TAC|(L_c, L_s) \neq 0$.
+
+If $\verb|TAC|(L_c, L_s) \neq 0$ then, as stated in equation \ref{eqn:iac}, there has to be a class $rc$ such that  $rc \in \verb|RC|(L_c,L_s)$. However, if $rc \in \verb|RC|(L_c,L_s)$, then $rc$ belongs to $L_s$, and is reachable from $L_c$. This creates a relation between $L_c$ and $L_s$, and therefore contradicts $\verb|R|(L_c, L_s) = \emptyset$.
+
+In conclusion, the property \textit{Null value} holds for metric $\verb|TAC|$ .
 
 \paragraph{Property 3: Monotonicity}
 
