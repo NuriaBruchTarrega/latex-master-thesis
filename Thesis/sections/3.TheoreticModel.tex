@@ -463,5 +463,10 @@ Therefore, the last option is that there is a class $rc \in \verb|RC|(L_c,L_s) \
 Therefore, property \textit{Monotonicity} holds for $\verb|TAC|$.
 
 \paragraph{Property 4: Merging of classes}
+Let $L_c$ be a client library, and let classes $c_1$ and $c_2$ be classes implemented in $L_c$. Also, let $c'$, created as follows $c' = c_1 + c_2$, and $L_c'$ be a client library based on $L_c$ in which $c_1$ and $c_2$ have been replaced by $c'$. Assuming \textit{merging of classes} does not hold for $\verb|TAC|$, we have that $\verb|R|(c_1, L_s) \subseteq \verb|R|(c', L_s) \land \verb|R|(c_2, L_s) \subseteq \verb|R|(c', L_s) \land \verb|TAC|(L_c, L_s) > \verb|TAC|(L_c', L_s)$.
+
+$L_c$ and $L_c'$ are only different in the replacement of $c_1$ and $c_2$ by $c'$. Hence, there has to be a field declaration from $c_1$ or $c_2$ which reaches a class $rc \in \verb|RC|(L_c,L_s)$, and is not found in $c'$. However, the reachability through a field declaration is a relation included in $\verb|R|(c_1, L_s)$ or $\verb|R|(c_2, L_s)$, and we have that $\verb|R|(c_1, L_s) \subseteq \verb|R|(c', L_s) \land \verb|R|(c_2, L_s) \subseteq \verb|R|(c', L_s)$, which constitutes a contradiction.
+
+Therefore, $\verb|TAC|$ fulfills property \textit{Merging of classes}.
 
 \paragraph{Property 5: Merging of unconnected classes}
