@@ -408,7 +408,9 @@ Hence, the property \textit{null value} holds for metric $\verb|TMIC|$ .
 \paragraph{Property 3: Monotonicity}
 Let $L_c$ be a client library containing class $c_c$, and $c_c'$ be a class resulting from adding relationships with the server library $L_s$ to class $c_c$. Then, $\verb|R|(c_c, L_s) \subseteq \verb|R|(c_c', L_s)$. Let $L_c'$ be a client library resulting from replacing class $c_c$ by $c_c'$ in $L_c$. Therefore, $\verb|R|(L_c, L_s) \subseteq \verb|R|(L_c', L_s)$.
 
-If we assume that $\verb|TMIC|$ does not fulfill property \textit{Monotonicity}, it would be true that $\verb|TMIC|(L_c, L_s) > \verb|TMIC|(L_c', L_s)$. Therefore, for a certain distance, we have that $\verb|IMIC|(L_c,L_s) > \verb|IMIC|(L_c',L_s)$, which opens two possibilities. First, we have that $|\verb|RM|(L_c,L_s)| > |\verb|RM|(L_c',L_s)|$, which means that there are more methods from $L_s$ reachable from $L_c$ than from $L_c'$. This is not possible since, the only difference between $L_c$ and $L_c'$ is the substitution of class $c_c$ by class $c_c'$, which only adds relationships with $L_s$.
+If we assume that $\verb|TMIC|$ does not fulfill property \textit{Monotonicity}, it would be true that $\verb|TMIC|(L_c, L_s) > \verb|TMIC|(L_c', L_s)$. Therefore, for a certain distance, we have that $\verb|IMIC|(L_c,L_s) > \verb|IMIC|(L_c',L_s)$, according to equation \ref{eqn:tmic}. According to the equation \ref{eqn:imic}, this opens two possibilities.
+
+First, we have that $|\verb|RM|(L_c,L_s)| > |\verb|RM|(L_c',L_s)|$, which means that there are more methods from $L_s$ reachable from $L_c$ than from $L_c'$. This is not possible since, the only difference between $L_c$ and $L_c'$ is the substitution of class $c_c$ by class $c_c'$, which only adds relationships with $L_s$.
 
 The second option is that for a certain $rm \in \verb|RM|(L_c,L_s)$, and therefore also $rm \in \verb|RM|(L_c',L_s)$, such that   $\verb|nIR|(rm,L_c) > \verb|nIR|(rm,L_c')$. However, that means that in $L_c$ there are more method invocations that reach $rm$, than in $L_c'$. As discussed earlier, this constitutes a contradicion with the way $L_c'$ is created.
 
@@ -433,6 +435,13 @@ We conclude that $\verb|TMIC|$ fulfills property \textit{Merging of unconnected 
 \subsubsection{Transitive aggregation coupling}
 
 \paragraph{Property 1: Nonnegativity}
+Assuming that nonnegativity does not hold for metric $\verb|TAC|$, there exists a client library $L_c$, and a server library $L_s$ such that $\verb|TAC|(L_c, L_s) < 0$. In line with equation \ref{eqn:tac}, there is a $\verb|distance|$ for which two things can happen. First, $\verb|PF|^{\verb|distance|} < 0$. However, since $\verb|distance|$ is a positive integer, and $\verb|PF| \in (0,1)$, this is not possible.
+
+The scond option is that $\verb|IAC|(L_c,L_s, \verb|distance|) < 0$. Looking at the equation \ref{eqn:iac}, we see that there has to be at least one class, $rc \in \verb|RC|(L_c,L_s)$, that belongs to $L_s$ and is reachable from $L_c$, such that $\verb|nFR|(rc,L_c) < 0$ or $\verb|nDC|(rm, L_s) < 0$. $\verb|nDC|(rm, L_s)$ is the number of descendants of $rc$ in $L_s$. Ad we know that $rc$ belongs to $L_s$, we have that $\verb|nDC|(rm, L_s) \geq 1$.
+
+Finally, if $\verb|nFR|(rc,L_c) < 0$ is true, there are less than zero field declarations in $L_c$ from which $rc$ is reachable. However, since $rc \in \verb|RC|(L_c,L_s)$, and $\verb|RC|(L_c,L_s)$ corresponds to the set of classes from $L_s$ that are reachable from $L_c$ through field declarations, we have that $\verb|nFR|(rc,L_c) \geq 1$, which constitutes a contradition.
+
+Therefore, the property \textit{Nonnegativity} holds for metric $\verb|TAC|$.
 
 \paragraph{Property 2: Null value}
 
