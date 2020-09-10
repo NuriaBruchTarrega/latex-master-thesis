@@ -205,7 +205,7 @@ classes implemented in $L_s$ ($\verb|C|(L_s)$). Finally, to count the  individua
     \verb|nDC|(c_s, L_s) = |\verb|DC|(c_s) \cap \verb|C|(L_s)|
 \end{equation}
 
-\subsection{Theoretical validation}
+\subsubsection{Theoretical validation}
 \unsure{Should I move the description of the properties to background, or is it fine here?}
 The theoretical validation of the metrics consists of demonstrating the properties of the metrics. The theoretical validation is necessary since it proves that the metrics share some properties with the attribute these are measuring, in this case coupling. In particular, for coupling metrics there are five properties defined by Briand et al. \cite{briand1996property} which have been largely used by the literature \cite{poshyvanyk2006conceptual, allen1999measuring, zhao2004measuring}.
 
@@ -239,7 +239,7 @@ When measuring the coupling between a client library and a server library, the t
 
 Let $L_c$ be a client library and $c_1, c_2 \in L_c$ two classes from $L_c$. Let $c'$ be the class that is the union of  $c_1$ and $c_2$, and $L_c'$ be the library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. If there are no relationships between $c_1$ and $c_2$, then, $\verb|Coupling|(c_1) + \verb|Coupling|(c_2) \ge \verb|Coupling|(c')$ and $\verb|Coupling|(C) \ge \verb|Coupling|(C')$.
 
-\subsubsection{Direct method invocation coupling}
+\subsubsection{Theoretical validation: MIC}
 
 \paragraph{Property 1: Nonnegativity}
 If we assume that the metric $\verb|MIC|$ does not fulfill the property Nonnegativity, there should be a client library $L_s$ and a server library $L_c$ such that $\verb|MIC|(L_c, L_s) < 0$.
@@ -277,7 +277,7 @@ Therefore, $\verb|MIC|(L_c, L_s) \neq \verb|MIC|(L_c', L_s)$. According to prope
 
 Therefore, property \textit{Merging of unconnected classes} holds for metric $\verb|MIC|$.
 
-\subsubsection{Direct aggregation coupling}
+\subsubsection{Theoretical validation: AC}
 
 \paragraph{Property 1: Nonnegativity}
 Supose that the metric $\verb|AC|$ does not have the nonnegativity property. Thus, there is a client library $L_c$ and a server library $L_s$ such that $\verb|AC|(L_c, L_s) < 0$. Then, according to equation \ref{eqn:ac} there is a client class $c_c \in \verb|C|(L_c)$ and a server class $c_s \in \verb|SAT|(c_c)$ such that either $\verb|NA|(c_c, c_s)$ or $\verb|nDC|(c_s, L_s)$ have a negative value.
@@ -379,7 +379,7 @@ In the case of aggregation coupling for the transitive dependencies ($\verb|IAC|
   \verb|IAC|(L_c,L_s) = \sum_{rc \in \verb|RC|(L_c,L_s)} \verb|nFR|(rc,L_c) * \verb|nDC|(rm, L_s)
 \end{equation}
 
-\todo{This formula will not be final until I have been able to measure it, so let's not look too much at it just yet :)}
+\todo{This formula will not be final until I have been able to measure it}
 Just as in the case of $\verb|TMIC|$, the $\verb|distance|$ between $L_c$ and $L_s$ should be considered. Therefore, for each $\verb|distance|$, we take the number measured by $\verb|IAC|(L_c,L_s, \verb|distance|)$, and multiply it by a propagation factor $\verb|PF|$ to the power of the $\verb|distance|$.
 
 \begin{equation}
@@ -387,9 +387,7 @@ Just as in the case of $\verb|TMIC|$, the $\verb|distance|$ between $L_c$ and $L
   \verb|TAC|(L_c,L_s) = \sum_{\verb|distance|} \verb|IAC|(L_c,L_s, \verb|distance|) * \verb|PF|^{\verb|distance|}
 \end{equation}
 
-\subsection{Theoretical validation}
-
-\subsubsection{Transitive method invocation coupling}
+\subsubsection{Theoretical validation: TMIC}
 
 \paragraph{Property 1: Nonnegativity}
 Assume that nonnegativity does not hold for metric $\verb|TMIC|$. Then, there exists a client library $L_c$, and a server library $L_s$ such that $\verb|TMIC|(L_c, L_s) < 0$. According to equation \ref{eqn:tmic}, there is a $\verb|distance|$ for which either $\verb|IMIC|(L_c,L_s, \verb|distance|) < 0$ or $\verb|PF|^{\verb|distance|} < 0$. Since $\verb|distance|$ is a positive integer, and $\verb|PF| \in (0,1)$, the second option is not possible.
@@ -432,7 +430,7 @@ Then, there is a method invocation is $c_1$ or $c_2$ which is not included in $c
 
 We conclude that $\verb|TMIC|$ fulfills property \textit{Merging of unconnected classes}.
 
-\subsubsection{Transitive aggregation coupling}
+\subsubsection{Theoretical validation: TAC}
 
 \paragraph{Property 1: Nonnegativity}
 Assuming that nonnegativity does not hold for metric $\verb|TAC|$, there exists a client library $L_c$, and a server library $L_s$ such that $\verb|TAC|(L_c, L_s) < 0$. In line with equation \ref{eqn:tac}, there is a $\verb|distance|$ for which two things can happen. First, $\verb|PF|^{\verb|distance|} < 0$. However, since $\verb|distance|$ is a positive integer, and $\verb|PF| \in (0,1)$, this is not possible.
