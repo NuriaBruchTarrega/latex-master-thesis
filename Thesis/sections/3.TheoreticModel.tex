@@ -525,8 +525,24 @@ Finally, we have to decide whether to consider indirect usage or not. Since we w
     \label{table:metric-characteristics}
 \end{table}
 
-
 \subsection{Formal definition of the metrics}
+
+\unsure{Decide whether to use the word used or reachable}
+
+\subsubsection{Percentage of used classes}
+
+\begin{equation}
+\label{eqn:used-classes}
+\verb|%UsedClasses|(L_c, L_s) = \frac{\verb|RC|(L_c, L_s)}{\verb|C|(L_s)}
+\end{equation}
+
+
+\subsubsection{Pergentage of used methods}
+
+\begin{equation}
+\label{eqn:used-methods}
+\verb|%UsedMethods|(L_c, L_s) = \frac{\verb|RM|(L_c, L_s)}{\verb|M|(L_s)} 
+\end{equation}
 
 \subsection{Theoretical validation}
 
