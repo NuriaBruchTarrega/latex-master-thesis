@@ -10,7 +10,7 @@ To measure the degree of dependency, we are going to define the characteristics 
 With this criterion, it is defined which type of connection creates coupling between the two items, previously defined as two separate sets of classes. There are several and clearly distinguished mechanisms that can create coupling, as defined by Briand et al. \cite{briand1999unified}, listed below.
 
 \blankls
-Given class \textit{a} of set of classes \textit{A}, and class \textit{b} of set of classes \textit{B}...
+Given class \textit{a} of library \textit{A}, and class \textit{b} of library \textit{B}...
 
 \begin{enumerate}
   \item ... class \textit{a} has an attribute of type \textit{b} (Relationship of aggregation).
@@ -70,7 +70,7 @@ In this criterion, there are two aspects to define. (1) The aggregation level of
 \end{itemize}
 
 \blankls
-The goal is to measure the coupling between the set of classes of the client library and the set of classes of the server library. The measurement is done by aggregating the coupling of the more fine-grained levels \cite{briand1999unified}. For consistency, we name this aggregation level \textbf{library level}.
+The goal is to measure the coupling between the set of classes of the client library and the classes of the server library. The measurement is done by aggregating the coupling of the more fine-grained levels \cite{briand1999unified}. For consistency, we name this aggregation level \textbf{library level}.
 
 Next, we define how the metric has to count connections. The options for counting connections defined by Briand et al. \cite{briand1999unified} are explained in Table \ref{table:counting-connections}. The options B), D), E), and F), are not useful for this research. These options count the distinct items at the other end of the connection, not considering how many times those items are at the other end of the connection.
 
@@ -477,8 +477,54 @@ Then, there exists a field declaration in $c_1$ or $c_2$ which reaches a class i
 Therefore, the metric $\verb|TAC|$ fulfills property \textit{Merging of unconnected classes}.
 
 \section{Measuring usage of the dependency}
+The metrics presented in this section measure the dependencies from a diferent perspective. Instead of measuring import coupling between the client library and the serverlibrary, we look at how much of the server library is used by the client library.
+
+\unsure{Maybe explain why? To know if that library is really necessary, or only a submodule is needed, to see if there is another library that offers only the functionality that you use, to know which is the probability that a breaking change affects your code...}
 
 \subsection{Definition of usage}
+Just as with the coupling metrics, it is necessary to define which are the characteristics of the usage that is going to be measured. In this case, there is no framework indicating which are the relevant characteristics to define, and with which criteria.
+
+Therefore, based on the critera discussed for the definition of coupling, we have created the list of the criterion to be defined in the case of the usage of a dependency.
+
+\paragraph{Type of connection}
+For these metrics, since it is not about coupling, but about how much of the server library is used by the client library, the metrics will not be focused solely on one type of connection. Instead, we will consider every type of connection as a usage.
+
+In addition, the types of connection discussed previously (see section \ref{subsect:defCoupling}), which are some of the most common types of connection, there are others which are also considered.
+
+Given class \textit{a} and class \textit{b}...
+
+\begin{itemize}
+  \item ... class \textit{a} has an annotation of type \textit{b}.
+  \item ... class \textit{a} has method \textit{m}, which has an annotation of type \textit{b}.
+  \item ... class \textit{a} has method \textit{m}, which has a parameter with an annotation of type \textit{b}.
+  \item ... class \textit{a} has method \textit{m}, which throws an exception of type \textit{b}.
+\end{itemize}
+
+\paragraph{Granularity}
+In this case we have to define what is a unit, to measure which percentage of units of the server library are being used by the client library. According to the type of connections, there are two diferent kind of units that can be used: methods and classes. Therefore, we define two metrics, one for each of the units. Nevertheless, the aggregation level of the metrics, is still the library level. Since the goal is to measure the percentage of units used.
+
+The last aspect of the granularity to consider is how are the connections evaluated. Since the goal is not to know how many times a connection takes place, we count the distinct items at the other end of the connections.
+
+\paragraph{Direct \& Indirect}
+Finally, we have to decide whether to consider indirect usage or not. Since we want to know the total percentage of usage of the server library, we will consider both, the units that are directly used and those that are indirectly used.
+
+\unsure{Decide whether to add inheritance criterion or not}
+
+\paragraph{Result}
+
+\begin{table}[h]
+    \begin{center}
+    \begin{tabular}{|l|l|l|l|l|}
+    \hline
+    Metric & Type of connection & Unit of measure & Counting connections & Direct/Indirect \\ \hline
+    \% Used classes & All & Class   & Distinct items & Both \\
+    \% Used methods & All & Method  & Distinct items & Both \\
+    \end{tabular}
+    \end{center}
+    \caption{Criteria of the set of metrics}
+    \label{table:metric-characteristics}
+\end{table}
+
 
 \subsection{Formal definition of the metrics}
 
