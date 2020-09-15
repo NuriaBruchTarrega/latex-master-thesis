@@ -484,7 +484,7 @@ The metrics presented in this section measure the dependencies from a diferent p
 \subsection{Definition of usage}\label{subsect:usage-definition}
 Just as with the coupling metrics, it is necessary to define which are the characteristics of the usage that is going to be measured. In this case, there is no framework indicating which are the relevant characteristics to define, and with which criteria.
 
-Therefore, based on the critera discussed for the definition of coupling, we have created the list of the criterion to be defined in the case of the usage of a dependency.
+Therefore, based on the critera discussed for the definition of coupling, we have created the list of the criterion applicable in the case of the usage of a dependency.
 
 \paragraph{Type of connection}
 For these metrics, since it is not about coupling, but about how much of the server library is used by the client library, the metrics will not be focused solely on one type of connection. Instead, we will consider every type of connection as a usage.
@@ -558,7 +558,30 @@ In this case, the goal is to give a bit more low level information of the impact
 In this section, we describe how is impact measured by these metrics and provide a formal definition of the metrics. Finally, we perform a theoretical validation of the metrics.
 
 \subsection{Definition of impact}
+To define the impact to be measured by these metrics, we use the relevant criteria for this case.
 
+\paragraph{Type of connection}
+Just as with the coupling metrics, all the types of connection can be relevant, but probably the impact of each type of connection is different. Therefore, these should not be measured together. Since this work is meant to be a first approach we select two of the possible types of connection.
+
+First, the \textit{method invocation}, since it is the only type of connection which refers to the methods used in the dependencies, and therefore is the only one indicating where the methods of the server libraries can be invoked from. Then, to have a representation as well of how the classes of the server libraries are used, and for consistency with the previous metrics, we select the \textit{field declaration}.
+
+\paragraph{Granularity}
+
+As the title of the section indicates, these metrics are measuring the impact \textit{per class}. Hence, the aggregation level of the metric is the \textit{class} level for the client library. In other words, we calculate the metric taking a class of the client library, and a server library.
+
+With respect to the way the connections are counted is not considered in the original list created by Briand et al. \cite{briand1999unified}. Instead, it is counted the number of places of the client class where a connection is originated. For instance, let's take \textit{Lib1} from Figure \ref{fig:example-impact-per-class} as the client library, and \textit{Lib3} as the server library. From \textit{Class1} to \textit{Lib3} there are four different connections, but there are only two origins of these connections. The same happens with \textit{Class2}, in which there are two connections with \textit{Lib3}, but only one origin.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/impact-per-class.png}
+\caption{Example to calculate impact per class}
+\label{fig:example-impact-per-class}
+\end{center}
+\end{figure}
+
+\paragraph{Direct \& Indirect}
+
+The connection measured can be either direct or indirect, depending on the type of dependency between the client and the server library. However, this does not change the calculation of the metric, hence, both types of dependencies are calculated with the same metric.
 
 \subsection{Formal definition of the metrics}
 
