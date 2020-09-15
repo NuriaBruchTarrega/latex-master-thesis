@@ -552,6 +552,7 @@ For this metric, since the unit of measure is the method, the only type of conne
 
 \section{Measuring impact per class}
 \unsure{I'm not sure if impact is really the word I want to use here, I'm still thinking about it}
+\unsure{Also, I'm not sure about the level of detail needed for these metrics, since it seems pretty simple. Let me know if there is something I should remove or add}
 
 In this case, the goal is to give a bit more low level information of the impact of the dependency in the client library. From the point of view of a developer or a maintainer, it can be useful to know exactly which parts of your code can be impacted by the dependency. For example, in case there is a breaking change, or if the library with which there is a dependency, has to be replaced.
 
@@ -583,6 +584,27 @@ With respect to the way the connections are counted is not considered in the ori
 
 The connection measured can be either direct or indirect, depending on the type of dependency between the client and the server library. However, this does not change the calculation of the metric, hence, both types of dependencies are calculated with the same metric.
 
+\paragraph{Result}
+Based on the criteria discussed above, we define two metrics. The summary of the characeristics of these two metrics can be found in Table \ref{table:per-class-characteristics}.
+
+\begin{table}[h]
+    \begin{center}
+    \begin{tabular}{|l|l|l|l|}
+    \hline
+    Type of connection & Aggregation level & Counting connections & Direct/Indirect \\ \hline
+    Method invocation & Class & \#origin of connection & Both \\
+    Field declaration & Class & \#origin of connection & Both \\
+    \hline
+    \end{tabular}
+    \end{center}
+    \caption{Criteria of the set of metrics}
+    \label{table:per-class-characteristics}
+\end{table}
+
 \subsection{Formal definition of the metrics}
+
+\paragraph{Method invocations per class}
+
+\paragraph{Field declaration per class}
 
 \subsection{Theoretical validation}
