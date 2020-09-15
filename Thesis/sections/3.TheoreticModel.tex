@@ -180,7 +180,7 @@ According to the criterion inheritance, it is necessary to take into account all
 
 \begin{equation}
 \label{eqn:mic-nii}
-   \verb|nII|(m_c, L_s) =\!\!\! \sum_{m_s \in \verb|SIM|(m_c)} \verb|nI|(m_c, m_s)*\verb|nP|(m_s, L_s)
+   \verb|nII|(m_c, L_s) = \sum_{m_s \in \verb|SIM|(m_c)} \verb|nI|(m_c, m_s)*\verb|nP|(m_s, L_s)
 \end{equation}
 
 \begin{equation}
@@ -602,9 +602,20 @@ Based on the criteria discussed above, we define two metrics. The summary of the
 \end{table}
 
 \subsection{Formal definition of the metrics}
+\unsure{I am not sure about which names to use here}
 
 \paragraph{Method invocations per class}
 
+\begin{equation}
+\label{eqn:mi}
+    \verb|MethodInvocations|(c_c, L_s) =  \sum_{mi \in \verb|MI|(c_c)} |\verb|RM|(mi, L_s)|
+\end{equation}
+
 \paragraph{Field declaration per class}
+
+\begin{equation}
+\label{eqn:fd}
+    \verb|FieldDeclarations|(c_c, L_s) = \sum_{fd \in \verb|FD|(c_c)} |\verb|RF|(fd, L_s)|
+\end{equation}
 
 \subsection{Theoretical validation}
