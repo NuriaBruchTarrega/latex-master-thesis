@@ -605,17 +605,19 @@ Based on the criteria discussed above, we define two metrics. The summary of the
 \unsure{I am not sure about which names to use here}
 
 \paragraph{Method invocations per class}
+Having a client library ($L_c$), and a server library ($L_s$). The result of this metric for a class of the client library ($c_c \in \verb|C|(L_c)$) corresponds to the number of method invocations contained in the methods of $c_c$ ($m_c \in \verb|M|(c_c)$) such that, the call graph created from these method invocations reach a method implemented in the client library ($m_s \in \verb|M|(L_s)$). The set with the method invocations in $m_c$ that reach a method in $L_s$ is $\verb|nIR|(m_c, L_s)$.
 
 \begin{equation}
 \label{eqn:mi}
-    \verb|MethodInvocations|(c_c, L_s) =  \sum_{mi \in \verb|MI|(c_c)} |\verb|RM|(mi, L_s)|
+    \verb|MethodInvocations|(c_c, L_s) =  \sum_{m_c \in \verb|M|(c_c)} |\verb|nIR|(m_c, L_s)|
 \end{equation}
 
 \paragraph{Field declaration per class}
+This metric is calculated in the following manner. For a class $c_c$ of a client library $L_c$ ($c_c \in \verb|C|(L_c)$), and a server library $L_s$. The result of the metric for $c_c$, corresponds to the number of field declarations in $c_c$ such that, through field declarations reach a class implemented in $L_s$. The set of field declarations that reach $L_s$ is denoted $\verb|nFR|(c_c, L_s)$.
 
 \begin{equation}
 \label{eqn:fd}
-    \verb|FieldDeclarations|(c_c, L_s) = \sum_{fd \in \verb|FD|(c_c)} |\verb|RF|(fd, L_s)|
+    \verb|FieldDeclarations|(c_c, L_s) = |\verb|nFR|(c_c, L_s)|
 \end{equation}
 
 \subsection{Theoretical validation}
