@@ -481,7 +481,7 @@ The metrics presented in this section measure the dependencies from a diferent p
 
 \unsure{Maybe explain why? To know if that library is really necessary, or only a submodule is needed, to see if there is another library that offers only the functionality that you use, to know which is the probability that a breaking change affects your code...}
 
-\subsection{Definition of usage}
+\subsection{Definition of usage}\label{subsect:usage-definition}
 Just as with the coupling metrics, it is necessary to define which are the characteristics of the usage that is going to be measured. In this case, there is no framework indicating which are the relevant characteristics to define, and with which criteria.
 
 Therefore, based on the critera discussed for the definition of coupling, we have created the list of the criterion to be defined in the case of the usage of a dependency.
@@ -519,29 +519,33 @@ Finally, we have to decide whether to consider indirect usage or not. Since we w
     Metric & Type of connection & Unit of measure & Counting connections & Direct/Indirect \\ \hline
     \% Used classes & All & Class   & Distinct items & Both \\
     \% Used methods & All & Method  & Distinct items & Both \\
+    \hline
     \end{tabular}
     \end{center}
     \caption{Criteria of the set of metrics}
-    \label{table:metric-characteristics}
+    \label{table:usage-metric-characteristics}
 \end{table}
 
 \subsection{Formal definition of the metrics}
 
-\unsure{Decide whether to use the word used or reachable}
+\subsubsection{Percentage of reachable classes}
+This metric calculates the percentage of usage of a dependency using classes as the unit of measure. Therefore, it calculates the cardinality of the set of classes implemented in the server library ($L_s$) that are reachable from the client library ($L_c$), denoted $\verb|RC|(L_c, L_s)$. The number of reachable classes is divided by the total number of classes in $L_s$.
 
-\subsubsection{Percentage of used classes}
+As explained in section \ref{subsect:usage-definition}, all types of connections are considered for this metric. Hence, $\verb|RC|(L_c, L_s)$ includes all the classes reachable through any of the types of connection, or a combination of these.
 
 \begin{equation}
-\label{eqn:used-classes}
-\verb|%UsedClasses|(L_c, L_s) = \frac{\verb|RC|(L_c, L_s)}{\verb|C|(L_s)}
+\label{eqn:reachable-classes}
+    \verb|ReachableClasses|(L_c, L_s) = \frac{|RC(L_c, L_s)|}{|C(L_s)|}
 \end{equation}
 
+\subsubsection{Pergentage of reachable methods}
+This metric works exactly as the previous one, but instead of using class as the unit of measure, it uses methods. Therefore, it divides the number of elements in the set of methods from the server library ($L_s$) that are reachable from the client library ($L_c$), $RM(L_c, L_s)$, by the total number of methods ($|M(L_s)|$).
 
-\subsubsection{Pergentage of used methods}
+For this metric, since the unit of measure is the method, the only type of connection through which a method is reachable is the method call or method invocation. Thus, the methods included in the reachable classes, are not considered reachable by default, since it is not sure if the method has been invoked.
 
 \begin{equation}
-\label{eqn:used-methods}
-\verb|%UsedMethods|(L_c, L_s) = \frac{\verb|RM|(L_c, L_s)}{\verb|M|(L_s)} 
+\label{eqn:reachable-methods}
+\verb|ReachableMethods|(L_c, L_s) = \frac{|RM(L_c, L_s)|}{|M(L_s)|}
 \end{equation}
 
 \subsection{Theoretical validation}
