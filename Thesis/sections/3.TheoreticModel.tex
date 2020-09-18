@@ -379,7 +379,6 @@ In the case of aggregation coupling for the transitive dependencies ($\verb|IAC|
   \verb|IAC|(L_c,L_s) = \sum_{rc \in \verb|RC|(L_c,L_s)} \verb|nFR|(rc,L_c) * \verb|nDC|(rm, L_s)
 \end{equation}
 
-\todo{This formula will not be final until I have been able to measure it}
 Just as in the case of $\verb|TMIC|$, the $\verb|distance|$ between $L_c$ and $L_s$ should be considered. Therefore, for each $\verb|distance|$, we take the number measured by $\verb|IAC|(L_c,L_s, \verb|distance|)$, and multiply it by a propagation factor $\verb|PF|$ to the power of the $\verb|distance|$.
 
 \begin{equation}
@@ -477,6 +476,7 @@ Then, there exists a field declaration in $c_1$ or $c_2$ which reaches a class i
 Therefore, the metric $\verb|TAC|$ fulfills property \textit{Merging of unconnected classes}.
 
 \section{Measuring usage of the dependency}
+\unsure{Should I talk about usage or maybe about coverage?}
 The metrics presented in this section measure the dependencies from a diferent perspective. Instead of measuring import coupling between the client library and the serverlibrary, we look at how much of the server library is used by the client library.
 
 \unsure{Maybe explain why? To know if that library is really necessary, or only a submodule is needed, to see if there is another library that offers only the functionality that you use, to know which is the probability that a breaking change affects your code...}
@@ -514,11 +514,11 @@ Finally, we have to decide whether to consider indirect usage or not. Since we w
 
 \begin{table}[h]
     \begin{center}
-    \begin{tabular}{|l|l|l|l|l|}
+    \begin{tabular}{|l|l|l|l|l|l|}
     \hline
-    Metric & Type of connection & Unit of measure & Counting connections & Direct/Indirect \\ \hline
-    \% Used classes & All & Class   & Distinct items & Both \\
-    \% Used methods & All & Method  & Distinct items & Both \\
+    Metric & Type of connection & Unit of measure & Aggregation level & Counting connections & Direct/Indirect \\ \hline
+    \% Used classes & All & Class   & Library & Distinct items & Both \\
+    \% Used methods & All & Method  & Library & Distinct items & Both \\
     \hline
     \end{tabular}
     \end{center}
@@ -529,26 +529,47 @@ Finally, we have to decide whether to consider indirect usage or not. Since we w
 \subsection{Formal definition of the metrics}
 
 \subsubsection{Percentage of reachable classes}
-This metric calculates the percentage of usage of a dependency using classes as the unit of measure. Therefore, it calculates the cardinality of the set of classes implemented in the server library ($L_s$) that are reachable from the client library ($L_c$), denoted $\verb|RC|(L_c, L_s)$. The number of reachable classes is divided by the total number of classes in $L_s$.
+This metric calculates the percentage of usage of a dependency using classes as the unit of measure. Therefore, it calculates the cardinality of the set of classes implemented in the server library ($L_s$) that are reachable from the code of the client library ($L_c$), denoted $\verb|RC|(L_c, L_s)$. The number of reachable classes is divided by the total number of classes in $L_s$.
 
 As explained in section \ref{subsect:usage-definition}, all types of connections are considered for this metric. Hence, $\verb|RC|(L_c, L_s)$ includes all the classes reachable through any of the types of connection, or a combination of these.
 
 \begin{equation}
 \label{eqn:reachable-classes}
-    \verb|ReachableClasses|(L_c, L_s) = \frac{|RC(L_c, L_s)|}{|C(L_s)|}
+    \verb|%ReachableClasses|(L_c, L_s) = \frac{|RC(L_c, L_s)|}{|C(L_s)|}
 \end{equation}
 
 \subsubsection{Pergentage of reachable methods}
-This metric works exactly as the previous one, but instead of using class as the unit of measure, it uses methods. Therefore, it divides the number of elements in the set of methods from the server library ($L_s$) that are reachable from the client library ($L_c$), $RM(L_c, L_s)$, by the total number of methods ($|M(L_s)|$).
+This metric works exactly as the previous one, but instead of using class as the unit of measure, it uses methods. Therefore, it divides the number of elements in the set of methods from the server library ($L_s$) that are reachable from the code of the client library ($L_c$), $RM(L_c, L_s)$, by the total number of methods ($|M(L_s)|$).
 
 For this metric, since the unit of measure is the method, the only type of connection through which a method is reachable is the method call or method invocation. Thus, the methods included in the reachable classes, are not considered reachable by default, since it is not sure if the method has been invoked.
 
 \begin{equation}
 \label{eqn:reachable-methods}
-\verb|ReachableMethods|(L_c, L_s) = \frac{|RM(L_c, L_s)|}{|M(L_s)|}
+\verb|%ReachableMethods|(L_c, L_s) = \frac{|RM(L_c, L_s)|}{|M(L_s)|}
 \end{equation}
 
 \subsection{Theoretical validation}
+In this section, the theoretical validation of the metrics $\verb|\%ReachableClasses|$ and $\verb|\%ReachableMethods|$ is done by proving the properties that these metrics should fulfill. Given that the two metrics are highly similar, the proofs are done for the first metric, namely $\verb|\%ReachableClasses|$, but could easily be done for the second one with the same reasoning.
+
+The properties chosen for these metrics are the ones that the element being measured should have. We based the properties to be proven on the work by Srinivasan and Devi \cite{srinivasan2014software}, which reviews the methodologies to validate metrics in software engineering. We obtained the following list of properties, which are applicable to these metrics. The first two properties were originally described by Weyuker \cite{weyuker1988evaluating} and the last three by Briand et al. \cite{briand1996property}. Some properties are originally defined using class as the aggregation level. Therefore, we adapted the properties to be used with the library aggregation level.
+
+\begin{enumerate}
+  \item \textbf{Noncoarseness:} Two different libraries can have different values for the same metric.
+  \item \textbf{Nonuniqueness:} There can exist different libraries with the same value.
+  \item \textbf{Nonnegativity:} The value of the metric should never be negative.
+  \item \textbf{Null value:} The value of the metric is expected to be zero if there is no usage of the server library in the code of the client library.
+  \item \textbf{Monotonicity:} It is expected that if more usage is added from the client library to the server library, the value of the metric does not decrease.
+\end{enumerate}
+
+\paragraph{Property 1: Noncoarseness}
+
+\paragraph{Property 2: Nonuniqueness}
+
+\paragraph{Property 3: Nonnegativity}
+
+\paragraph{Property 4: Null value}
+
+\paragraph{Property 5: Monotonicity}
 
 \section{Measuring impact per class}
 \unsure{I'm not sure if impact is really the word I want to use here, I'm still thinking about it}
