@@ -516,7 +516,7 @@ Finally, we have to decide whether to consider indirect usage or not. Since we w
     \begin{center}
     \begin{tabular}{|l|l|l|l|l|l|}
     \hline
-    Metric & Type of connection & Unit of measure & Aggregation level & Counting connections & Direct/Indirect \\ \hline
+    \rot{Metric} & \rot{Type of connection} & \rot{Unit of measure} & \rot{Aggregation level} & \rot{Counting connections    } & \rot{Direct/Indirect} \\ \hline
     \% Used classes & All & Class   & Library & Distinct items & Both \\
     \% Used methods & All & Method  & Library & Distinct items & Both \\
     \hline
@@ -562,14 +562,26 @@ The properties chosen for these metrics are the ones that the element being meas
 \end{enumerate}
 
 \paragraph{Property 1: Noncoarseness}
+Let $L_c$ be a client library, such that
 
 \paragraph{Property 2: Nonuniqueness}
 
 \paragraph{Property 3: Nonnegativity}
+Assume that the metric $\verb|%ReachableClasses|$ does not fulfill this property. Let $L_c$ be a client library, and $L_s$ be a server library, such that $\verb|%ReachableClasses|(L_c, L_s) < 0$. Then, we have that $|RC(L_c, L_s)| < 0 \oplus |C(L_s)| < 0$. This means that the cardinality of a set is negative, which is not true by definition. Therefore, it is a contradition.
+
+Hence, the metric fulfills property \textit{Nonnegativity}.
 
 \paragraph{Property 4: Null value}
+Let $L_c$ be a client library, and $L_s$ be a server library. There is no usage in $L_c$ of class $L_s$, $RC(L_c, L_s) = \emptyset$. Assuming that the property null value does not hold for $\verb|%ReachableClasses|$, then $\verb|%ReachableClasses|(L_c, L_s) \neq 0$. Since this metric has the property nonnegativity, then  $\verb|%ReachableClasses|(L_c, L_s) > 0$.
+Therefore, $\frac{|RC(L_c, L_s)|}{|C(L_s)|} > 0$ and $|RC(L_c, L_s)| > 0$, which contradicts that $RC(L_c, L_s) = \emptyset$.
+
+Therefore, the property \textit{Null value} holds for metric $\verb|%ReachableClasses|$.
 
 \paragraph{Property 5: Monotonicity}
+Having $L_c$ a client library, and $L_s$ a server library. Let $c_c$ be a class in $L_c$, and $c_c'$ a class created as the result of adding more connections to $L_s$ in $c_c$. Then, let $L_c'$ be a client library resulting of replacing $c_c$ by $c_c'$ in $L_c$. Assuming that the property does not hold, we would have that $\verb|%ReachableClasses|(L_c, L_s) > \verb|%ReachableClasses|(L_c', L_s)$.
+Therefore, since $|C(L_s)|$ is the same in both cases because $L_s$ does not change, we have that $|RC(L_c, L_s)| > |RC(L_c', L_s)|$. This means that there is some $c_s$ in $L_s$, which is reachable from $c_c$ and not reachable from $c_c'$. However, $c_c'$ contains all the connections between $c_c$ and $L_s$, and that is therefore not possible.
+
+In conclusion, the metric $\verb|%ReachableClasses|$ has the property \textit{Monotonicity}.
 
 \section{Measuring impact per class}
 \unsure{I'm not sure if impact is really the word I want to use here, I'm still thinking about it}
@@ -653,3 +665,14 @@ The properties chosen in this case, are the same as the ones chosen in section \
   \item \textbf{Null value:} The value of the metric is expected to be zero if there is no connection of the type measured by the metric from the client class, to the server library.
   \item \textbf{Monotonicity:} It is expected that if more usage is added from the client class to the server library, the value of the metric does not decrease.
 \end{enumerate}
+
+
+\paragraph{Property 1: Noncoarseness}
+
+\paragraph{Property 2: Nonuniqueness}
+
+\paragraph{Property 3: Nonnegativity}
+
+\paragraph{Property 4: Null value}
+
+\paragraph{Property 5: Monotonicity}
