@@ -567,12 +567,13 @@ Let $L_c$ be a client library, such that
 \paragraph{Property 2: Nonuniqueness}
 
 \paragraph{Property 3: Nonnegativity}
-Assume that the metric $\verb|%ReachableClasses|$ does not fulfill this property. Let $L_c$ be a client library, and $L_s$ be a server library, such that $\verb|%ReachableClasses|(L_c, L_s) < 0$. Then, we have that $|RC(L_c, L_s)| < 0 \oplus |C(L_s)| < 0$. This means that the cardinality of a set is negative, which is not true by definition. Therefore, it is a contradition.
+Assume that the metric $\verb|%ReachableClasses|$ does not fulfill this property.
+Let $L_c$ be a client library, and $L_s$ be a server library, such that $\verb|%ReachableClasses|(L_c, L_s) < 0$. Then, we have that $|RC(L_c, L_s)| < 0 \oplus |C(L_s)| < 0$. This means that the cardinality of a set is negative, which is not true by definition. Therefore, it is a contradition.
 
 Hence, the metric fulfills property \textit{Nonnegativity}.
 
 \paragraph{Property 4: Null value}
-Let $L_c$ be a client library, and $L_s$ be a server library. There is no usage in $L_c$ of class $L_s$, $RC(L_c, L_s) = \emptyset$. Assuming that the property null value does not hold for $\verb|%ReachableClasses|$, then $\verb|%ReachableClasses|(L_c, L_s) \neq 0$. Since this metric has the property nonnegativity, then  $\verb|%ReachableClasses|(L_c, L_s) > 0$.
+Let $L_c$ be a client library, and $L_s$ be a server library. There is no usage in $L_c$ of library $L_s$, $RC(L_c, L_s) = \emptyset$. Assuming that the property null value does not hold for $\verb|%ReachableClasses|$, then $\verb|%ReachableClasses|(L_c, L_s) \neq 0$. Since this metric has the property nonnegativity, then  $\verb|%ReachableClasses|(L_c, L_s) > 0$.
 Therefore, $\frac{|RC(L_c, L_s)|}{|C(L_s)|} > 0$ and $|RC(L_c, L_s)| > 0$, which contradicts that $RC(L_c, L_s) = \emptyset$.
 
 Therefore, the property \textit{Null value} holds for metric $\verb|%ReachableClasses|$.
@@ -654,7 +655,7 @@ This metric is calculated in the following manner. For a class $c_c$ of a client
 \end{equation}
 
 \subsection{Theoretical validation}
-This section contains the proofs of the properties that the metrics $\verb|#MethodInvocations|$ and $\verb|#FieldDeclarations|$ should have. The proofs are done for one metric, since they can be done for the other metric very similarly.
+This section contains the proofs, for the metrics $\verb|#MethodInvocations|$ and $\verb|#FieldDeclarations|$, of the properties that these should have. The proofs are done for one metric, since they can be done for the other metric very similarly.
 
 The properties chosen in this case, are the same as the ones chosen in section \ref{subsect:theoretical-validation-usage}, since these properties can also be applied for these metrics. Nevertheless, the description of the properties has been adapted to fit the characteristics of the metrics.
 
@@ -672,7 +673,19 @@ The properties chosen in this case, are the same as the ones chosen in section \
 \paragraph{Property 2: Nonuniqueness}
 
 \paragraph{Property 3: Nonnegativity}
+Assuming that the property does not hold for $\verb|#MethodInvocations|$, let $L_c$ be a client library containing $c_c$. Let $L_s$ be a server library, such that $\verb|#MethodInvocations|(c_c, L_s)
+< 0$. Therefore, exsists a method $m_c \in \verb|M|(c_c)$, such that $|\verb|nIR|(m_c, L_s)| < 0$. However, the cardinality of a set cannot be negative by definition, and therefore it is a contradition.
+
+Hence, the property \textit{Nonnegativity} holds for metric $\verb|#MethodInvocations|$.
 
 \paragraph{Property 4: Null value}
+Assume that the metric does not fulfill property null value. Let $L_c$ and $L_s$ be a client library and a server library, adn $c_c$ a class in $L_c$. Assume that $c_c$ does not have any connection to $L_s$, and given that the metric does not fulfill \textit{null value}, $\verb|#MethodInvocations|(c_c, L_s) \neq 0$. From the previous proof we know that $\verb|#MethodInvocations|(c_c, L_s) \geq 0$, then  $\verb|#MethodInvocations|(c_c, L_s) > 0$.
+Hence, there is a method $m_c \in \verb|M|(c_c)$ such that $|\verb|nIR|(m_c, L_s)| > 0$. Since $\verb|nIR|(m_c, L_s)$ is the set of method invocations in $c_c$ that reach $L_s$, there has to be a connection between $c_c$ and $L_s$, which constitutes a contradition.
+
+Therefore, the metric fulfills property \textit{Null value}.
 
 \paragraph{Property 5: Monotonicity}
+Let $L_c$ be a client library, and let $L_s$ be a server library. Given a class $c_c$ in $L_c$, we define $c_c'$ as a copy $c_c$ with added connections to $L_s$. Let $L_c'$ be a client library identical to $L_c$,. but in which $c_c$ has been replaced by $c_c'$. Assume that metric $\verb|#MethodInvocations|$ does not fulfill \textit{Monotonicity}. Therefore, $\verb|#MethodInvocations|(c_c, L_s) > \verb|#MethodInvocations|(c_c, L_s)$.
+Then, for a given $m_c \in \verb|M|(c_c)$, and its copy in $c_c'$, $m_c' \in \verb|M|(c_c')$, such that $|\verb|nIR|(m_c, L_s)| > |\verb|nIR|(m_c', L_s)|$. This means that $m_c$ contains a method invocation which reaches $L_s$ and it is not included in $m_c'$. However, all the method invocations contained in $c_c$ are maintained in $c_c'$. Therefore, it is a contradition.
+
+Hence, property \textit{Monotonicity} holds for metric $\verb|#MethodInvocations|$.
