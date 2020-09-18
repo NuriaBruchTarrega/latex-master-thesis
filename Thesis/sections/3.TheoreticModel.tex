@@ -548,7 +548,7 @@ For this metric, since the unit of measure is the method, the only type of conne
 \verb|%ReachableMethods|(L_c, L_s) = \frac{|RM(L_c, L_s)|}{|M(L_s)|}
 \end{equation}
 
-\subsection{Theoretical validation}
+\subsection{Theoretical validation}\label{subsect:theoretical-validation-usage}
 In this section, the theoretical validation of the metrics $\verb|\%ReachableClasses|$ and $\verb|\%ReachableMethods|$ is done by proving the properties that these metrics should fulfill. Given that the two metrics are highly similar, the proofs are done for the first metric, namely $\verb|\%ReachableClasses|$, but could easily be done for the second one with the same reasoning.
 
 The properties chosen for these metrics are the ones that the element being measured should have. We based the properties to be proven on the work by Srinivasan and Devi \cite{srinivasan2014software}, which reviews the methodologies to validate metrics in software engineering. We obtained the following list of properties, which are applicable to these metrics. The first two properties were originally described by Weyuker \cite{weyuker1988evaluating} and the last three by Briand et al. \cite{briand1996property}. Some properties are originally defined using class as the aggregation level. Therefore, we adapted the properties to be used with the library aggregation level.
@@ -573,7 +573,7 @@ The properties chosen for these metrics are the ones that the element being meas
 
 \section{Measuring impact per class}
 \unsure{I'm not sure if impact is really the word I want to use here, I'm still thinking about it}
-\unsure{Also, I'm not sure about the level of detail needed for these metrics, since it seems pretty simple. Let me know if there is something I should remove or add}
+\unsure{Also, I'm not sure about the level of detail needed for these metrics, since it seems pretty simple. Let me know if there is something I should remove or add. Or if I should not treat these as metrics in the same way as the others}
 
 In this case, the goal is to give a bit more low level information of the impact of the dependency in the client library. From the point of view of a developer or a maintainer, it can be useful to know exactly which parts of your code can be impacted by the dependency. For example, in case there is a breaking change, or if the library with which there is a dependency, has to be replaced.
 
@@ -630,7 +630,7 @@ Having a client library ($L_c$), and a server library ($L_s$). The result of thi
 
 \begin{equation}
 \label{eqn:mi}
-    \verb|MethodInvocations|(c_c, L_s) =  \sum_{m_c \in \verb|M|(c_c)} |\verb|nIR|(m_c, L_s)|
+    \verb|#MethodInvocations|(c_c, L_s) =  \sum_{m_c \in \verb|M|(c_c)} |\verb|nIR|(m_c, L_s)|
 \end{equation}
 
 \paragraph{Field declaration per class}
@@ -638,7 +638,18 @@ This metric is calculated in the following manner. For a class $c_c$ of a client
 
 \begin{equation}
 \label{eqn:fd}
-    \verb|FieldDeclarations|(c_c, L_s) = |\verb|nFR|(c_c, L_s)|
+    \verb|#FieldDeclarations|(c_c, L_s) = |\verb|nFR|(c_c, L_s)|
 \end{equation}
 
 \subsection{Theoretical validation}
+This section contains the proofs of the properties that the metrics $\verb|#MethodInvocations|$ and $\verb|#FieldDeclarations|$ should have. The proofs are done for one metric, since they can be done for the other metric very similarly.
+
+The properties chosen in this case, are the same as the ones chosen in section \ref{subsect:theoretical-validation-usage}, since these properties can also be applied for these metrics. Nevertheless, the description of the properties has been adapted to fit the characteristics of the metrics.
+
+\begin{enumerate}
+  \item \textbf{Noncoarseness:} Two different classes can have different values for the same metric.
+  \item \textbf{Nonuniqueness:} There can exist different classes with the same value.
+  \item \textbf{Nonnegativity:} The value of the metric should never be negative.
+  \item \textbf{Null value:} The value of the metric is expected to be zero if there is no connection of the type measured by the metric from the client class, to the server library.
+  \item \textbf{Monotonicity:} It is expected that if more usage is added from the client class to the server library, the value of the metric does not decrease.
+\end{enumerate}
