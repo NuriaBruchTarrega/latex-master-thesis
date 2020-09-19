@@ -562,9 +562,34 @@ The properties chosen for these metrics are the ones that the element being meas
 \end{enumerate}
 
 \paragraph{Property 1: Noncoarseness}
-Let $L_c$ be a client library, such that
+Let's take the two cases in Figure \ref{fig:example-noncoarseness-reachable-classes}. In the first case, \textit{Lib1} would be the client library, and \textit{Lib2} the server library. In the example, we can see that the number of classes in the server library is: $|\verb|C|(Lib2)| = 3$. Also, the number of classes of the server library, reached by the client library is $|RM(Lib1, Lib2)| = 2$. Therefore, following the equation \ref{eqn:reachable-classes}, we have that $\verb|%ReachableClasses|(Lib1, Lib2) = \frac{2}{3} = 0.66$.
+
+In the second case in Figure \ref{fig:example-noncoarseness-reachable-classes} we take \textit{Lib3} as the client library, and \textit{Lib4} as the server library. Therefore, we have $|\verb|C|(Lib4)| = 3$ and $|RM(Lib3, Lib4)| = 3$, which means that the value of the metric is  $\verb|%ReachableClasses|(Lib3, Lib4) = \frac{3}{3} = 1$.
+
+Therefore, two different libraries can have different values for $\verb|%ReachableClasses|$, which means that this metric fulfills the property \textit{noncoarseness}.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{figures/Example-Percentage-Classes-1.png}
+\caption{Example of noncoarseness, percentage of reachable classes}
+\label{fig:example-noncoarseness-reachable-classes}
+\end{center}
+\end{figure}
 
 \paragraph{Property 2: Nonuniqueness}
+Following the first example in Figure \ref{fig:example-nonuniqueness-reachable-classes} we take \textit{Lib1} as the client library, and \textit{Lib2} the server library. Therefore, we can see that $|\verb|C|(Lib2)| = 3$, and $|RM(Lib1, Lib2)| = 2$. Hence, calculating the metric using equation \ref{eqn:reachable-classes}, we obtain $\verb|%ReachableClasses|(Lib1, Lib2) = \frac{2}{3} = 0.66$.
+
+In the second case in Figure \ref{fig:example-noncoarseness-reachable-classes} we have \textit{Lib3} as the client library, and \textit{Lib4} as the server library. Looking at the example, we know that $|\verb|C|(Lib4)| = 3$ and $|RM(Lib3, Lib4)| = 2$. Therefore, the metric for these two libraries is $\verb|%ReachableClasses|(Lib3, Lib4) = \frac{2}{3} = 0.66$.
+
+Therefore, two different libraries can have the same value for metric $\verb|%ReachableClasses|$. Hence, the property \textit{nonuniqueness} holds for this metric.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{figures/Example-Percentage-Classes-2.png}
+\caption{Example of nonuniqueness, percentage of reachable classes}
+\label{fig:example-nonuniqueness-reachable-classes}
+\end{center}
+\end{figure}
 
 \paragraph{Property 3: Nonnegativity}
 Assume that the metric $\verb|%ReachableClasses|$ does not fulfill this property.
