@@ -566,7 +566,7 @@ Let's take the two cases in Figure \ref{fig:example-noncoarseness-reachable-clas
 
 In the second case in Figure \ref{fig:example-noncoarseness-reachable-classes} we take \textit{Lib3} as the client library, and \textit{Lib4} as the server library. Therefore, we have $|\verb|C|(Lib4)| = 3$ and $|RM(Lib3, Lib4)| = 3$, which means that the value of the metric is  $\verb|%ReachableClasses|(Lib3, Lib4) = \frac{3}{3} = 1$.
 
-Therefore, two different libraries can have different values for $\verb|%ReachableClasses|$, which means that this metric fulfills the property \textit{noncoarseness}.
+Therefore, two different libraries can have different values for $\verb|%ReachableClasses|$, which means that this metric fulfills the property \textit{Noncoarseness}.
 
 \begin{figure}[ht]
 \begin{center}
@@ -581,7 +581,7 @@ Following the first example in Figure \ref{fig:example-nonuniqueness-reachable-c
 
 In the second case in Figure \ref{fig:example-noncoarseness-reachable-classes} we have \textit{Lib3} as the client library, and \textit{Lib4} as the server library. Looking at the example, we know that $|\verb|C|(Lib4)| = 3$ and $|RM(Lib3, Lib4)| = 2$. Therefore, the metric for these two libraries is $\verb|%ReachableClasses|(Lib3, Lib4) = \frac{2}{3} = 0.66$.
 
-Therefore, two different libraries can have the same value for metric $\verb|%ReachableClasses|$. Hence, the property \textit{nonuniqueness} holds for this metric.
+Therefore, two different libraries can have the same value for metric $\verb|%ReachableClasses|$. Hence, the property \textit{Nonuniqueness} holds for this metric.
 
 \begin{figure}[ht]
 \begin{center}
@@ -692,10 +692,35 @@ The properties chosen in this case, are the same as the ones chosen in section \
   \item \textbf{Monotonicity:} It is expected that if more usage is added from the client class to the server library, the value of the metric does not decrease.
 \end{enumerate}
 
-
 \paragraph{Property 1: Noncoarseness}
+Following the first case in Figure \ref{fig:example-noncoarseness-method-invocation}, we take textit{Lib1} as the client library, \textit{Lib2} as the server library, and the only class in \textit{Lib1} as $c_c$. We can see that the class has only one method, for which $|\verb|nIR|(Method, Lib2)| = 1$. Therefore, following the equation \ref{eqn:mi}, we have that $\verb|#MethodInvocations|(c_c, Lib2) = 1$.
+
+Now we move to the second case in Figure \ref{fig:example-noncoarseness-method-invocation}. In this case we take \textit{Lib3} as the client library, \textit{Lib4} as the server library, and the class in \textit{Lib3} as $c_c$. $c_c$ has only one method, for which $|\verb|nIR|(Method, Lib4)| = 3$. Hence, $\verb|#MethodInvocations|(c_c, Lib4) = 3$.
+
+In conclusion, two different classes can have different values for metric $\verb|#MethodInvocations|$, which fulfills property \textit{Noncoarseness}.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{figures/Example-Distribution-1.png}
+\caption{Example of noncoarseness, number of method invocations}
+\label{fig:example-noncoarseness-method-invocation}
+\end{center}
+\end{figure}
 
 \paragraph{Property 2: Nonuniqueness}
+Now we look at Figure \ref{fig:example-nonuniqueness-method-invocation}, and in the first example we take \textit{Lib1} as the client library, \textit{Lib2} the server library, and the class in \textit{Lib1} as the client class, $c_c$. The client class has only one method, for which $|\verb|nIR|(Method, Lib2)| = 2$. Therefore, the value of the metric in this case, is as follows, $\verb|#MethodInvocations|(c_c, Lib2) = 2$.
+
+Focusing on the second case in Figure \ref{fig:example-nonuniqueness-method-invocation}, we have that \textit{Lib3} is the client library and \textit{Lib4} the server library. Also, the client class, $c_c$, is the only class in \textit{Lib3}. We can see that there is one method in $c_c$, which calls \textit{Lib4} a total of 2 times, $|\verb|nIR|(Method, Lib4)| = 2$. Hence, $\verb|#MethodInvocations|(c_c, Lib4) = 2$.
+
+With this example we see that two different classes can have the same value for $\verb|#MethodInvocations|$. Therefore, this metric fulfills the property \textit{Nonuniqueness}.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{figures/Example-Distribution-2.png}
+\caption{Example of nonuniqueness, number of method invocations}
+\label{fig:example-nonuniqueness-method-invocation}
+\end{center}
+\end{figure}
 
 \paragraph{Property 3: Nonnegativity}
 Assuming that the property does not hold for $\verb|#MethodInvocations|$, let $L_c$ be a client library containing $c_c$. Let $L_s$ be a server library, such that $\verb|#MethodInvocations|(c_c, L_s)
