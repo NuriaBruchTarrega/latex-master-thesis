@@ -57,7 +57,7 @@ To calculate this first metric, the PoC tool iterates through all the classes of
 
 Then, the tool iterates through all the behaviors (line 5), and calls the method \texttt{instrument}. The main use case of this method is to modify the bytecode of the method. The method \texttt{instrument} receives an \texttt{ExprEditor} object, which is a class that can be extended to implement the methods for editing the bytecode, which are empty by default. To calculate this metric, the overridden methods are \texttt{edit(MethodCall mc)}, \texttt{edit(ConstructorCall cc)}, and \texttt{edit(NewExpr ne)}. These methods will be called for each method call or constructor call, existing in the bytecode of the method (line 6). The constructor calls in the form of \texttt{this()} or \texttt{super()} are captured by the method \texttt{edit(ConstructorCall cc)}. Whereas the constructor calls in the form of \texttt{new Object()} are captured by \texttt{edit(NewExpr ne)}.
 
-For each captured call to a behavior, it is checked if the called behavior belongs to a server library (line 9). In case it does, the call is added to the \texttt{MicBehaviors} map of the server library (line 10).
+For each captured call to a behavior, it is checked if the called behavior belongs to a server library (line 9). In case it does, the call is added to the \texttt{MicBehaviors} map of the server library (line 10), with 1 as the distance at which the connection is found, since it is a direct dependency.
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -70,7 +70,7 @@ for each clientClass in clientClasses
       serverBehavior = behaviorCall.getBehavior()
       serverClass = serverBehavior.getDeclaringClass()
       if (classPoolManager.belongsToClientLibrary(serverClass))
-        dependencyTreeNode.addReachableBehavior(serverBehavior, behaviorCall)
+        dependencyTreeNode.addMicBehavior(serverBehavior, behaviorCall, distance = 1)
 \end{lstlisting}
 \caption{Pseudo-code of the algorithm to calculate MIC}
 \label{fig:algorithm-mic}
@@ -79,7 +79,7 @@ for each clientClass in clientClasses
 \subsection{Aggregation Coupling}
 The pseudo-code in Figure \ref{fig:algorithm-ac} represents the algorithm used to calculate the metric AC. The output of the algorithm is a map containing for each \texttt{CtClass} of the server library, the set of \texttt{CtField} that are of the type of the \texttt{CtClass}. The class \texttt{CtClass} represents a class and contains the information of the class and the library where it is implemented. \texttt{CtClass} is used later on to find the descendants of the class, and to calculate the metric \texttt{TAC} for the transitive dependencies.
 
-The algorithm for this second metric is similar to the previous one. The implementation iterates through all the classes of the client library (line 3). Then, for each class, it iterates through all the declared fields (line 5). Next, each of the fields containing a generic type are parsed separatedly (line 6), to obtain all the types icluded in the generic  (line 7), which are treated individually (line 8). All the simple fields, if the implementation of the class is found in a server library (line 13), are included in the calculation of the metric (line 14).
+The algorithm for this second metric is similar to the previous one. The implementation iterates through all the classes of the client library (line 3). Then, for each class, it iterates through all the declared fields (line 5). Next, each of the fields containing a generic type are parsed separatedly (line 6), to obtain all the types icluded in the generic  (line 7), which are treated individually (line 8). All the simple fields, if the implementation of the class is found in a server library (line 13), are included in the calculation of the metric (line 14), with 1 as the distance, due to the server library being a direct dependency.
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -96,32 +96,32 @@ for each c in clientClasses
     else
       serverClass = field.getType()
       if (classPoolManager.belongsToClientLibrary(serverClass))
-      dependencyTreeNode.addReachableClass(serverClass, field)
+      dependencyTreeNode.addAcClass(serverClass, field, distance = 1)
 \end{lstlisting}
 \caption{Pseudo-code of the algorithm to calculate AC}
 \label{fig:algorithm-ac}
 \end{figure}
 
-\paragraph{Inheritance}
+\paragraph{Inheritance}\label{paragraph:inheritance}
 Once the two algorithms (Figures \ref{fig:algorithm-mic} and \ref{fig:algorithm-ac}) are finished, in order to follow the definition of the metrics as specified in section \ref{subsec:metric-definition} the hierarchies in the server libraries are visited. For the metric \texttt{MIC} all the polymorphic implementations of the behaviors are found, and for the metric \texttt{AC} all the descendants of the classes.
 
 The algorithms to find the descendants and the polymorphic implementations of the methods, are used with each one of the libraries with which the client library has a direct dependency, and for which coupling was found, either \texttt{MIC} or \texttt{AC}.
 
-The pseudo-code used to find the polymorphic implementations of the methods can be found in Figure \ref{fig:algorithm-polymorphy}. The process is as follows: First, iterate through all the classes of the server library, given its \texttt{DependencyTreeNode} (line 5). Then, it iterates through the behaviors in the map contained in \texttt{MicBehaviors}. If the current library class is a descendant of the class containing the reachable behavior (line 8), and it contains a behavior with the same signature as the reachable behavior (line 9), a polymorphic implementation of the behavior has been found. Therefore, the found behavior is added to the \texttt{MicBehaviors} with the same set of \texttt{BehaviorCall} as the reachable behavior (line 11).
+The pseudo-code used to find the polymorphic implementations of the methods can be found in Figure \ref{fig:algorithm-polymorphy}. The process is as follows: First, iterate through all the classes of the server library, given its \texttt{DependencyTreeNode} (line 5). Then, it iterates through the behaviors in the map contained in \texttt{MicBehaviors}. If the current library class is a descendant of the class containing the reachable behavior (line 8), and it contains a behavior with the same signature as the reachable behavior (line 9), a polymorphic implementation of the behavior has been found. Therefore, the found behavior is added to the \texttt{MicBehaviors} with the same set of \texttt{BehaviorCall} and distance as the mic behavior (line 11).
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
 serverLibrary = dependencyTreeNode.getLibrary()
-reachableBehaviorsMap = dependencyTreeNode.getMicBehaviors()
+micBehaviorsMap = dependencyTreeNode.getMicBehaviors()
 serverLibraryClasses = classPoolManager.getLibraryClasses(serverLibrary)
 
 for each serverClass in serverLibraryClasses
-  for each reachableBehavior in reachableBehaviorsMap
-    declaringClass = reachableBehavior.getDeclaringClass()
+  for each micBehavior in micBehaviorsMap
+    declaringClass = micBehavior.getDeclaringClass()
     if (serverClass.isSubClassOf(declaringClass))
-      if (serverClass.containsBehavior(reachableBehavior.getSignature()))
+      if (serverClass.containsBehavior(micBehavior.getSignature()))
         serverBehavior = serverClass.getBehavior(reachableBehavior.getSignature())
-        dependencyTreeNode.addReachableBehavior(serverBehavior, reachableBehavior.getBehaviorCalls())
+        dependencyTreeNode.addMicBehavior(serverBehavior, micBehavior.getBehaviorCalls(), distance)
 \end{lstlisting}
 \caption{Pseudo-code of the algorithm to find polymorphic implementations}
 \label{fig:algorithm-polymorphy}
@@ -157,10 +157,10 @@ while (!toVisit.isEmpty())
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
-reachableBehaviors = visitingTreeNode.getMicBehaviors()
+micBehaviors = visitingTreeNode.getMicBehaviors()
 
-for each reachableBehavior in reachableBehaviors
-  behaviorsToVisit = queue(reachableBehavior)
+for each micBehavior in micBehaviors
+  behaviorsToVisit = queue(micBehavior)
   visitedBehaviors = empty set
   while (!behaviorsToVisit.isEmpty())
     visitingBehavior = behaviorsToVisit.poll()
@@ -173,7 +173,7 @@ for each reachableBehavior in reachableBehaviors
       if (classPoolManager.isStandardClass(calledClass))
         continue
       else if (classPoolManager.isClassInDependency(calledClass, visitingLibrary))
-        visitingLibrary.addReachableBehaviorToDependency(calledClass)
+        visitingLibrary.addMicBehaviorToDependency(calledClass, distance + 1)
       else // calledClass is in current library
         behaviorsToVisit.add(calledBehavior)
 \end{lstlisting}
@@ -181,14 +181,14 @@ for each reachableBehavior in reachableBehaviors
 \label{fig:calculate-tmic}
 \end{figure}
 
-The first step is to obtain all the reachable behaviors of the \texttt{DependencyTreeNode} that is being visited (line 1). For each one of these behaviors (line 3), the call graph of the behavior is going to be followed, to find all the reachable behaviors of the dependencies of the library that is being visited.
+The first step is to obtain all the behaviors, used for the calculation of \texttt{MIC}, of the \texttt{DependencyTreeNode} that is being visited (line 1). For each one of these behaviors (line 3), the call graph of the behavior is going to be followed, to find all the reachable behaviors of the dependencies of the library that is being visited.
 
-A queue of the behaviors that have to be visited is created, containing only the current reachable behavior (line 4). In addition, a set of all the behaviors that have already been visited is also created (line 5) to avoid infinite loops.
+A queue of the behaviors that have to be visited is created, containing initially only the current behavior (line 4). In addition, a set of all the behaviors that have already been visited is also created (line 5) to avoid infinite loops.
 
-For each behavior in the queue, all the \texttt{behaviorCall} are visited (line 11). Then, there are three different cases that could occurr. First, if the called behavior is implemented in a standard class, the call is ignored (line 14). Also, if the called behavior is implemented in a dependency of the current library, the behavior is added to the reachable behaviors of the dependency (line 16). Finally, the last option is the called behavior is implemented in the current library, in which case it is added to the queue of behaviors to visit (line 19). This way all the entire call graph of the reachable behaviors is visited.
+For each behavior in the queue, all the \texttt{behaviorCall} are visited (line 11). Then, there are three different cases that could occurr. First, if the called behavior is implemented in a standard class, the call is ignored (line 14). Also, if the called behavior is implemented in a dependency of the current library, the behavior is added to the mic behaviors of the dependency (line 16), with the same distance plus 1, since it is one level more of dependency than the current \texttt{DependencyTreeNode}. Finally, the last option is if the called behavior is implemented in the current library, in which case it is added to the queue of behaviors to visit (line 19). This way all the entire call graph of the mic behaviors is visited.
 
 \subsection{Transitive Aggregation Coupling}
-The calculation of the Transitive Aggregation Coupling is very similar to the calculation of the Transitive Method Invocation Coupling but using the reachable classes instead of the reachable behaviors. The pseudo-code of the \textit{BFS} for the \texttt{TAC} is in Figure \ref{fig:tree-traversing-tac}\reminder{is this pseudo-code really necessary?}.
+The calculation of \texttt{TAC} is very similar to the calculation of \texttt{TMIC} but using the ac classes instead of the mic behaviors. The pseudo-code of the \textit{BFS} for the \texttt{TAC} is in Figure \ref{fig:tree-traversing-tac}\unsure{Should I remove this pseudo-code, is it repetitive?}.
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -210,10 +210,10 @@ The implementation of the method \texttt{calculateTransitiveAC} also follows a s
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
-reachableClasses = visitingTreeNode.getAcClasses()
+acClasses = visitingTreeNode.getAcClasses()
 
-for each reachableClass in reachableClasses
-  classesToVisit = queue(reachableClass)
+for each acClass in acClasses
+  classesToVisit = queue(acClass)
   visitedClasses = empty set
   while (!classesToVisit.isEmpty())
     visitingClass = classesToVisit.poll()
@@ -227,35 +227,30 @@ for each reachableClass in reachableClasses
         for each classInField in classesInFIeld
           if (classPoolManager.isStandardClass(classInField)) continue
           else if (classPoolManager.isClassInDependency(classInField, visitingLibrary))
-            visitingLibrary.addReachableClassToDependency(classInField)
+            visitingLibrary.addAcClassToDependency(classInField)
           else // classInField is in current library
             classesToVisit.add(classInField)
       else
         classInField = field.getType()
         if (classPoolManager.isStandardClass(classInField)) continue
         else if (classPoolManager.isClassInDependency(classInField, visitingLibrary))
-          visitingLibrary.addReachableClassToDependency(classInField)
+          visitingLibrary.addReachableClassToDependency(classInField, distance + 1)
         else // classInField is in current library
           classesToVisit.add(classInField)
 \end{lstlisting}
-\caption{Pseudo-code of the algorithm to calculate \texttt{TMIC}}
+\caption{Pseudo-code of the algorithm to calculate \texttt{TAC}}
 \label{fig:calculate-tac}
 \end{figure}
 
-For each reachable class of the current library (line 3), a queue is create with all the classes to be visited (line 4). The queue is declared containing only the current reachable class. To avoid visiting multiple times the same classes, a set with all the visited classes is also maintained (line 5). When a class is visited, all the fields declared in the class are obtained. For each of the declared fields, just as in the calculation of \texttt{AC} (Figure \ref{fig:algorithm-ac}), the fields containing generic signature are parsed, to obtain all the types included in the field (line 14).
+For each class in the field \texttt{AcClasses} of the current library (line 3), a queue is created with all the classes to be visited (line 4). The queue is declared containing only the current class. To avoid visiting multiple times the same classes, a set with all the visited classes is also maintained (line 5). When a class is visited, all the fields declared in the class are obtained. For each of the declared fields, just as in the calculation of \texttt{AC} (Figure \ref{fig:algorithm-ac}), the fields containing generic signature are parsed, to obtain all the types included in the field (line 14).
 
-Then, for each type in the fields, a similar process as the one described in the \texttt{TMIC} metric is done. If the type is implemented in a standard class, it is ignored. Whereas if the type is implemented in a class of a dependency of the current library, is added to the reachable classes of the dependencies. Finally, if the type is implemented in the current library, it is added to the queue of classes to visit.
+Then, for each type in the fields, a similar process as the one described in the \texttt{TMIC} metric is done. If the type is implemented in a standard class, it is ignored. Whereas if the type is implemented in a class of a dependency of the current library, is added to the ac classes of the dependency, with the distance of the current \texttt{DependencyTreeNode} plus one. Finally, if the type is implemented in the current library, it is added to the queue of classes to visit.
 
-\todo{An explanation of what does the implementation do when an abstract method/class or interface is found in the call graph is still missing}
+\paragraph{Inheritance}
+During the calculation of \texttt{TMIC} and \texttt{TAC}, it is possible that one of the classes visited during the algorithms described in Figures \ref{fig:calculate-tmic} and \ref{fig:calculate-tac} is found to be abstract. In this case, the possible executed implementations of the class or methods are found by using the same strategy described in Figure \ref{fig:algorithm-polymorphy}.
 
 \subsection{Propagation Formula}
-- Explain that for each reachable method/class stored in the DependencyTreeNodes, the distance at which this method/class is reachable is also stored.
-
-- Also, how the sets of methodCall/Fields are used in the transitive dependencies
-
-- How to define the propagation formula
-
-- How to find the propagation factor
+To calculate the actual value of both, \texttt{TMIC} and \texttt{TAC}, we use the values stored in the fields \texttt{MicBehaviorsAtDistance} and \texttt{AcClassesAtDistance} (see Figure \ref{fig:class-diagram-tree}). Then, using the value calculated at each distance, we apply the formula described in the equations \ref{eqn:tmic} and \ref{eqn:tac}. The only value of these formulas that cannot be extracted from the analysis of the bytecode, is the \textit{propagation factor}. This variable depends on the real-world behavior of these metrics, and its value will be discussed in Chapter \ref{ch:Experiments}.
 
 \section{Measuring usage metrics}
 
