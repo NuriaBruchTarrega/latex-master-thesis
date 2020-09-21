@@ -161,7 +161,7 @@ micBehaviors = visitingTreeNode.getMicBehaviors()
 
 for each micBehavior in micBehaviors
   behaviorsToVisit = queue(micBehavior)
-  visitedBehaviors = empty set
+  visitedBehaviors = (*$\emptyset$*)
   while (!behaviorsToVisit.isEmpty())
     visitingBehavior = behaviorsToVisit.poll()
     if (visitedBehaviors.contains(visitingBehavior)) continue
@@ -214,7 +214,7 @@ acClasses = visitingTreeNode.getAcClasses()
 
 for each acClass in acClasses
   classesToVisit = queue(acClass)
-  visitedClasses = empty set
+  visitedClasses = (*$\emptyset$*)
   while (!classesToVisit.isEmpty())
     visitingClass = classesToVisit.poll()
     if (visitedClasses.contains(visitingClass)) continue
@@ -256,7 +256,7 @@ To calculate the actual value of both, \texttt{TMIC} and \texttt{TAC}, we use th
 This section describes how the metrics \texttt{\%ReachableClasses} and \texttt{\%ReachableMethods} are calculated in the proof-of-concept, including the pseudo-code of the implementation. Both metrics are calculated at the same time, since some of the connections are entangled. For example, one class can be reachable because it is the return type of a method. The implementation is done in two steps, to find the classes and methods of the direct dependencies directly reachable from the client library, and a second one to find the rest of the reachable methods and classes of all the dependency tree.
 
 \subsection{Step 1}
-The pseudo-code to perform the first step of the calculation of the usage metrics can be found in Figures \ref{fig:algorithm-direct-usage-1}, \ref{fig:algorithm-direct-usage-2}, and \ref{fig:algorithm-direct-usage-3}. First, in Figure \ref{fig:algorithm-direct-usage-1} the implementation iterates through all the classes in the client library to find the usage of the dependencies (line 3). In the case of these metrics, the usage can be any type of connection, in the methods of each of the classes (line 4) or in the class itself (line 5). In Figure \ref{fig:algorithm-direct-usage-2}, we show which connections are detected in the methods of the client library.
+The pseudo-code to perform the first step of the calculation of the usage metrics can be found in Figures \ref{fig:algorithm-usage-step1-1}, \ref{fig:algorithm-usage-step1-2}, and \ref{fig:algorithm-usage-step1-3}. First, in Figure \ref{fig:algorithm-usage-step1-1} the implementation iterates through all the classes in the client library to find the usage of the dependencies (line 3). In the case of these metrics, the usage can be any type of connection, in the methods of each of the classes (line 4) or in the class itself (line 5). In Figure \ref{fig:algorithm-direct-usage-2}, we show which connections are detected in the methods of the client library.
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -267,10 +267,10 @@ for each clientClass in clientClasses
   findDependencyUsageInClass(clientClass)
 \end{lstlisting}
 \caption{Pseudo-code of the step 1 to calculate usage of the dependencies (Part 1)}
-\label{fig:algorithm-direct-usage-1}
+\label{fig:algorithm-usage-step1-1}
 \end{figure}
 
-In the pseudo-code of Figure \ref{fig:algorithm-direct-usage-2}, the connections are detected in the methods of the client library. The code iterates through every behavior declared in the current client class (line 3). For each behavior, different types of connection are detected. If any of the types involve a class or a behavior implemented in one of the dependencies, it is added to the information of the dependency as reachable. The first type of connection detected are the method or constructor calls (line 4), and the field access performed in the methods (line 10). Also, the types of the parameters of the method (line 15) and the return type (line 20) are possible connections with the dependencies, as well as the exceptions thrown by the methods (line 24). Finally, the annotations contained in the method are also detected (line 29), these annotations include those specified in the method itself, as well as the annotations of the parameters of the method.
+In the pseudo-code of Figure \ref{fig:algorithm-usage-step1-2}, the connections are detected in the methods of the client library. The code iterates through every behavior declared in the current client class (line 3). For each behavior, different types of connection are detected. If any of the types involve a class or a behavior implemented in one of the dependencies, it is added to the information of the dependency as reachable. The first type of connection detected are the method or constructor calls (line 4), and the field access performed in the methods (line 10). Also, the types of the parameters of the method (line 15) and the return type (line 20) are possible connections with the dependencies, as well as the exceptions thrown by the methods (line 24). Finally, the annotations contained in the method are also detected (line 29), these annotations include those specified in the method itself, as well as the annotations of the parameters of the method.
 
 \begin{figure}[h]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -308,10 +308,10 @@ findDependencyUsageInBehaviors(clientClass)
         dependencyTreeNode.addReachableClass(annotation)
 \end{lstlisting}
 \caption{Pseudo-code of the step 1 to calculate usage of the dependencies (Part 2)}
-\label{fig:algorithm-direct-usage-2}
+\label{fig:algorithm-usage-step1-2}
 \end{figure}
 
-Finally, the connections the happen at a class level are detected with the pseudo-code in Figure \ref{fig:algorithm-direct-usage-3}. The first of these connections is, as was detected by metric \texttt{AC}, the field declarations (line 2). Then, it is also detected as a connection the superclass of the client class (line 8), and the interfaces implemented (line 12). Lastly, it is also detected as a connection, the annotations in the class (line 17). These annotations can be in the class itself or in any of the declared fields.
+Finally, the connections the happen at a class level are detected with the pseudo-code in Figure \ref{fig:algorithm-usage-step1-3}. The first of these connections is, as was detected by metric \texttt{AC}, the field declarations (line 2). Then, it is also detected as a connection the superclass of the client class (line 8), and the interfaces implemented (line 12). Lastly, it is also detected as a connection, the annotations in the class (line 17). These annotations can be in the class itself or in any of the declared fields.
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -337,7 +337,59 @@ findDependencyUsageInClass(clientClass)
       dependencyTreeNode.addReachableClass(annotation)
 \end{lstlisting}
 \caption{Pseudo-code of the step 1 to calculate usage of the dependencies (Part 3)}
-\label{fig:algorithm-direct-usage-3}
+\label{fig:algorithm-usage-step1-3}
+\end{figure}
+
+\subsection{Step 2}
+
+\begin{figure}[ht!]
+\begin{lstlisting}[escapeinside={(*}{*)}]
+toVisit = queue(clientLibraryNode.getChildren())
+
+while (!toVisit.isEmpty())
+  visiting = toVisit.poll()
+
+  findAllReachableMethodsAndUsageOfDependencies(visiting)
+  findAllReachableClassesAndUsageOfDependencies(visiting)
+
+  toVisit.add(visiting.getChildren())
+\end{lstlisting}
+\caption{Pseudo-code of the step 2 to calculate usage of the dependencies (Part 1)}
+\label{fig:algorithm-usage-step2-1}
+\end{figure}
+
+\begin{figure}[ht!]
+\begin{lstlisting}[escapeinside={(*}{*)}]
+findAllReachableClassesAndUsageOfDependencies(dependencyTreeNode)
+  directlyReachableClasses = dependencyTreeNode.getReachableClasses()
+
+  for each directlyReachableClass in directlyReachableClasses
+    classesToVisit = queue(directlyReachableClass)
+    visitedClasses = (*$\emptyset$*)
+    while (!classesToVisit.isEmpty())
+      visiting = toVisit.poll()
+      findConnectionsInClass(toVisit)
+      visitedBehaviors.add(visiting)
+\end{lstlisting}
+\caption{Pseudo-code of the step 2 to calculate usage of the dependencies (Part 3)}
+\label{fig:algorithm-usage-step2-3}
+\end{figure}
+
+\begin{figure}[ht!]
+\begin{lstlisting}[escapeinside={(*}{*)}]
+findAllReachableMethodsAndUsageOfDependencies(dependencyTreeNode)
+  directlyReachableMethods = dependencyTreeNode.getReachableMethods()
+
+  for each directlyReachableMethod in directlyReachableMethods
+    behaviorsToVisit = queue(directlyReachableMethod)
+    visitedBehaviors = (*$\emptyset$*)
+    while (!behaviorsToVisit.isEmpty())
+      visiting = toVisit.poll()
+      findConnectionsInBehavior(toVisit)
+      visitedBehaviors.add(visiting)
+\end{lstlisting}
+\caption{Pseudo-code of the step 2 to calculate usage of the dependencies (Part 2)}
+\label{fig:algorithm-usage-step2-2}
 \end{figure}
 
 \section{Measuring impact metrics}
