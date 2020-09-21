@@ -362,7 +362,7 @@ However, this formula does not consider propagation at all. Therefore, it is nec
 \end{center}
 \end{figure}
 
-Therefore, the previous formula for $|IMIC|(L_c,L_s)$ will be measured for a certain reachability $\verb|distance|$. \reminder{This formula will not be final until I have been able to measure it}
+Therefore, the previous formula for $|IMIC|(L_c,L_s)$ will be measured for a certain reachability $\verb|distance|$.
 The Transitive Method Invocation Coupling ($\verb|TMIC|(L_c,L_s)$), will be measured as follows. For each $\verb|distance|$ at which there is coupling between $L_c$ and $L_s$, sum up the coupling measured by $\verb|IMIC|(L_c,L_s, \verb|distance|)$, multiplied by a propagation factor ($\verb|PF|$) to the power of the $\verb|distance|$. Where $\verb|PF| \in (0,1)$.
 \unsure{Should this be to the power of (distance - 1)? This way, the distance = 1 (direct dependencies) are not mitigated by the propagation factor. Also, then distance = 2 (first level of transitivity) would only be mitigated once (which would correspond to the direct dependency)}
 
@@ -508,8 +508,6 @@ The last aspect of the granularity to consider is how are the connections evalua
 \paragraph{Direct \& Indirect}
 Finally, we have to decide whether to consider indirect usage or not. Since we want to know the total percentage of usage of the server library, we will consider both, the units that are directly used and those that are indirectly used.
 
-\unsure{Decide whether to add inheritance criterion or not}
-
 \paragraph{Result}
 
 \begin{table}[h]
@@ -610,7 +608,7 @@ Therefore, since $|C(L_s)|$ is the same in both cases because $L_s$ does not cha
 In conclusion, the metric $\verb|%ReachableClasses|$ has the property \textit{Monotonicity}.
 
 \section{Measuring impact per class}
-\unsure{I'm not sure if impact is really the word I want to use here, I'm still thinking about it}
+\unsure{I'm not sure if impact is really the word I want to use here}
 \unsure{Also, I'm not sure about the level of detail needed for these metrics, since it seems pretty simple. Let me know if there is something I should remove or add. Or if I should not treat these as metrics in the same way as the others}
 
 In this case, the goal is to give a bit more low level information of the impact of the dependency in the client library. From the point of view of a developer or a maintainer, it can be useful to know exactly which parts of your code can be impacted by the dependency. For example, in case there is a breaking change, or if the library with which there is a dependency, has to be replaced.
