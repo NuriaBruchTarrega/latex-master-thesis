@@ -92,11 +92,11 @@ for each c in clientClasses
       serverClasses = getAllClasses(field)
       for each serverClass in serverClasses
         if (classPoolManager.belongsToClientLibrary(serverClass))
-          dependencyTreeNode.addClass(serverClass, field)
+          dependencyTreeNode.addAcClass(serverClass, field)
     else
       serverClass = field.getType()
       if (classPoolManager.belongsToClientLibrary(serverClass))
-      dependencyTreeNode.addAcClass(serverClass, field, distance = 1)
+        dependencyTreeNode.addAcClass(serverClass, field, distance = 1)
 \end{lstlisting}
 \caption{Pseudo-code of the algorithm to calculate AC}
 \label{fig:algorithm-ac}
@@ -250,9 +250,95 @@ Then, for each type in the fields, a similar process as the one described in the
 During the calculation of \texttt{TMIC} and \texttt{TAC}, it is possible that one of the classes visited during the algorithms described in Figures \ref{fig:calculate-tmic} and \ref{fig:calculate-tac} is found to be abstract. In this case, the possible executed implementations of the class or methods are found by using the same strategy described in Figure \ref{fig:algorithm-polymorphy}.
 
 \subsection{Propagation Formula}
-To calculate the actual value of both, \texttt{TMIC} and \texttt{TAC}, we use the values stored in the fields \texttt{MicBehaviorsAtDistance} and \texttt{AcClassesAtDistance} (see Figure \ref{fig:class-diagram-tree}). Then, using the value calculated at each distance, we apply the formula described in the equations \ref{eqn:tmic} and \ref{eqn:tac}. The only value of these formulas that cannot be extracted from the analysis of the bytecode, is the \textit{propagation factor}. This variable depends on the real-world behavior of these metrics, and its value will be discussed in Chapter \ref{ch:Experiments}.
+To calculate the actual value of both, \texttt{TMIC} and \texttt{TAC}, we use the values stored in \texttt{MicBehaviorsAtDistance} and \texttt{AcClassesAtDistance} (see Figure \ref{fig:class-diagram-tree}). Then, using the value calculated at each distance, we apply the formula described in the equations \ref{eqn:tmic} and \ref{eqn:tac}. The only value of these formulas that cannot be extracted from the analysis of the bytecode, is the \textit{propagation factor}. This variable depends on the real-world behavior of these metrics, and its value will be discussed in Chapter \ref{ch:Experiments}.
 
 \section{Measuring usage metrics}
+This section describes how the metrics \texttt{\%ReachableClasses} and \texttt{\%ReachableMethods} are calculated in the proof-of-concept, including the pseudo-code of the implementation. Both metrics are calculated at the same time, since some of the connections are entangled. For example, one class can be reachable because it is the return type of a method. The implementation is done in two steps, to find the classes and methods of the direct dependencies directly reachable from the client library, and a second one to find the rest of the reachable methods and classes of all the dependency tree.
+
+\subsection{Step 1}
+The pseudo-code to perform the first step of the calculation of the usage metrics can be found in Figures \ref{fig:algorithm-direct-usage-1}, \ref{fig:algorithm-direct-usage-2}, and \ref{fig:algorithm-direct-usage-3}. First, in Figure \ref{fig:algorithm-direct-usage-1} the implementation iterates through all the classes in the client library to find the usage of the dependencies (line 3). In the case of these metrics, the usage can be any type of connection, in the methods of each of the classes (line 4) or in the class itself (line 5). In Figure \ref{fig:algorithm-direct-usage-2}, we show which connections are detected in the methods of the client library.
+
+\begin{figure}[ht!]
+\begin{lstlisting}[escapeinside={(*}{*)}]
+clientClasses = classPoolManager.getClientLibraryClasses()
+
+for each clientClass in clientClasses
+  findDependencyUsageInBehaviors(clientClass)
+  findDependencyUsageInClass(clientClass)
+\end{lstlisting}
+\caption{Pseudo-code of the step 1 to calculate usage of the dependencies (Part 1)}
+\label{fig:algorithm-direct-usage-1}
+\end{figure}
+
+In the pseudo-code of Figure \ref{fig:algorithm-direct-usage-2}, the connections are detected in the methods of the client library. The code iterates through every behavior declared in the current client class (line 3). For each behavior, different types of connection are detected. If any of the types involve a class or a behavior implemented in one of the dependencies, it is added to the information of the dependency as reachable. The first type of connection detected are the method or constructor calls (line 4), and the field access performed in the methods (line 10). Also, the types of the parameters of the method (line 15) and the return type (line 20) are possible connections with the dependencies, as well as the exceptions thrown by the methods (line 24). Finally, the annotations contained in the method are also detected (line 29), these annotations include those specified in the method itself, as well as the annotations of the parameters of the method.
+
+\begin{figure}[h]
+\begin{lstlisting}[escapeinside={(*}{*)}]
+findDependencyUsageInBehaviors(clientClass)
+  behaviors = clientClass.getDeclaredBehaviors()
+  for each behavior in behaviors
+    for each behaviorCall in behavior
+      serverBehavior = behaviorCall.getBehavior()
+      serverClass = serverBehavior.getDeclaringClass()
+      if (classPoolManager.belongsToDependency(serverClass))
+        dependencyTreeNode.addReachableBehavior(serverBehavior)
+
+    for each fieldAccess in behavior
+      serverClass = fieldAccess.getField().getType()
+      if (classPoolManager.belongsToDependency(serverClass))
+        dependencyTreeNode.addReachableClass(serverClass)
+
+    for each parameter in behavior
+      serverClass = parameter.getType()
+      if (classPoolManager.belongsToDependency(serverClass))
+        dependencyTreeNode.addReachableClass(serverClass)
+
+    returnType = behavior.getReturnType()
+    if (classPoolManager.belongsToDependency(returnType))
+      dependencyTreeNode.addReachableClass(returnType)
+
+    exceptions = behavior.getThrowsExceptions()
+    for each exception in behavior
+      if (classPoolManager.belongsToDependency(exception))
+        dependencyTreeNode.addReachableClass(exception)
+
+    annotations = behavior.getAnnotations()
+    for each annotation in annotations
+      if (classPoolManager.belongsToDependency(annotation))
+        dependencyTreeNode.addReachableClass(annotation)
+\end{lstlisting}
+\caption{Pseudo-code of the step 1 to calculate usage of the dependencies (Part 2)}
+\label{fig:algorithm-direct-usage-2}
+\end{figure}
+
+Finally, the connections the happen at a class level are detected with the pseudo-code in Figure \ref{fig:algorithm-direct-usage-3}. The first of these connections is, as was detected by metric \texttt{AC}, the field declarations (line 2). Then, it is also detected as a connection the superclass of the client class (line 8), and the interfaces implemented (line 12). Lastly, it is also detected as a connection, the annotations in the class (line 17). These annotations can be in the class itself or in any of the declared fields.
+
+\begin{figure}[ht!]
+\begin{lstlisting}[escapeinside={(*}{*)}]
+findDependencyUsageInClass(clientClass)
+  fields = clientClass.getDeclaredFields()
+  for each field in fields
+    serverClass = field.getType()
+    if (classPoolManager.belongsToDependency(serverClass))
+      dependencyTreeNode.addReachableClass(serverClass)
+
+  superClass = clientClass.getSuperClass()
+  if (classPoolManager.belongsToDependency(superClass))
+    dependencyTreeNode.addReachableClass(superClass)
+
+  interfaces = clientClass.getImplementedInterfaces()
+  for each interfaceClass in interfaces
+    if (classPoolManager.belongsToDependency(interfaceClass))
+      dependencyTreeNode.addReachableClass(interfaceClass)
+
+  annotations = clientClass.getAnnotations()
+  for each annotation in annotations
+    if (classPoolManager.belongsToDependency(annotation))
+      dependencyTreeNode.addReachableClass(annotation)
+\end{lstlisting}
+\caption{Pseudo-code of the step 1 to calculate usage of the dependencies (Part 3)}
+\label{fig:algorithm-direct-usage-3}
+\end{figure}
 
 \section{Measuring impact metrics}
 
