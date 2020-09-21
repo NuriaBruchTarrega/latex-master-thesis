@@ -46,8 +46,9 @@ In addition, for the metrics that measure the usage of the dependencies, there a
 \end{figure}
 
 \section{Measuring coupling metrics}
+This section contains the description of how the metrics \texttt{MIC}, \texttt{AC}, \texttt{TMIC}, and \texttt{TAC} are calculated in the implementation of the PoC.
 
-\subsection{Direct Method Invocation Coupling}
+\subsection{Method Invocation Coupling}
 The pseudo-code in Figure \ref{fig:algorithm-mic} represents the algorithm used to calculate the metric MIC for each one of the direct dependencies of a given client library. The output of the algorithm is a map containing the set of \texttt{BehaviorCalls} that call each \texttt{CtBehavior}. The map is generated for each one of the direct dependencies and stored in the \texttt{DependencyTreeNode} of each library.
 
 The class \texttt{CtBehavior} represents a method, it contains the information about the method itself, and about the class that contains the method. Each of the \texttt{CtMethod} are used later on to find the polymorphic implementations of the method, as well as to calculate the transitive dependencies.
@@ -75,7 +76,7 @@ for each clientClass in clientClasses
 \label{fig:algorithm-mic}
 \end{figure}
 
-\subsection{Direct Aggregation Coupling}
+\subsection{Aggregation Coupling}
 The pseudo-code in Figure \ref{fig:algorithm-ac} represents the algorithm used to calculate the metric AC. The output of the algorithm is a map containing for each \texttt{CtClass} of the server library, the set of \texttt{CtField} that are of the type of the \texttt{CtClass}. The class \texttt{CtClass} represents a class and contains the information of the class and the library where it is implemented. \texttt{CtClass} is used later on to find the descendants of the class, and to calculate the metric \texttt{TAC} for the transitive dependencies.
 
 The algorithm for this second metric is similar to the previous one. The implementation iterates through all the classes of the client library (line 3). Then, for each class, it iterates through all the declared fields (line 5). Next, each of the fields containing a generic type are parsed separatedly (line 6), to obtain all the types icluded in the generic  (line 7), which are treated individually (line 8). All the simple fields, if the implementation of the class is found in a server library (line 13), are included in the calculation of the metric (line 14).
@@ -132,7 +133,6 @@ The process to find descendants in the case of the metric \texttt{AC} is the sam
 As can be observed in the previous explanation of how the detection of inheritance is done, in this PoC implementation, it is not detected if a class is extended in the client library instead of in the server library.\todo{Find out how often does this happen}
 
 \subsection{Transitive Method Invocation Coupling}
-
 The calculation of the Transitive Method Invocation Coupling takes place after calculating Method Invocation Coupling for the direct dependencies of the client library. The reachable methods found in these dependencies are used as a base to calculate the Transitive Method Invocation Coupling.
 
 To calculate the metric for every dependency in the tree, the dependency tree is traversed using a \textit{breadth-first search (BFS)} on the \texttt{DependencyTreeNode}. The algorithm starts with the direct dependencies, since the client library node has already been used for the calculation of \texttt{MIC}. The traversing of a branch finishes either when a node does not have more children, or when no reachable methods have been found in a library. The pseudo-code of the implemented algorithm can be found in Figure \ref{fig:tree-traversing-tmic}.
@@ -188,7 +188,6 @@ A queue of the behaviors that have to be visited is created, containing only the
 For each behavior in the queue, all the \texttt{behaviorCall} are visited (line 11). Then, there are three different cases that could occurr. First, if the called behavior is implemented in a standard class, the call is ignored (line 14). Also, if the called behavior is implemented in a dependency of the current library, the behavior is added to the reachable behaviors of the dependency (line 16). Finally, the last option is the called behavior is implemented in the current library, in which case it is added to the queue of behaviors to visit (line 19). This way all the entire call graph of the reachable behaviors is visited.
 
 \subsection{Transitive Aggregation Coupling}
-
 The calculation of the Transitive Aggregation Coupling is very similar to the calculation of the Transitive Method Invocation Coupling but using the reachable classes instead of the reachable behaviors. The pseudo-code of the \textit{BFS} for the \texttt{TAC} is in Figure \ref{fig:tree-traversing-tac}\reminder{is this pseudo-code really necessary?}.
 
 \begin{figure}[ht!]
