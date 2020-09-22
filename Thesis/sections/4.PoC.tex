@@ -453,19 +453,29 @@ There are two ways to select a node. The first one is by clicking the node. The 
 
 The second type of interaction has been implemented to display some additional information of the nodes. When a user hovers over a node, a \textit{tooltip} appears. The \textit{tooltip} contains the data of the library, and the value of the coupling and usage metrics. For the coupling metrics, there are two tables displaying, for each metric, the value measured and the distance at which the value was measured.
 
+\subsection{Dependency Table}
+
+\paragraph{Layout}
+
+\paragraph{Shape}
+
+\paragraph{Color}
+
+\paragraph{Interaction}
+
 \subsection{Distribution per class}
 With the previous visualizations, the user has an overview of the dependency tree. However, there is no way the user can have more detailed information about a specific library of the dependency tree. Therefore, and making use of the node selection implemented in the visualization described in section \ref{sec:visualization-dependency-tree}, we have created a visualization to display how the distribution of the dependency among the classes of the client library.\todo{Add example visualization}
 
 \paragraph{Layout}
-The chosen layout for this visualization is a multi-chart. The chart contains two values for each represented class, the metrics \texttt{#MethodInvocations} and \texttt{#FieldDeclarations}.
+The chosen layout for this visualization is a multi-chart. The chart contains two values for each represented class, the metrics \texttt{\#MethodInvocations} and \texttt{\#FieldDeclarations}.
 Only the classes for which at least one of the two metrics is measured appear in the chart.
 
 \paragraph{Shape}
 The shape chosen for this chart is the bar. The line was discarded since, it is not the goal to show any kind of progression between the different classes. Hence, the chart used is a multi-barchart.
-At the x-axis of the chart, only the simple names of the classes are displayed, in order to avoid having too much text in the chart. In the y-axis, there is a numeric scale, which corresponds to the measured \texttt{#MethodInvocations} and \texttt{#FieldDeclarations}.
+At the x-axis of the chart, only the simple names of the classes are displayed, in order to avoid having too much text in the chart. In the y-axis, there is a numeric scale, which corresponds to the measured \texttt{\#MethodInvocations} and \texttt{\#FieldDeclarations}.
 
 \paragraph{Color}
-To follow the palette used for the rest of the frontend of this tool, the bars displaying the \texttt{#MethodInvocations} value have dark blue color, while the bars displaying the \texttt{#FieldDeclarations} value are pink.
+To follow the palette used for the rest of the frontend of this tool, the bars displaying the \texttt{\#MethodInvocations} value have dark blue color, while the bars displaying the \texttt{\#FieldDeclarations} value are pink.
 
 \paragraph{Interaction}
 This visualization appears and disappears according to the node selection of the dependency tree and table visualizations.
