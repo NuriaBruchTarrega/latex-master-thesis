@@ -422,52 +422,52 @@ for each entry in micBehaviorsMap
 \end{figure}
 
 \section{Visualization}
-Until now, in this chapter, it has been described how the implementation works for the backend part. In this section, however, we are going to explain how the visualization of the tool has been designed and implemented.
+ In this section, we are going to explain how the visualization of the tool has been designed and implemented.
 
 This section contains a brief description of the technologies and libraries used to develop the visualization of the application, and a description of each part of the visualization.
 
-For each part of the visualization, we are going to discuss different visual aspects of the visualization following the structure used by Kula et al. \cite{kula2014visualizing}. However, since the tool implemented for this thesis is meant to be interactive, we have added a new aspects, interactivity. These visual aspects are: Layout, shape, color, and interaction.
+For each part of the visualization, we are going to discuss different visual aspects of the visualization following the structure used by Kula et al. \cite{kula2014visualizing}. However, since the tool implemented for this thesis is meant to be interactive, we have added this new aspect. Therefore, the visual aspects considered are: Layout, shape, color, and interaction.
 
 \subsection{Technologies}
 The visualization has been implemented using the framework \texttt{Angular}\footnote{\url{https://angular.io/}}. Most of the UI elements used are obtained from \texttt{Angular Material}\footnote{\url{https://material.angular.io/}}. Finally, for graph representations we have used \texttt{vis.js}\footnote{\url{https://visjs.org/}}, and \texttt{ngx-charts}\footnote{\url{https://github.com/swimlane/ngx-charts}} for charts.
 
 \subsection{Dependency Tree}\label{sec:visualization-dependency-tree}
-The goal for the first visualization element is to provide an overview of the dependency tree of the client library, after being resolved with the Maven algorithm. In this overview, the maintainer should be able to see the degree of dependency with each of the dependencies of the client library. Furthermore, the unused dependencies, as well as the most sued ones, should be easily identifiable.
+The goal for the first visualization element is to provide an overview of the dependency tree of the client library, after being resolved with the Maven algorithm. In this overview, the maintainer should be able to see the degree of dependency with each of the dependencies of the client library. Furthermore, the unused dependencies, as well as the most used ones, should be easily identifiable.
 \todo{add example image}
 
 \paragraph{Layout}
 Since this visualization displays the dependency tree of the client library, the chosen layout is a \textit{graph}. In particular, it is a \textit{tree}. In this graph, each node represents a library, and each edge a dependency between the nodes. The tree is organized by levels, such that the first level only contains the client library, and the second level the direct dependencies. The rest of the levels are organized according to the dependencies of the previous levels.
 
-Each node displays the following information about the library: \texttt{GroupID}, \texttt{ArtifactID}, \texttt{version}, and the result of the metrics - \texttt{MIC} and \texttt{AC} for the direct dependencies, and \texttt{TMIC} and \texttt{TAC} for the transitive dependencies.
+Each node displays the following information about the library: \texttt{GroupID}, \texttt{ArtifactID}, \texttt{version}, and the result of the metrics - \texttt{MIC} and \texttt{AC} for the direct dependencies, as well as \texttt{TMIC} and \texttt{TAC} for the transitive dependencies.
 
 \paragraph{Shape}
 For this visualization, the shape of each of the nodes is the same, an elipse. This is because the differentiation between the nodes is done with the color of the node, and not the shape. Furthermore, the elipse is the shape that allows to display all the necessary information in the node, without taking too much extra space.
 
 \paragraph{Color}
-The color palette used in all the different elements of the visualization has \textit{deep-purple} as primary color, and \textit{pink} as accent color. Hence, most of the nodes have different shades of \textit{deep-purple}. The node representing the client color is \textit{pink}, and the nodes representing libraries for which the value of all the metrics is 0 are \textit{light-grey}. For the rest of the nodes, the direct dependencies have a darker shade of \textit{deep-purple}, and the transitive dependencies a lighter one. \reminder{Maybe, I'll change this and the color of the rest of the nodes will range according to the degree of dependency}
-In addition, when a node is selected (see next paragraph), the color of the node changes to a \textit{light-pink}.
+To indicate with the color of the nodes the state of the dependency we have used three different colors. The nodes representing libraries for which no usage has been found are light grey. Then, the rest of the dependencies have different shades of blue, going from lighter blue for the less used, and darker blue for the most used. Finally, the node representing the client color is dark pink. In addition, when a node is selected (see next paragraph), the color of the node changes to a light pink.
 
 \paragraph{Interaction}
-The main problem with the dependcy tree visualization is that if the tree contains too many node, it is very difficult to see the content of the nodes. To fix this, all the nodes can be selected. When a node is selected, the visualization zooms in the selected node, so the user can see the content.
+The main problem with the dependcy tree visualization is that if the tree contains too many nodes, it is very difficult to see the content of the nodes. To fix this, all the nodes can be selected. When a node is selected, the visualization zooms in the selected node, so the user can see the content.
 
 There are two ways to select a node. The first one is by clicking the node. The second option is by finding the node in the search bar. The search bar has been implemented to give suggestions containing the names of all the libraries displayed in the tree. To clear the node selection, the user has to click in the graph view, outside of any node.
 
-The second type of interaction has been implemented to display some additional information of the nodes. When a user hovers over a node, a \textit{tooltip} appears. The \textit{tooltip} contains two tables displaying, for each metric, the value measured and the distance at which the value was measured.
+The second type of interaction has been implemented to display some additional information of the nodes. When a user hovers over a node, a \textit{tooltip} appears. The \textit{tooltip} contains the data of the library, and the value of the coupling and usage metrics. For the coupling metrics, there are two tables displaying, for each metric, the value measured and the distance at which the value was measured.
 
 \subsection{Distribution per class}
-With the first visualization, the user has an overview of the dependency tree. However, there is no way the user can have more detailed information about a specific library of the dependency tree. Therefore, and making use of the node selection implemented in the visualization described in section \ref{sec:visualization-dependency-tree}, we have created a visualization to display how the distribution of the dependency among the classes of the client library.\todo{Add example visualization}
+With the previous visualizations, the user has an overview of the dependency tree. However, there is no way the user can have more detailed information about a specific library of the dependency tree. Therefore, and making use of the node selection implemented in the visualization described in section \ref{sec:visualization-dependency-tree}, we have created a visualization to display how the distribution of the dependency among the classes of the client library.\todo{Add example visualization}
 
 \paragraph{Layout}
-The chosen layout for this visualization is a multi-chart. The chart contains two values for each represented class: the calculated \texttt{MIC} and the calculated \texttt{AC}.\reminder{And TMIC, TAC? Maybe I should also use the propagation formula here} Only the classes for which at least one of the two metrics is measured appear in the chart. \reminder{I could also sort the classes by some of the metrics, or make the chart scrollable to avoid very thin bars}
+The chosen layout for this visualization is a multi-chart. The chart contains two values for each represented class, the metrics \texttt{#MethodInvocations} and \texttt{#FieldDeclarations}.
+Only the classes for which at least one of the two metrics is measured appear in the chart.
 
 \paragraph{Shape}
-The shape chosed for this chart is the bar. The line was discarded since, it is not the goal to show any kind of progression between the different classes. Hence, the chart used is a multi-barchart.
-At the x-axis of the chart, only the simple names of the classes are displayed, in order to avoid having too much text in the chart. In the y-axis, there is a numeric scale, which corresponds to the measured \texttt{MIC} and \texttt{AC}.
+The shape chosen for this chart is the bar. The line was discarded since, it is not the goal to show any kind of progression between the different classes. Hence, the chart used is a multi-barchart.
+At the x-axis of the chart, only the simple names of the classes are displayed, in order to avoid having too much text in the chart. In the y-axis, there is a numeric scale, which corresponds to the measured \texttt{#MethodInvocations} and \texttt{#FieldDeclarations}.
 
 \paragraph{Color}
-To follow the palette used for the rest of the frontend of this tool, the bars displaying the \texttt{MIC} value have \textit{deep-purple} color, while the bars displaying the \texttt{AC} value are \textit{pink}.
+To follow the palette used for the rest of the frontend of this tool, the bars displaying the \texttt{#MethodInvocations} value have dark blue color, while the bars displaying the \texttt{#FieldDeclarations} value are pink.
 
 \paragraph{Interaction}
-This visualization appears and disappears according to the node selection of the dependency tree visualization.
+This visualization appears and disappears according to the node selection of the dependency tree and table visualizations.
 
-In addition, if the user hovers over a column, a tooltip appears. This tooltip contains the values of the measured metrics (since these values are not displayed in the chart). In addition, it also contains the fully-qualified name of the class, to indicate the user where to find the class.
+In addition, if the user hovers the cursor over a column, a \textit{tooltip} appears. This \textit{tooltip} contains the values of the measured metrics, since these values are not displayed in the chart. In addition, it also contains the fully-qualified name of the class, to indicate the user the exact path to find the class.
