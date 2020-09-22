@@ -398,6 +398,28 @@ findAllReachableClassesAndUsageOfDependencies(dependencyTreeNode)
 \end{figure}
 
 \section{Measuring impact metrics}
+These two metrics are calculated after the calculation of the coupling metrics. In order to calculate the impact per class, the sets of \texttt{MethodCall} and \texttt{CtField} from \texttt{MicBehaviors} and \texttt{AcClasses}, are used (see Figure \ref{fig:class-diagram-tree}).
+
+The pseudo-code used to calculate the metric $\verb|#MethodInvocations|$, for a certain dependency and all the client classes from which it is reachable, can be found in Figure \ref{fig:algorithm-method-invocations}. The \texttt{micBehaviors} of the \texttt{DependencyTreeNode} are iterated (line 4). For each one of the \texttt{methodCall} involved (line 7), the class where the \texttt{methodCall} takes place is added to the map of the $\verb|#MethodInvocations|$, or summed 1 to the value of the metric for that class. In the case of the $\verb|#FieldDeclarations|$ the process is the same, but using the \texttt{CtField} stored in \texttt{AcClasses} instead.
+
+\begin{figure}[ht!]
+\begin{lstlisting}[escapeinside={(*}{*)}]
+methodInvocationMap = map(class, int)
+micBehaviorsMap = dependencyTreeNode.getMicBehaviorsMap()
+
+for each entry in micBehaviorsMap
+  methodCallSet = entry.getValue()
+
+  for each methodCall in methodCallSet
+    clientClass = methodCall.fromClass()
+    if methodInvocationMap.contains(clientClass)
+      methodInvocationMap.update(clientClass, value + 1)
+    else
+      methodInvocationMap.add(clientClass, 1)
+\end{lstlisting}
+\caption{Pseudo-code of the calculation of the \texttt{\#MethodInvocations} of a dependency}
+\label{fig:algorithm-method-invocations}
+\end{figure}
 
 \section{Visualization}
 Until now, in this chapter, it has been described how the implementation works for the backend part. In this section, however, we are going to explain how the visualization of the tool has been designed and implemented.
