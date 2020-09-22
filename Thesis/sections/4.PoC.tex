@@ -16,6 +16,8 @@ After an initial try, source code analysis has been discarded. The reason for it
 The option of call-level dependency graphs is useful for the metrics that measure method invocations. However, the information needed to measure aggregation coupling, is not contained in the call-level graphs. Therefore, the approach to develop this PoC has been bytecode analysis. Furthermore, obtaining the call-graphs of the complete dependency tree is still a work in progres within the FASTEN project.
 
 \subsection{Bytecode analysis}
+The model proposed in this research is meant to be language-agnostic. Nevertheless, the scope of the proof-of-concept is limited to Java, since the bytecode analysis performed by the proof-of-concept is limited to this programming language.
+
 The PoC implementation to calculate the metrics of the uses bytecode analysis. The implementation is supported by the libraries  \textit{Aether}\footnote{\url{https://wiki.eclipse.org/Aether/What_Is_Aether}}, and \textit{Javassist}\footnote{\url{http://www.javassist.org/}}.
 
 \paragraph{Aether}

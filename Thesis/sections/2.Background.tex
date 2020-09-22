@@ -140,7 +140,29 @@ In order to resolve the dependencies, Maven uses the \textit{POM} file and scope
 \section{Coupling}\label{section:bg-coupling}
 When assessing the quality of software, there are many aspects that are considered and measured. One of these, in particular for Object-Oriented systems, is coupling. Coupling measures the degree of dependency between two different parts of a system. In the literature of coupling metrics, these have been used to measure the dependency of the elements of the same system, or to give an overview of the coupling within a system. However, in this thesis we measure the coupling, or degree of dependency, between two different systems.
 
-As described in section \ref{section:scope}, this thesis is focused in the structural metrics, based on static source code analysis.
+Therefore, we propose re-using the already existing coupling metrics, meant to measure the coupling between units of the \textit{same} project and adapt them to measure coupling \textit{between} projects.
+
+\blankl
+According to Poshyvanyk and Marcus in \cite{poshyvanyk2006conceptual}, there are six main groups of coupling metrics:
+
+\begin{itemize}
+  \item \textbf{Structural coupling metrics:} Measured directly from static source code analysis. Largely studied by the literature about coupling \cite{briand1999unified, poshyvanyk2006conceptual, briand1997investigation, eder1994coupling}.
+
+  \item \textbf{Dynamic coupling measures:} Measured using dynamic code analysis. \textit{"Introduced as the refinement to existing coupling measures due to gaps in addressing polymorphism, dynamic binding, and the presence of unused code by static structural coupling measures"} \cite{poshyvanyk2006conceptual}.
+
+  \item \textbf{Evolutionary and Logical coupling:} According to Zimmermann and Diehl \cite{zimmermann2005mining}, evolutionary coupling can: \textit{"tell us which parts of the system are coupled by common changes or cochanges."}
+
+  \item \textbf{Coupling measures based on information entropy approach:} Coupling metrics based on the information-theory approach, such as the metrics proposed by Allen and Khoshgoftaar in \cite{allen1999measuring}.
+
+  \item \textbf{Conceptual coupling metrics:} Based on the semantic similarity between the elements. This is the focus of the work from Poshyvanyk and Marcus \cite{poshyvanyk2006conceptual}.
+
+  \item \textbf{Coupling metrics for specific types of software applications:} Specialized coupling metrics for certain types of projects, such as knowledge-based systems or aspect-oriented approach.
+\end{itemize}
+
+\blankl
+Since this research is aimed to be independent of the domain, the last category is not considered in this thesis. Moreover, the evolutionary coupling is not possible to be applied in our context. It is very likely that the separate projects are not going to evolve at the same time, given that they are not developed by the same team. Finally, the research of this project, owing to the time limitation, is going to be centered on the structural metrics.
+
+These metrics are going to be proposed as a first step to measure the degree of library dependency. Nevertheless, the metrics can be extended and calculated more accurately by adding dynamic coupling and information entropy approach metrics in future work.
 
 There are many structural coupling metrics, each one measuring a different type of coupling from a different perspective, depending on the purpose for which the metrics are needed. In order to define type of metric needed to measure the dependency between products, we have used the framework defined by Briand et al. \cite{briand1999unified}, which unifies the frameworks defined by Eder et al. \cite{eder1994coupling}, Hitz and Montazeri \cite{hitz1995measuring}, and Briand et al. \cite{briand1997investigation}.
 
@@ -305,3 +327,8 @@ Finally, the two types of locus are:
 
 \blankls
 The suite of metrics is defined based on all possible combinations of these three criteria.
+
+\section{Metrics validation}
+This thesis includes the evaluation and validation of the metrics included in the proposed model by using the proof-of-concept. Since there is not a unique way to validate metrics which is globally accepted and used various approaches are adopted. In the paper \cite{srinivasan2014software}, Srinivasan et al. explain that there are two fundamental approaches for metric validation: \textit{theoretically} and \textit{empirically}. Therefore, to provide a check of validity that is as broad as possible, a mixture of these two approaches will be used during this project. However, this research does not contain a full validation of the metrics, due to time constraints.
+
+For the theoretical validity of the coupling metrics, these are validated according to the \textit{Mathematical Properties of Measures for Coupling} \cite{srinivasan2014software}. Also, a subset of the aspects presented by Meenely et al. \cite{meneely2013validating} are also used to validate all the metrics in the model.

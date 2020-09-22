@@ -40,7 +40,7 @@ With this question, we want to propose a set of metrics to measure a dependency 
 \end{itemize}
 
 \blankl
-\textbf{RQ2:} \textit{How can we measure the degree of code dependency between two software products with a transitive dependency?} \unsure{I'm not sure if I should phrase this question like this, or focusing on the differences: How should the measurements of the dependencies be adapted for the case of transitive dependencies}
+\textbf{RQ2:} \textit{How can we measure the degree of code dependency between two software products with a transitive dependency?}
 
 \blankls
 Transitive dependencies involve more factors than direct dependencies. Therefore, the metrics proposed for the direct dependencies have to be adapted for the transitive ones.
@@ -75,48 +75,6 @@ Considering the current state of the art in the domain of this thesis project, t
 
   \item A proposed visualization of the model, validated through expert review.
 \end{enumerate}
-
-\section{Scope}\label{section:scope}
-
-In this research we propose a model for software dependencies, containing metrics to measure different aspects of the dependencies. We develop a proof-of-concept tool to calculate and visualize the model.
-
-\subsection{Quantifying the dependencies}
-To the best of our knowledge, there are no references about measuring the degree of dependency between two separate projects. On the other hand, the degree of dependency between two classes or modules of the same project has already been measured, using coupling metrics \cite{briand1999unified}.
-
-Therefore, we propose re-using the already existing coupling metrics, meant to measure the coupling between units of the \textit{same} project and adapt them to measure coupling \textit{between} projects.
-
-\blankl
-According to Poshyvanyk and Marcus in \cite{poshyvanyk2006conceptual}, there are six main groups of coupling metrics:
-
-\begin{itemize}
-  \item \textbf{Structural coupling metrics:} Measured directly from static source code analysis. Largely studied by the literature about coupling \cite{briand1999unified, poshyvanyk2006conceptual, briand1997investigation, eder1994coupling}.
-
-  \item \textbf{Dynamic coupling measures:} Measured using dynamic code analysis. \textit{"Introduced as the refinement to existing coupling measures due to gaps in addressing polymorphism, dynamic binding, and the presence of unused code by static structural coupling measures"} \cite{poshyvanyk2006conceptual}.
-
-  \item \textbf{Evolutionary and Logical coupling:} According to Zimmermann and Diehl \cite{zimmermann2005mining}, evolutionary coupling can: \textit{"tell us which parts of the system are coupled by common changes or cochanges."}
-
-  \item \textbf{Coupling measures based on information entropy approach:} Coupling metrics based on the information-theory approach, such as the metrics proposed by Allen and Khoshgoftaar in \cite{allen1999measuring}.
-
-  \item \textbf{Conceptual coupling metrics:} Based on the semantic similarity between the elements. This is the focus of the work from Poshyvanyk and Marcus \cite{poshyvanyk2006conceptual}.
-
-  \item \textbf{Coupling metrics for specific types of software applications:} Specialized coupling metrics for certain types of projects, such as knowledge-based systems or aspect-oriented approach.
-\end{itemize}
-
-\blankl
-Since this research is aimed to be independent of the domain, the last category is not considered in this thesis. Moreover, the evolutionary coupling is not possible to be applied in our context. It is very likely that the separate projects are not going to evolve at the same time, given that they are not developed by the same team. Finally, the research of this project, owing to the time limitation, is going to be centered on the structural metrics.
-
-These metrics are going to be proposed as a first step to measure the degree of library dependency. Nevertheless, the metrics can be extended and calculated more accurately by adding dynamic coupling and information entropy approach metrics in future work.
-
-\subsection{Proof-of-concept}
-The model proposed in this research is meant to be language-agnostic. Nevertheless, the scope of the proof-of-concept is limited to Java, since the bytecode analysis performed by the proof-of-concept is limited to this programming language.
-
-Besides, since the implementation performs bytecode analysis on jar files obtained from \textit{Maven Repository Central}, the testing dependencies are out of the scope of the proof-of-concept. Generally, the testing classes are not included in the jar files of the Maven artifacts.
-
-\subsection{Evaluation and validation}
-This thesis includes the evaluation and validation of the metrics included in the proposed model by using the proof-of-concept. Since there is not a unique way to validate metrics which is globally accepted and used various approaches are adopted. In the paper \cite{srinivasan2014software}, Srinivasan et al. explain that there are two fundamental approaches for metric validation: \textit{theoretically} and \textit{empirically}. Therefore, to provide a check of validity that is as broad as possible, a mixture of these two approaches will be used during this project. However, this research does not contain a full validation of the metrics, due to time constraints.
-
-For the theoretical validity of the coupling metrics, these are validated according to the \textit{Mathematical Properties of Measures for Coupling} \cite{srinivasan2014software}. Also, a subset of the aspects presented by Meenely et al. \cite{meneely2013validating} are also used to validate all the metrics in the model.
-The empirical validation of the metrics is carried out by the means of case studies, comparing the impact that breaking changes in the APIs of a library has in the dependant projects with the measured metrics.
 
 \section{Outline}
 In Chapter \ref{ch:Background} we describe the background of this thesis based on the existing literature of the domain.
