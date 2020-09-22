@@ -454,14 +454,20 @@ There are two ways to select a node. The first one is by clicking the node. The 
 The second type of interaction has been implemented to display some additional information of the nodes. When a user hovers over a node, a \textit{tooltip} appears. The \textit{tooltip} contains the data of the library, and the value of the coupling and usage metrics. For the coupling metrics, there are two tables displaying, for each metric, the value measured and the distance at which the value was measured.
 
 \subsection{Dependency Table}
+The dependency tree visualization gives an overview of the dependencies. However, it is not useful to compare the values of the metrics among dependencies. Therefore, this second visualization is focused on being able to see together all the values to sort and compare.
+\todo{Add image}
 
 \paragraph{Layout}
+For it to be easy to compare the value of the metrics among all the dependencies, the layout chosen for this visualization is a table. The table displays one dependency on each row, while the columns display information about the dependency, and the coupling and usage metrics calculated for the dependency. For each library, there is a column for the \textit{groupId}, the \textit{artifactId}, the \textit{version}, and whether the dependency is direct or transitive. Then, the rest of the columns the values displayed are \texttt{MIC} and \texttt{AC} (or \texttt{TMIC} and \texttt{TAC} for transitive dependencies), and the metrics \texttt{\%ReachableClasses} and \texttt{\%ReachableMethods}.
 
 \paragraph{Shape}
+For this visualization, the shape is already defined by the layout, which is a table.
 
 \paragraph{Color}
+The color is used in this visualization only to indicate which library has been selected by the user, in pink.
 
 \paragraph{Interaction}
+As explained earlier, this visualization is meant to make the comparison of the values easier, and therefore the first interaction implemented for this visualization is sorting. The rows of the table can be sorted according to the values of any of the columns. In addition, it is possible to filter the content of the table. The rows can be filtered based on whether the dependencies are direct or transitive, and if the dependencies are used by the client library or not.
 
 \subsection{Distribution per class}
 With the previous visualizations, the user has an overview of the dependency tree. However, there is no way the user can have more detailed information about a specific library of the dependency tree. Therefore, and making use of the node selection implemented in the visualization described in section \ref{sec:visualization-dependency-tree}, we have created a visualization to display how the distribution of the dependency among the classes of the client library.\todo{Add example visualization}
