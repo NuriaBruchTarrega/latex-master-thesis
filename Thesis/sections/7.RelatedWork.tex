@@ -1,44 +1,36 @@
 % !TEX root = ..\main.tex
 \chapter{Related Work}\label{ch:RelatedWork}
-In this chapter we are going to present the related work to this thesis.
-
-We are going to explain the different topics researched during the literature study part of this project, according to different categories.
-For the research activities done during the project, the tool that has been mainly used is \textit{Google Scholar}, as well as \textit{IEEE Xplore}.
-
-\blankl
-The papers to be used for this document were selected according to their language (English) and accessibility. Of all the performed searches, we first conducted a selection according to titles and a second filter after reading the abstract and introduction of the papers.
-The papers that according to these filters are related and relevant to the topic of this research were completely read and used to create this thesis. For each of the selected papers, the references of the paper were also reviewed.
-
-\section{Dependency management}
-
-As far as we have been able to find, there are no papers that propose a way to measure dependencies between two software products. However, there is a lot of related work in the area of dependency management.
+In this chapter we present the work related to the topic of this thesis.
+As far as we have been able to find, there are no papers that propose a way to measure dependencies between two software products. However, there is related work in the area of dependency management and software ecosystems modelling.
 
 \paragraph{In Dependencies We Trust: How vulnerable are dependencies in software modules? \cite{hejderup2015dependencies}}
-In this thesis, Hejderup studies the impact of vulnerabilities in the JavaScript ecosystem. In particular, this research studies the prevalence of known vulnerable modules, the cascading effect of these, and finally the time needed to update libraries to a version without vulnerabilities.
-One of the main contributions of this research is the tool used to conduct the experiments to answer the research questions, \texttt{rastogi.js}\footnote{\href{https://github.com/jhejderup/rastogi.js}{https://github.com/jhejderup/rastogi.js}}.
+The thesis does a study of how the vulnerabilities in the npm packages impact of the JavaScript ecosystem. This is done by studying the dependency chain created by the vulnerable packages through the packages that depend on these. One of the main contributions of this research is the tool used to find the dependencies between the packages, to determine the impact of the vulnerabilities, \texttt{Rastogi.js}\footnote{\href{https://github.com/jhejderup/rastogi.js}{https://github.com/jhejderup/rastogi.js}}. The research determined that although only a 1\% of the modules are vulnerable, and that the dependency chain increased the number of vulnerable modules a 39.36\%.
 
-However, in this research the structure used to study the dependencies is not a call-level graph. In the conclusions, Hejderup states: \textit{"On the other hand, reports of a vulnerable dependency are not an immediate sign of a security weakness in a module. There are several factors to this: the module isused in a development environment, the vulnerable functionality of the dependency is not used, or there is a little risk that the vulnerability can be triggered."}. This points out the need for a more detailed analysis of the usage of the dependencies.
+In addition, the research includes a study of how these vulnerabilities are fixed, by updating to a new version of the package without the vulnerability. In particular, it focuses on the time needed for updating to a newer version. The results show that in 2013 there was a latency of several months, while the most recent pathes (at the time the thesis was done) needed about two weeks.
+
+However, to determine the packages affected by a vulnerability with the \texttt{Rastorgy.js}, the strategy is still binary, looking at whether the package is included as a dependency or not. Therefore, there is no confirmation of whether the dependency is really used, or if the part containing the vulnerability is being exploited. In the conclusions, Hejderup states: \textit{"On the other hand, reports of a vulnerable dependency are not an immediate sign of a security weakness in a module. There are several factors to this: the module is used in a development environment, the vulnerable functionality of the dependency is not used, or there is a little risk that the vulnerability can be triggered."}. This points out the need for a more detailed analysis of the usage of the dependencies.
 
 \paragraph{Impact Assessment for Vulnerabilities in Open-Source Software Libraries \cite{plate2015impact}}
 Plate et al. create a methodology to analyse the impact of a vulnerability in an application that uses the vulnerable library. Their methodology is meant to help assess the need to update the application with a version which does not use the vulnerable version of the library.
 The methodology consists on comparing the parts of the library that are used by the application, with the parts updated in the library patch that fixes the vulnerability. The parts of the library used by the application are defined based on dynamic analysis of the application and the bundled libraries.
 
+\paragraph{Modeling Library Dependencies and Updates in Large Software Repository Universes \cite{Kula2017}}
+
+\paragraph{PRÄZI: From Package-based to Precise Call-based Dependency Network Analyses \cite{hejderup2018prazi}}
+
+\paragraph{Software ecosystem call graph for dependency management \cite{hejderup2018software}}
+
+\begin{comment}
 \paragraph{Vulnerable Open Source Dependencies: Counting Those That Matter \cite{pashchenko2018vulnerable}} % This is the paper that talks about halted dependencies.
 In this research, Pashchenko et al. propose a new method to count the dependencies of libraries. This method is used to analyse the dependencies of 200 libraries of the Maven ecosystem. With their method, they differentiate between libraries from the same project and third-party libraries. Furthermore, the dependencies that are not deployed in production (only used for testing or development purposes) are filtered out, since the vulnerabilities of this dependencies do not affect the final product. Furthermore, they consider the special case of halted dependencies, which are the ones that are not being actively developed. Vulnerabilities in halted dependencies suppose an important threat to the software project that depend on these, since the vulnerability is not going to be fixed.
 
 One of the main contributions of this research is a tool implementing the method defined in the paper to detect the vulnerabilities that, according to their definition, matter.
 
 However, Pashchenko et al. do not perform a call-level analysis of the dependencies, since their dependency resolution is based only on the \textit{POM} file of the libraries. Hence, the transitive dependencies that are not really used in the studied library are still counted.
+\end{comment}
 
 \paragraph{A Comprehensive Study of Bloated Dependencies in the Maven Ecosystem \cite{soto2020comprehensive}}
 Soto-Valero et al. conduct a study of the unused dependencies included in the dependency tree of Maven artifacts. These libraries can be directly included in the dependency declaration file, or included by transitivity or inheritance.
 
 One of the experiments conducted during the research, reported that a 75.1\% of the analyzed dependencies were unused dependencies. In this experiment Soto-Valero et al. used their tool \texttt{DepClean}\footnote{\href{https://github.com/castor-software/depclean}{https://github.com/castor-software/depclean}} to analyze the dependencies of 9,639 Java artifacts from Maven Central.
 The tool \texttt{DepClean} analyses the dependencies of an artifact by creating a call graph of the API members of the libraries involved to define if a dependency is used or not.
-
-%\blankl
-% decan2018impact --> analysis of how the vulnerabilities in libraries affect the other libraries that depend on these, how the vulnerabilities are fixed, resolved, and updated in the dependent libraries.
-
-% In decan2017empirical Decan et al. studied the evolution of three different package ecosystems, namely npm, CRAN, and RubyGems. The research is focused on their evolution and dependencies, the issues related to dependency updates, and the solutions to these issues. The
-
-% Kikas et al. (kikas2017structure) study three package ecosystems, namely npm, RubyGems and Crates. The authors focus on the structure of the dependency declaration, which affects the way the dependencies are updated. Also, they study the evolution of these ecosystems, and the vulnerability, by studying how many packages would be affected by the removal of a certain package.
