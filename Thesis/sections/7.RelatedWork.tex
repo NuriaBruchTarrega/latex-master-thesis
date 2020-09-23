@@ -11,8 +11,11 @@ In addition, the research includes a study of how these vulnerabilities are fixe
 However, to determine the packages affected by a vulnerability with the \texttt{Rastorgy.js}, the strategy is still binary, looking at whether the package is included as a dependency or not. Therefore, there is no confirmation of whether the dependency is really used, or if the part containing the vulnerability is being exploited. In the conclusions, Hejderup states: \textit{"On the other hand, reports of a vulnerable dependency are not an immediate sign of a security weakness in a module. There are several factors to this: the module is used in a development environment, the vulnerable functionality of the dependency is not used, or there is a little risk that the vulnerability can be triggered."}. This points out the need for a more detailed analysis of the usage of the dependencies.
 
 \paragraph{Impact Assessment for Vulnerabilities in Open-Source Software Libraries \cite{plate2015impact}}
-Plate et al. create a methodology to analyse the impact of a vulnerability in an application that uses the vulnerable library. Their methodology is meant to help assess the need to update the application with a version which does not use the vulnerable version of the library.
-The methodology consists on comparing the parts of the library that are used by the application, with the parts updated in the library patch that fixes the vulnerability. The parts of the library used by the application are defined based on dynamic analysis of the application and the bundled libraries.
+Plate et al. create an approach to analyse whether an application depending on a library that contains a vulnerability is affected by it or not. Their methodology is meant to help assess the need to update the application with a version which does not use the vulnerable version of the library.
+
+The methodology consists on comparing the parts of the library that are used by the application, with the parts updated in the library patch that fixes the vulnerability. It is assumed that those are the parts of the library containing the application. The parts of the library used by the application are defined based on a dynamic analysis of the application and the bundled libraries.
+
+Although the use case of the research in this paper differs from the one of this thesis, the usage of static analysis performed with the metrics of the proposed model of the thesis, and the dynamic analysis done by Plate et al. can make a more accurate evaluation of both, the degree of dependency, and the probablility that a vulnerability is affecting the depending code.
 
 \paragraph{Modeling Library Dependencies and Updates in Large Software Repository Universes \cite{Kula2017}}
 
