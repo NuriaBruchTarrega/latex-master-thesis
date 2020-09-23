@@ -18,6 +18,9 @@ The methodology consists on comparing the parts of the library that are used by 
 Although the use case of the research in this paper differs from the one of this thesis, the usage of static analysis performed with the metrics of the proposed model of the thesis, and the dynamic analysis done by Plate et al. can make a more accurate evaluation of both, the degree of dependency, and the probablility that a vulnerability is affecting the depending code.
 
 \paragraph{Modeling Library Dependencies and Updates in Large Software Repository Universes \cite{Kula2017}}
+In this paper, a model for library dependencies is created. The model is classified as a graph-based Software Universe Graph. It is focused on the updates of the dependencies and shows metrics such as the \textit{wisdom-of-the-crowd}. In addition, it is extended to describe the \textit{adoption-diffusion} and the \textit{co-dependency}. The \textit{adoption-diffusion} studies how the migrations to newer versions of a library are done. The \textit{co-dependencies} are libraries which are usually employed together in an application. This last metric is used to compare different super repositories, Github and Maven.
+
+As described, the model of the dependencies is focused on the popularity of each version of the libraries, as well as the updates made in the dependencies of the different applications. Therefore, the analysis done is not fine-grained since the focus of the research is different.
 
 \paragraph{PRÄZI: From Package-based to Precise Call-based Dependency Network Analyses \cite{hejderup2018prazi}}
 
