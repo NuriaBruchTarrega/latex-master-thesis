@@ -30,6 +30,9 @@ With \textit{RustPräzi} and in order to demonstrate how effective the approach 
 In conclusion, they demonstrate the usefulness of a more fine-grained evaluation of the dependencies, and propose an approach to create a dependency network that allows this kind of evaluation. They do not propose a way to model the dependencies, but study two practical applications of the call-level dependency network.
 
 \paragraph{Software ecosystem call graph for dependency management \cite{hejderup2018software}}
+In this paper, Hejderup et al. propose a way to extend dependency networks a versioned call-graph. The authors describe the algorithms used to create the network, as well as how to perform an impact analysis of the changes in a library. Their technique uses the commit time of the products to resolve the version ranges of the dependencies, in order not to miss dependencies with previous versions of the libraries. The authors perform an evaluation of their dependency network, by generating an impact analysis of a particular security bug. The output of the analysis is the part of the dependency network which is impacted by the bug.
+
+Therefore, in this work, Hejderup et al. propose a different approach to create call-level dependency networks, which considers historical data of each library. The dependency network is used to perform an impact analysis, but it could also have other applications, such as the calculation of the metrics proposed in this thesis.
 
 \begin{comment}
 \paragraph{Vulnerable Open Source Dependencies: Counting Those That Matter \cite{pashchenko2018vulnerable}} % This is the paper that talks about halted dependencies.
