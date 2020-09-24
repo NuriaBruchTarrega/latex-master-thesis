@@ -23,6 +23,11 @@ In this paper, a model for library dependencies is created. The model is classif
 As described, the model of the dependencies is focused on the popularity of each version of the libraries, as well as the updates made in the dependencies of the different applications. Therefore, the analysis done is not fine-grained since the focus of the research is different.
 
 \paragraph{PRÄZI: From Package-based to Precise Call-based Dependency Network Analyses \cite{hejderup2018prazi}}
+Hejderup et al. create an approach to generate fine-grained call-level dependency networks, \textit{Präzi}. This approach is evaluates more precisely the dependencies between software products than a packag-level approach. As part of their work, the authors create an implementation of \textit{Präzi} for the Rust's \textit{Crates.io} ecosystem, called \textit{RustPräzi}.
+
+With \textit{RustPräzi} and in order to demonstrate how effective the approach is, they perform two case studies. First, a case study which focuses on the propagation of the vulnerabilities accross software products, in which they prove the higher accuracy of their approach in comparison to a package-level dependency network. The second case study looks at the impact of deprecation in a library. In this case, with \textit{Präzi} they are able to perform an impact analysis of cleaning up deprecated functions.
+
+In conclusion, they demonstrate the usefulness of a more fine-grained evaluation of the dependencies, and propose an approach to create a dependency network that allows this kind of evaluation. They do not propose a way to model the dependencies, but study two practical applications of the call-level dependency network.
 
 \paragraph{Software ecosystem call graph for dependency management \cite{hejderup2018software}}
 
