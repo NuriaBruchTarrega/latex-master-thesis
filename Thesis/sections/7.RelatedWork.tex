@@ -1,7 +1,7 @@
 % !TEX root = ..\main.tex
 \chapter{Related Work}\label{ch:RelatedWork}
 In this chapter we present the work related to the topic of this thesis.
-As far as we have been able to find, there are no papers that propose a way to measure dependencies between two software products. However, there is related work in the area of dependency management and software ecosystems modelling.
+As far as we have been able to find, there are no papers that propose a way to model dependencies between two software products. However, there is related work in the area of dependency management and software ecosystems modelling.
 
 \paragraph{In Dependencies We Trust: How vulnerable are dependencies in software modules? \cite{hejderup2015dependencies}}
 The thesis does a study of how the vulnerabilities in the npm packages impact of the JavaScript ecosystem. This is done by studying the dependency chain created by the vulnerable packages through the packages that depend on these. One of the main contributions of this research is the tool used to find the dependencies between the packages, to determine the impact of the vulnerabilities, \texttt{Rastogi.js}\footnote{\href{https://github.com/jhejderup/rastogi.js}{https://github.com/jhejderup/rastogi.js}}. The research determined that although only a 1\% of the modules are vulnerable, and that the dependency chain increased the number of vulnerable modules a 39.36\%.
@@ -25,7 +25,7 @@ As described, the model of the dependencies is focused on the popularity of each
 \paragraph{PRÄZI: From Package-based to Precise Call-based Dependency Network Analyses \cite{hejderup2018prazi}}
 Hejderup et al. create an approach to generate fine-grained call-level dependency networks, \textit{Präzi}. This approach is evaluates more precisely the dependencies between software products than a packag-level approach. As part of their work, the authors create an implementation of \textit{Präzi} for the Rust's \textit{Crates.io} ecosystem, called \textit{RustPräzi}.
 
-With \textit{RustPräzi} and in order to demonstrate how effective the approach is, they perform two case studies. First, a case study which focuses on the propagation of the vulnerabilities accross software products, in which they prove the higher accuracy of their approach in comparison to a package-level dependency network. The second case study looks at the impact of deprecation in a library. In this case, with \textit{Präzi} they are able to perform an impact analysis of cleaning up deprecated functions.
+With \textit{RustPräzi}, and in order to demonstrate how effective the approach is, they perform two case studies. First, a case study which focuses on the propagation of the vulnerabilities accross software products, in which they prove the higher accuracy of their approach in comparison to a package-level dependency network. The second case study looks at the impact of deprecation in a library. In this case, with \textit{Präzi} they are able to perform an impact analysis of cleaning up deprecated functions.
 
 In conclusion, they demonstrate the usefulness of a more fine-grained evaluation of the dependencies, and propose an approach to create a dependency network that allows this kind of evaluation. They do not propose a way to model the dependencies, but study two practical applications of the call-level dependency network.
 
@@ -35,6 +35,7 @@ In this paper, Hejderup et al. propose a way to extend dependency networks a ver
 Therefore, in this work, Hejderup et al. propose a different approach to create call-level dependency networks, which considers historical data of each library. The dependency network is used to perform an impact analysis, but it could also have other applications, such as the calculation of the metrics proposed in this thesis.
 
 \begin{comment}
+%% I'm not sure whether to add this paper or not
 \paragraph{Vulnerable Open Source Dependencies: Counting Those That Matter \cite{pashchenko2018vulnerable}} % This is the paper that talks about halted dependencies.
 In this research, Pashchenko et al. propose a new method to count the dependencies of libraries. This method is used to analyse the dependencies of 200 libraries of the Maven ecosystem. With their method, they differentiate between libraries from the same project and third-party libraries. Furthermore, the dependencies that are not deployed in production (only used for testing or development purposes) are filtered out, since the vulnerabilities of this dependencies do not affect the final product. Furthermore, they consider the special case of halted dependencies, which are the ones that are not being actively developed. Vulnerabilities in halted dependencies suppose an important threat to the software project that depend on these, since the vulnerability is not going to be fixed.
 
