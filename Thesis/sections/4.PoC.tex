@@ -11,24 +11,27 @@ There are several techniques that could have been used to implement the PoC that
   \item Call-level dependency graph
 \end{itemize}
 
-After an initial try, source code analysis has been discarded. The reason for it is that the source code is needed for both the client library, and all its dependencies. Although Maven can provide the source code for some of the artifacts, it is not available as often as the bytecode.
+After an initial try, source code analysis has been discarded. The reason for it is that the source code is needed for both the client library, and all its dependencies. Although, it is sometimes available in Maven, it is not available as often as the bytecode.
 
 The option of call-level dependency graphs is useful for the metrics that measure method invocations. However, the information needed to measure aggregation coupling, is not contained in the call-level graphs. Therefore, the approach to develop this PoC has been bytecode analysis. Furthermore, obtaining the call-graphs of the complete dependency tree is still a work in progres within the FASTEN project.
 
 \subsection{Bytecode analysis}
-The model proposed in this research is meant to be language-agnostic. Nevertheless, the scope of the proof-of-concept is limited to Java, since the bytecode analysis performed by the proof-of-concept is limited to this programming language.
+The model proposed in this research is meant to be language-agnostic. Nevertheless, the scope of the proof-of-concept is limited to Java, since the bytecode analysis performed by the proof-of-concept is limited to this programming language. Furthermore, the PoC is focused on the libraries available in Maven.
 
-The PoC implementation to calculate the metrics of the uses bytecode analysis. The implementation is supported by the libraries  \textit{Aether}\footnote{\url{https://wiki.eclipse.org/Aether/What_Is_Aether}}, and \textit{Javassist}\footnote{\url{http://www.javassist.org/}}.
+The PoC implementation is supported by the libraries  \textit{Aether}\footnote{\url{https://wiki.eclipse.org/Aether/What_Is_Aether}}, and \textit{Javassist}\footnote{\url{http://www.javassist.org/}}.
 
 \paragraph{Aether}
 Aether is a library created by Eclipse, which allows to fetch Maven artifacts from different repositories. In addition, it is also used to resolve the dependencies of a library, and create the dependency tree. To create the dependency tree, Aether uses the same strategy to resolve the dependencies as Maven.
 
-In the PoC, it has been used for the initial steps. The request to calculate the metrics receives the identifiers of the library to analyze (\textit{GroupID}, \textit{ArtifactID}, and \textit{version}). Aether fetches the library \textit{jar} and \textit{POM} files from the Maven Central Repository.
+In the PoC, this library has been used for the initial steps. The request to calculate the metrics receives the identifiers of the library to analyze (\textit{GroupId}, \textit{ArtifactId}, and \textit{version}). Aether is used to fetch the library \textit{jar} and \textit{POM} files from the Maven Central Repository.
 
-Once the artifact of the client library is obtained, \textit{Aether} is used to resolve the dependencies of the artifact. For the calculation of the metrics to be possible, all the dependencies of the client library should also be available in Maven. The dependency tree of the artifact is visited, and each of the dependencies are also obtained, in order to have the \textit{jar} files to analyze as well. In addition, the dependency tree calculated with Aether is also used to create a custom dependency tree with the class \texttt{DependencyTreeNode} which is used to store the needed data about each of the libraries during the process of calculating the metrics.
+Once the artifact of the client library is obtained, \textit{Aether} is used to resolve the dependencies of the artifact. For the calculation of the metrics to be possible, all the dependencies of the client library should also be available in the Maven Central Repository. The dependency tree of the artifact is visited, and each of the dependencies are also obtained, in order to have the \textit{jar} files to analyze as well. In addition, the dependency tree calculated with Aether is also used to create a custom dependency tree by using the custom class \texttt{DependencyTreeNode} which stores the data about each of the libraries which is needed during the process of calculating the metrics. The \texttt{DependencyTreeNode} will be described in greater detail later on.
 
 \paragraph{Javassist}
-Once the jars of the client library and all its dependencies are available, the first step is to join all the \textit{.class} files in a \texttt{ClassPool} object, which is the main object of \textit{Javassist}. Once the \texttt{ClassPool} is created, it is used to obtain the classes from the client library, from which the different metrics are calculated.
+Javassist is a library which allows the used to perform bytecode manipulation in a simple way. It has two levels, a source-level and a bytecode level. By using the source-code level, it is possible to perform bytecode analysis and manipulation without a deep knowledge of bytecode. Meanwhile, the bytecode level allows the user to directly manipulate bytecode.
+For this thesis, the level used is source-code.
+
+The javassist library has been used to interpret and analyze the jars of the client library and all the server libraries. Once the jars of the client library and all its dependencies are available, the first step is to join all the \textit{.class} files in a \texttt{ClassPool} object, which is the main object of \textit{Javassist}. Once the \texttt{ClassPool} is created, it is used to obtain the classes from the client library, from which the different metrics are calculated. The process of calculating the metrics is explained in greater detail in the following
 
 \subsection{Model of the dependency tree}
 In order to represent the dependency tree of the client library, the implementation uses the class \texttt{DependencyTreeNode}. Each \texttt{DependencyTreeNode} contains the information of the library it represents, namely \textit{groupID}, \textit{artifactID}, and \textit{version}. Also, to represent the dependencies of the library represented by each  \texttt{DependencyTreeNode}, there is a \texttt{List} of \texttt{DependencyTreeNode}.
@@ -37,7 +40,7 @@ To store the information needed to calculate the coupling metrics, there are two
 
 Each \texttt{DependencyTreeNode} has an object \texttt{MicBehaviors} and \texttt{AcClasses} for each of the distances at which the metric is measured, stored as a map, where the distance is the key and \texttt{MicBehaviors} or \texttt{AcClasses}, the value.
 
-In addition, for the metrics that measure the usage of the dependencies, there are two other fields: \texttt{ReachableClasses} and \texttt{ReachableBehaviors}. The first field is to calculate the \texttt{\%ReachableClasses}, and the second one for \texttt{\%ReachableMethods}. Both, \texttt{ReachableClasses} and \texttt{ReachableBehaviors}, are sets containing the classes, in the first case, and behaviors in the second case, of the library represented by the \texttt{DependencyTreeNode}, which are reachable from the client library.
+In addition, for the metrics that measure the usage of the dependencies, there are two other fields: \texttt{ReachableClasses} and \texttt{ReachableBehaviors}. The first field is to calculate the \(\verb|%ReachableClasses|\), and the second one for \(\verb|%ReachableMethods|\). Both, \texttt{ReachableClasses} and \texttt{ReachableBehaviors}, are sets containing the classes, in the first case, and behaviors in the second case, of the library represented by the \texttt{DependencyTreeNode}, which are reachable from the client library.
 
 \begin{figure}[ht]
 \begin{center}
@@ -48,16 +51,16 @@ In addition, for the metrics that measure the usage of the dependencies, there a
 \end{figure}
 
 \section{Measuring coupling metrics}
-This section contains the description of how the metrics \texttt{MIC}, \texttt{AC}, \texttt{TMIC}, and \texttt{TAC} are calculated in the implementation of the PoC.
+This section contains the description of how the metrics \texttt{MIC}, \texttt{AC}, \texttt{TMIC}, and \texttt{TAC} are calculated in the implementation of the PoC. During this section, we use the terminology of the library Javassist. For example, to refer to methods and constructors, we say behaviors. Also, the classes used from Javassist are named as \texttt{Ct<name of the element>}, where \texttt{Ct} means compile-time. Therefore, the class representing a java class is \texttt{CtClass}.
 
 \subsection{Method Invocation Coupling}
-The pseudo-code in Figure \ref{fig:algorithm-mic} represents the algorithm used to calculate the metric MIC for each one of the direct dependencies of a given client library. The output of the algorithm is a map containing the set of \texttt{BehaviorCalls} that call each \texttt{CtBehavior}. The map is generated for each one of the direct dependencies and stored in the \texttt{DependencyTreeNode} of each library.
+The pseudo-code in Figure \ref{fig:algorithm-mic} represents the algorithm used to calculate the metric \textit{MIC} for each one of the direct dependencies of a given client library. The output of the algorithm is a map containing the set of \texttt{BehaviorCalls} that call each \texttt{CtBehavior}. The map is generated for each one of the direct dependencies and stored in the \texttt{DependencyTreeNode} of each library.
 
-The class \texttt{CtBehavior} represents a method, it contains the information about the method itself, and about the class that contains the method. Each of the \texttt{CtMethod} are used later on to find the polymorphic implementations of the method, as well as to calculate the transitive dependencies.
+The class \texttt{CtBehavior} contains the information about the behavior itself, and about the class in which it is declared. Each of the \texttt{CtBehavior} are used later on to find the polymorphic implementations of the behavior, as well as to calculate the metrics for the transitive dependencies.
 
-To calculate this first metric, the PoC tool iterates through all the classes of the client library (line 3). For each class, the behaviors are obtained (line 4). In the \textit{Javassist} terminology, the behaviors include both methods and constructors.
+To calculate this first metric, the implementation iterates through all the classes of the client library (line 3). For each class, the behaviors are obtained (line 4).
 
-Then, the tool iterates through all the behaviors (line 5), and calls the method \texttt{instrument}. The main use case of this method is to modify the bytecode of the method. The method \texttt{instrument} receives an \texttt{ExprEditor} object, which is a class that can be extended to implement the methods for editing the bytecode, which are empty by default. To calculate this metric, the overridden methods are \texttt{edit(MethodCall mc)}, \texttt{edit(ConstructorCall cc)}, and \texttt{edit(NewExpr ne)}. These methods will be called for each method call or constructor call, existing in the bytecode of the method (line 6). The constructor calls in the form of \texttt{this()} or \texttt{super()} are captured by the method \texttt{edit(ConstructorCall cc)}. Whereas the constructor calls in the form of \texttt{new Object()} are captured by \texttt{edit(NewExpr ne)}.
+Then, the tool iterates through all the behaviors (line 5), and calls the method \texttt{instrument}. The main use case of this method is to modify the bytecode of the method, but in this case we use it to find the connections of interest for this metric. The method \texttt{instrument} receives an \texttt{ExprEditor} object, which is a class that can be extended to implement the methods for editing the bytecode, which are empty by default. To calculate this metric, the overridden methods are \texttt{edit(MethodCall mc)}, \texttt{edit(ConstructorCall cc)}, and \texttt{edit(NewExpr ne)}. These methods will be called for each method call or constructor call, existing in the bytecode of the method (line 6). The constructor calls in the form of \texttt{this()} or \texttt{super()} are captured by the method \texttt{edit(ConstructorCall cc)}. Meanwhile, the constructor calls in the form of \texttt{new Object()} are captured by \texttt{edit(NewExpr ne)}.
 
 For each captured call to a behavior, it is checked if the called behavior belongs to a server library (line 9). In case it does, the call is added to the \texttt{MicBehaviors} map of the server library (line 10), with 1 as the distance at which the connection is found, since it is a direct dependency.
 
@@ -79,9 +82,9 @@ for each clientClass in clientClasses
 \end{figure}
 
 \subsection{Aggregation Coupling}
-The pseudo-code in Figure \ref{fig:algorithm-ac} represents the algorithm used to calculate the metric AC. The output of the algorithm is a map containing for each \texttt{CtClass} of the server library, the set of \texttt{CtField} that are of the type of the \texttt{CtClass}. The class \texttt{CtClass} represents a class and contains the information of the class and the library where it is implemented. \texttt{CtClass} is used later on to find the descendants of the class, and to calculate the metric \texttt{TAC} for the transitive dependencies.
+The pseudo-code in Figure \ref{fig:algorithm-ac} represents the algorithm used to calculate the metric \texttt{AC}. The output of the algorithm is a map containing for each \texttt{CtClass} of the server library, the set of \texttt{CtField} that are of the type of the \texttt{CtClass}. The class \texttt{CtClass} represents a class and contains the information about the class itself and about the library where it is implemented. \texttt{CtClass} is used later on to find the descendants of the class, and to calculate the metric \texttt{TAC} for the transitive dependencies.
 
-The algorithm for this second metric is similar to the previous one. The implementation iterates through all the classes of the client library (line 3). Then, for each class, it iterates through all the declared fields (line 5). Next, each of the fields containing a generic type are parsed separatedly (line 6), to obtain all the types icluded in the generic  (line 7), which are treated individually (line 8). All the simple fields, if the implementation of the class is found in a server library (line 13), are included in the calculation of the metric (line 14), with 1 as the distance, due to the server library being a direct dependency.
+The algorithm for this second metric is similar to the previous one. The implementation iterates through all the classes of the client library (line 3). Then, for each class, it iterates through all the declared fields (line 5). Next, each of the fields containing a generic type are parsed separatedly (line 6), to obtain all the types icluded in the generic (line 7), which are treated individually (line 8). All the simple fields, if the implementation of the class is found in a server library (line 13), are included in the calculation of the metric (line 14). The distance is set to 1 due to the server library being a direct dependency.
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -135,9 +138,9 @@ The process to find descendants in the case of the metric \texttt{AC} is the sam
 As can be observed in the previous explanation of how the detection of inheritance is done, in this PoC implementation, it is not detected if a class is extended in the client library instead of in the server library.\todo{Find out how often does this happen}
 
 \subsection{Transitive Method Invocation Coupling}\label{subsec:tmic}
-The calculation of the Transitive Method Invocation Coupling takes place after calculating Method Invocation Coupling for the direct dependencies of the client library. The reachable methods found in these dependencies are used as a base to calculate the Transitive Method Invocation Coupling.
+The calculation of \texttt{TMIC} takes place after calculating \texttt{MIC} for all the direct dependencies of the client library. The methods used in the calculation of \texttt{MIC} from these dependencies, are used as a base to calculate \texttt{TMIC}.
 
-To calculate the metric for every dependency in the tree, the dependency tree is traversed using a \textit{breadth-first search (BFS)} on the \texttt{DependencyTreeNode}. The algorithm starts with the direct dependencies, since the client library node has already been used for the calculation of \texttt{MIC}. The traversing of a branch finishes either when a node does not have more children, or when no reachable methods have been found in a library. The pseudo-code of the implemented algorithm can be found in Figure \ref{fig:tree-traversing-tmic}.
+To calculate the metric for every dependency in the tree, the dependency tree is traversed using a \textit{breadth-first search (BFS)} on the \texttt{DependencyTreeNode}. The algorithm starts with the direct dependencies, since the client library node has already been used for the calculation of \texttt{MIC}. The traversing of a branch finishes either when a node does not have more children, or when no reachable methods have been found in a server library. The pseudo-code of the implemented algorithm can be found in Figure \ref{fig:tree-traversing-tmic}.
 
 For each \texttt{DependencyTreeNode} visited, the method \texttt{calculateTransitiveMIC} is executed. The pseudo-code of this method can be found in Figure \ref{fig:calculate-tmic}, which is going to be explained below.
 
@@ -183,14 +186,14 @@ for each micBehavior in micBehaviors
 \label{fig:calculate-tmic}
 \end{figure}
 
-The first step is to obtain all the behaviors, used for the calculation of \texttt{MIC}, of the \texttt{DependencyTreeNode} that is being visited (line 1). For each one of these behaviors (line 3), the call graph of the behavior is going to be followed, to find all the reachable behaviors of the dependencies of the library that is being visited.
+First, we obtain all the behaviors of the visited \texttt{DependencyTreeNode}, used for the calculation of \texttt{MIC} (line 1). For each one of these behaviors (line 3), the call graph of the behavior is iterated, to find all the reachable behaviors of the dependencies of the library that is being visited.
 
 A queue of the behaviors that have to be visited is created, containing initially only the current behavior (line 4). In addition, a set of all the behaviors that have already been visited is also created (line 5) to avoid infinite loops.
 
-For each behavior in the queue, all the \texttt{behaviorCall} are visited (line 11). Then, there are three different cases that could occurr. First, if the called behavior is implemented in a standard class, the call is ignored (line 14). Also, if the called behavior is implemented in a dependency of the current library, the behavior is added to the mic behaviors of the dependency (line 16), with the same distance plus 1, since it is one level more of dependency than the current \texttt{DependencyTreeNode}. Finally, the last option is if the called behavior is implemented in the current library, in which case it is added to the queue of behaviors to visit (line 19). This way all the entire call graph of the mic behaviors is visited.
+For each behavior in the queue, all the \texttt{behaviorCall} are visited (line 11). Then, there are three different cases to consider. First, if the called behavior is implemented in a standard class the call is ignored (line 14). Also, if the called behavior is implemented in a dependency of the current library, the behavior is added to the behaviors to consider of the dependency (line 16), with the same distance plus 1, since it is one level more of dependency than the current \texttt{DependencyTreeNode}. Finally, the last option is if the called behavior is implemented in the current library, in which case it is added to the queue of behaviors to visit (line 19). This way the entire call graph of the relevant behaviors is visited.
 
 \subsection{Transitive Aggregation Coupling}
-The calculation of \texttt{TAC} is very similar to the calculation of \texttt{TMIC} but using the ac classes instead of the mic behaviors. The pseudo-code of the \textit{BFS} for the \texttt{TAC} is in Figure \ref{fig:tree-traversing-tac}\unsure{Should I remove this pseudo-code, is it repetitive?}.
+The calculation of \texttt{TAC} is very similar to the calculation of \texttt{TMIC} but using the ac classes instead of the mic behaviors. The pseudo-code of the \textit{BFS} for the \texttt{TAC} is in Figure \ref{fig:tree-traversing-tac}.
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -208,7 +211,7 @@ while (!toVisit.isEmpty())
 \label{fig:tree-traversing-tac}
 \end{figure}
 
-The implementation of the method \texttt{calculateTransitiveAC} also follows a similar strategy as the \texttt{calculateTransitiveMIC}, but instead of following the call grpahs of the reachable methods, it follows the field declarations of the classes. The pseudo-code can be found in Figure \ref{fig:calculate-tac}.
+The implementation of the method \texttt{calculateTransitiveAC} also follows a similar strategy as the \texttt{calculateTransitiveMIC}, but instead of iterating the call grpahs of the reachable methods, it iterates the field declarations of the classes. The pseudo-code can be found in Figure \ref{fig:calculate-tac}.
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -246,7 +249,7 @@ for each acClass in acClasses
 
 For each class in the field \texttt{AcClasses} of the current library (line 3), a queue is created with all the classes to be visited (line 4). The queue is declared containing only the current class. To avoid visiting multiple times the same classes, a set with all the visited classes is also maintained (line 5). When a class is visited, all the fields declared in the class are obtained. For each of the declared fields, just as in the calculation of \texttt{AC} (Figure \ref{fig:algorithm-ac}), the fields containing generic signature are parsed, to obtain all the types included in the field (line 14).
 
-Then, for each type in the fields, a similar process as the one described in the \texttt{TMIC} metric is done. If the type is implemented in a standard class, it is ignored. Whereas if the type is implemented in a class of a dependency of the current library, is added to the ac classes of the dependency, with the distance of the current \texttt{DependencyTreeNode} plus one. Finally, if the type is implemented in the current library, it is added to the queue of classes to visit.
+Then, for each type in the fields, a similar process as the one described for \texttt{TMIC} is done. If the type is implemented in a standard class, it is ignored. Meanwhile, if the type is implemented in a class that belongs to dependency of the current library, is added to the relevant classes of the dependency, with the distance of the current \texttt{DependencyTreeNode} plus one. Finally, if the type is implemented in the current library, it is added to the queue of classes to visit.
 
 \paragraph{Inheritance}
 During the calculation of \texttt{TMIC} and \texttt{TAC}, it is possible that one of the classes visited during the algorithms described in Figures \ref{fig:calculate-tmic} and \ref{fig:calculate-tac} is found to be abstract. In this case, the possible executed implementations of the class or methods are found by using the same strategy described in Figure \ref{fig:algorithm-polymorphy}.
@@ -255,7 +258,7 @@ During the calculation of \texttt{TMIC} and \texttt{TAC}, it is possible that on
 To calculate the actual value of both, \texttt{TMIC} and \texttt{TAC}, we use the values stored in \texttt{MicBehaviorsAtDistance} and \texttt{AcClassesAtDistance} (see Figure \ref{fig:class-diagram-tree}). Then, using the value calculated at each distance, we apply the formula described in the equations \ref{eqn:tmic} and \ref{eqn:tac}. The only value of these formulas that cannot be extracted from the analysis of the bytecode, is the \textit{propagation factor}. This variable depends on the real-world behavior of these metrics, and its value will be discussed in Chapter \ref{ch:Experiments}.
 
 \section{Measuring usage metrics}
-This section describes how the metrics \texttt{\%ReachableClasses} and \texttt{\%ReachableMethods} are calculated in the proof-of-concept, including the pseudo-code of the implementation. Both metrics are calculated at the same time, since some of the connections are entangled. For example, one class can be reachable because it is the return type of a method. The implementation is done in two steps, to find the classes and methods of the direct dependencies directly reachable from the client library, and a second one to find the rest of the reachable methods and classes of all the dependency tree.
+This section describes how the metrics \(\verb|%ReachableClasses|\) and \(\verb|%ReachableMethods|\) are calculated in the proof-of-concept, including the pseudo-code of the implementation. Both metrics are calculated at the same time, since some of the connections are entangled. For example, one class can be reachable because it is the return type of a method. The implementation is done in two steps, to find the classes and methods of the direct dependencies directly reachable from the client library, and a second one to find the rest of the reachable methods and classes of all the dependency tree.
 
 \subsection{Step 1}
 The pseudo-code to perform the first step of the calculation of the usage metrics can be found in Figures \ref{fig:algorithm-usage-step1-1}, \ref{fig:algorithm-usage-step1-2}, and \ref{fig:algorithm-usage-step1-3}. First, in Figure \ref{fig:algorithm-usage-step1-1} the implementation iterates through all the classes in the client library to find the usage of the dependencies (line 3). In the case of these metrics, the usage can be any type of connection, in the methods of each of the classes (line 4) or in the class itself (line 5). In Figure \ref{fig:algorithm-direct-usage-2}, we show which connections are detected in the methods of the client library.
@@ -313,7 +316,7 @@ findDependencyUsageInBehaviors(clientClass)
 \label{fig:algorithm-usage-step1-2}
 \end{figure}
 
-Finally, the connections the happen at a class level are detected with the pseudo-code in Figure \ref{fig:algorithm-usage-step1-3}. The first of these connections is, as was detected by metric \texttt{AC}, the field declarations (line 2). Then, it is also detected as a connection the superclass of the client class (line 8), and the interfaces implemented (line 12). Lastly, it is also detected as a connection, the annotations in the class (line 17). These annotations can be in the class itself or in any of the declared fields.
+Finally, the connections that happen at a class level are detected with the pseudo-code in Figure \ref{fig:algorithm-usage-step1-3}. The first one of these connections is, as was detected by metric \texttt{AC}, the field declarations (line 2), the parsing of the generic types is skiped for simplicity. Then, it is also detected as a connection the superclass of the client class (line 8), and the interfaces implemented (line 12). Lastly, it is also detected as a connection, the annotations in the class (line 17). These annotations can be in the class itself or in any of the declared fields.
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -402,7 +405,7 @@ findAllReachableClassesAndUsageOfDependencies(dependencyTreeNode)
 \section{Measuring impact metrics}
 These two metrics are calculated after the calculation of the coupling metrics. In order to calculate the impact per class, the sets of \texttt{MethodCall} and \texttt{CtField} from \texttt{MicBehaviors} and \texttt{AcClasses}, are used (see Figure \ref{fig:class-diagram-tree}).
 
-The pseudo-code used to calculate the metric $\verb|#MethodInvocations|$, for a certain dependency and all the client classes from which it is reachable, can be found in Figure \ref{fig:algorithm-method-invocations}. The \texttt{micBehaviors} of the \texttt{DependencyTreeNode} are iterated (line 4). For each one of the \texttt{methodCall} involved (line 7), the class where the \texttt{methodCall} takes place is added to the map of the $\verb|#MethodInvocations|$, or summed 1 to the value of the metric for that class. In the case of the $\verb|#FieldDeclarations|$ the process is the same, but using the \texttt{CtField} stored in \texttt{AcClasses} instead.
+The pseudo-code used to calculate the metric $\verb|#MethodInvocations|$, for a certain dependency and all the client classes from which it is reachable, can be found in Figure \ref{fig:algorithm-method-invocations}. The \texttt{micBehaviors} of the \texttt{DependencyTreeNode} are iterated (line 4). For each one of the \texttt{methodCall} involved (line 7), the class where the \texttt{methodCall} takes place is added to the map of the $\verb|#MethodInvocations|$ with value 1, or summed 1 to the value of the metric for that class, in case the class is already included in the map. In the case of the $\verb|#FieldDeclarations|$ the process is the same, but using the \texttt{CtField} stored in \texttt{AcClasses} instead.
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -431,7 +434,7 @@ This section contains a brief description of the technologies and libraries used
 For each part of the visualization, we are going to discuss different visual aspects of the visualization following the structure used by Kula et al. \cite{kula2014visualizing}. However, since the tool implemented for this thesis is meant to be interactive, we have added this new aspect. Therefore, the visual aspects considered are: Layout, shape, color, and interaction.
 
 \subsection{Technologies}
-The visualization has been implemented using the framework \texttt{Angular}\footnote{\url{https://angular.io/}}. Most of the UI elements used are obtained from \texttt{Angular Material}\footnote{\url{https://material.angular.io/}}. Finally, for graph representations we have used \texttt{vis.js}\footnote{\url{https://visjs.org/}}, and \texttt{ngx-charts}\footnote{\url{https://github.com/swimlane/ngx-charts}} for charts.
+The visualization has been implemented using the framework \texttt{Angular}\footnote{\url{https://angular.io/}}. Most of the UI elements used are obtained from \texttt{Angular Material}\footnote{\url{https://material.angular.io/}}. Finally, for graph representations we have used \texttt{vis.js}\footnote{\url{https://visjs.org/}}, and \texttt{ngx-charts}\footnote{\url{https://github.com/swimlane/ngx-charts}} to display charts.
 
 \subsection{Dependency Tree}\label{sec:visualization-dependency-tree}
 The goal for the first visualization element is to provide an overview of the dependency tree of the client library, after being resolved with the Maven algorithm. In this overview, the maintainer should be able to see the degree of dependency with each of the dependencies of the client library. Furthermore, the unused dependencies, as well as the most used ones, should be easily identifiable.
@@ -451,7 +454,7 @@ To indicate with the color of the nodes the state of the dependency we have used
 \paragraph{Interaction}
 The main problem with the dependcy tree visualization is that if the tree contains too many nodes, it is very difficult to see the content of the nodes. To fix this, all the nodes can be selected. When a node is selected, the visualization zooms in the selected node, so the user can see the content.
 
-There are two ways to select a node. The first one is by clicking the node. The second option is by finding the node in the search bar. The search bar has been implemented to give suggestions containing the names of all the libraries displayed in the tree. To clear the node selection, the user has to click in the graph view, outside of any node.
+There are two ways to select a node. The first one is by clicking the node. The second option is by finding the node in the search bar. The search bar has been implemented to give suggestions containing the names of all the libraries displayed in the tree. To clear the node selection, the user has to click in the graph view, outside of the nodes.
 
 The second type of interaction has been implemented to display some additional information of the nodes. When a user hovers over a node, a \textit{tooltip} appears. The \textit{tooltip} contains the data of the library, and the value of the coupling and usage metrics. For the coupling metrics, there are two tables displaying, for each metric, the value measured and the distance at which the value was measured.
 
@@ -466,7 +469,7 @@ For it to be easy to compare the value of the metrics among all the dependencies
 For this visualization, the shape is already defined by the layout, which is a table.
 
 \paragraph{Color}
-The color is used in this visualization only to indicate which library has been selected by the user, in pink.
+The color is used in this visualization only to indicate which library has been selected by the user, in which case the row of the library has a pink background. The rest of the rows have a white background.
 
 \paragraph{Interaction}
 As explained earlier, this visualization is meant to make the comparison of the values easier, and therefore the first interaction implemented for this visualization is sorting. The rows of the table can be sorted according to the values of any of the columns. In addition, it is possible to filter the content of the table. The rows can be filtered based on whether the dependencies are direct or transitive, and if the dependencies are used by the client library or not.
@@ -475,17 +478,17 @@ As explained earlier, this visualization is meant to make the comparison of the 
 With the previous visualizations, the user has an overview of the dependency tree. However, there is no way the user can have more detailed information about a specific library of the dependency tree. Therefore, and making use of the node selection implemented in the visualization described in section \ref{sec:visualization-dependency-tree}, we have created a visualization to display how the distribution of the dependency among the classes of the client library.\todo{Add example visualization}
 
 \paragraph{Layout}
-The chosen layout for this visualization is a multi-chart. The chart contains two values for each represented class, the metrics \texttt{\#MethodInvocations} and \texttt{\#FieldDeclarations}.
+The chosen layout for this visualization is a multi-chart. The chart contains two values for each represented class, the metrics \(\verb|#MethodInvocations|\) and \(\verb|#FieldDeclarations|\).
 Only the classes for which at least one of the two metrics is measured appear in the chart.
 
 \paragraph{Shape}
 The shape chosen for this chart is the bar. The line was discarded since, it is not the goal to show any kind of progression between the different classes. Hence, the chart used is a multi-barchart.
-At the x-axis of the chart, only the simple names of the classes are displayed, in order to avoid having too much text in the chart. In the y-axis, there is a numeric scale, which corresponds to the measured \texttt{\#MethodInvocations} and \texttt{\#FieldDeclarations}.
+At the x-axis of the chart, only the simple names of the classes are displayed, in order to avoid having too much text in the chart. In the y-axis, there is a numeric scale, which corresponds to the measured \(\verb|#MethodInvocations|\) and \(\verb|#FieldDeclarations|\).
 
 \paragraph{Color}
-To follow the palette used for the rest of the frontend of this tool, the bars displaying the \texttt{\#MethodInvocations} value have dark blue color, while the bars displaying the \texttt{\#FieldDeclarations} value are pink.
+To follow the palette used for the rest of the frontend of this tool, the bars displaying the \(\verb|#MethodInvocations|\) value have dark blue color, while the bars displaying the \(\verb|#FieldDeclarations|\) value are pink.
 
 \paragraph{Interaction}
 This visualization appears and disappears according to the node selection of the dependency tree and table visualizations.
 
-In addition, if the user hovers the cursor over a column, a \textit{tooltip} appears. This \textit{tooltip} contains the values of the measured metrics, since these values are not displayed in the chart. In addition, it also contains the fully-qualified name of the class, to indicate the user the exact path to find the class.
+In addition, if the user hovers the cursor over a column, a \textit{tooltip} appears. This \textit{tooltip} contains the values of the measured metrics, since these values are not displayed in the chart. In addition, it also contains the fully-qualified name of the class, to indicate the user the exact path to find the class within the project.
