@@ -74,7 +74,7 @@ for each clientClass in clientClasses
     for each behaviorCall in behavior
       serverBehavior = behaviorCall.getBehavior()
       serverClass = serverBehavior.getDeclaringClass()
-      if (classPoolManager.belongsToClientLibrary(serverClass))
+      if (classPoolManager.belongsToDependency(serverClass))
         dependencyTreeNode.addMicBehavior(serverBehavior, behaviorCall, distance = 1)
 \end{lstlisting}
 \caption{Pseudo-code of the algorithm to calculate MIC}
@@ -100,7 +100,7 @@ for each c in clientClasses
           dependencyTreeNode.addAcClass(serverClass, field)
     else
       serverClass = field.getType()
-      if (classPoolManager.belongsToClientLibrary(serverClass))
+      if (classPoolManager.belongsToDependency(serverClass))
         dependencyTreeNode.addAcClass(serverClass, field, distance = 1)
 \end{lstlisting}
 \caption{Pseudo-code of the algorithm to calculate AC}
