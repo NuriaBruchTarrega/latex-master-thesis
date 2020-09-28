@@ -261,7 +261,7 @@ To calculate the actual value of both, \texttt{TMIC} and \texttt{TAC}, we use th
 This section describes how the metrics \(\verb|%ReachableClasses|\) and \(\verb|%ReachableMethods|\) are calculated in the proof-of-concept, including the pseudo-code of the implementation. Both metrics are calculated at the same time since some of the connections are entangled. For example, one class can be reachable because it is the return type of a method. The implementation is done in two steps: finding the classes and methods of the direct dependencies directly reachable from the client library, and a second one to find the rest of the reachable methods and classes of all the dependency tree.
 
 \subsection{Step 1}
-The pseudo-code to perform the first step of the calculation of the usage metrics can be found in Figures \ref{fig:algorithm-usage-step1-1}, \ref{fig:algorithm-usage-step1-2}, and \ref{fig:algorithm-usage-step1-3}. First, in Figure \ref{fig:algorithm-usage-step1-1}, the implementation iterates through all the classes in the client library to find the usage of the dependencies (line 3). In the case of these metrics, the usage can be any type of connection, in the methods of each of the classes (line 4) or in the class itself (line 5). In Figure \ref{fig:algorithm-direct-usage-2}, we show which connections are detected in the client library methods.
+The pseudo-code to perform the first step of the calculation of the usage metrics can be found in Figures \ref{fig:algorithm-usage-step1-1}, \ref{fig:algorithm-usage-step1-2}, and \ref{fig:algorithm-usage-step1-3}. First, in Figure \ref{fig:algorithm-usage-step1-1}, the implementation iterates through all the classes in the client library to find the usage of the dependencies (line 3). In the case of these metrics, the usage can be any type of connection, in the methods of each of the classes (line 4) or in the class itself (line 5). In Figure \ref{fig:algorithm-usage-step1-2}, we show which connections are detected in the client library methods.
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -277,7 +277,7 @@ for each clientClass in clientClasses
 
 In the pseudo-code of Figure \ref{fig:algorithm-usage-step1-2}, the connections are detected in the client library methods. The code iterates through every behavior declared in the current client class (line 3). For each behavior, different types of connections are detected. If any of the types involve a class or a behavior implemented in one of the dependencies, it is added to the information of the dependency as reachable. The first type of connection detected is the method or constructor calls (line 4), and the field access performed in the methods (line 10). Also, the types of the parameters of the method (line 15) and the return type (line 20) are possible connections with the dependencies, as well as the exceptions thrown by the methods (line 24). Finally, the annotations contained in the method are also detected (line 29); these annotations include those specified in the method itself and the annotations of the parameters of the method.
 
-\begin{figure}[h]
+\begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
 findDependencyUsageInBehaviors(clientClass)
   behaviors = clientClass.getDeclaredBehaviors()
