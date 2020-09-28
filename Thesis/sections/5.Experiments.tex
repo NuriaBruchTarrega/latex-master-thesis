@@ -1,7 +1,7 @@
 % !TEX root = ..\main.tex
 \chapter{Experiments}\label{ch:Experiments}
 
-\section{Experiment 1: Comparison}
+\section{Experiment 1: Comparison}\label{sec:Exp1}
 The goal of this experiment is to provide validation of the implementation in the PoC. This is done with the results of the paper \textit{"A Comprehensive Study of Bloated Dependencies in the Maven Ecosystem"} by Soto-Valero et al. \cite{soto2020comprehensive}. In this work, a byte-code analysis is performed on Maven Artifacts to detect which of the dependencies of this artifacts are \textit{bloated}, which we refer to as \textit{unused}. Although the PoC created in this thesis does not perform exactly the same kind of analysis, we consider that a dependency is \textit{unused} if no usage is detected by any of the metrics in the model.
 
 \subsection{Experimental set up}
@@ -54,9 +54,9 @@ Of the 29 artifacts, 13 could not be used with the PoC, because either the artif
 
 \section{Experiment 2: Relevance of the coupling metrics}
 
-The goal of this experiment is to validate if the coupling metrics designed in the model, namely \texttt{MIC}, \texttt{AC}, \texttt{TMIC}, and \texttt{TAC}, are a good indicator of the usage of the dependencies by the clients.
+The goal of this experiment is to validate if the coupling metrics designed in the model, namely \texttt{MIC}, \texttt{AC}, \texttt{TMIC}, and \texttt{TAC}, are a good indicator of the usage of the dependencies by the clients. As a partial validation of the relevance of the metrics, we compare it with the results gathered from the usage metrics. We want to know how often it happens, that a dependency is used, either by using classes or methods, and it is detected as uncoupled by the coupling metrics. This way, we know if there are many cases in which a dependency is only used with a type of connection other than method invocation and field declaration.
 
-\unsure{I'm not sure if this is the right place for the explanation of the failed data recolection}
+\unsure{I'm not sure if this is the right place for the explanation of the failed data recolection, or if it is too long}
 
 The original idea was to measure real-world data about how the clients update the dependencies and their impact on the code. We could then have seen the correlation of this impact with the degree of dependency measured with the coupling metrics. Different approaches were taken to obtain real-world data.
 
@@ -70,24 +70,47 @@ Finally, we tried to manually search for deprecated libraries and other librarie
 
 
 \subsection{Experimental set up}
-- Explain what is the MDD, and which schema it uses
+To run this experiment, we prepared a new request in the API of the PoC. The request has to contain a path to a txt file (tab delimited). The file has to contain three columns (with headers): Group Id, Artifact Id, and version. For each one of the rows, the analysis of the dependencies is performed. The result of each of the analysis is processed, summarizing all the analysis with the following information:
 
-- Create new table with all the breaking changes, and the information about the two versions of the library, the previous to the change and the one that had the breaking change.
+\begin{itemize}
+  \item \textbf{Total number of dependencies:} Number of dependencies of all the analyzed client libraries, including both, direct and indirect.
+  \item \textbf{Times coupling metrics were not enough:} Number of dependencies for which all the coupling metrics had value zero, but there where methods and classes found reachable by the usage metrics.
+  \item \textbf{Times MIC/TMIC were not enough:} Number of times in which there was usage found, but MIC (or TMIC in the case of transitive dependencies) had value zero.
+  \item \textbf{Times AC/TAC were not enough:} Number of times in which there was usage found, but MIC (or TMIC in the case of transitive dependencies) had value zero.
+  \item \textbf{List server libraries coupling metrics not enough:} The list of \textit{GroupId}, \textit{ArtifactId}, and \textit{version} of the server libraries for which all the coupling metrics were not enough to indicate if there is usage or not.
+  \item \textbf{List server libraries MIC/TMIC not enough:} The list of \textit{GroupId}, \textit{ArtifactId}, and \textit{version} of the server libraries for which the metrics \texttt{MIC} and \texttt{TMIC} were not enough to indicate if there is usage or not.
+  \item \textbf{List server libraries AC/TAC not enough:} The list of \textit{GroupId}, \textit{ArtifactId}, and \textit{version} of the server libraries for which the metrics \texttt{AC} and \texttt{TAC} were not enough to indicate if there is usage or not.
+\end{itemize}
 
-- Create new table based on the table dependencies. Table containing a library (client) identified by group and artifact, for which two different versions of the library have a dependency with another library (server), with same artifact and group but different versions.
+As can be seen, in addition to the number of times that a dependency was used and it was not detected by the metrics (or at least by one of them), the list of server libraries of these dependencies is also stored. This way, it is possible to analyze which types of libraries are those, and why the coupling metrics are not relevant in this case.
 
-- Match the server library of the second table with the libraries with breaking chages of the first table. This way, we have for each breaking change, the client libraries that have versions depdending on the version previous to the breaking change, and the version after the breaking change. This means that the client library has had to adapt to the breaking change, in case if was originally used.
+\blankl
+The experiment was run with a file containing X\todo{Add number} client libraries from the \textit{Maven Central Repository}.  We selected the client libraries to use for this experiment with the following criteria. First, we used the same libraries as in the comparison experiment (see Section \ref{sec:Exp1}), but using the last version of each library. We decided to reuse these libraries because the criteria used to select these libraries by Soto-Valero et al. \cite{soto2020comprehensive} is aligned with the needs of this experiment, and are listed below:
 
-- From the result table, it happens that more than one version of the client library can depend on the same version of the server library, both previous and posterior to the change. That is why, a new filtered table is created, conatining for each breaking change, only the last version of the client library depending on the version previous to the change, and the first version of the client library depending on the version with the change.
+\begin{itemize}
+  \item The library is relevant - has more than 100 stars on GitHub.
+  \item The library can be built successfully with Maven.
+  \item Has been developed recently - in the case of Soto-Valero et al. at least October 2019.
+  \item The library has at least one dependency declared.
+  \item It is indicated how to create a pull request.
+\end{itemize}
 
-- Also, I filter out all the dependencies that belong to the same group, since the developments of these dependencies are probably synchronized, and the impact works differently (cite counting those that matter)
+Although some of the items of the list are not explicitly required for our experiment. We need that the library can be built and is available in Maven as well as that it has at least one relevant dependency (compile scope). Therefore, the libraries in this set are a good fit for the experiment.
+
+To analyze more client libraries and, therefore, more dependencies, we extended the list of libraries, according to the following process:
+\todo{Finish explaining the process}
+
+\unsure{Should I show the exact content of the file in a Table here or in an appendix at the end of the document?}
 
 \subsection{Results}
 
+\section{Experiment 3: Benchmarking}
 
-\reminder{The same dataset and strategy is going to be used for the transitive metrics. And, it could also be used for the percentage of usage. I have to develop a bit more on this}
+\subsection{Experimental set up}
 
-\section{Experiment 3: Validation of visualization}
+\subsection{Results}
+
+\section{Experiment 4: Interviews}
 
 
 \subsection{Experimental set up}
