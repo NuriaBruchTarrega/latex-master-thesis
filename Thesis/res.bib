@@ -307,6 +307,7 @@ year = {2019}
 }
 
 @article{Raemaekers2017,
+abstract = {Systems that depend on third-party libraries may have to be updated when updates to these libraries become available in order to benefit from new functionality, security patches, bug fixes, or API improvements. However, often such changes come with changes to the existing interfaces of these libraries, possibly causing rework on the client system. In this paper, we investigate versioning practices in a set of more than 100,000 jar files from Maven Central, spanning over 7 years of history of more than 22,000 different libraries. We investigate to what degree versioning conventions are followed in this repository. Semantic versioning provides strict rules regarding major (breaking changes allowed), minor (no breaking changes allowed), and patch releases (only backward-compatible bug fixes allowed). We find that around one third of all releases introduce at least one breaking change. We perform an empirical study on potential rework caused by breaking changes in library releases and find that breaking changes have a significant impact on client libraries using the changed functionality. We find out that minor releases generally have larger release intervals than major releases. We also investigate the use of deprecation tags and find out that these tags are applied improperly in our dataset.},
 annote = {Study of the impact of breaking changes using the Maven Dependencies Dataset},
 author = {Raemaekers, S. and van Deursen, A. and Visser, J.},
 doi = {10.1016/j.jss.2016.04.008},
@@ -314,7 +315,7 @@ file = {:C$\backslash$:/Users/usuario/AppData/Local/Mendeley Ltd./Mendeley Deskt
 issn = {01641212},
 journal = {Journal of Systems and Software},
 keywords = {Breaking changes,Semantic versioning,Software libraries},
-mendeley-groups = {Thesis/Experiments},
+mendeley-groups = {Thesis/5. Experiments,Thesis/5. Experiments/Empirical validation metrics},
 month = {jul},
 pages = {140--158},
 publisher = {Elsevier Inc.},
@@ -322,6 +323,24 @@ title = {{Semantic versioning and impact of breaking changes in the Maven reposi
 volume = {129},
 year = {2017}
 }
+
+
+@inproceedings{Raemaekers2013,
+abstract = {We present the Maven Dependency Dataset (MDD), containing metrics, changes and dependencies of 148,253 jar files. Metrics and changes have been calculated at the level of individual methods, classes and packages of multiple library versions. A complete call graph is also presented which includes call, inheritance, containment and historical relationships between all units of the entire repository. In this paper, we describe our dataset and the methodology used to obtain it. We present different conceptual views of MDD and we also describe limitations and data quality issues that researchers using this data should be aware of. {\textcopyright} 2013 IEEE.},
+annote = {Description of the Maven Dependencies Dataset, the three databases},
+author = {Raemaekers, Steven and {Van Deursen}, Arie and Visser, Joost},
+booktitle = {IEEE International Working Conference on Mining Software Repositories},
+doi = {10.1109/MSR.2013.6624031},
+file = {:C$\backslash$:/Users/usuario/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Raemaekers, Van Deursen, Visser - 2013 - The maven repository dataset of metrics, changes, and dependencies.pdf:pdf},
+isbn = {9781467329361},
+issn = {21601852},
+keywords = {Data mining,Dataset,Maven repository},
+mendeley-groups = {Thesis/5. Experiments,Thesis/1. Introduction,Thesis/5. Experiments/Empirical validation metrics},
+pages = {221--224},
+title = {{The maven repository dataset of metrics, changes, and dependencies}},
+year = {2013}
+}
+
 
 @ARTICLE{weyuker1988evaluating,  author={E. J. {Weyuker}},  journal={IEEE Transactions on Software Engineering},   title={Evaluating software complexity measures},   year={1988},  volume={14},  number={9},  pages={1357-1365},}
 
@@ -336,4 +355,23 @@ mendeley-groups = {Thesis/7. RelatedWork/Used},
 title = {{Modeling Library Dependencies and Updates in Large Software Repository Universes}},
 url = {http://arxiv.org/abs/1709.04626},
 year = {2017}
+}
+
+@article{Brito2018,
+abstract = {Modern software development depends on APIs to reuse code and increase productivity. As most software systems, these libraries and frameworks also evolve, which may break existing clients. However, the main reasons to introduce breaking changes in APIs are unclear. Therefore, in this paper, we report the results of an almost 4-month long field study with the developers of 400 popular Java libraries and frameworks. We configured an infrastructure to observe all changes in these libraries and to detect breaking changes shortly after their introduction in the code. After identifying breaking changes, we asked the developers to explain the reasons behind their decision to change the APIs. During the study, we identified 59 breaking changes, confirmed by the developers of 19 projects. By analyzing the developers' answers, we report that breaking changes are mostly motivated by the need to implement new features, by the desire to make the APIs simpler and with fewer elements, and to improve maintainability. We conclude by providing suggestions to language designers, tool builders, software engineering researchers and API developers.},
+archivePrefix = {arXiv},
+arxivId = {1801.05198},
+author = {Brito, Aline and Xavier, Laerte and Hora, Andre and Valente, Marco Tulio},
+doi = {10.1109/SANER.2018.8330214},
+eprint = {1801.05198},
+file = {:C$\backslash$:/Users/usuario/Documents/UvA/Thesis/literatura/papers per utilitzar/Why and How Java developers break APIs.pdf:pdf},
+isbn = {9781538649695},
+journal = {25th IEEE International Conference on Software Analysis, Evolution and Reengineering, SANER 2018 - Proceedings},
+keywords = {API Evolution,Breaking Changes,Field Study},
+mendeley-groups = {Thesis/5. Experiments/Empirical validation metrics},
+number = {Dcc},
+pages = {255--265},
+title = {{Why and how Java developers break APIs}},
+volume = {2018-March},
+year = {2018}
 }

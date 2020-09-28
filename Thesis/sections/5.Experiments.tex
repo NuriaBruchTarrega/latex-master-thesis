@@ -1,18 +1,44 @@
 % !TEX root = ..\main.tex
 \chapter{Experiments}\label{ch:Experiments}
 
-\section{Experiment 1: Validation of the PoC}
-The goal of this experiment is to provide validation of the implementation in the PoC. This is done with the results of the paper \textit{"A Comprehensive Study of Bloated Dependencies in the Maven Ecosystem"} by Soto-Valero et al. \cite{soto2020comprehensive}. In this work, a byte-code analysis is performed on Maven Artifacts to detect which of the dependencies of this artifacts are \textit{bloated}. Although the PoC created in this thesis does not perform exactly the same kind of analysis, we consider that a dependency is \textit{bloated} if all the metrics have value zero for that dependency.
+\section{Experiment 1: Comparison}
+The goal of this experiment is to provide validation of the implementation in the PoC. This is done with the results of the paper \textit{"A Comprehensive Study of Bloated Dependencies in the Maven Ecosystem"} by Soto-Valero et al. \cite{soto2020comprehensive}. In this work, a byte-code analysis is performed on Maven Artifacts to detect which of the dependencies of this artifacts are \textit{bloated}, which we refer to as \textit{unused}. Although the PoC created in this thesis does not perform exactly the same kind of analysis, we consider that a dependency is \textit{unused} if no usage is detected by any of the metrics in the model.
 
 \subsection{Experimental set up}
 Soto-Valero et al. perform a qualitative analysis, in which they analyze 31 libraries available as Maven artifacts. If unused dependencies are found during the analysis, a \textit{Pull Request} is made to the \textit{GitHub} repository of the artifact in which the unused dependencies are deleted from the \textit{pom} file.
 
 With the information in the paper, we collect the \textit{GroupId} and \textit{ArtifactId} of the 31 artifacts. Out of the 31, 2 could not be found in the \textit{Maven Repository Central}. For the other 29, the \textit{version} to use in the experiment is determined by finding the last version released before the experiment by Soto-Valero et al. was conducted - November of 2019.
 
-Of the 29 artifacts, X\todo{determine how many} could not be used with the PoC, because either the artifact itself or some dependency could not be downloaded from \textit{Maven Central}, leaving a set of X \todo{find out the number} libraries.
+Of the 29 artifacts, 13 could not be used with the PoC, because either the artifact itself or some dependency could not be downloaded from \textit{Maven Central}, leaving a set of 16 libraries to analyse and compare the results with the results obtained by Soto-Valero et al. The table containing the identifiers of the artifacts used in this experiment can be found in Table \ref{table:comparison-artifacts}.
 
-% MDD: https://data.4tu.nl/articles/dataset/The_Maven_Dependency_Dataset/12698027
-\subsection{Execution}
+\begin{table}[h]
+    \begin{center}
+    \begin{tabular}{|l|l|l|l|l|l|l|l|l|}
+    \hline
+    Group Id              & Artifact Id                     & Version       \\
+    \hline
+    org.mybatis           &	mybatis	                        & 3.5.3         \\
+    org.apache.flink      & flink-core                      & 1.9.1         \\
+    com.puppycrawl.tools  & checkstyle                      & 8.27          \\
+    com.google.auto       & auto-common                     & 0.10          \\
+    edu.stanford.nlp      & stanford-corenlp                & 3.9.2         \\
+    com.squareup.moshi    & moshi-kotlin                    & 1.9.2         \\
+    org.neo4j             & neo4j-collections               & 3.5.13        \\
+    org.asynchttpclient   & async-http-client               & 2.10.4        \\
+    org.alluxio           & alluxio-core-transport          & 2.1.0         \\
+    com.github.javaparser & javaparser-symbol-solver-logic  & 3.15.5        \\
+    io.undertow           & undertow-benchmarks             & 2.0.27.Final  \\
+    org.teavm             & teavm-core                      & 0.6.1         \\
+    com.github.jknack     & handlebars-markdown             & 4.1.2         \\
+    ma.glasnost.orika     & orika-eclipse-tools             & 1.5.4         \\
+    fr.inria.gforge.spoon & spoon-core                      & 8.0.0         \\
+    org.jacop             & jacop                           & 4.7.0         \\
+    \hline
+    \end{tabular}
+    \end{center}
+    \caption{Identifiers of the Maven artifacts used for comparison}
+    \label{table:comparison-artifacts}
+\end{table}
 
 - New request set up
 
@@ -26,9 +52,21 @@ Of the 29 artifacts, X\todo{determine how many} could not be used with the PoC, 
 
 - overall evaluation
 
-\section{Experiment 2: Validation of the direct metrics}
+\section{Experiment 2: Relevance of the coupling metrics}
 
-Goal of the experiment: collect some real world data of the impact of a dependency in a project, and compare it with the metrics calculated.
+The goal of this experiment is to validate if the coupling metrics designed in the model, namely \texttt{MIC}, \texttt{AC}, \texttt{TMIC}, and \texttt{TAC}, are a good indicator of the usage of the dependencies by the clients.
+
+\unsure{I'm not sure if this is the right place for the explanation of the failed data recolection}
+
+The original idea was to measure real-world data about how the clients update the dependencies and their impact on the code. We could then have seen the correlation of this impact with the degree of dependency measured with the coupling metrics. Different approaches were taken to obtain real-world data.
+
+First, we tried to find in GitHub commits in which there had been an update of a dependency. However, the search engine in GitHub does not allow to filter the results by the language of the commit. Therefore, most of the results obtained were not useful. Also, most of the updates are only patches, which require only a bump in the version number of the declared dependency.
+
+Based on these findings, the second approach we took was to look for updates that contained breaking changes. To find the libraries that had these type of changes, and in which versions, we used the \textit{Maven Dependency Dataset} \cite{Raemaekers2013}. Raemaekers et al. used this dataset to analyze the use of semantic versioning and the possible impact of breaking changes \cite{Raemaekers2017}. It is possible to query this dataset to obtain libraries with breaking changes, with version numbers and other libraries that depended on these. However, we need to find the commit of the client library in which the update containing a breaking change was made, and it is not always possible. We considered some of the requirements to be able to analyze a dependency with the PoC. For instance, we need all the dependencies of the client library available in Maven, and testing dependencies cannot be used since they are not analyzed by the tool. Considering all these requirements, it was not possible to obtain enough data for the experiment from the \textit{Maven Dependency Dataset} on time, since all these checks had to be done manually.
+
+Next, we contacted the first author of the paper \textit{"Why and How Java Developers Break APIs"} \cite{Brito2018}, which mines GitHub repositories to find possible breaking changes in APIs, to obtain the dataset of breaking changes created based on their findings. Brito, the author, shared the dataset with us. The dataset includes 24 commits containing breaking changes, which correspond to 19 different libraries. Out of the 25 commits, 12 are from libraries managed by Gradle instead of Maven and cannot be used with the PoC. Besides, we could not find 4 of the commits in GitHub, and 2 others correspond to testing libraries, which are out of the scope of the analysis performed by the PoC. Therefore, there were only 6 breaking changes left, for which 3 the Maven artifact that these belong to had no dependants for which to do the analysis. The last 3 have only one dependant, and therefore is not possible to compare the impact of the breaking changes.
+
+Finally, we tried to manually search for deprecated libraries and other libraries that used them — however, similar problems where encountered. Finding commits which replaced a deprecated dependency and the client library and all the dependencies are available in \textit{Maven Central Repository}, is a manual task that, after multiple hours of work, gave no results.
 
 
 \subsection{Experimental set up}
@@ -44,7 +82,6 @@ Goal of the experiment: collect some real world data of the impact of a dependen
 
 - Also, I filter out all the dependencies that belong to the same group, since the developments of these dependencies are probably synchronized, and the impact works differently (cite counting those that matter)
 
-\subsection{Execution}
 \subsection{Results}
 
 
@@ -62,5 +99,4 @@ Goal of the experiment: collect some real world data of the impact of a dependen
 
 - Explain the set up of the interviews (online, control to the interviewee when using the tool...)
 
-\subsection{Execution}
 \subsection{Results}
