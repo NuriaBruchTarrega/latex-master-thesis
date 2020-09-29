@@ -129,18 +129,43 @@ The interview consists on 19 and a demonstration of the PoC, with two proposed s
   \item \textbf{Demographics:} The questions of this section are related to the professional experience and current job of the interviewee.
   \item \textbf{Dependency Management:} In this part, the questions are focused on the experience of the interviewee with dependency management and the tools used for this purpose.
   \item \textbf{Demonstration:} The third part is the demonstration of the tool, in which two scenarios are presented to the interviewee. During the scenarios discussion, the interviewee has the control of the mouse, so the person can interact directly with the tool.
-  \item \textbf{About the visualizations:} The section after the demonstration contains questions about the tool itself and the designed visualizations.
-  \item \textbf{About the metrics:} The last section is focused on the designed metrics, and the clarity and comprehensibility of these, as well as the actionability.
+  \item \textbf{Visualizations:} The section after the demonstration contains questions about the tool itself and the designed visualizations.
+  \item \textbf{Metrics:} The last section is focused on the designed metrics, and the clarity and comprehensibility of these, as well as the actionability.
 \end{enumerate}
 
 The interviews contain three types of questions: open answer, binary, and scaled from 1 to 5. During every question, even the binary and scaled questions, the interviewee has the option of making comments or discuss the answer. The list of questions contained in the interview, can be found in Table \ref{table:interview-questions}.
 
-\begin{table}[ht!]
+\begin{table}[p]
     \begin{center}
     \begin{tabularx}{\textwidth}{|X|l|l|}
     \hline
-    Question & Section & Type of question \\
+    Question & Section & Type \\\hline
     \hline
+    1.  What is your software development role?  & Demographics & Open answer \\\hline
+    2.	How many years of experience do you have as a software developer? & Demographics & Open answer \\\hline
+    3.	Which programming language(s) do you usually use in your job? & Demographics & Open answer \\\hline
+    4.	Which type of projects do you usually work on? & Demographics & Open answer \\\hline
+    \hline
+    5.	Would you consider dependency management to be one of the tasks at your job? & Dependency Management & Binary \\\hline
+    6.	To what extent is it important to you (or do you try) to have the dependencies up to date? & Dependency Management & Scaled \\\hline
+    7.	To what extent is it important to you to monitor the vulnerabilities that your dependencies may be exploiting? & Dependency Management & Scaled \\\hline
+    8.	Which tools (if any) do you use for dependency management? & Dependency Management & Open answer \\\hline
+    9.	To what extent do you think the tools you used so far are helping you to maintain your dependencies? & Dependency Management & Open answer \\\hline
+    \hline
+    Scenario 1: You are a new maintainer of the library \textit{org.apache.flink:flink-core}. Since you have not worked in the development of this library, you want to see how the dependency tree looks like. What would you look for? & Demonstration & Scenario \\\hline
+    Scenario 2: You realize that a library called \textit{kryo} has a new version, which has been announced to contain breaking changes. How likely it would affect your library, and which classes are affected. & Demonstration & Scenario \\\hline
+    \hline
+    10.	How much do you agree that the tool is useful in the presented scenarios? & Visualizations & Scaled \\\hline
+    11.	How much do you agree that managing dependencies would be easier with the presented tool? & Visualizations & Scaled \\\hline
+    12.	With your job in mind, which (if any) are the most useful of the visualizations? & Visualizations & Open answer \\\hline
+    13.	How much do you agree that the presented tool would be useful in your job? & Visualizations & Scaled \\\hline
+    14.	Is there some any othother visualization or change you would like to see? For which cases do you think it would be useful? & Visualizations & Scaled \\\hline
+    \hline
+    15.	To what extent do you agree that the metrics are clear and comprehensible? (Answer per metric) & Metrics & Scaled \\\hline
+    16.	To what extent do you agree that the metrics are useful in the described scenarios & Metrics & Scaled \\\hline
+    17.	To what extent do agree that the metrics are actionable in the sense that they give you the information you need to make a decision? (Answer per metric) & Metrics & Scaled \\\hline
+    18.	Which (if any) do you think are the most useful of the metrics? Based on the tasks that you usually do in your job. & Metrics & Open answer \\\hline
+    19.	Is there some other metric or change that you would like to be added to the model? In which scenarios do you think it could be useful? & Metrics & Open answer \\\hline
     \end{tabularx}
     \end{center}
     \caption{Questions of the interview}
