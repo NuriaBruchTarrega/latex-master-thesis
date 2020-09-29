@@ -186,7 +186,13 @@ The interviews are done via \textit{Zoom}\footnote{\url{https://zoom.us/}}. \tex
 \subsection{Results}
 
 \section{Experiment 5: Benchmarking}
+One of the main remarks received for the coupling metrics during the interviews, is that there is not a clear scale for those metrics. Therefore, the value of the metrics can be hard to interpret, since there is no indicator of which number is very high or very low.
+
+Hence, we have done a benchmarking of the values of the metrics \texttt{MIC}, \texttt{AC}, \texttt{TMIC}, and \texttt{TAC}. The goal is to understand which is the distribution of the values, and be able to indicate which are the outliers of these metrics.
 
 \subsection{Experimental set up}
+To execute this experiment, we have set a new request in the backend of the PoC. This request should contain the path to a \textit{.txt} file which includes three different columns, tab delimited. Each row represents a Maven artifact, and for each column it indicates: \textit{group id}, \textit{artifact id}, and \textit{version}.
+
+Then, the calculation of the metrics of the model is performed. For each analyzed dependency, the value of the benchmarked metrics is stored. The result consists on 4 different \textit{.csv} files. The first two, containing all the different values of the \texttt{MIC} and \texttt{AC} metrics respectively. The last files represent the values of the transitive coupling metrics, represented in three columns. The first, the dependency id, the second the distance, and the third the value calculated at the distance. Therefore, more than one row might be used to represent the \texttt{TMIC} or \texttt{TAC} of a dependency.
 
 \subsection{Results}
