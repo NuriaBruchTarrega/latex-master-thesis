@@ -11,7 +11,7 @@ With the information in the paper, we collect the \textit{GroupId} and \textit{A
 
 Of the 29 artifacts, 13 could not be used with the PoC, because either the artifact itself or some dependency could not be downloaded from \textit{Maven Central}, leaving a set of 16 libraries to analyse and compare the results with the results obtained by Soto-Valero et al. The table containing the identifiers of the artifacts used in this experiment can be found in Table \ref{table:comparison-artifacts}.
 
-\begin{table}[h]
+\begin{table}[ht]
     \begin{center}
     \begin{tabular}{|l|l|l|l|l|l|l|l|l|}
     \hline
@@ -104,22 +104,55 @@ To analyze more client libraries and, therefore, more dependencies, we extended 
 
 \subsection{Results}
 
-\section{Experiment 3: Benchmarking}
+\section{Experiment 3: Sensitivity Analysis}
 
 \subsection{Experimental set up}
 
 \subsection{Results}
 
-\section{Experiment 4: Interviews}
+\section{Experiment 4: Expert Interviews}
+This last experiment has various goals. The main one is to validate the design of the visualization. According to Munzner \cite{Munzner2009}, there are four levels at which this validation can be done:
 
+\begin{enumerate}
+  \item Domain Problem and Data Characterization
+  \item Operation and Data Type Abstraction
+  \item Visual Encoding and Interaction Design
+  \item Algorithm Design
+\end{enumerate}
+
+In this case, we focus on the third option: Visual Encoding and Interaction Design. To carry out this validation, we designed an \textit{Expert Review} by means of interviews. In addition, we included questions about the clarity and actionability of the metrics of the model. Therefore, these two aspects of the metrics, which are included in the set of validation criteria defined by Meneely et al. \cite{Meneely2012}, are also validated.
 
 \subsection{Experimental set up}
+The interview consists on 19 and a demonstration of the PoC, with two proposed scenarios in which the interviewee uses the tool. The questions are divided in four sections, dividing the interview in a total of five parts:
 
+\begin{enumerate}
+  \item \textbf{Demographics:} The questions of this section are related to the professional experience and current job of the interviewee.
+  \item \textbf{Dependency Management:} In this part, the questions are focused on the experience of the interviewee with dependency management and the tools used for this purpose.
+  \item \textbf{Demonstration:} The third part is the demonstration of the tool, in which two scenarios are presented to the interviewee. During the scenarios discussion, the interviewee has the control of the mouse, so the person can interact directly with the tool.
+  \item \textbf{About the visualizations:} The section after the demonstration contains questions about the tool itself and the designed visualizations.
+  \item \textbf{About the metrics:} The last section is focused on the designed metrics, and the clarity and comprehensibility of these, as well as the actionability.
+\end{enumerate}
 
-- Explain which stage of the visualization design is being validated, and why is domain expert interview a good idea.
+The interviews contain three types of questions: open answer, binary, and scaled from 1 to 5. During every question, even the binary and scaled questions, the interviewee has the option of making comments or discuss the answer. The list of questions contained in the interview, can be found in Table \ref{table:interview-questions}.
 
-- Describe the different type of questions (topic, and open question or scaled...)
+\begin{table}[ht!]
+    \begin{center}
+    \begin{tabularx}{\textwidth}{|X|l|l|}
+    \hline
+    Question & Section & Type of question \\
+    \hline
+    \end{tabularx}
+    \end{center}
+    \caption{Questions of the interview}
+    \label{table:interview-questions}
+\end{table}
 
-- Explain the set up of the interviews (online, control to the interviewee when using the tool...)
+The interviews are done via \textit{Zoom}\footnote{\url{https://zoom.us/}}. \textit{Zoom} offers the possibility of sharing the control of the mouse with other participants, as well as the option of recording the interview. The interviews are recorded to be able to rewatch it afterwards and take notes of the answers of the interviewees. Therefore, the interview itself feels more like a normal conversation, and there are no pauses. The control of the mouse was shared with the interviewees so they could try to use the tool themselves, to get a better idea of how it works and how they would use it.
+
+\subsection{Results}
+
+\section{Experiment 5: Benchmarking}
+
+\subsection{Experimental set up}
 
 \subsection{Results}
