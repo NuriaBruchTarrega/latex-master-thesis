@@ -105,8 +105,17 @@ To analyze more client libraries and, therefore, more dependencies, we extended 
 \subsection{Results}
 
 \section{Experiment 3: Sensitivity Analysis}
+As explained before, we have not been able to obtain the real-world data to understand how the impact of the transitive dependencies behaves, and correlate it with our transitive coupling metrics \texttt{TMIC}, and \texttt{TAC}. Therefore, we cannot know which would be the actual value of the \textit{propagation factor} for these two metrics. Instead, what we do is a sensitivity analysis of the \textit{propagation factor} on these two metrics.
+
+A \textit{Sensitivity Analysis} consists on analyzing how much an input variable affects the output. In this case, the input variable is the \textit{propagation factor} and the output is the value of the metrics.
 
 \subsection{Experimental set up}
+
+To run this analysis, we have set up a new request in the API of the PoC. This request receives a list of Maven artifacts, in a \textit{.txt} file (tab delimited). The file includes three columns, containing for each artifact, the following information: \textit{group id}, \textit{artifact id}, and \textit{version}.
+
+The first step is to run the calculation of the dependency model, for each of the dependencies of the artifacts. Then, for each one of the transitive dependencies, for which coupling was found, we run the sensitivity analysis. Since the \textit{propagation factor} is a value in the range $(0,1)$, we calculate the value of the metrics incrementing the propagation factor by $0.01$ from $0.01$ to $0.99$.
+
+The content of the file which we have used to run the sensitivity analysis can be found in Table \cn{table:sensitivity-analysis-libraries}.
 
 \subsection{Results}
 
