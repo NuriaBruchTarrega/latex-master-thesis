@@ -319,6 +319,98 @@ With Question 14, the interviewees gave their suggestions for improvements of th
 
 \subsubsection{Metrics}
 
+The answers to question 15 can be found in Figure \ref{fig:interview-15}, for each metrics the amount of times that an interviewee answered with each number of the options. In addition, Table \ref{table:interview-15} shows the average grade given to each metric.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/interview/Question15.png}
+\caption{Answers to Question 15 of the interview}
+\label{fig:interview-15}
+\end{center}
+\end{figure}
+
+\begin{table}[ht]
+    \begin{center}
+    \begin{tabular}{|l|l|}
+    \hline
+    Metric & Average \\
+    \hline
+    MIC/TMIC & 4.06 \\
+    AC/TAC & 3.8 \\
+    \% Reachable classes & 4.66 \\
+    \% Reachable methods & 4.73 \\
+    Field declaration per class & 4.6 \\
+    Method invocation per class & 4.66 \\
+    \hline
+    \end{tabular}
+    \end{center}
+    \caption{Average grade of the metrics in Question 15}
+    \label{table:interview-15}
+\end{table}
+
+In Figure \ref{fig:interview-16}, there are the answers to question 16 of the interview. The reasons for not giving the metrics the best grade include that it would be more useful if the metrics suggested as missing in question 19 were included. Also, it was suggested that context is missing for some metrics (e.g. the absolute number of reachable methods and classes, risk assessment for the coupling metrics).
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/interview/Question16.png}
+\caption{Answers to Question 16 of the interview}
+\label{fig:interview-16}
+\end{center}
+\end{figure}
+
+The answers to question 17, can be found in Figure \ref{fig:interview-17}. The interviewees which gave a grade of \textit{Neutral}, reasoned that the metrics need some improvements to be really actionable, and that there is information that still can only be found in other places. The interviewees who answered \textit{Agree}, suggested that the metrics of the model are a good starting point, in order to know which actions to take, to start with.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/interview/Question17.png}
+\caption{Answers to Question 17 of the interview}
+\label{fig:interview-17}
+\end{center}
+\end{figure}
+
+For question 18, the interviewees answered with which metrics they considered more useful. Their answers can be found in Table \ref{table:interview-18}. As in question 12, an $\oplus$ means that the interviewee mentioned the metric as one of the most useful, $\odot$ is for the metrics mentioned in a second place. And finally, if the cell is empty means that the metric was not mentioned.
+
+\begin{table}[ht]
+    \begin{center}
+    \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    \rot{MIC / TMIC}	& \rot{AC / TAC}	& \rot{\% Reachable classes}	& \rot{\% Reachable Methods}	& \rot{Field declaration per class}	& \rot{Method invocation per class    } \\
+    \hline\hline
+    $\oplus$  & ~	       & $\oplus$	& ~	        & ~	        & ~        \\\hline
+    ~	        & ~	       & $\oplus$	& $\oplus$	& ~	        & ~        \\\hline
+    ~	        & ~	       & $\oplus$	& $\oplus$  & ~	        & ~        \\\hline
+    ~	        & ~	       & ~	      & ~	        & $\odot$	  & $\oplus$ \\\hline
+    ~	        & ~	       & $\oplus$	& $\oplus$	& ~	        & ~        \\\hline
+    ~	        & ~	       & $\oplus$	& $\oplus$	& ~	        & ~        \\\hline
+    $\oplus$	& ~	       & $\oplus$	& $\oplus$	& ~	        & ~        \\\hline
+    $\oplus$	& ~	       & ~	      & ~	        & ~	        & ~        \\\hline
+    $\oplus$	& $\oplus$ & $\oplus$	& $\oplus$	& ~	        & ~        \\\hline
+    ~	        & ~	       & $\oplus$	& $\oplus$	& $\oplus$	& $\oplus$ \\\hline
+    $\oplus$	& $\oplus$ & $\oplus$	& $\oplus$	& $\oplus$  & $\oplus$ \\\hline
+    $\oplus$	& $\oplus$ & ~	      & ~	        & ~	        & ~        \\\hline
+    $\oplus$	& $\oplus$ & ~	      & ~	        & ~	        & ~        \\\hline
+    ~	        & ~        & $\oplus$ & $\oplus$	& ~         & ~        \\\hline
+    $\oplus$	& ~	       & $\oplus$ & ~	        & ~	        & ~        \\\hline
+    \end{tabular}
+    \end{center}
+    \caption{Answers to Question 18 of the interview}
+    \label{table:interview-18}
+\end{table}
+
+Finally, the suggestions made for improving the current metrics or adding new ones, in the answers of question 19, can be found in the list below:
+
+\begin{itemize}
+  \item Min, max, and mean of the coupling metrics.
+  \item How much of the client is depending on the server library.
+  \item A list of the reachable methods and classes.
+  \item The absolute number of reachable methods and classes.
+  \item Freshness indicator.
+  \item Aggregate of the coupling metrics.
+  \item Muber of files of the client using the server library.
+  \item Lines of code of the client affected by the dependency.
+  \item Code reuse: a combination of the metrics.
+\end{itemize}
+
 \section{Experiment 5: Benchmarking}
 One of the main remarks received for the coupling metrics during the interviews, is that there is not a clear scale for those metrics. Therefore, the value of the metrics can be hard to interpret, since there is no indicator of which number is very high or very low.
 
