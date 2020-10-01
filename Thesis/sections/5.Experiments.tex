@@ -81,7 +81,7 @@ To run this experiment, we prepared a new request in the API of the PoC. The req
 As can be seen, in addition to the number of times that a dependency was used and it was not detected by the metrics (or at least by one of them), the list of server libraries of these dependencies is also stored. This way, it is possible to analyze which types of libraries are those, and why the coupling metrics are not relevant in this case.
 
 \blankl
-The experiment was run with a file containing X\todo{Add number} client libraries from the \textit{Maven Central Repository}.  We selected the client libraries to use for this experiment with the following criteria. First, we used the same libraries as in the comparison experiment (see Section \ref{sec:Exp1}), but using the last version of each library. We decided to reuse these libraries because the criteria used to select these libraries by Soto-Valero et al. \cite{soto2020comprehensive} is aligned with the needs of this experiment, and are listed below:
+The experiment was run with a file containing 49 client libraries from the \textit{Maven Central Repository}.  We selected the client libraries to use for this experiment with the following criteria. First, we used the same libraries as in the comparison experiment (see Section \ref{sec:Exp1}), but using the last version of each library. We decided to reuse these libraries because the criteria used to select these libraries by Soto-Valero et al. \cite{soto2020comprehensive} is aligned with the needs of this experiment, and are listed below:
 
 \begin{itemize}
   \item The library is relevant - has more than 100 stars on GitHub.
@@ -155,11 +155,11 @@ The interviews contain three types of questions: open answer, binary, and scaled
     3.	Which programming language(s) do you usually use in your job? & Demographics & Open answer \\\hline
     4.	Which type of projects do you usually work on? & Demographics & Open answer \\\hline
     \hline
-    5.	Would you consider dependency management to be one of the tasks at your job? & Dependency Management & Binary \\\hline
+    5.	Do you have experience with dependency management? & Dependency Management & Binary \\\hline
     6.	To what extent is it important to you (or do you try) to have the dependencies up to date? & Dependency Management & Scaled \\\hline
     7.	To what extent is it important to you to monitor the vulnerabilities that your dependencies may be exploiting? & Dependency Management & Scaled \\\hline
     8.	Which tools (if any) do you use for dependency management? & Dependency Management & Open answer \\\hline
-    9.	To what extent do you think the tools you used so far are helping you to maintain your dependencies? & Dependency Management & Open answer \\\hline
+    9.	To what extent do you think the tools you used so far are helping you to maintain your dependencies? & Dependency Management & Scaled \\\hline
     \hline
     Scenario 1: You are a new maintainer of the library \textit{org.apache.flink:flink-core}. Since you have not worked in the development of this library, you want to see how the dependency tree looks like. What would you look for? & Demonstration & Scenario \\\hline
     Scenario 2: You realize that a library called \textit{kryo} has a new version, which has been announced to contain breaking changes. How likely it would affect your library, and which classes are affected. & Demonstration & Scenario \\\hline
@@ -168,7 +168,7 @@ The interviews contain three types of questions: open answer, binary, and scaled
     11.	How much do you agree that managing dependencies would be easier with the presented tool? & Visualizations & Scaled \\\hline
     12.	With your job in mind, which (if any) are the most useful of the visualizations? & Visualizations & Open answer \\\hline
     13.	How much do you agree that the presented tool would be useful in your job? & Visualizations & Scaled \\\hline
-    14.	Is there some any othother visualization or change you would like to see? For which cases do you think it would be useful? & Visualizations & Scaled \\\hline
+    14.	Is there some other visualization or change you would like to see? For which cases do you think it would be useful? & Visualizations & Scaled \\\hline
     \hline
     15.	To what extent do you agree that the metrics are clear and comprehensible? (Answer per metric) & Metrics & Scaled \\\hline
     16.	To what extent do you agree that the metrics are useful in the described scenarios & Metrics & Scaled \\\hline
@@ -184,6 +184,65 @@ The interviews contain three types of questions: open answer, binary, and scaled
 The interviews are done via \textit{Zoom}\footnote{\url{https://zoom.us/}}. \textit{Zoom} offers the possibility of sharing the control of the mouse with other participants, as well as the option of recording the interview. The interviews are recorded to be able to rewatch it afterwards and take notes of the answers of the interviewees. Therefore, the interview itself feels more like a normal conversation, and there are no pauses. The control of the mouse was shared with the interviewees so they could try to use the tool themselves, to get a better idea of how it works and how they would use it.
 
 \subsection{Results}
+In this section, we show the answers obtained during the interviews. The results will be discussed in section \ref{sec:discussion-interviews}: the suitability of the visualizations, as well as the clarity and actionability of the metrics.
+
+\subsubsection{Demographics}
+
+The roles of the 15 participants in the interviews include: Software developer, Software engineer, Security consultant, Technology lead, Head of innovation, Head of development, and Head of product. The years of experience range from 1 to 20, with an average of 7.13. A half of the interviewees have worked in backend development, and web services systems. In addition, some of the other type of projects include mobile applications, and frontend development. The languages in which the interviewees have experience can be seen in Figure \ref{fig:interview-3}.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/interview/Question3.png}
+\caption{Answers to Question 3 of the interview}
+\label{fig:interview-3}
+\end{center}
+\end{figure}
+
+\subsubsection{Dependency Management}
+
+The 15 interviewees have experience with dependency management. However, some of them indicated that it is not a task that they usually perform in their jobs, but rather in personal projects or from time to time. Figure \ref{fig:interview-6} shows the answers to question 6, regarding the importance of updating the dependencies. The reasons given by the interviewees answering \textit{Neutral} and \textit{Important} for not giving it more importance include: prioritizing the fact that the versions used are compatible, that there are no version incompatibilities with the current version used, and that the version used is stable.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/interview/Question6.png}
+\caption{Answers to Question 6 of the interview}
+\label{fig:interview-6}
+\end{center}
+\end{figure}
+
+ Figure \ref{fig:interview-7} the answers to question 7, about the importance of monitoring the vulnerabilities of the dependencies. The interviewees considering that the importance of monitoring the vulnerabilities of the dependencies was less than \textit{Very important} reasoned about it. For example, some said that it is something that they do, but not regularly. Also, they just update when there is a new version, to make sure that if a vulnerability has been discovered, the patch is always used. Finally, the last reason is that depends on the type of dependency that it is, since if it is not a customer-facing dependency, it is not that important.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/interview/Question7.png}
+\caption{Answers to Question 7 of the interview}
+\label{fig:interview-7}
+\end{center}
+\end{figure}
+
+In Figure \ref{fig:interview-8}, there are the answers to question 8. The interviewees gave more than one answer to the question, but always at least one explicitly included in the figure.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/interview/Question8.png}
+\caption{Answers to Question 8 of the interview}
+\label{fig:interview-8}
+\end{center}
+\end{figure}
+
+Finally, the answers to question 9, regarding the how helpul are the tools that the interviewees use for dependency management are. The interviewees that considered the tools to be really helpful (5), compared it to not using any tool at all. Whilts the interviewees giving lower marks (2-3), considered that there are features missing. Mainly, they considered that the basic needs are covered, however some more detailed information about how to manage the dependencies is not there.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/interview/Question9.png}
+\caption{Answers to Question 9 of the interview}
+\label{fig:interview-9}
+\end{center}
+\end{figure}
+
+\subsubsection{Visualizations}
+
+\subsubsection{Metrics}
 
 \section{Experiment 5: Benchmarking}
 One of the main remarks received for the coupling metrics during the interviews, is that there is not a clear scale for those metrics. Therefore, the value of the metrics can be hard to interpret, since there is no indicator of which number is very high or very low.
