@@ -13,7 +13,7 @@ Of the 29 artifacts, 13 could not be used with the PoC, because either the artif
 
 \begin{table}[ht]
     \begin{center}
-    \begin{tabular}{|l|l|l|l|l|l|l|l|l|}
+    \begin{tabular}{|l|l|l|}
     \hline
     Group Id              & Artifact Id                     & Version       \\
     \hline
@@ -241,6 +241,81 @@ Finally, the answers to question 9, regarding the how helpul are the tools that 
 \end{figure}
 
 \subsubsection{Visualizations}
+
+The answers of the interviewees to question 10, about the usefulness of the tool are displayed in Figure \ref{fig:interview-10}. Some of the reasons of the interviewees for not giving it the maximum grade, are the need for improvement in some aspects of both the visualization and the metrics, as well as being useful for some very specific scenarios.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/interview/Question10.png}
+\caption{Answers to Question 10 of the interview}
+\label{fig:interview-10}
+\end{center}
+\end{figure}
+
+Figure \ref{fig:interview-11} we can see the results for Question 11. In this case, the interviewees who answered \textit{Disagree} or \textit{Neutral} considered that the tool is meant for some very specific cases, which are not very likely to be needed. The other interviewees agreed that the tool would probably not be used on a daily basis, but would make some tasks easier, such as the ones discussed in the scenarios.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/interview/Question11.png}
+\caption{Answers to Question 11 of the interview}
+\label{fig:interview-11}
+\end{center}
+\end{figure}
+
+For Question 12, about which of the visualizations are most useful, most of the interviews answered with more than one visualization. Table \ref{table:interview-12} summarizes the answers. The $\oplus$ indicates that the interviewee considered that visualization to be the most useful, and the $\odot$ is used when the interviewee said that the visualization was useful but in a clear second position. If the cell is empty, the interviewee did not mention the visualization in the answer.
+
+\begin{table}[ht]
+    \begin{center}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    Tree      & Table     & Barchart \\
+    \hline\hline
+    $\odot$   & $\oplus$  & ~        \\\hline
+    ~	        & ~	        & $\oplus$ \\\hline
+    $\oplus$  & ~         & $\oplus$ \\\hline
+    $\oplus$	& ~         & ~        \\\hline
+    $\oplus$	& $\odot$	  & $\oplus$ \\\hline
+    $\oplus$	& ~         & $\odot$  \\\hline
+    $\odot$	  & $\oplus$	& ~        \\\hline
+    $\oplus$	& $\oplus$	& $\oplus$ \\\hline
+    ~	        & ~	        & $\oplus$ \\\hline
+    $\odot$	  & $\odot$	  & $\oplus$ \\\hline
+    $\oplus$	& $\oplus$	& $\oplus$ \\\hline
+    $\oplus$	& ~	        & ~        \\\hline
+    $\oplus$	& $\oplus$	& $\oplus$ \\\hline
+    $\odot$	  & ~	        & $\oplus$ \\\hline
+    $\oplus$	& $\oplus$	& $\oplus$ \\\hline
+    \end{tabular}
+    \end{center}
+    \caption{Answers to Question 12 of the interview}
+    \label{table:interview-12}
+\end{table}
+
+The answers to Question 13, are shown in Figure \ref{fig:interview-13}. Just as in Question 11, the reason given by the interviewees who answered \textit{Disagree} or \textit{Neutral} are that the tasks for which the tool is useful are not one of the regular tasks in their job.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/interview/Question13.png}
+\caption{Answers to Question 13 of the interview}
+\label{fig:interview-13}
+\end{center}
+\end{figure}
+
+With Question 14, the interviewees gave their suggestions for improvements of the current visualizations, as well as completely new visualizations. The list of suggestions can be found below:
+
+\begin{itemize}
+  \item Add tree visualization at the class level.
+  \item List with the classes and methods used from a library.
+  \item Add a decision making model, indicating which actions should be taken.
+  \item Visualization to know how much of my system is depending on a library.
+  \item Smart visualization displaying some potential problems: freshness of the dependency, multiple versions of the same library being used.
+  \item Color legend in the tree map.
+  \item Tooltip with a description of the metrics of the model.
+  \item Display the licenses of the dependencies.
+  \item Change the barchart for a table.
+  \item Possibility to move and reorganize the nodes of the tree.
+  \item Turn the features into a command interface, so it can be unatendedly running in the build pipeline.
+\end{itemize}
 
 \subsubsection{Metrics}
 
