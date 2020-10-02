@@ -44,13 +44,54 @@ The first idea was to create a request that computed the comparison automaticall
 
 \subsection{Results}
 
-- how many libraries have different results and why.
+The results obtained from the comparison with the data from the research by Soto-Valero et al. is done in two parts: if all the libraries found as unused in the paper are also found as unused by the tool, and if all the other libraries are found as used. For the first part, there are several cases:
 
-- overall evaluation
+\begin{itemize}
+  \item \textbf{Correct:} All the dependencies detected as unused in the paper, are also detected as unused by the PoC.
+  \item \textbf{Testing:} At least one of the unused dependencies is a testing depenedency, and therefore it is not detected by the PoC.
+  \item \textbf{Parent:} At least one of the unused dependencies is from a parent module, and it does not appear in the tree of the artifact.
+  \item \textbf{Used:} At least one of the unused dependencies is found as used by the PoC.
+\end{itemize}
 
-\section{Experiment 2: Relevance of the coupling metrics}
+The cases that can happen for the rest of the libraries, the ones that are found as used by Soto-Valero et al. are listed below:
 
-The goal of this experiment is to validate if the coupling metrics designed in the model, namely \texttt{MIC}, \texttt{AC}, \texttt{TMIC}, and \texttt{TAC}, are a good indicator of the usage of the dependencies by the clients. As a partial validation of the relevance of the metrics, we compare it with the results gathered from the usage metrics. We want to know how often it happens, that a dependency is used, either by using classes or methods, and it is detected as uncoupled by the coupling metrics. This way, we know if there are many cases in which a dependency that is only used with a type of connection other than method invocation or field declaration.
+\begin{itemize}
+  \item \textbf{Correct:} All the used dependencies according to the paper, are also used according to the tool.
+  \item \textbf{Shadowed:} At least one dependency is detected as unused because it is shadowed within the jar file of the client library in the building process.
+  \item \textbf{Testing:} At least one dependency is found as unused since it is only used for testing, but not marked with scope \textit{testing}.
+  \item \textbf{Unused:} At least one dependency found as used by the paper, is unused in the analysis of the tool.
+\end{itemize}
+
+In Table \cn{table:comparison-results}, there are the results for each one of the client libraries used in the experiments.
+
+\begin{table}[ht]
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Library} & \textbf{Unused in paper} & \textbf{Used in paper} \\ \hline
+org.mybatis:mybatis:3.5.3                                   & Testing       & Shadowed        \\ \hline
+org.apache.flink:flink-core:1.9.1                           & Testing       & Unused          \\ \hline
+com.puppycrawl.tools:checkstyle:8.27                        & Testing       & Correct         \\ \hline
+com.google.auto:auto-common:0.10                            & Testing       & Unused          \\ \hline
+edu.stanford.nlp:stanford-corenlp:3.9.2                     & Correct       & Unused          \\ \hline
+com.squareup.moshi:moshi-kotlin:1.9.2                       & Correct       & Correct         \\ \hline
+org.neo4j:neo4j-collections:3.5.13                          & Correct       & Unused          \\ \hline
+org.asynchttpclient:async-http-client:2.10.4                & Used          & Shadowed        \\ \hline
+org.alluxio:alluxio-core-transport:2.1.0                    & Correct       & Unused          \\ \hline
+com.github.javaparser:javaparser-symbol-solver-logic:3.15.5 & Correct       & Correct         \\ \hline
+io.undertow:undertow-benchmarks:2.0.27.Final                & Parent        & Correct         \\ \hline
+org.teavm:teavm-core:0.6.1                                  & Parent        & Correct         \\ \hline
+com.github.jknack:handlebars-markdown:4.1.2                 & Correct       & Unused          \\ \hline
+ma.glasnost.orika:orika-eclipse-tools:1.5.4                 & Testing, Used & Correct         \\ \hline
+fr.inria.gforge.spoon:spoon-core:8.0.0                      & Used          & Correct         \\ \hline
+org.jacop:jacop:4.7.0                                       & Correct       & Testing, Unused \\ \hline
+\end{tabular}
+\end{table}
+
+%% Unused: lucene: not shipped with maven, empty dependency,
+
+\section{Experiment 2: Significance of the coupling metrics}
+
+The goal of this experiment is to validate if the coupling metrics designed in the model, namely \texttt{MIC}, \texttt{AC}, \texttt{TMIC}, and \texttt{TAC}, are a good indicator of the usage of the dependencies by the clients. As a partial validation of the significance of the metrics, we compare it with the results gathered from the usage metrics. We want to know how often it happens, that a dependency is used, either by using classes or methods, and it is detected as uncoupled by the coupling metrics. This way, we know if there are many cases in which a dependency that is only used with a type of connection other than method invocation or field declaration.
 
 \unsure{I'm not sure if this is the right place for the explanation of the failed data recolection, or if it is too long}
 
