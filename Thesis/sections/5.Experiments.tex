@@ -44,7 +44,7 @@ The first idea was to create a request that computed the comparison automaticall
 
 \subsection{Results}
 
-The results obtained from the comparison with the data from the research by Soto-Valero et al. is done in two parts: if all the libraries found as unused in the paper are also found as unused by the tool, and if all the other libraries are found as used. For the first part, there are several cases:
+The results obtained from the comparison with the data from the research by Soto-Valero et al. \cite{soto2020comprehensive} is done in two parts: if all the libraries found as unused in the paper are also found as unused by the tool, and if all the other libraries are found as used. For the first part, there are several cases:
 
 \begin{itemize}
   \item \textbf{Correct:} All the dependencies detected as unused in the paper, are also detected as unused by the PoC.
@@ -62,9 +62,10 @@ The cases that can happen for the rest of the libraries, the ones that are found
   \item \textbf{Unused:} At least one dependency found as used by the paper, is unused in the analysis of the tool.
 \end{itemize}
 
-In Table \cn{table:comparison-results}, there are the results for each one of the client libraries used in the experiments.
+In Table \ref{table:comparison-results}, there are the results for each one of the client libraries used in the experiments.
 
 \begin{table}[ht]
+\begin{center}
 \begin{tabular}{|l|l|l|}
 \hline
 \textbf{Library} & \textbf{Unused in paper} & \textbf{Used in paper} \\ \hline
@@ -85,6 +86,9 @@ ma.glasnost.orika:orika-eclipse-tools:1.5.4                 & Testing, Used & Co
 fr.inria.gforge.spoon:spoon-core:8.0.0                      & Used          & Correct         \\ \hline
 org.jacop:jacop:4.7.0                                       & Correct       & Testing, Unused \\ \hline
 \end{tabular}
+\end{center}
+\caption{Results of the comparison with Soto-Valero et al. \cite{soto2020comprehensive}}
+\label{table:comparison-results}
 \end{table}
 
 %% Unused: lucene: not shipped with maven, empty dependency,
@@ -144,6 +148,128 @@ To analyze more client libraries and, therefore, more dependencies, we extended 
 \unsure{Should I show the exact content of the file? In case I should, should I do it in a Table here or in an appendix at the end of the document?}
 
 \subsection{Results}
+
+The summary of the results of this experiment are shown in Table \ref{table:summary-significance}. We can see the total number of analyzed dependencies, the number of dependencies for which the coverage metrics have found usage and the coupling metrics have not. The last two rows show, the number of dependencies which have more than 0\% coverage and no coupling has been found by the metrics \texttt{MIC}/\texttt{TMIC} and \texttt{AC}/\texttt{TAC} respectively.
+
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{l|l}
+  \hline
+  Analyzed dependencies   & 699 \\\hline
+  Metrics are not enough  & 35  \\\hline
+  MIC/TMIC are not enough & 40  \\\hline
+  AC/TAC are not enough   & 35  \\\hline
+\end{tabular}
+\end{center}
+\caption{Summary of the significance experiment}
+\label{table:summary-significance}
+\end{table}
+
+The server libraries for which usage was found by the coverage metrics but not by the coupling metrics can be found in Table \ref{table:significance-coupling}. The first two columns of this table are the \textit{group id}, and the \textit{artifact id} of the server libraries. Only by looking at the names of the libraries, one can see that some of them are libraries that contain \texttt{annotations}. We have checked the content of all the libraries, in order to find out which contain only \texttt{annotations}. The result of this search can be seen in the last column of Table \ref{table:significance-coupling}.
+
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Group Id} & \textbf{Artifact Id} & \textbf{Type} \\
+\hline
+com.fasterxml.jackson.core  & jackson-annotations             & Annotations \\\hline
+com.github.javaparser       & javaparser-symbol-solver-model  & Other       \\\hline
+com.google.code.findbugs    & findbugs-annotations            & Annotations \\\hline
+com.google.code.findbugs    & jsr305                          & Annotations \\\hline
+com.google.errorprone       & error\_prone\_annotations       & Annotations \\\hline
+com.google.j2objc           & j2objc-annotations              & Annotations \\\hline
+org.apache.flink            & flink-annotations               & Annotations \\\hline
+io.grpc                     & grpc-context                    & Other       \\\hline
+io.netty                    & netty-codec-socks               & Other       \\\hline
+jakarta.activation          & jakarta.activation-api          & Other       \\\hline
+org.apiguardian             & apiguardian-api                 & Annotations \\\hline
+org.codehaus.mojo           & animal-sniffer-annotations      & Annotations \\\hline
+org.codehaus.plexus         & plexus-component-annotations    & Annotations \\\hline
+org.codehaus.woodstox       & stax2-api                       & Other       \\\hline
+org.glassfish.jaxb          & jaxb-core                       & Other       \\\hline
+org.jetbrains               & annotations                     & Annotations \\\hline
+org.joda                    & joda-convert                    & Other       \\\hline
+org.junit.jupiter           & junit-jupiter-api               & Other       \\\hline
+org.neo4j                   & annotations                     & Annotations \\\hline
+org.yaml                    & snakeyaml                       & Other       \\\hline
+\end{tabular}
+\end{center}
+\caption{List of the server libraries for which the coupling metrics were not enough to indicate usage}
+\label{table:significance-coupling}
+\end{table}
+
+The list of the libraries for which the usage was not detected by \texttt{MIC}/\texttt{TMIC} or \texttt{AC}/\texttt{TAC} can be found in Tables \ref{table:significance-mic} and \ref{table:significance-ac}, respectively. The server libraries whichusage is only not detected by the metric, are highlighted in yellow background.
+\unsure{Should I only display the highlighted ones?}
+
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Group Id} & \textbf{Artifact Id} & \textbf{Type} \\
+\hline
+avalon-framework            & avalon-framework                & Other       \\\hline %New!
+com.fasterxml.jackson.core  & jackson-annotations             & Annotations \\\hline
+com.github.javaparser       & javaparser-symbol-solver-model  & Other       \\\hline
+com.google.errorprone       & error\_prone\_annotations       & Annotations \\\hline
+com.google.code.findbugs    & findbugs-annotations            & Annotations \\\hline
+com.google.code.findbugs    & jsr305                          & Annotations \\\hline
+com.google.j2objc           & j2objc-annotations              & Annotations \\\hline
+org.apache.flink            & flink-annotations               & Annotations \\\hline
+io.grpc                     & grpc-context                    & Other       \\\hline
+io.netty                    & netty-codec-socks               & Other       \\\hline
+jakarta.activation          & jakarta.activation-api          & Other       \\\hline
+logkit                      & logkit                          & Other       \\\hline %New!
+org.apache.geronimo.specs   & geronimo-jms\_1.1\_spec         & Other       \\\hline %New!
+org.apache.openejb          & javaee-api                      & Other       \\\hline %New!
+org.apiguardian             & apiguardian-api                 & Annotations \\\hline
+org.codehaus.plexus         & plexus-component-annotations    & Annotations \\\hline
+org.codehaus.mojo           & animal-sniffer-annotations      & Annotations \\\hline
+org.codehaus.woodstox       & stax2-api                       & Other       \\\hline
+org.glassfish.jaxb          & jaxb-core                       & Other       \\\hline
+org.jetbrains               & annotations                     & Annotations \\\hline
+org.joda                    & joda-convert                    & Other       \\\hline
+org.junit.jupiter           & junit-jupiter-api               & Other       \\\hline
+org.neo4j                   & annotations                     & Annotations \\\hline
+org.slf4j                   & slf4j-api                       & Other       \\\hline %New!
+org.yaml                    & snakeyaml                       & Other       \\\hline
+\end{tabular}
+\end{center}
+\caption{List of the server libraries for which the \texttt{MIC}/\texttt{TMIC} were not enough to indicate usage}
+\label{table:significance-mic}
+\end{table}
+
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Group Id} & \textbf{Artifact Id} & \textbf{Type} \\
+\hline
+com.fasterxml.jackson.core  & jackson-annotations             & \\\hline
+com.github.javaparser       & javaparser-symbol-solver-model  & \\\hline
+com.google.code.findbugs    & findbugs-annotations            & \\\hline
+com.google.code.findbugs    & jsr305                          & \\\hline
+com.google.errorprone       & error\_prone\_annotations       & \\\hline
+com.google.j2objc           & j2objc-annotations              & \\\hline
+io.grpc                     & grpc-context                    & \\\hline
+io.netty                    & netty-codec-socks               & \\\hline
+jakarta.activation          & jakarta.activation-api          & \\\hline
+org.apache.flink            & flink-annotations               & \\\hline
+org.apiguardian             & apiguardian-api                 & \\\hline
+org.codehaus.mojo           & animal-sniffer-annotations      & \\\hline
+org.codehaus.plexus         & plexus-component-annotations    & \\\hline
+org.codehaus.woodstox       & stax2-api                       & \\\hline
+org.glassfish.jaxb          & jaxb-core                       & \\\hline
+org.jetbrains               & annotations                     & \\\hline
+org.joda                    & joda-convert                    & \\\hline
+org.junit.jupiter           & junit-jupiter-api               & \\\hline
+org.neo4j                   & annotations                     & \\\hline
+org.yaml                    & snakeyaml                       & \\\hline
+\end{tabular}
+\end{center}
+\caption{List of the server libraries for which the \texttt{AC}/\texttt{TAC} were not enough to indicate usage}
+\label{table:significance-ac}
+\end{table}
 
 \section{Experiment 3: Sensitivity Analysis}
 As explained before, we have not been able to obtain the real-world data to understand how the impact of the transitive dependencies behaves, and correlate it with our transitive coupling metrics \texttt{TMIC}, and \texttt{TAC}. Therefore, we cannot know which would be the actual value of the \textit{propagation factor} for these two metrics. Instead, what we do is a sensitivity analysis of the \textit{propagation factor} on these two metrics.
@@ -213,7 +339,7 @@ The interviews contain three types of questions: open answer, binary, and scaled
     \hline
     15.	To what extent do you agree that the metrics are clear and comprehensible? (Answer per metric) & Metrics & Scaled \\\hline
     16.	To what extent do you agree that the metrics are useful in the described scenarios & Metrics & Scaled \\\hline
-    17.	To what extent do agree that the metrics are actionable in the sense that they give you the information you need to make a decision? (Answer per metric) & Metrics & Scaled \\\hline
+    17.	To what extent do agree that the metrics are actionable in the sense that they give you the information you need to make a decision? & Metrics & Scaled \\\hline
     18.	Which (if any) do you think are the most useful of the metrics? Based on the tasks that you usually do in your job. & Metrics & Open answer \\\hline
     19.	Is there some other metric or change that you would like to be added to the model? In which scenarios do you think it could be useful? & Metrics & Open answer \\\hline
     \end{tabularx}
