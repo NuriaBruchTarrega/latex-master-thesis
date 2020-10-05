@@ -333,20 +333,20 @@ This last experiment has various goals. The main one is to validate the design o
   \item Algorithm Design
 \end{enumerate}
 
-In this case, we focus on the third option: Visual Encoding and Interaction Design. To carry out this validation, we designed an \textit{Expert Review} by means of interviews. In addition, we included questions about the clarity and actionability of the metrics of the model. Therefore, these two aspects of the metrics, which are included in the set of validation criteria defined by Meneely et al. \cite{Meneely2012}, are also validated.
+In this case, we focus on the third option: Visual Encoding and Interaction Design. To carry out this validation, we designed an \textit{Expert Review} through interviews. In addition, we included questions about the clarity and actionability of the metrics of the model. Therefore, these two aspects of the metrics, which are included in the set of validation criteria defined by Meneely et al. \cite{Meneely2012}, are also validated.
 
 \subsection{Experimental set up}
 The interview consists on 19 and a demonstration of the PoC, with two proposed scenarios in which the interviewee uses the tool. The questions are divided in four sections, dividing the interview in a total of five parts:
 
 \begin{enumerate}
-  \item \textbf{Demographics:} The questions of this section are related to the professional experience and current job of the interviewee.
-  \item \textbf{Dependency Management:} In this part, the questions are focused on the experience of the interviewee with dependency management and the tools used for this purpose.
-  \item \textbf{Demonstration:} The third part is the demonstration of the tool, in which two scenarios are presented to the interviewee. During the scenarios discussion, the interviewee has the control of the mouse, so the person can interact directly with the tool.
+  \item \textbf{Demographics:} The questions of this section are related to the interviewee's professional experience and current job.
+  \item \textbf{Dependency Management:} In this part, the questions are focused on the interviewee's experience with dependency management and the tools used for this purpose.
+  \item \textbf{Demonstration:} The third part is the demonstration of the tool, in which two scenarios are presented to the interviewee. During the scenarios discussion, the interviewee controls the mouse, so the person can interact directly with the tool.
   \item \textbf{Visualizations:} The section after the demonstration contains questions about the tool itself and the designed visualizations.
-  \item \textbf{Metrics:} The last section is focused on the designed metrics, and the clarity and comprehensibility of these, as well as the actionability.
+  \item \textbf{Metrics:} The last section focuses on the designed metrics, the clarity and comprehensibility of these, as well as actionability.
 \end{enumerate}
 
-The interviews contain three types of questions: open answer, binary, and scaled from 1 to 5. During every question, even the binary and scaled questions, the interviewee has the option of making comments or discuss the answer. The list of questions contained in the interview, can be found in Table \ref{table:interview-questions}.
+The interviews contain three types of questions: open answer, binary, and scaled from 1 to 5. During every question, even the binary and scaled questions, the interviewee can make comments or discuss the answer. The list of questions contained in the interview, can be found in Table \ref{table:interview-questions}.
 
 \begin{table}[p]
     \begin{center}
@@ -365,7 +365,7 @@ The interviews contain three types of questions: open answer, binary, and scaled
     8.	Which tools (if any) do you use for dependency management? & Dependency Management & Open answer \\\hline
     9.	To what extent do you think the tools you used so far are helping you to maintain your dependencies? & Dependency Management & Scaled \\\hline
     \hline
-    Scenario 1: You are a new maintainer of the library \textit{org.apache.flink:flink-core}. Since you have not worked in the development of this library, you want to see how the dependency tree looks like. What would you look for? & Demonstration & Scenario \\\hline
+    Scenario 1: You are a new maintainer of the library \textit{org.apache.flink:flink-core}. Since you have not worked in this library's development, you want to see how the dependency tree looks like. What would you look for? & Demonstration & Scenario \\\hline
     Scenario 2: You realize that a library called \textit{kryo} has a new version, which has been announced to contain breaking changes. How likely it would affect your library, and which classes are affected. & Demonstration & Scenario \\\hline
     \hline
     10.	How much do you agree that the tool is useful in the presented scenarios? & Visualizations & Scaled \\\hline
@@ -376,7 +376,7 @@ The interviews contain three types of questions: open answer, binary, and scaled
     \hline
     15.	To what extent do you agree that the metrics are clear and comprehensible? (Answer per metric) & Metrics & Scaled \\\hline
     16.	To what extent do you agree that the metrics are useful in the described scenarios & Metrics & Scaled \\\hline
-    17.	To what extent do agree that the metrics are actionable in the sense that they give you the information you need to make a decision? & Metrics & Scaled \\\hline
+    17.	To what extent do you agree that the metrics are actionable in the sense that they give you the information you need to make a decision? & Metrics & Scaled \\\hline
     18.	Which (if any) do you think are the most useful of the metrics? Based on the tasks that you usually do in your job. & Metrics & Open answer \\\hline
     19.	Is there some other metric or change that you would like to be added to the model? In which scenarios do you think it could be useful? & Metrics & Open answer \\\hline
     \end{tabularx}
@@ -385,14 +385,14 @@ The interviews contain three types of questions: open answer, binary, and scaled
     \label{table:interview-questions}
 \end{table}
 
-The interviews are done via \textit{Zoom}\footnote{\url{https://zoom.us/}}. \textit{Zoom} offers the possibility of sharing the control of the mouse with other participants, as well as the option of recording the interview. The interviews are recorded to be able to rewatch it afterwards and take notes of the answers of the interviewees. Therefore, the interview itself feels more like a normal conversation, and there are no pauses. The control of the mouse was shared with the interviewees so they could try to use the tool themselves, to get a better idea of how it works and how they would use it.
+The interviews are done via \textit{Zoom}\footnote{\url{https://zoom.us/}}. \textit{Zoom} offers the possibility of sharing the control of the mouse with other participants and the option of recording the interview. The interviews are recorded to rewatch it afterward and take notes of the interviewees' answers. Therefore, the interview itself feels more like a normal conversation, and there are no pauses. The control of the mouse was shared with the interviewees to try to use the tool themselves, to get a better idea of how it works and how they would use it.
 
 \subsection{Results}
 In this section, we show the answers obtained during the interviews. The results will be discussed in section \ref{sec:discussion-interviews}: the suitability of the visualizations, as well as the clarity and actionability of the metrics.
 
 \subsubsection{Demographics}
 
-The roles of the 15 participants in the interviews include: Software developer, Software engineer, Security consultant, Technology lead, Head of innovation, Head of development, and Head of product. The years of experience range from 1 to 20, with an average of 7.13. A half of the interviewees have worked in backend development, and web services systems. In addition, some of the other type of projects include mobile applications, and frontend development. The languages in which the interviewees have experience can be seen in Figure \ref{fig:interview-3}.
+The roles of the 15 participants in the interviews include: Software developer, Software engineer, Security consultant, Technology lead, Head of innovation, Head of development, and Head of product. The years of experience range from 1 to 20, with an average of 7.13. Half of the interviewees have worked in backend development and web services systems. In addition, some of the other types of projects include mobile applications and frontend development. The languages in which the interviewees have experience can be seen in Figure \ref{fig:interview-3}.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -404,7 +404,7 @@ The roles of the 15 participants in the interviews include: Software developer, 
 
 \subsubsection{Dependency Management}
 
-The 15 interviewees have experience with dependency management. However, some of them indicated that it is not a task that they usually perform in their jobs, but rather in personal projects or from time to time. Figure \ref{fig:interview-6} shows the answers to question 6, regarding the importance of updating the dependencies. The reasons given by the interviewees answering \textit{Neutral} and \textit{Important} for not giving it more importance include: prioritizing the fact that the versions used are compatible, that there are no version incompatibilities with the current version used, and that the version used is stable.
+The 15 interviewees have experience with dependency management. However, some of them indicated that it is not a task that they usually perform in their jobs, but rather in personal projects or time. Figure \ref{fig:interview-6} shows the answers to question 6, regarding the importance of updating the dependencies. The reasons given by the interviewees answering \textit{Neutral} and \textit{Important} for not giving it more importance include: prioritizing the fact that the versions used are compatible, that there are no version incompatibilities with the current version used, and that the version used is stable.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -414,7 +414,7 @@ The 15 interviewees have experience with dependency management. However, some of
 \end{center}
 \end{figure}
 
- Figure \ref{fig:interview-7} the answers to question 7, about the importance of monitoring the vulnerabilities of the dependencies. The interviewees considering that the importance of monitoring the vulnerabilities of the dependencies was less than \textit{Very important} reasoned about it. For example, some said that it is something that they do, but not regularly. Also, they just update when there is a new version, to make sure that if a vulnerability has been discovered, the patch is always used. Finally, the last reason is that depends on the type of dependency that it is, since if it is not a customer-facing dependency, it is not that important.
+ Figure \ref{fig:interview-7} the answers to question 7 about the importance of monitoring the dependencies' vulnerabilities. The interviewees which considered that the importance of monitoring the dependencies' vulnerabilities was less than \textit{Very important} reasoned about it. For example, some said that it is something that they do, but not regularly. They just update when there is a new version, to make sure that if a vulnerability has been discovered, the patch is always used. Finally, the last reason depends on the type of dependency that it is, since if it is not a customer-facing dependency, it is not that important.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -434,7 +434,7 @@ In Figure \ref{fig:interview-8}, there are the answers to question 8. The interv
 \end{center}
 \end{figure}
 
-Finally, the answers to question 9, regarding the how helpul are the tools that the interviewees use for dependency management are. The interviewees that considered the tools to be really helpful (5), compared it to not using any tool at all. Whilts the interviewees giving lower marks (2-3), considered that there are features missing. Mainly, they considered that the basic needs are covered, however some more detailed information about how to manage the dependencies is not there.
+Finally, the answers to question 9, regarding the how helpul are the tools that the interviewees use for dependency management are. The interviewees that considered the tools to be really helpful (5), compared it to not using any tool. Whilts the interviewees giving lower marks (2-3), considered that features are missing. Mainly, they considered that the basic needs are covered, however some more detailed information about how to manage the dependencies is not there.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -446,7 +446,7 @@ Finally, the answers to question 9, regarding the how helpul are the tools that 
 
 \subsubsection{Visualizations}
 
-The answers of the interviewees to question 10, about the usefulness of the tool are displayed in Figure \ref{fig:interview-10}. Some of the reasons of the interviewees for not giving it the maximum grade, are the need for improvement in some aspects of both the visualization and the metrics, as well as being useful for some very specific scenarios.
+The answers of the interviewees to question 10 about the tool's usefulness are displayed in Figure \ref{fig:interview-10}. Some of the interviewees' reasons for not giving it the maximum grade are the need for improvement in some aspects of both the visualization and the metrics and being useful for some very specific scenarios.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -456,7 +456,7 @@ The answers of the interviewees to question 10, about the usefulness of the tool
 \end{center}
 \end{figure}
 
-Figure \ref{fig:interview-11} we can see the results for Question 11. In this case, the interviewees who answered \textit{Disagree} or \textit{Neutral} considered that the tool is meant for some very specific cases, which are not very likely to be needed. The other interviewees agreed that the tool would probably not be used on a daily basis, but would make some tasks easier, such as the ones discussed in the scenarios.
+Figure \ref{fig:interview-11} we can see the results for Question 11. In this case, the interviewees who answered \textit{Disagree} or \textit{Neutral} considered that the tool is meant for some very specific cases, which are not very likely to be needed. The other interviewees agreed that the tool would probably not be used daily, but would make some tasks easier, such as those discussed in the scenarios.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -466,7 +466,7 @@ Figure \ref{fig:interview-11} we can see the results for Question 11. In this ca
 \end{center}
 \end{figure}
 
-For Question 12, about which of the visualizations are most useful, most of the interviews answered with more than one visualization. Table \ref{table:interview-12} summarizes the answers. The $\oplus$ indicates that the interviewee considered that visualization to be the most useful, and the $\odot$ is used when the interviewee said that the visualization was useful but in a clear second position. If the cell is empty, the interviewee did not mention the visualization in the answer.
+For Question 12, about which visualizations are most useful, most of the interviews answered with more than one visualization. Table \ref{table:interview-12} summarizes the answers. The $\oplus$ indicates that the interviewee considered that visualization to be the most useful, and the $\odot$ is used when the interviewee said that the visualization was useful but in a clear second position. If the cell is empty, the interviewee did not mention the visualization in the answer.
 
 \begin{table}[ht!]
     \begin{center}
@@ -495,7 +495,7 @@ For Question 12, about which of the visualizations are most useful, most of the 
     \label{table:interview-12}
 \end{table}
 
-The answers to Question 13, are shown in Figure \ref{fig:interview-13}. Just as in Question 11, the reason given by the interviewees who answered \textit{Disagree} or \textit{Neutral} are that the tasks for which the tool is useful are not one of the regular tasks in their job.
+The answers to Question 13 are shown in Figure \ref{fig:interview-13}. Just as in Question 11, the reason given by the interviewees who answered \textit{Disagree} or \textit{Neutral} are that the tasks for which the tool is useful are not one of the regular tasks in their job.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -505,25 +505,25 @@ The answers to Question 13, are shown in Figure \ref{fig:interview-13}. Just as 
 \end{center}
 \end{figure}
 
-With Question 14, the interviewees gave their suggestions for improvements of the current visualizations, as well as completely new visualizations. The list of suggestions can be found below:
+With Question 14, the interviewees gave their suggestions for improvements to the current visualizations and completely new visualizations. The list of suggestions can be found below:
 
 \begin{itemize}
   \item Add tree visualization at the class level.
   \item List with the classes and methods used from a library.
-  \item Add a decision making model, indicating which actions should be taken.
+  \item Add a decision-making model, indicating which actions should be taken.
   \item Visualization to know how much of the system is depending on a library.
-  \item Smart visualization displaying some potential problems: freshness of the dependency, multiple versions of the same library being used.
-  \item Color legend in the tree map.
+  \item Smart visualization displaying some potential problems: the freshness of the dependency, multiple versions of the same library being used.
+  \item Color legend in the tree graph.
   \item Tooltip with a description of the metrics of the model.
   \item Display the licenses of the dependencies.
-  \item Change the barchart for a table.
+  \item Change the bar chart for a table.
   \item Possibility to move and reorganize the nodes of the tree.
-  \item Turn the features into a command interface, so it can be unatendedly running in the build pipeline.
+  \item Turn the features into a command interface to be unattended running in the build pipeline.
 \end{itemize}
 
 \subsubsection{Metrics}
 
-The answers to question 15 can be found in Figure \ref{fig:interview-15}, for each metrics the amount of times that an interviewee answered with each number of the options. In addition, Table \ref{table:interview-15} shows the average grade given to each metric.
+The answers to question 15 can be found in Figure \ref{fig:interview-15}; for each metric, the number of times an interviewee answered with each number of the options. In addition, Table \ref{table:interview-15} shows the average grade given to each metric.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -552,7 +552,7 @@ The answers to question 15 can be found in Figure \ref{fig:interview-15}, for ea
     \label{table:interview-15}
 \end{table}
 
-In Figure \ref{fig:interview-16}, there are the answers to question 16 of the interview. The reasons for not giving the metrics the best grade include that it would be more useful if the metrics suggested as missing in question 19 were included. Also, it was suggested that context is missing for some metrics (e.g. the absolute number of reachable methods and classes, risk assessment for the coupling metrics).
+In Figure \ref{fig:interview-16}, there are the answers to question 16 of the interview. The reasons for not giving the metrics the best grade include that it would be more useful if the metrics suggested as missing in question 19 were included. It was also suggested that context is missing for some metrics (e.g., the absolute number of reachable methods and classes, risk assessment for the coupling metrics).
 
 \begin{figure}[ht!]
 \begin{center}
@@ -562,7 +562,7 @@ In Figure \ref{fig:interview-16}, there are the answers to question 16 of the in
 \end{center}
 \end{figure}
 
-The answers to question 17, can be found in Figure \ref{fig:interview-17}. The interviewees which gave a grade of \textit{Neutral}, reasoned that the metrics need some improvements to be really actionable, and that there is information that still can only be found in other places. The interviewees who answered \textit{Agree}, suggested that the metrics of the model are a good starting point, in order to know which actions to take, to start with.
+The answers to question 17 can be found in Figure \ref{fig:interview-17}. The interviewees who gave the grade \textit{Neutral} reasoned that the metrics need some improvements to be trully actionable and that there is information that still can only be found in other places. The interviewees who answered \textit{Agree} suggested that the model's metrics are a good starting point to know which actions to take to start with.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -572,7 +572,7 @@ The answers to question 17, can be found in Figure \ref{fig:interview-17}. The i
 \end{center}
 \end{figure}
 
-For question 18, the interviewees answered with which metrics they considered more useful. Their answers can be found in Table \ref{table:interview-18}. As in question 12, a $\oplus$ mean that the interviewee mentioned the metric as one of the most useful, $\odot$ is for the metrics mentioned in a second place. And finally, if the cell is empty means that the metric was not mentioned.
+For question 18, the interviewees answered with which metrics they considered more useful. Their answers can be found in Table \ref{table:interview-18}. As in question 12, a $\oplus$ means that the interviewee mentioned the metric as one of the most useful, $\odot$ is for the metrics mentioned in second place. And finally, if the cell is empty means that the metric was not mentioned.
 
 \begin{table}[ht!]
     \begin{center}
@@ -616,75 +616,75 @@ Finally, the suggestions made for improving the current metrics or adding new on
 \end{itemize}
 
 \subsection{Discussion}
-In this section, we discuss the answers to the interviews, divided in sections. First, there is a discussion on the general evaluation given by the interviewees, according to their role.
+In this section, we discuss the answers to the interviews, divided into sections. First, there is a discussion on the interviewees' general evaluation, according to their role.
 
-We have found, that there is a difference in the way the interviewees evaluate the model and the visualizations according to whether the main focus of the interviewee's rols is development, or arquitecture and analysis.
+We have found a difference in how the interviewees evaluate the model and the visualizations according to whether the interviewee's main focus is development or architecture and analysis.
 
-The developers want more informations that can be directly transformed into development actions. For example, the suggestions regarding the list of methods used of the dependencies, which can answer a vulnerable method is used or not. Also, the lines of code where the calls to a dependency are made, then they can directly go to that line of code to make the necessary changes.
+The developers want more information that can be directly transformed into development actions. For example, the suggestions regarding the list of methods used of the dependencies, which can answer a vulnerable method is used or not. Also, the lines of code where the calls to a dependency are made can directly go to that line of code to make the necessary changes.
 
-However, the other type of interviewee need more high-level information. One of the suggestions made by several of these interviewees was to create a metric regarding how much of the client library depends on the server library. Also, how widespread the usage is in the client library. These two metrics would be related to the arquitecture of the system.
+However, the other type of interviewee is interested in more high-level information. One of the suggestions made by several of these interviewees was to create a metric regarding how much of the client library depends on the server library. Also, how widespread the usage is in the client library. These two metrics would be related to the architecture of the system.
 
-Furthermore, there is also an indicator of this difference in their answers to the prefered metric. The interviewees with tasks related to analysis and architecture prefered the metric \texttt{MIC}/\texttt{TMIC}, as they indicated in Question 18.
+Furthermore, there is also an indicator of this difference in their answers to the preferred metric. The interviewees with tasks related to analysis and architecture preferred the metric \texttt{MIC}/\texttt{TMIC}, as they indicated in Question 18.
 
 \subsubsection{Dependency Management}
-With the questions answered in the \textit{Dependency Management} section we know that all the interviewees have experience with this type of tasks. Also, the interviewees considered more important to monitor the vulnerabilities of the dependencies, than update to the last version. This is also confirmed by the comments of some interviewees, saying that the main reason to update a dependency is to avoid being affected by possible vulnerabilities. \unsure{Should I add a finding about this? Even if it does not relate directly to any of the research questions}
+With the questions answered in the \textit{Dependency Management} section, we know that all the interviewees have experience with this type of task. Also, the interviewees considered it more important to monitor the dependencies' vulnerabilities than the update to the last version. This is also confirmed by some interviewees' comments, saying that the main reason to update a dependency is to avoid being affected by possible vulnerabilities. \unsure{Should I add a finding of this? Even if it does not relate directly to any of the research questions}
 
 
 \subsubsection{Visualizations}
-When asked about the usefulness of the tool, there is a general agreement that the tool is useful in the scenarios discussed during the interview. There are some negative answers to whether the tool can make the dependency management easier. However, most of the comments about these answers are related to the tool being useful for very specific cases. Therefore, the negative answers are not related to the tool not making the tasks easier.
+When asked about the tool's usefulness, there is a general agreement that the tool is useful in the scenarios discussed during the interview. There are some negative answers to whether the tool can make dependency management easier. However, most of the comments about these answers are related to the tool being useful for particular cases. Therefore, the negative responses are not associated with the tool, not making the tasks easier.
 
 \begin{finding}
 	There is a consensus that the created tool is useful in certain scenarios related to dependency management.
 	\label{find:tool-useful}
 \end{finding}
 
-In the answers to Question 12, only 4 interviewees answer only one of the visualizations. Also, some of the other interviewees commented that there is value on the combination of the perspectives in the visualizations. Each visualization has a point of view which adds to the value of the entire tool. The \textit{Tree} visualization gives an understanding of the hierarchy of the dependencies, and where the transitive dependencies come from. The \textit{Table} visualization make it possible to compare the metrics, and therefore, the degree of dependency. Finally, the \textit{Barchart} gives a more detailed view of the impact of the dependencies in the client library.
+In the answers to Question 12, only four interviewees answer only one of the visualizations. Some of the other interviewees also commented that there is value in combining the perspectives in the visualizations. Each visualization has a point of view, which adds to the value of the entire tool. The \textit{Tree} visualization gives an understanding of the hierarchy of the dependencies and where the transitive dependencies come from. The \textit{Table} visualization makes it possible to compare the metrics, and therefore, the degree of dependence. Finally, the \textit{Barchart} gives a more detailed view of the impact of the dependencies in the client library.
 
 \begin{finding}
-	It is important to have different perspective on the dependencies of a system in the visualizations, to have a complete understanding of the dependency tree.
+	It is important to have a different perspective on a system's dependencies in the visualizations to have a complete understanding of the dependency tree.
 	\label{find:different-perspectives}
 \end{finding}
 
-With the last question about the visualizations, the interviewees suggested some improvements to be made. There are certain suggestions which are small improvements in terms of interaction with the visualizations, and some other additions to make it easier to use. According to the research method, the next step would be to implement some of these suggestions, and do more interviews. However, due to time limitations we cannot do these tasks.
+With the last question about the visualizations, the interviewees suggested some improvements to be made. Certain suggestions are small improvements in terms of interaction with the visualizations, and some other additions to make it easier to use. According to the research method, the next step would be implementing some of these suggestions and doing more interviews. However, due to time limitations, we cannot do these tasks.
 
-In addition, some of the interviewees expressed a need to integrate the different sources of information about dependency management. This data includes vulnerability data, the new versions available of the dependencies, and the licenses of the libraries used. Some related suggestions into making the features of this tool into another type of tool are to make it a IDE Plugin, and a command interface. Hence, there is a general interest in the tool, but it might be important to consider changing the format in which these are supplied.
+Also, some interviewees expressed a need to integrate the different sources of information about dependency management. This data includes vulnerability data, the new versions available of the dependencies, and the licenses of the libraries used. Some related suggestions into making this tool's features into another type of tool are to make it an IDE Plugin and a command interface. Hence, there is a general interest in the tool, but it might be important to consider changing the format in which these are supplied.
 
 \unsure{Should these last two points be made into a finding?}
 
 \subsubsection{Metrics}
-Regarding the clarity and comprehensibility of the metrics, the average grade given by the interviewees for all the metrics is positive, being a 3.8/5 the lowest one, and a 4.73/5 the highest one.
+Regarding the clarity and comprehensibility of the metrics, the interviewees' average grade for all the metrics is positive, being a 3.8/5, the lowest one, and a 4.73/5 the highest one.
 
 \begin{finding}
-	There is a general consensus that the metrics defined in this model are clear and comprehensible.
+	There is a consensus that the metrics defined in this model are clear and comprehensible.
 	\label{find:clear-comprehensible}
 \end{finding}
 
-The metrics with the lowest grade are the coupling metrics. As confirmed by the comments of the question about the actionability of the model, most of the interviewees agreed that the coupling metrics are harder to understand since there is not a clear scale. Therefore, a number gives some information on the dependency itself, as well as how it compares to the rest of dependencies in the tree, but there is no clear meaning which indicates if a certain value is "good" or "bad".
+The metrics with the lowest grade are the coupling metrics. As confirmed by the comments of the question about the model's actionability, most of the interviewees agreed that the coupling metrics are harder to understand since there is not a clear scale. Therefore, a number gives some information on the dependency itself and how it compares to the rest of dependencies in the tree, but there is no clear meaning that indicates if a certain value is "good" or "bad."
 
 \begin{finding}
-	The coupling metrics could be improved with a clear scale, or rating evaluation.
+	The coupling metrics could be improved with a clear scale or rating evaluation.
 	\label{find:coupling-scale}
 \end{finding}
 
-The answers to Question 16, about the usefulness of the model are mainly positive. Just as in the case of the visualizations, the interviewees giving the lowerst marks reasoned that the need to have such a detailed evaluation of the dependencies is not necessary on a daily basis.
+The answers to Question 16, about the usefulness of the model, are mainly positive. Just as in the visualizations, the interviewees giving the lowest marks reasoned that the need to have such a detailed evaluation of the dependencies is not necessary daily.
 
 \begin{finding}
-	The model is useful for dependency management, however it is not needed for the most common and regular tasks.
+	The model is useful for dependency management. However, it is not needed for the most common and regular tasks.
 	\label{find:model-useful}
 \end{finding}
 
-With respect to the question 18, regarding which are the most useful metrics in the model. The metrics that got more votes are the coverage metrics, which is consistent with the answers to question 15, in which the coverage metrics have two of the highest average scores. Also, just as in the case of the visualizations, some of the interviewees commented that it is the different perspectives given by each of the metrics which makes the model more useful.
+With respect to question 18, regarding which are the most useful metrics in the model. The metrics that got more votes are the coverage metrics, which is consistent with the answers to question 15, in which the coverage metrics have two of the highest average scores. Also, just as in the visualizations, some interviewees commented that it is the different perspectives given by each of the metrics making the model more useful.
 
-In the last question of the interviews, we gathered suggestions about the metrics in the model, can also be grouped into: changes to current metrics, and new metrics. One of the main suggestions obtained is to create a combination of the coupling metrics, to have a general evaluation, but also being able to dive in the detail with the current metrics. Then, the users would have first a general indicator, which can already point them to the dependencies that need a more detailed look.
+In the last question of the interviews, we gathered suggestions about the model's metrics and can also be grouped into changes to current metrics and new metrics. One of the main suggestions obtained is to create a combination of the coupling metrics, have a general evaluation, and dive into the detail with the current metrics. The users would then have a general indicator, which can already point them to the dependencies that need a more detailed look.
 
 \begin{finding}
-	There is interest of a general metric indicating the general degree of dependency, as a combination of the existing metrics in the model.
+	There is an interest in a general metric indicating the general degree of dependency as a combination of the model's existing metrics.
 	\label{find:general-metric}
 \end{finding}
 
-We have also obtained some suggestions which are modifications over the current metrics. For example, having the absolute number of reachable methods or classes, and the list of their names. It should be evaluated which is the need for this information, and in which cases it would be useful.
+We have also obtained some suggestions, which are modifications to the current metrics. For example, having the absolute number of reachable methods or classes and the list of their names. It should be evaluated, which is the need for this information, and in which cases it would be useful.
 
-Finally, one of the suggestions to also improve the actionability of the coupling metrics is to create a risk profile of these metrics, by evaluating which are the common values of this metrics, and which are the outliers. These suggestion is further investigated in the following experiment.
+Finally, one of the suggestions to improve the actionability of the coupling metrics is to create a risk profile of these metrics by evaluating the common values of these metrics and the outliers. This suggestion is further investigated in the following experiment.
 
 \section{Experiment 5: Benchmarking}
 One of the main remarks received for the coupling metrics during the interviews, is that there is not a clear scale for those metrics. Therefore, the value of the metrics can be hard to interpret, since there is no indicator of which number is very high or very low.
