@@ -2,14 +2,14 @@
 \chapter{Experiments}\label{ch:Experiments}
 
 \section{Experiment 1: Comparison}\label{sec:Exp1}
-The goal of this experiment is to provide validation of the implementation in the PoC. This is done with the results of the paper \textit{"A Comprehensive Study of Bloated Dependencies in the Maven Ecosystem"} by Soto-Valero et al. \cite{soto2020comprehensive}. In this work, a byte-code analysis is performed on Maven Artifacts to detect which of the dependencies of this artifacts are \textit{bloated}, which we refer to as \textit{unused}. Although the PoC created in this thesis does not perform exactly the same kind of analysis, we consider that a dependency is \textit{unused} if no usage is detected by any of the metrics in the model.
+The goal of this experiment is to provide validation of the implementation in the PoC. We compare the results of the paper \textit{"A Comprehensive Study of Bloated Dependencies in the Maven Ecosystem"} by Soto-Valero et al. \cite{soto2020comprehensive}. In this work, a byte-code analysis is performed on Maven Artifacts to detect which of these artifacts' dependencies are \textit{bloated}, which we refer to as \textit{unused}. Although the PoC created in this thesis does not perform the same kind of analysis, we consider that a dependency is \textit{unused} if all the model's metrics detects no usage.
 
 \subsection{Experimental set up}
 Soto-Valero et al. perform a qualitative analysis, in which they analyze 31 libraries available as Maven artifacts. If unused dependencies are found during the analysis, a \textit{Pull Request} is made to the \textit{GitHub} repository of the artifact in which the unused dependencies are deleted from the \textit{pom} file.
 
 With the information in the paper, we collect the \textit{GroupId} and \textit{ArtifactId} of the 31 artifacts. Out of the 31, 2 could not be found in the \textit{Maven Repository Central}. For the other 29, the \textit{version} to use in the experiment is determined by finding the last version released before the experiment by Soto-Valero et al. was conducted - November of 2019.
 
-Of the 29 artifacts, 13 could not be used with the PoC, because either the artifact itself or some dependency could not be downloaded from \textit{Maven Central}, leaving a set of 16 libraries to analyse and compare the results with the results obtained by Soto-Valero et al. The table containing the identifiers of the artifacts used in this experiment can be found in Table \ref{table:comparison-artifacts}.
+Of the 29 artifacts, the PoC could not use 13 because either the artifact itself or some dependency could not be downloaded from \textit{Maven Central}. Therefore, we have a set of 16 libraries to analyze and compare the results with the results obtained by Soto-Valero et al. The table containing the identifiers of the artifacts used in this experiment can be found in Table \ref{table:comparison-artifacts}.
 
 \begin{table}[ht!]
     \begin{center}
@@ -40,26 +40,26 @@ Of the 29 artifacts, 13 could not be used with the PoC, because either the artif
     \label{table:comparison-artifacts}
 \end{table}
 
-The first idea was to create a request that computed the comparison automatically. However, finding the reason why the results were not exactly the same, in most of the cases needed manual checking and research. That is why, the analysis of the libraries in Table \ref{table:comparison-artifacts} have been executed one by one, and the comparison has been done manually.
+The first idea was to create a request that computed the comparison automatically. However, finding why the results were not the same, in most cases, needed manual checking and research. That is why the analysis of the libraries in Table \ref{table:comparison-artifacts} has been executed one by one, and the comparison has been made manually.
 
 \subsection{Results}
 
-The results obtained from the comparison with the data from the research by Soto-Valero et al. \cite{soto2020comprehensive} is done in two parts: if all the libraries found as unused in the paper are also found as unused by the tool, and if all the other libraries are found as used. For the first part, there are several cases:
+The results obtained from the comparison with the data from Soto-Valero et al. \cite{soto2020comprehensive} is done in two parts: if all the libraries found as unused in the paper are also found as unused by the tool, and if all the other libraries are found as used. For the first part, there are several cases:
 
 \begin{itemize}
-  \item \textbf{Correct:} All the dependencies detected as unused in the paper, are also detected as unused by the PoC.
-  \item \textbf{Testing:} At least one of the unused dependencies is a testing depenedency, and therefore it is not detected by the PoC.
-  \item \textbf{Parent:} At least one of the unused dependencies is from a parent module, and it does not appear in the tree of the artifact.
+  \item \textbf{Correct:} All the dependencies detected as unused in the paper are also detected as unused by the PoC.
+  \item \textbf{Testing:} At least one of the unused dependencies is a testing dependency, and therefore it is not detected by the PoC.
+  \item \textbf{Parent:} At least one of the unused dependencies is from a parent module, and it does not appear in the artifact's tree.
   \item \textbf{Used:} At least one of the unused dependencies is found as used by the PoC.
 \end{itemize}
 
 The cases that can happen for the rest of the libraries, the ones that are found as used by Soto-Valero et al. are listed below:
 
 \begin{itemize}
-  \item \textbf{Correct:} All the used dependencies according to the paper, are also used according to the tool.
+  \item \textbf{Correct:} All the used dependencies, according to the paper, are also used according to the tool.
   \item \textbf{Shadowed:} At least one dependency is detected as unused because it is shadowed within the jar file of the client library in the building process.
   \item \textbf{Testing:} At least one dependency is found as unused since it is only used for testing, but not marked with scope \textit{testing}.
-  \item \textbf{Unused:} At least one dependency found as used by the paper, is unused in the analysis of the tool.
+  \item \textbf{Unused:} At least one dependency found as used by the paper is unused in the tool's analysis.
 \end{itemize}
 
 In Table \ref{table:comparison-results}, there are the results for each one of the client libraries used in the experiments.
@@ -92,9 +92,9 @@ org.jacop:jacop:4.7.0                                       & Correct       & Te
 \end{table}
 
 \subsection{Discussion}
-To evaluate the results of this experiment, we will discuss the meaning of the different cases as for detecting unused dependencies. There are 9 cases in which the unused dependencies were not correctly detected. Out of these 9, 4 can completely be fixed, if the tool could also analyze the tests defined in the client library. This could be fixed by doing source-code analysis including the testing, instead of bytecode analysis. In addition, the 2 cases in which the dependencies \todo{check why the parent dependencies are not included}. Finally, there are 3 cases in which there is at least one dependency which according to the paper should be unused, and it was detected used by the PoC. Therefore, the PoC implementation is overestimating in certain measure the usage of the dependencies.
+To evaluate the results of this experiment, we will discuss the meaning of the different cases to detect unused dependencies. There are 9 cases in which the unused dependencies were not correctly detected. Out of these 9, 4 can completely be fixed, if the tool could also analyze the tests defined in the client library. This could be fixed by doing source-code analysis including the testing, instead of bytecode analysis. Also, the 2 cases in which the dependencies \todo{check why the parent dependencies are not included}. Finally, there are 3 cases in which there is at least one dependency which according to the paper should be unused, and it was detected used by the PoC. Therefore, the PoC implementation is overestimating in certain measure the usage of the dependencies.
 
-Next, we take a look at the detection of used dependencies. There are 9 cases in which at least one of the dependencies which were supposed to be used, have no usage detected. Two of these cases, are due to the dependencies being shadowed within the jar of the client library during the build process. Also, one case includes a dependency used for testing. Both these scenarios, could be fixed by doing source-code analysis, since the dependencies would not be shadowed yet. Finally, the other 7 cases include dependencies detected as unused, which according to the paper by Soto-Valero et al. \cite{soto2020comprehensive}. This means that there are still some types of connections which are not detected by the tool (e.g., reflection constructs). Also, we researched the server libraries of these cases, and it includes a case in which the dependency is related to the compilation of the project. Another case involves a client library in which the part that uses the dependency is not shipped with Maven, and therefore it cannot be detected in the jar file. Finally, there are some dependencies which are empty - have no classes. A next step could be to investigate what are these libraries used for, and how to detect it.
+Next, we take a look at the detection of used dependencies. There are 9 cases in which at least one of the dependencies that were supposed to be used has no usage detected. Two of these cases are due to the dependencies being shadowed within the client library's jar during the build process. Also, one case includes a dependency used for testing. These scenarios could be fixed by doing source-code analysis, since the dependencies would not be shadowed yet. Finally, the other 7 cases include dependencies detected as unused, according to the paper by Soto-Valero et al. \cite{soto2020comprehensive}. This means that there are still some types of connections not detected by the tool (e.g., reflection constructs). Also, we researched the server libraries of these cases, and it includes a case in which the dependency is related to the compilation of the project. Another case involves a client library in which the part that uses the dependency is not shipped with Maven, and therefore it cannot be detected in the jar file. Finally, there are some empty dependencies - have no classes. A next step could be to investigate what are these libraries used for, and how to detect it.
 
 \begin{finding}
 	Replacing bytecode analysis with source-code analysis would help improving the detection of the dependencies usage, and would allow to analyze testing dependencies.
@@ -103,26 +103,25 @@ Next, we take a look at the detection of used dependencies. There are 9 cases in
 
 \section{Experiment 2: Significance of the coupling metrics}
 
-The goal of this experiment is to validate if the coupling metrics designed in the model, namely \texttt{MIC}, \texttt{AC}, \texttt{TMIC}, and \texttt{TAC}, are a good indicator of the usage of the dependencies by the clients. As a partial validation of the significance of the metrics, we compare it with the results gathered from the usage metrics. We want to know how often it happens, that a dependency is used, either by using classes or methods, and it is detected as uncoupled by the coupling metrics. This way, we know if there are many cases in which a dependency that is only used with a type of connection other than method invocation or field declaration.
+The goal of this experiment is to validate if the coupling metrics designed in the model, namely \texttt{MIC}, \texttt{AC}, \texttt{TMIC}, and \texttt{TAC}, are a good indicator of the usage of the dependencies by the clients. As a partial validation of the metrics' significance, we compare it with the results gathered from the usage metrics. We want to know how often a dependency is used, either by using classes or methods, and it is detected as uncoupled by the coupling metrics. This way, we know if there are many cases in which a dependency is only used with a type of connection other than method invocation or field declaration.
 
-\unsure{I'm not sure if this is the right place for the explanation of the failed data recolection, or if it is too long}
+\unsure{I'm not sure if this is the right place for the explanation of the failed data recollection, or if it is too long}
 
 The original idea was to measure real-world data about how the clients update the dependencies and their impact on the code. We could then have seen the correlation of this impact with the degree of dependency measured with the coupling metrics. Different approaches were taken to obtain real-world data.
 
 First, we tried to find in GitHub commits in which there had been an update of a dependency. However, the search engine in GitHub does not allow to filter the results by the language of the commit. Therefore, most of the results obtained were not useful. Also, most of the updates are only patches, which require only a bump in the version number of the declared dependency.
 
-Based on these findings, the second approach we took was to look for updates that contained breaking changes. To find the libraries that had these type of changes, and in which versions, we used the \textit{Maven Dependency Dataset} \cite{Raemaekers2013}. Raemaekers et al. used this dataset to analyze the use of semantic versioning and the possible impact of breaking changes \cite{Raemaekers2017}. It is possible to query this dataset to obtain libraries with breaking changes, with version numbers and other libraries that depended on these. However, we need to find the commit of the client library in which the update containing a breaking change was made, and it is not always possible. We considered some of the requirements to be able to analyze a dependency with the PoC. For instance, we need all the dependencies of the client library available in Maven, and testing dependencies cannot be used since they are not analyzed by the tool. Considering all these requirements, it was not possible to obtain enough data for the experiment from the \textit{Maven Dependency Dataset} on time, since all these checks had to be done manually.
+Based on these findings, the second approach we took was to look for updates that contained breaking changes. To find the libraries that had these types of changes and versions, we used the \textit{Maven Dependency Dataset} \cite{Raemaekers2013}. Raemaekers et al. used this dataset to analyze the use of semantic versioning and the possible impact of breaking changes \cite{Raemaekers2017}. It is possible to query this dataset to obtain libraries with breaking changes, with version numbers and other libraries that depended on these. However, we need to find the commit of the client library in which the update containing a breaking change was made, and it is not always possible. We considered some of the requirements to be able to analyze a dependency with the PoC. For instance, we need all the dependencies of the client library available in Maven, and testing dependencies cannot be used since they are not analyzed by the tool. Considering all these requirements, obtaining enough data for the experiment from the \textit{Maven Dependency Dataset} on time, since all these checks had to be done manually.
 
-Next, we contacted the first author of the paper \textit{"Why and How Java Developers Break APIs"} \cite{Brito2018}, which mines GitHub repositories to find possible breaking changes in APIs, to obtain the dataset of breaking changes created based on their findings. Brito, the author, shared the dataset with us. The dataset includes 24 commits containing breaking changes, which correspond to 19 different libraries. Out of the 25 commits, 12 are from libraries managed by Gradle instead of Maven and cannot be used with the PoC. Besides, we could not find 4 of the commits in GitHub, and 2 others correspond to testing libraries, which are out of the scope of the analysis performed by the PoC. Therefore, there were only 6 breaking changes left, for which 3 the Maven artifact that these belong to had no dependants for which to do the analysis. The last 3 have only one dependant, and therefore is not possible to compare the impact of the breaking changes.
+Next, we contacted the first author of the paper \textit{"Why and How Java Developers Break APIs"} \cite{Brito2018}, which mines GitHub repositories to find possible breaking changes in APIs, to obtain the dataset of breaking changes created based on their findings. Brito, the author, shared the dataset with us. The dataset includes 24 commits containing breaking changes, which correspond to 19 different libraries. Out of the 25 commits, 12 are from Gradle libraries instead of Maven and cannot be used with the PoC. Besides, we could not find 4 of the commits in GitHub, and two others correspond to testing libraries, which are out of the scope of the analysis performed by the PoC. Therefore, there were only six breaking changes left, for which three the Maven artifact that these belong to had no dependants for which to do the analysis. The last three have only one dependant, and therefore is not possible to compare the impact of the breaking changes.
 
 Finally, we tried to manually search for deprecated libraries and other libraries that used them — however, similar problems where encountered. Finding commits which replaced a deprecated dependency and the client library and all the dependencies are available in \textit{Maven Central Repository}, is a manual task that, after multiple hours of work, gave no results.
 
-
 \subsection{Experimental set up}
-To run this experiment, we prepared a new request in the API of the PoC. The request has to contain a path to a txt file (tab delimited). The file has to contain three columns (with headers): Group Id, Artifact Id, and version. For each one of the rows, the analysis of the dependencies is performed. The result of each of the analysis is processed, summarizing all the analysis with the following information:
+To run this experiment, we prepared a new request in the API of the PoC. The request has to contain a path to a \textit{.txt} file (tab-delimited). The file has to contain three columns (with headers): Group Id, Artifact Id, and version. For each one of the rows, the analysis of the dependencies is performed. The result of each of the analysis is processed, summarizing all the analysis with the following information:
 
 \begin{itemize}
-  \item \textbf{Total number of dependencies:} Number of dependencies of all the analyzed client libraries, including both, direct and indirect.
+  \item \textbf{Total number of dependencies:} Number of dependencies of all the analyzed client libraries, including both direct and indirect.
   \item \textbf{Times coupling metrics were not enough:} Number of dependencies for which all the coupling metrics had value zero, but there where methods and classes found reachable by the usage metrics.
   \item \textbf{Times MIC/TMIC were not enough:} Number of times in which there was usage found, but MIC (or TMIC in the case of transitive dependencies) had value zero.
   \item \textbf{Times AC/TAC were not enough:} Number of times in which there was usage found, but MIC (or TMIC in the case of transitive dependencies) had value zero.
@@ -131,7 +130,7 @@ To run this experiment, we prepared a new request in the API of the PoC. The req
   \item \textbf{List server libraries AC/TAC not enough:} The list of \textit{GroupId}, \textit{ArtifactId}, and \textit{version} of the server libraries for which the metrics \texttt{AC} and \texttt{TAC} were not enough to indicate if there is usage or not.
 \end{itemize}
 
-As can be seen, in addition to the number of times that a dependency was used and it was not detected by the metrics (or at least by one of them), the list of server libraries of these dependencies is also stored. This way, it is possible to analyze which types of libraries are those, and why the coupling metrics are not relevant in this case.
+As can be seen, in addition to the number of times that a dependency was used and it was not detected by the metrics (or at least by one of them), the list of server libraries of these dependencies is also stored. This way, it is possible to analyze which types of libraries are those, and why the coupling metrics are not relevant.
 
 \blankl
 The experiment was run with a file containing 49 client libraries from the \textit{Maven Central Repository}.  We selected the client libraries to use for this experiment with the following criteria. First, we used the same libraries as in the comparison experiment (see Section \ref{sec:Exp1}), but using the last version of each library. We decided to reuse these libraries because the criteria used to select these libraries by Soto-Valero et al. \cite{soto2020comprehensive} is aligned with the needs of this experiment, and are listed below:
@@ -139,14 +138,14 @@ The experiment was run with a file containing 49 client libraries from the \text
 \begin{itemize}
   \item The library is relevant - has more than 100 stars on GitHub.
   \item The library can be built successfully with Maven.
-  \item Has been developed recently - in the case of Soto-Valero et al. at least October 2019.
+  \item Has been developed recently - in the case of Soto-Valero et al., at least October 2019.
   \item The library has at least one dependency declared.
   \item It is indicated how to create a pull request.
 \end{itemize}
 
 Although some of the items of the list are not explicitly required for our experiment. We need that the library can be built and is available in Maven as well as that it has at least one relevant dependency (compile scope). Therefore, the libraries in this set are a good fit for the experiment.
 
-To analyze more client libraries and, therefore, more dependencies, we extended the list of libraries. First, we visited the popular libraries list of the \textit{Maven Central Repository} \footnote{\url{https://mvnrepository.com/popular}}. In addition, we queried the dataset generated by Harrand et al. \cite{Harrand2019} with the 99 most popular libraries from Maven, according to the number of clients these have. For each of the libraries, we selected the last version available in Maven, and filtered the resulting list according to the following criteria:
+To analyze more client libraries and, therefore, more dependencies, we extended the list of libraries. First, we visited the popular libraries list of the \textit{Maven Central Repository} \footnote{\url{https://mvnrepository.com/popular}}. Also, we queried the dataset generated by Harrand et al. \cite{Harrand2019} with the 99 most popular libraries from Maven, according to the number of clients these have. For each of the libraries, we selected the last version available in Maven and filtered the resulting list according to the following criteria:
 
 \begin{itemize}
   \item The artifact of the last version of the library should have at least one dependency with scope compile.
@@ -157,7 +156,7 @@ To analyze more client libraries and, therefore, more dependencies, we extended 
 
 \subsection{Results}
 
-The summary of the results of this experiment are shown in Table \ref{table:summary-significance}. We can see the total number of analyzed dependencies, the number of dependencies for which the coverage metrics have found usage and the coupling metrics have not. The last two rows show, the number of dependencies which have more than 0\% coverage and no coupling has been found by the metrics \texttt{MIC}/\texttt{TMIC} and \texttt{AC}/\texttt{TAC} respectively.
+The summary of the results of this experiment is shown in Table \ref{table:summary-significance}. We can see the total number of analyzed dependencies, the number of dependencies for which the coverage metrics have found usage, and the coupling metrics have not. The last two rows show the number of dependencies which have more than 0\% coverage, and no coupling has been found by the metrics \texttt{MIC}/\texttt{TMIC} and \texttt{AC}/\texttt{TAC} respectively.
 
 \begin{table}[ht!]
 \begin{center}
@@ -173,7 +172,7 @@ The summary of the results of this experiment are shown in Table \ref{table:summ
 \label{table:summary-significance}
 \end{table}
 
-The server libraries for which usage was found by the coverage metrics but not by the coupling metrics can be found in Table \ref{table:significance-coupling}. The first two columns of this table are the \textit{group id}, and the \textit{artifact id} of the server libraries. Only by looking at the names of the libraries, one can see that some of them are libraries that contain \texttt{annotations}. We have checked the content of all the libraries, in order to find out which contain only \texttt{annotations}. The result of this search can be seen in the last column of Table \ref{table:significance-coupling}.
+The server libraries for which usage was found by the coverage metrics but not by the coupling metrics can be found in Table \ref{table:significance-coupling}. The first two columns of this table are the \textit{group id}, and the \textit{artifact id} of the server libraries. Only by looking at the libraries' names, one can see that some of them are libraries that contain \texttt{annotations}. We have checked the content of all the libraries to find out which include only \texttt{annotations}. The result of this search can be seen in the last column of Table \ref{table:significance-coupling}.
 
 \begin{table}[ht!]
 \begin{center}
@@ -281,7 +280,7 @@ org.yaml                    & snakeyaml                       & \\\hline
 
 \subsection{Discussion}
 
-Based on the results shown in Table \ref{table:summary-significance}, we can see that the combination of the two types of coupling metrics allow to detect used dependencies in 664/699 of the cases. In addition, the metrics \texttt{MIC} and \texttt{TMIC} alone, detect 659/699 of the cases. Which means that \texttt{AC} and \texttt{TAC} are only really needed in 5 of these dependencies. However, this only talks about whether or not the metrics can be used to perform a binary evaluation of the dependencies, which was not the goal of this thesis. Therefore, \texttt{AC} and \texttt{TAC} are also necessary in order to consider the type of coupling measured by this metric.
+Based on the results shown in Table \ref{table:summary-significance}, we can see that the combination of the two types of coupling metrics allows us to detect used dependencies in 664/699 of the cases. In addition, the metrics \texttt{MIC} and \texttt{TMIC} alone, detect 659/699 of the cases. This means that \texttt{AC} and \texttt{TAC} are only really needed in 5 of these dependencies. However, this only talks about whether or not the metrics can perform a binary evaluation of the dependencies, which was not the goal of this thesis. Therefore, \texttt{AC} and \texttt{TAC} are also necessary to consider the type of coupling measured by this metric.
 
 Nevertheless, if we compare the number of times that \texttt{AC}/\texttt{TAC} are not able to detect whether a dependency is used or not, with the times that the same happens with \texttt{MIC}/\texttt{TMIC}, we can conclude that:
 
@@ -292,14 +291,14 @@ Nevertheless, if we compare the number of times that \texttt{AC}/\texttt{TAC} ar
 
 This is inlined with the intuition that method invocation is the most significant type of connection. Generally, if there is an object of a particular class type in the code, at some point, a method call will be done on this object. However, an object can exist in the code through mechanisms other than field declaration (e.g., return type of a method call, or a variable).
 
-Nevertheless, since there are cases in which the combination of both types of metrics was not enough, it indicates that there are some other types of connections to be considered and measured. Given that half of the server libraries which were used but not detected by the coupling metrics contain annotations, creating a metric to measure the coupling created by annotations would improve this results.
+Nevertheless, since there are cases in which the combination of both types of metrics was not enough, it indicates that there are some other types of connections to be considered and measured. Given that half of the server libraries used but not detected by the coupling metrics contain annotations, creating a metric to measure the coupling created by annotations would improve these results.
 
 \begin{finding}
 	A metric to measure coupling created by the use of annotations would improve the precision of the model. The usage of annotations is sometimes the only type of connection between a client and a server library.
 	\label{find:significance-annotations}
 \end{finding}
 
-During the process of this thesis, it was intended to create this type of coupling metric. However, it is not a trivial problem for the transitive dependencies. In the coupling metrics defined in this thesis, only one type of connection is considered throughout the whole dependency tree. For example, in the dependency tree in Figure \ref{fig:annotation-dependencies}, the client library uses the direct depedency through a connection other than annotations. Then, the \textit{non-annotation server library} uses some annotation from the \textit{annotation server library}. Iterating the dependency tree through annotations connection would still not detect the usage of the transitive dependency.
+During the process of this thesis, it was intended to create this type of coupling metric. However, it is not a trivial problem for transitive dependencies. In the coupling metrics defined in this thesis, only one type of connection is considered throughout the whole dependency tree. For example, in the dependency tree in Figure \ref{fig:annotation-dependencies}, the client library uses direct dependency through a connection other than annotations. Then, the \textit{non-annotation server library} uses some annotation from the \textit{annotation server library}. Iterating the dependency tree through annotations connection would still not detect the usage of the transitive dependency.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -686,9 +685,6 @@ In the last question of the interviews, we gathered suggestions about the metric
 We have also obtained some suggestions which are modifications over the current metrics. For example, having the absolute number of reachable methods or classes, and the list of their names. It should be evaluated which is the need for this information, and in which cases it would be useful.
 
 Finally, one of the suggestions to also improve the actionability of the coupling metrics is to create a risk profile of these metrics, by evaluating which are the common values of this metrics, and which are the outliers. These suggestion is further investigated in the following experiment.
-
-
-
 
 \section{Experiment 5: Benchmarking}
 One of the main remarks received for the coupling metrics during the interviews, is that there is not a clear scale for those metrics. Therefore, the value of the metrics can be hard to interpret, since there is no indicator of which number is very high or very low.
