@@ -165,7 +165,7 @@ The summary of the results of this experiment is shown in Table \ref{table:summa
   Analyzed dependencies   & 699 \\\hline
   Metrics are not enough  & 35  \\\hline
   MIC/TMIC are not enough & 40  \\\hline
-  AC/TAC are not enough   & 35  \\\hline
+  AC/TAC are not enough   & 147 \\\hline
 \end{tabular}
 \end{center}
 \caption{Summary of the significance experiment}
@@ -204,78 +204,6 @@ org.yaml                    & snakeyaml                       & Other       \\\h
 \end{center}
 \caption{List of the server libraries for which the coupling metrics were not enough to indicate usage}
 \label{table:significance-coupling}
-\end{table}
-
-The list of the libraries for which the usage was not detected by \texttt{MIC}/\texttt{TMIC} or \texttt{AC}/\texttt{TAC} can be found in Tables \ref{table:significance-mic} and \ref{table:significance-ac}, respectively. The server libraries whichusage is only not detected by the metric, are highlighted in yellow background.
-\unsure{Should I only display the highlighted ones?}
-
-\begin{table}[ht!]
-\begin{center}
-\begin{tabular}{|l|l|l|}
-\hline
-\textbf{Group Id} & \textbf{Artifact Id} & \textbf{Type} \\
-\hline
-avalon-framework            & avalon-framework                & Other       \\\hline %New!
-com.fasterxml.jackson.core  & jackson-annotations             & Annotations \\\hline
-com.github.javaparser       & javaparser-symbol-solver-model  & Other       \\\hline
-com.google.errorprone       & error\_prone\_annotations       & Annotations \\\hline
-com.google.code.findbugs    & findbugs-annotations            & Annotations \\\hline
-com.google.code.findbugs    & jsr305                          & Annotations \\\hline
-com.google.j2objc           & j2objc-annotations              & Annotations \\\hline
-org.apache.flink            & flink-annotations               & Annotations \\\hline
-io.grpc                     & grpc-context                    & Other       \\\hline
-io.netty                    & netty-codec-socks               & Other       \\\hline
-jakarta.activation          & jakarta.activation-api          & Other       \\\hline
-logkit                      & logkit                          & Other       \\\hline %New!
-org.apache.geronimo.specs   & geronimo-jms\_1.1\_spec         & Other       \\\hline %New!
-org.apache.openejb          & javaee-api                      & Other       \\\hline %New!
-org.apiguardian             & apiguardian-api                 & Annotations \\\hline
-org.codehaus.plexus         & plexus-component-annotations    & Annotations \\\hline
-org.codehaus.mojo           & animal-sniffer-annotations      & Annotations \\\hline
-org.codehaus.woodstox       & stax2-api                       & Other       \\\hline
-org.glassfish.jaxb          & jaxb-core                       & Other       \\\hline
-org.jetbrains               & annotations                     & Annotations \\\hline
-org.joda                    & joda-convert                    & Other       \\\hline
-org.junit.jupiter           & junit-jupiter-api               & Other       \\\hline
-org.neo4j                   & annotations                     & Annotations \\\hline
-org.slf4j                   & slf4j-api                       & Other       \\\hline %New!
-org.yaml                    & snakeyaml                       & Other       \\\hline
-\end{tabular}
-\end{center}
-\caption{List of the server libraries for which the \texttt{MIC}/\texttt{TMIC} were not enough to indicate usage}
-\label{table:significance-mic}
-\end{table}
-
-\begin{table}[ht!]
-\begin{center}
-\begin{tabular}{|l|l|l|}
-\hline
-\textbf{Group Id} & \textbf{Artifact Id} & \textbf{Type} \\
-\hline
-com.fasterxml.jackson.core  & jackson-annotations             & \\\hline
-com.github.javaparser       & javaparser-symbol-solver-model  & \\\hline
-com.google.code.findbugs    & findbugs-annotations            & \\\hline
-com.google.code.findbugs    & jsr305                          & \\\hline
-com.google.errorprone       & error\_prone\_annotations       & \\\hline
-com.google.j2objc           & j2objc-annotations              & \\\hline
-io.grpc                     & grpc-context                    & \\\hline
-io.netty                    & netty-codec-socks               & \\\hline
-jakarta.activation          & jakarta.activation-api          & \\\hline
-org.apache.flink            & flink-annotations               & \\\hline
-org.apiguardian             & apiguardian-api                 & \\\hline
-org.codehaus.mojo           & animal-sniffer-annotations      & \\\hline
-org.codehaus.plexus         & plexus-component-annotations    & \\\hline
-org.codehaus.woodstox       & stax2-api                       & \\\hline
-org.glassfish.jaxb          & jaxb-core                       & \\\hline
-org.jetbrains               & annotations                     & \\\hline
-org.joda                    & joda-convert                    & \\\hline
-org.junit.jupiter           & junit-jupiter-api               & \\\hline
-org.neo4j                   & annotations                     & \\\hline
-org.yaml                    & snakeyaml                       & \\\hline
-\end{tabular}
-\end{center}
-\caption{List of the server libraries for which the \texttt{AC}/\texttt{TAC} were not enough to indicate usage}
-\label{table:significance-ac}
 \end{table}
 
 \subsection{Discussion}
@@ -319,9 +247,57 @@ To run this analysis, we have set up a new request in the API of the PoC. This r
 
 The first step is to run the calculation of the dependency model, for each of the dependencies of the artifacts. Then, for each one of the transitive dependencies, for which coupling was found, we run the sensitivity analysis. Since the \textit{propagation factor} is a value in the range $(0,1)$, we calculate the value of the metrics incrementing the propagation factor by $0.01$ from $0.01$ to $0.99$.
 
-The content of the file which we have used to run the sensitivity analysis can be found in Table \cn{table:sensitivity-analysis-libraries}.
+We run this experiment with a randomly selected subset of the libraries used for the significance experiment. Then, out of the set of dependencies that can be used for the sensitivity analysis, we select a representative subset. This subset is selected in order to have dependencies with different distances, and values measured at each distance.
 
 \subsection{Results}
+With the data obtained from running the experiment, we calculate the covariance of the metrics \texttt{TMIC} and \texttt{TAC} with the \textit{propagation factor}. The values of the covariance are displayed in Table \ref{table:covariance-sensitivity}.
+
+\unsure{This table seems too big, should I just display the values of the covariance? Or should I keep the names of the libraries?}
+\begin{table}[ht!]
+\begin{center}
+\begin{tabularx}{\textwidth}{|X|X|l|l|}
+\hline
+\textbf{Client   library} & \textbf{Server library} & \textbf{TMIC Covariance} & \textbf{TAC Covariance} \\ \hline
+org.asynchttpclient\_\newline async-http-client\_2.12.1 & io.netty\_netty-common\_4.1.48.Final & 21.39853 & 7.740404 \\ \hline
+org.asynchttpclient\_\newline async-http-client\_2.12.1 & io.netty\_netty-buffer\_4.1.48.Final & 35.28688 & 4.461675 \\ \hline
+org.easymock\_easymock\_\newline 4.2 & org.hamcrest\_\newline hamcrest-core\_1.3 & 0.6733333 & 1.515 \\ \hline
+org.apache.maven\_maven-project\_3.0-alpha-2 & org.codehaus.plexus\_\newline plexus-classworlds\_1.3 & 1.431675 & 0.6767 \\ \hline
+org.springframework.\newline boot\_spring-boot-\newline autoconfigure & org.springframework\_\newline spring-core\_5.2.9.RELEASE & 15.34022 & 2.278392 \\ \hline
+org.springframework.\newline boot\_spring-boot-\newline autoconfigure & org.springframework\_\newline spring-jcl\_5.2.9.\newline RELEASE & 5.914392 & 1.01505 \\ \hline
+org.springframework.\newline boot\_spring-boot-\newline autoconfigure & org.springframework\_\newline spring-beans\_5.2.9.RELEASE & 3.535 & 0.9258333 \\ \hline
+org.eclipse.jetty\_jetty-server\_11.0.0.beta1 & org.eclipse.jetty\_jetty-util\_11.0.0.beta1 & 16.83586 & 4.545 \\ \hline
+org.asynchttpclient\_\newline async-http-client\_2.12.1 & log4j\_log4j\_1.2.17 & 0.3400333 & 2.014634 \\ \hline
+org.alluxio\_alluxio-core-transport\_2.3.0 & com.google.protobuf\_\newline protobuf-javalite\_3.11.0 & 35.94001 & 6.228333 \\ \hline
+fr.inria.gforge.spoon\_\newline spoon-core\_8.2.0 & org.eclipse.platform\_org.\newline eclipse.osgi\_3.16.0 & 10.21567 & 0.5870659 \\ \hline
+fr.inria.gforge.spoon\_\newline spoon-core\_8.2.0 & org.eclipse.platform\_org.\newline eclipse.equinox.\newline preferences\_3.8.0 & 9.179277 & 1.225487 \\ \hline
+fr.inria.gforge.spoon\_\newline spoon-core\_8.2.0 & org.eclipse.platform\_org.\newline eclipse.equinox.common\_\newline3.13.0 & 31.63428 & 1.783189 \\ \hline
+com.puppycrawl.tools\_\newline checkstyle\_8.36.2 & log4j\_log4j\_1.2.17 & 1.323955 & 0.674175 \\ \hline
+com.puppycrawl.tools\_\newline checkstyle\_8.36.2 & org.apache.geronimo.\newline specs\_geronimo-jms\_1.1\_spec\_1.0 & 2.916436 & 1.360133 \\ \hline
+\end{tabularx}
+\end{center}
+\caption{Covariance of the dependencies used in the sensitivity analysis}
+\label{table:covariance-sensitivity}
+\end{table}
+
+\unsure{Here should I add a table with all the coefficients?}
+In addition, we also calculate the \textit{Pearson correlation coefficient}. The values of the correlation range from $0.941282$ to $1$ for \texttt{TMIC}, and from $0.9445726
+$ to $1$ for \texttt{TAC}. In Figure \ref{correlation-sensitivity}, one can see a scatter plot displaying the correlation between the value of \texttt{TMIC} (upper plot) and \texttt{TAC} (lower plot), and the \textit{propagation factor}. The figure shows the values of the sensitivity analysis done for the client library \textit{fr.inria.gforge.spoon:spoon-core:8.2.0} and the server library \textit{org.eclipse.platform:org.eclipse.osgi:3.16.0}.
+
+\begin{figure}[ht!]
+\begin{center}
+  \begin{subfigure}[b]{0.7\textwidth}
+    \includegraphics[width=\textwidth]{figures/results/Rplot_spoon-core_eclipse-osgi_TMIC.png}
+  \end{subfigure}
+  %
+  \begin{subfigure}[b]{0.7\textwidth}
+    \includegraphics[width=\textwidth]{figures/results/Rplot_spoon-core_eclipse-osgi_TAC.png}
+  \end{subfigure}
+\caption{Scatter plot sensitivity analysis correlation \texttt{TMIC} and \texttt{TAC}}
+\label{fig:correlation-sensitivity}
+\end{center}
+\end{figure}
+
+\subsection{Discussion}
 
 \section{Experiment 4: Expert Interviews}
 This last experiment has various goals. The main one is to validate the design of the visualization. According to Munzner \cite{Munzner2009}, there are four levels at which this validation can be done:
