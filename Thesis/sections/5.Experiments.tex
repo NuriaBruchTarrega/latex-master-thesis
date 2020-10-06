@@ -614,18 +614,17 @@ However, the other type of interviewee is interested in more high-level informat
 Furthermore, there is also an indicator of this difference in their answers to the preferred metric. The interviewees with tasks related to analysis and architecture preferred the metric \texttt{MIC}/\texttt{TMIC}, as they indicated in Question 18.
 
 \subsubsection{Dependency Management}
-With the questions answered in the \textit{Dependency Management} section, we know that all the interviewees have experience with this type of task. Also, the interviewees considered it more important to monitor the dependencies' vulnerabilities than the update to the last version. This is also confirmed by some interviewees' comments, saying that the main reason to update a dependency is to avoid being affected by possible vulnerabilities. \unsure{Should I add a finding of this? Even if it does not relate directly to any of the research questions}
-
+With the questions answered in the \textit{Dependency Management} section, we know that all the interviewees have experience with this type of task. Also, the interviewees considered it more important to monitor the dependencies' vulnerabilities than the update to the last version (see Figures \ref{fig:interview-6}, and \ref{fig:interview-7}). This is also confirmed by some interviewees' comments, saying that the main reason to update a dependency is to avoid being affected by possible vulnerabilities. \unsure{Should I add a finding of this? Even if it does not relate directly to any of the research questions}
 
 \subsubsection{Visualizations}
-When asked about the tool's usefulness, there is a general agreement that the tool is useful in the scenarios discussed during the interview. There are some negative answers to whether the tool can make dependency management easier. However, most of the comments about these answers are related to the tool being useful for particular cases. Therefore, the negative responses are not associated with the tool, not making the tasks easier.
+When asked about the tool's usefulness, there is a general agreement that the tool is useful in the scenarios discussed during the interview, Figure \ref{fig:interview-10}. There are some negative answers to whether the tool can make dependency management easier. However, most of the comments about these answers are related to the tool being useful for particular cases. Therefore, the negative responses are not associated with the tool, not making the tasks easier.
 
 \begin{finding}
 	There is a consensus that the created tool is useful in certain scenarios related to dependency management.
 	\label{find:tool-useful}
 \end{finding}
 
-In the answers to Question 12, only four interviewees answer only one of the visualizations. Some of the other interviewees also commented that there is value in combining the perspectives in the visualizations. Each visualization has a point of view, which adds to the value of the entire tool. The \textit{Tree} visualization gives an understanding of the hierarchy of the dependencies and where the transitive dependencies come from. The \textit{Table} visualization makes it possible to compare the metrics, and therefore, the degree of dependence. Finally, the \textit{Barchart} gives a more detailed view of the impact of the dependencies in the client library.
+In the answers to Question 12, only four interviewees answer only one of the visualizations (see Table \ref{table:interview-12}). Some of the other interviewees also commented that there is value in combining the perspectives in the visualizations. Each visualization has a point of view, which adds to the value of the entire tool. The \textit{Tree} visualization gives an understanding of the hierarchy of the dependencies and where the transitive dependencies come from. The \textit{Table} visualization makes it possible to compare the metrics, and therefore, the degree of dependence. Finally, the \textit{Barchart} gives a more detailed view of the impact of the dependencies in the client library.
 
 \begin{finding}
 	It is important to have a different perspective on a system's dependencies in the visualizations to have a complete understanding of the dependency tree.
@@ -639,7 +638,7 @@ Also, some interviewees expressed a need to integrate the different sources of i
 \unsure{Should these last two points be made into a finding?}
 
 \subsubsection{Metrics}
-Regarding the clarity and comprehensibility of the metrics, the interviewees' average grade for all the metrics is positive, being a 3.8/5, the lowest one, and a 4.73/5 the highest one.
+Regarding the clarity and comprehensibility of the metrics, the interviewees' average grade for all the metrics is positive, being a 3.8/5, the lowest one, and a 4.73/5 the highest one, as shown in Table \ref{table:interview-15}.
 
 \begin{finding}
 	There is a consensus that the metrics defined in this model are clear and comprehensible.
@@ -653,14 +652,14 @@ The metrics with the lowest grade are the coupling metrics. As confirmed by the 
 	\label{find:coupling-scale}
 \end{finding}
 
-The answers to Question 16, about the usefulness of the model, are mainly positive. Just as in the visualizations, the interviewees giving the lowest marks reasoned that the need to have such a detailed evaluation of the dependencies is not necessary daily.
+The answers to Question 16, about the usefulness of the model, are mainly positive (see Figure \ref{fig:interview-16}). Just as in the visualizations, the interviewees giving the lowest marks reasoned that the need to have such a detailed evaluation of the dependencies is not necessary daily.
 
 \begin{finding}
 	The model is useful for dependency management. However, it is not needed for the most common and regular tasks.
 	\label{find:model-useful}
 \end{finding}
 
-With respect to question 18, regarding which are the most useful metrics in the model. The metrics that got more votes are the coverage metrics, which is consistent with the answers to question 15, in which the coverage metrics have two of the highest average scores. Also, just as in the visualizations, some interviewees commented that it is the different perspectives given by each of the metrics making the model more useful.
+With respect to question 18, regarding which are the most useful metrics in the model, the metrics that got more votes are the coverage metrics, as shown in Table \ref{table:interview-18}. This result is consistent with the answers to Question 15, in which the coverage metrics have two of the highest average scores. Also, just as in the visualizations, some interviewees commented that it is the different perspectives given by each of the metrics making the model more useful.
 
 In the last question of the interviews, we gathered suggestions about the model's metrics and can also be grouped into changes to current metrics and new metrics. One of the main suggestions obtained is to create a combination of the coupling metrics, have a general evaluation, and dive into the detail with the current metrics. The users would then have a general indicator, which can already point them to the dependencies that need a more detailed look.
 
