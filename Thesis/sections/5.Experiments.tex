@@ -239,20 +239,20 @@ During the process of this thesis, it was intended to create this type of coupli
 \section{Experiment 3: Sensitivity Analysis}
 As explained before, we have not been able to obtain the real-world data to understand how the impact of the transitive dependencies behaves, and correlate it with our transitive coupling metrics \texttt{TMIC}, and \texttt{TAC}. Therefore, we cannot know which would be the actual value of the \textit{propagation factor} for these two metrics. Instead, what we do is a sensitivity analysis of the \textit{propagation factor} on these two metrics.
 
-A \textit{Sensitivity Analysis} consists on analyzing how much an input variable affects the output. In this case, the input variable is the \textit{propagation factor} and the output is the value of the metrics.
+A \textit{Sensitivity Analysis} consists of analyzing how much an input variable affects the output. In this case, the input variable is the \textit{propagation factor}, and the output is the value of the metrics.
 
 \subsection{Experimental set up}
 
-To run this analysis, we have set up a new request in the API of the PoC. This request receives a list of Maven artifacts, in a \textit{.txt} file (tab delimited). The file includes three columns, containing for each artifact, the following information: \textit{group id}, \textit{artifact id}, and \textit{version}.
+To run this analysis, we have set up a new request in the API of the PoC. This request receives a list of Maven artifacts in a \textit{.txt} file (tab-delimited). The file includes three columns, containing for each artifact, the following information: \textit{group id}, \textit{artifact id}, and \textit{version}.
 
-The first step is to run the calculation of the dependency model, for each of the dependencies of the artifacts. Then, for each one of the transitive dependencies, for which coupling was found, we run the sensitivity analysis. Since the \textit{propagation factor} is a value in the range $(0,1)$, we calculate the value of the metrics incrementing the propagation factor by $0.01$ from $0.01$ to $0.99$.
+The first step is to run the dependency model's calculation for each of the dependencies of the artifacts. Then, for each one of the transitive dependencies with coupling, we run the sensitivity analysis. Since the \textit{propagation factor} is a value in the range $(0,1)$, we calculate the value of the metrics incrementing the propagation factor by $0.01$ from $0.01$ to $0.99$.
 
-We run this experiment with a randomly selected subset of the libraries used for the significance experiment. Then, out of the set of dependencies that can be used for the sensitivity analysis, we select a representative subset. This subset is selected in order to have dependencies with different distances, and values measured at each distance.
+We run this experiment with a randomly selected subset of the libraries used for the significance experiment. Then, out of the set of dependencies that can be used for the sensitivity analysis, we select a representative subset. This subset is chosen to have dependencies with different distances, and values measured at each distance.
 
 \subsection{Results}
 With the data obtained from running the experiment, we calculate the covariance of the metrics \texttt{TMIC} and \texttt{TAC} with the \textit{propagation factor}. The values of the covariance are displayed in Table \ref{table:covariance-sensitivity}.
 
-\unsure{This table seems too big, should I just display the values of the covariance? Or should I keep the names of the libraries?}
+\unsure{This table seems too big. Should I display only the values of the covariance? Or should I keep the names of the libraries?}
 \begin{table}[ht!]
 \begin{center}
 \begin{tabularx}{\textwidth}{|X|X|l|l|}
@@ -279,7 +279,7 @@ com.puppycrawl.tools\_\newline checkstyle\_8.36.2 & org.apache.geronimo.\newline
 \label{table:covariance-sensitivity}
 \end{table}
 
-\unsure{Here should I add a table with all the coefficients?}
+\unsure{Here, should I add a table with all the coefficients?}
 In addition, we also calculate the \textit{Pearson correlation coefficient}. The values of the correlation range from $0.941282$ to $1$ for \texttt{TMIC}, and from $0.9445726
 $ to $1$ for \texttt{TAC}. In Figure \ref{correlation-sensitivity}, one can see a scatter plot displaying the correlation between the value of \texttt{TMIC} (upper plot) and \texttt{TAC} (lower plot), and the \textit{propagation factor}. The figure shows the values of the sensitivity analysis done for the client library \textit{fr.inria.gforge.spoon:spoon-core:8.2.0} and the server library \textit{org.eclipse.platform:org.eclipse.osgi:3.16.0}.
 
@@ -298,16 +298,16 @@ $ to $1$ for \texttt{TAC}. In Figure \ref{correlation-sensitivity}, one can see 
 \end{figure}
 
 \subsection{Discussion}
-The results of the sensitivity analysis indicate a high sensitivity of the two coupling metrics with respect to the propagation factor, since the correlation between this two factors is high (always higher than $0.94$).
+The sensitivity analysis results indicate a high sensitivity of the two coupling metrics to the propagation factor since the correlation between these two factors is high (always higher than $0.94$).
 
 \begin{finding}
 	The value of the metrics \texttt{TMIC} and \texttt{TAC} is highly sensitive to the value of the \textit{propagation factor}.
 	\label{find:high-sensitivity}
 \end{finding}
 
-There are only three cases in which the \textit{Pearson correlation coefficient} is less than $0.95$. These three cases have in common that the server libraries are reachable at different distances, and the distance is always greater or equal to 3. Therefore, it seems that the greater the distance is, less correlation there is between the value of the metrics and the propagation factor. Also, all the cases in which the correlation coefficient equals $1$, the distance at which transitive coupling is measured is $2$.
+There are only three cases in which the \textit{Pearson correlation coefficient} is less than $0.95$. These three cases have in common that the server libraries are reachable at different distances, and the distance is always greater or equal to 3. Therefore, the greater the distance, the less correlation there is between the value of the metrics and the propagation factor. Also, all the cases in which the correlation coefficient equals $1$, the distance at which transitive coupling is measured is $2$.
 
-In Table \ref{table:covariance-sensitivity}, we can see that the values of the covariance for \texttt{TMIC} are always greater than those of \texttt{TAC}. This seems to be related to the fact that the values measured for \texttt{TMIC} are greater than those measured for \texttt{TAC}. In line with these results, the values of the cases in which the covariance is less than $1$, have values measured per distance always lower than $12$. Meanwhile all the cases with covariance greater than $30$ have at least a distance with a measured value greater than $100$.
+In Table \ref{table:covariance-sensitivity}, we can see that the values of the covariance for \texttt{TMIC} are always greater than those of \texttt{TAC}. This seems to be related to the fact that the values measured for \texttt{TMIC} are greater than those measured for \texttt{TAC}. In line with these results, the values of the cases in which the covariance is less than $1$ have values measured per distance always lower than $12$. Meanwhile, all the cases with covariance greater than $30$ have at least a distance with a measured value greater than $100$.
 
 \section{Experiment 4: Expert Interviews}
 This last experiment has various goals. The main one is to validate the design of the visualization. According to Munzner \cite{Munzner2009}, there are four levels at which this validation can be done:
