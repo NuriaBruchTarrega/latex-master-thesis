@@ -298,6 +298,16 @@ $ to $1$ for \texttt{TAC}. In Figure \ref{correlation-sensitivity}, one can see 
 \end{figure}
 
 \subsection{Discussion}
+The results of the sensitivity analysis indicate a high sensitivity of the two coupling metrics with respect to the propagation factor, since the correlation between this two factors is high (always higher than $0.94$).
+
+\begin{finding}
+	The value of the metrics \texttt{TMIC} and \texttt{TAC} is highly sensitive to the value of the \textit{propagation factor}.
+	\label{find:high-sensitivity}
+\end{finding}
+
+There are only three cases in which the \textit{Pearson correlation coefficient} is less than $0.95$. These three cases have in common that the server libraries are reachable at different distances, and the distance is always greater or equal to 3. Therefore, it seems that the greater the distance is, less correlation there is between the value of the metrics and the propagation factor. Also, all the cases in which the correlation coefficient equals $1$, the distance at which transitive coupling is measured is $2$.
+
+In Table \ref{table:covariance-sensitivity}, we can see that the values of the covariance for \texttt{TMIC} are always greater than those of \texttt{TAC}. This seems to be related to the fact that the values measured for \texttt{TMIC} are greater than those measured for \texttt{TAC}. In line with these results, the values of the cases in which the covariance is less than $1$, have values measured per distance always lower than $12$. Meanwhile all the cases with covariance greater than $30$ have at least a distance with a measured value greater than $100$.
 
 \section{Experiment 4: Expert Interviews}
 This last experiment has various goals. The main one is to validate the design of the visualization. According to Munzner \cite{Munzner2009}, there are four levels at which this validation can be done:
