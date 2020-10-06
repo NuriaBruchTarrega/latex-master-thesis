@@ -684,3 +684,21 @@ To execute this experiment, we have set a new request in the backend of the PoC.
 Then, the calculation of the metrics of the model is performed. For each analyzed dependency, the value of the benchmarked metrics is stored. The result consists on 4 different \textit{.csv} files. The first two, containing all the different values of the \texttt{MIC} and \texttt{AC} metrics respectively. The last files represent the values of the transitive coupling metrics, represented in three columns. The first, the dependency id, the second the distance, and the third the value calculated at the distance. Therefore, more than one row might be used to represent the \texttt{TMIC} or \texttt{TAC} of a dependency.
 
 \subsection{Results}
+
+In Figures \ref{fig:MIC-benchmark} and \ref{fig:AC-benchmark}, we show the histograms representing the distribution of the values of \texttt{MIC} and \texttt{AC} respectively.
+
+\begin{figure}[ht!]
+\begin{center}
+  \includegraphics[width=0.7\textwidth]{figures/results/MIC_benchmark.png}
+  \caption{Histogram \texttt{MIC} benchmark}
+  \label{fig:MIC-benchmark}
+\end{center}
+\end{figure}
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{figures/results/AC_benchmark.png}
+\caption{Histogram \texttt{AC} benchmark}
+\label{fig:AC-benchmark}
+\end{center}
+\end{figure}
