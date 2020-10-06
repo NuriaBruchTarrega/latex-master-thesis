@@ -1,5 +1,6 @@
 % !TEX root = ..\main.tex
 \chapter{Experiments}\label{ch:Experiments}
+In this section, we describe the experiments conducted with the dependency model created in this thesis, as well as the PoC. For each of the experiments, we explain the goal, the setup, the results, and finally, we discuss the results and the conclusions extracted from these.
 
 \section{Experiment 1: Comparison}\label{sec:Exp1}
 The goal of this experiment is to provide validation of the implementation in the PoC. We compare the results of the paper \textit{"A Comprehensive Study of Bloated Dependencies in the Maven Ecosystem"} by Soto-Valero et al. \cite{soto2020comprehensive}. In this work, a byte-code analysis is performed on Maven Artifacts to detect which of these artifacts' dependencies are \textit{bloated}, which we refer to as \textit{unused}. Although the PoC created in this thesis does not perform the same kind of analysis, we consider that a dependency is \textit{unused} if all the model's metrics detects no usage.
