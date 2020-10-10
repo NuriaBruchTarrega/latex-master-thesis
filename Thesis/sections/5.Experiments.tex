@@ -330,9 +330,7 @@ The sensitivity analysis results indicate a high sensitivity of the two coupling
 	\label{find:high-sensitivity}
 \end{finding}
 
-There are only three cases in which the \textit{Pearson correlation coefficient} is less than $0.95$. These three cases have in common that the server libraries are reachable at different distances, sum of all the distances is above the average. Therefore, we create a scatter plot comparing  Therefore, the greater the distance, the less correlation there is between the value of the metrics and the propagation factor. Also, all the cases in which the correlation coefficient equals $1$, the distance at which transitive coupling is measured is $2$.
-
-In Table \ref{table:covariance-sensitivity}, we can see that the values of the covariance for \texttt{TMIC} are always greater than those of \texttt{TAC}. This seems to be related to the fact that the values measured for \texttt{TMIC} are greater than those measured for \texttt{TAC}. Also, the cases in which the covariance is greater than $30$ seem to have greater coupling values measured as well. To confirm this intuition we create a scatter plot to compare the covariance with the sum of the coupling measured at each distance. These plots can be seen in Figure \ref{fig:cov-value-tmic} and \ref{fig:cov-value-tac}, for \texttt{TMIC} and \texttt{TAC} respectively. In these plots, we have added the correlation between the two values, which confirms that the covariance between the \textit{propagation factor} and the value of the metrics, is higher when more coupling is measured.
+In Table \ref{table:covariance-sensitivity}, we can see that the values of the covariance for \texttt{TMIC} are always greater than those of \texttt{TAC}. This seems to be related to the fact that the values measured for \texttt{TMIC} are greater than those measured for \texttt{TAC}. Also, the cases in which the covariance is greater than $30$ seem to have greater coupling values measured as well. To confirm this intuition, we create a scatter plot to compare the covariance with the sum of the coupling measured at each distance. These plots can be seen in Figure \ref{fig:cov-value-tmic} and \ref{fig:cov-value-tac}, for \texttt{TMIC} and \texttt{TAC} respectively. In these plots, we have added the correlation between the two values, which confirms that the covariance between the \textit{propagation factor} and the value of the metrics is higher when more coupling is measured.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -350,7 +348,7 @@ In Table \ref{table:covariance-sensitivity}, we can see that the values of the c
 \end{center}
 \end{figure}
 
-Finally, in the results of the correlation coefficient between the propagation factor and the metrics, we also observe that the cases with lowest correlation coefficients, tend to be dependencies in which there is more distance between the client library and the server library. To compare the correlation and the distances, we create a scatter plot with the correlation coefficient calculated for the sensitivity analysis, and the maximum distance at which coupling is found. The confirmation of this intuition can be found in Figures \ref{fig:cor-dist-tmic} and \ref{fig:cor-dist-tac}.
+Finally, in the results of the correlation coefficient between the propagation factor and the metrics, we also observe that the cases with the lowest correlation coefficients tend to be dependencies in which there is more distance between the client library and the server library. To compare the correlation and the distances, we create a scatter plot with the correlation coefficient calculated for the sensitivity analysis and the maximum distance at which coupling is found. The confirmation of this intuition can be found in Figures \ref{fig:cor-dist-tmic} and \ref{fig:cor-dist-tac}.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -382,7 +380,7 @@ This last experiment has various goals. The main one is to validate the design o
 In this case, we focus on the third option: Visual Encoding and Interaction Design. To carry out this validation, we designed an \textit{Expert Review} by the means of interviews. In addition, we included questions about the clarity and actionability of the metrics of the model. Therefore, these two aspects of the metrics, which are included in the set of validation criteria defined by Meneely et al. \cite{Meneely2012}, can also be validated.
 
 \subsection{Experimental set up}
-The interview consists on 19 and a demonstration of the PoC, with two proposed scenarios in which the interviewee uses the tool. The questions are divided in four sections, dividing the interview in a total of five parts:
+The interview consists on 19 questions and a demonstration of the PoC, with two proposed scenarios in which the interviewee uses the tool. The questions are divided in four sections, dividing the interview in a total of five parts:
 
 \begin{enumerate}
   \item \textbf{Demographics:} The questions of this section are related to the interviewee's professional experience and current job.
@@ -438,7 +436,9 @@ In this section, we show the answers obtained during the interviews. The results
 
 \subsubsection{Demographics}
 
-The roles of the 15 participants in the interviews include: Software developer, Software engineer, Security consultant, Technology lead, Head of innovation, Head of development, and Head of product. The years of experience range from 1 to 20, with an average of 7.13. Half of the interviewees have worked in backend development and web services systems. In addition, some of the other types of projects include mobile applications and frontend development. The languages in which the interviewees have experience can be seen in Figure \ref{fig:interview-3}.
+The roles of the 15 participants in the interviews include: Software developer, Software engineer, Technology lead, Head of innovation, Head of development, and Head of product. In some of the results, we differentiate between the answers given by developers and managers. In the developers' group, we consider the interviewees who answered with the role of software developer and engineer, and the rest of the interviewees are considered managers. \unsure{I am not sure whether to call this manager or another name. What I mean is that they have tasks that involve software architecture, or reporting, effort estimation. Instead, the developers have programming as their main task}
+
+The years of experience range from 1 to 20, with an average of 7.13. Half of the interviewees have worked in backend development and web services systems. In addition, some of the other types of projects include mobile applications and frontend development. The languages in which the interviewees have experience can be seen in Figure \ref{fig:interview-3}.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -569,7 +569,7 @@ With Question 14, the interviewees gave their suggestions for improvements to th
 
 \subsubsection{Metrics}
 
-The answers to question 15 can be found in Figure \ref{fig:interview-15}; for each metric, the number of times an interviewee answered with each number of the options. In addition, Table \ref{table:interview-15} shows the average grade given to each metric.
+The answers to question 15 can be found in Figure \ref{fig:interview-15}; for each metric, the number of times an interviewee answered with each number of the options. In addition, Table \ref{table:interview-15} shows the average mark given to each metric, first considering only the marks given by developers, then my managers, and finally, the total average.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -581,20 +581,20 @@ The answers to question 15 can be found in Figure \ref{fig:interview-15}; for ea
 
 \begin{table}[ht!]
     \begin{center}
-    \begin{tabular}{|l|l|}
+    \begin{tabular}{|l|l|l|l|}
     \hline
-    Metric & Average \\
+    Metric                      & Average developers  & Average managers  & Total Average \\
     \hline
-    MIC/TMIC & 4.06 \\
-    AC/TAC & 3.8 \\
-    \% Reachable classes & 4.66 \\
-    \% Reachable methods & 4.73 \\
-    Field declaration per class & 4.6 \\
-    Method invocation per class & 4.66 \\
+    MIC/TMIC                    & 3.8                 & 4.6               & 4.06 \\
+    AC/TAC                      & 3.6                 & 4.2               & 3.8 \\
+    \% Reachable classes        & 4.6                 & 4.8               & 4.66 \\
+    \% Reachable methods        & 4.8                 & 4.6               & 4.73 \\
+    Field declaration per class & 4.8                 & 4.2               & 4.6 \\
+    Method invocation per class & 4.8                 & 4.4               & 4.66 \\
     \hline
     \end{tabular}
     \end{center}
-    \caption{Average grade of the metrics in Question 15}
+    \caption{Results Question 15: Average marks of the metrics, given by developers, managers, and all}
     \label{table:interview-15}
 \end{table}
 
@@ -618,29 +618,29 @@ The answers to question 17 can be found in Figure \ref{fig:interview-17}. The in
 \end{center}
 \end{figure}
 
-For question 18, the interviewees answered with which metrics they considered more useful. Their answers can be found in Table \ref{table:interview-18}. As in question 12, a $\oplus$ means that the interviewee mentioned the metric as one of the most useful, $\odot$ is for the metrics mentioned in second place. And finally, if the cell is empty means that the metric was not mentioned.
+For question 18, the interviewees answered with which metrics they considered more useful. Their answers can be found in Table \ref{table:interview-18}. As in question 12, a $\oplus$ means that the interviewee mentioned the metric as one of the most useful, $\odot$ is for the metrics mentioned in second place. And finally, if the cell is empty means that the metric was not mentioned. In addition, in the last column, we show the type of role the interviewee had, either development or management.
 
 \begin{table}[ht!]
     \begin{center}
-    \begin{tabular}{|c|c|c|c|c|c|}
+    \begin{tabular}{|c|c|c|c|c|c|l|}
     \hline
-    \rot{MIC / TMIC}	& \rot{AC / TAC}	& \rot{\% Reachable classes}	& \rot{\% Reachable Methods}	& \rot{Field declaration per class}	& \rot{Method invocation per class    } \\
+    \rot{MIC / TMIC}	& \rot{AC / TAC}	& \rot{\% Reachable classes}	& \rot{\% Reachable Methods}	& \rot{Field declaration per class}	& \rot{Method invocation per class    } & \rot{Role} \\
     \hline\hline
-    $\oplus$  & ~	       & $\oplus$	& ~	        & ~	        & ~        \\\hline
-    ~	        & ~	       & $\oplus$	& $\oplus$	& ~	        & ~        \\\hline
-    ~	        & ~	       & $\oplus$	& $\oplus$  & ~	        & ~        \\\hline
-    ~	        & ~	       & ~	      & ~	        & $\odot$	  & $\oplus$ \\\hline
-    ~	        & ~	       & $\oplus$	& $\oplus$	& ~	        & ~        \\\hline
-    ~	        & ~	       & $\oplus$	& $\oplus$	& ~	        & ~        \\\hline
-    $\oplus$	& ~	       & $\oplus$	& $\oplus$	& ~	        & ~        \\\hline
-    $\oplus$	& ~	       & ~	      & ~	        & ~	        & ~        \\\hline
-    $\oplus$	& $\oplus$ & $\oplus$	& $\oplus$	& ~	        & ~        \\\hline
-    ~	        & ~	       & $\oplus$	& $\oplus$	& $\oplus$	& $\oplus$ \\\hline
-    $\oplus$	& $\oplus$ & $\oplus$	& $\oplus$	& $\oplus$  & $\oplus$ \\\hline
-    $\oplus$	& $\oplus$ & ~	      & ~	        & ~	        & ~        \\\hline
-    $\oplus$	& $\oplus$ & ~	      & ~	        & ~	        & ~        \\\hline
-    ~	        & ~        & $\oplus$ & $\oplus$	& ~         & ~        \\\hline
-    $\oplus$	& ~	       & $\oplus$ & ~	        & ~	        & ~        \\\hline
+    $\oplus$  & ~	       & $\oplus$	& ~	        & ~	        & ~        & Developer \\\hline
+    ~	        & ~	       & $\oplus$	& $\oplus$	& ~	        & ~        & Developer \\\hline
+    ~	        & ~	       & $\oplus$	& $\oplus$  & ~	        & ~        & Developer \\\hline
+    ~	        & ~	       & ~	      & ~	        & $\odot$	  & $\oplus$ & Developer \\\hline
+    ~	        & ~	       & $\oplus$	& $\oplus$	& ~	        & ~        & Developer \\\hline
+    ~	        & ~	       & $\oplus$	& $\oplus$	& ~	        & ~        & Developer \\\hline
+    $\oplus$	& ~	       & $\oplus$	& $\oplus$	& ~	        & ~        & Manager   \\\hline
+    $\oplus$	& ~	       & ~	      & ~	        & ~	        & ~        & Manager   \\\hline
+    $\oplus$	& $\oplus$ & $\oplus$	& $\oplus$	& ~	        & ~        & Developer \\\hline
+    ~	        & ~	       & $\oplus$	& $\oplus$	& $\oplus$	& $\oplus$ & Developer \\\hline
+    $\oplus$	& $\oplus$ & $\oplus$	& $\oplus$	& $\oplus$  & $\oplus$ & Manager   \\\hline
+    $\oplus$	& $\oplus$ & ~	      & ~	        & ~	        & ~        & Developer \\\hline
+    $\oplus$	& $\oplus$ & ~	      & ~	        & ~	        & ~        & Manager   \\\hline
+    ~	        & ~        & $\oplus$ & $\oplus$	& ~         & ~        & Developer \\\hline
+    $\oplus$	& ~	       & $\oplus$ & ~	        & ~	        & ~        & Manager   \\\hline
     \end{tabular}
     \end{center}
     \caption{Answers to Question 18 of the interview}
@@ -666,11 +666,11 @@ In this section, we discuss the answers to the interviews, divided into sections
 
 We have found a difference in how the interviewees evaluate the model and the visualizations according to whether the interviewee's main focus is development or architecture and analysis.
 
-The developers want more information that can be directly transformed into development actions. For example, the suggestions regarding the list of methods used of the dependencies, which can answer a vulnerable method is used or not. Also, the lines of code where the calls to a dependency are made can directly go to that line of code to make the necessary changes.
+The developers want more information that can be directly transformed into development actions. For example, they suggested seeing the list of reachable methods of the dependencies, which can answer a vulnerable method is used or not. Another example is the lines of code where the calls to a dependency are made, so the developer can directly go to that line of code to make the necessary changes.
 
 However, the other type of interviewee is interested in more high-level information. One of the suggestions made by several of these interviewees was to create a metric regarding how much of the client library depends on the server library. Also, how widespread the usage is in the client library. These two metrics would be related to the architecture of the system.
 
-Furthermore, there is also an indicator of this difference in their answers to the preferred metric. The interviewees with tasks related to analysis and architecture preferred the metric \texttt{MIC}/\texttt{TMIC}, as they indicated in Question 18.
+Furthermore, there is also an indicator of this difference in their answers to the preferred metric. The coupling metrics are more useful at an architectural level to understand how much a client depends on a server library. In Table \ref{table:interview-18}, we can see that the interviewees with manager role, always mentioned at least \texttt{MIC}/\texttt{TMIC} as the most useful metric. If we compare the average marks of the developers and managers in Table \ref{table:interview-15}, we can see this same difference. The marks given by managers to the coupling metrics are higher than those given by developers.
 
 \subsubsection{Dependency Management}
 With the questions answered in the \textit{Dependency Management} section, we know that all the interviewees have experience with this type of task. Also, the interviewees considered it more important to monitor the dependencies' vulnerabilities than the update to the last version (see Figures \ref{fig:interview-6}, and \ref{fig:interview-7}). This is also confirmed by some interviewees' comments, saying that the main reason to update a dependency is to avoid being affected by possible vulnerabilities. \unsure{Should I add a finding of this? Even if it does not relate directly to any of the research questions}
