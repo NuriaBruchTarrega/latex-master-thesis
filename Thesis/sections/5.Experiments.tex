@@ -248,41 +248,65 @@ To run this analysis, we have set up a new request in the API of the PoC. This r
 
 The first step is to run the dependency model's calculation for each of the dependencies of the artifacts. Then, for each one of the transitive dependencies with coupling, we run the sensitivity analysis. Since the \textit{propagation factor} is a value in the range $(0,1)$, we calculate the value of the metrics incrementing the propagation factor by $0.01$ from $0.01$ to $0.99$.
 
-We run this experiment with a randomly selected subset of the libraries used for the significance experiment. Then, out of the set of dependencies that can be used for the sensitivity analysis, we select a representative subset. This subset is chosen to have dependencies with different distances, and values measured at each distance.
+We run this experiment with a randomly selected subset of the libraries used for the significance experiment. Then, out of the set of dependencies that can be used for the sensitivity analysis, we select a representative subset. This subset is chosen to have dependencies with different distances, and values measured at each distance. The dependencies used for the sensitivity analysis can be found in Table \ref{table:sensitivity-dependencies}.
+
+\begin{table}[ht!]
+\begin{center}
+\begin{tabularx}{\textwidth}{|X|X|}
+\hline
+\textbf{Client library} & \textbf{Server library} \\ \hline
+org.asynchttpclient async-http-client 2.12.1 & io.netty netty-common 4.1.48.Final \\ \hline
+org.asynchttpclient async-http-client 2.12.1 & io.netty netty-buffer 4.1.48.Final \\ \hline
+org.easymock easymock 4.2 & org.hamcrest hamcrest-core 1.3 \\ \hline
+org.apache.maven maven-project 3.0-alpha-2 & org.codehaus.plexus plexus-classworlds 1.3 \\ \hline
+org.springframework.boot\newline spring-boot-autoconfigure 2.3.4.RELEASE & org.springframework\newline spring-core  5.2.9.RELEASE \\ \hline
+org.springframework.boot\newline spring-boot-autoconfigure 2.3.4.RELEASE & org.springframework\newline spring-jcl  5.2.9.RELEASE \\ \hline
+org.springframework.boot\newline spring-boot-autoconfigure 2.3.4.RELEASE & org.springframework\newline spring-beans  5.2.9.RELEASE \\ \hline
+org.eclipse.jetty jetty-server 11.0.0.beta1 & org.eclipse.jetty jetty-util 11.0.0.beta1 \\ \hline
+org.asynchttpclient async-http-client 2.12.1 & log4j log4j 1.2.17 \\ \hline
+org.alluxio alluxio-core-transport 2.3.0 & com.google.protobuf protobuf-javalite 3.11.0 \\ \hline
+fr.inria.gforge.spoon spoon-core 8.2.0 & org.eclipse.platform org.eclipse.osgi 3.16.0 \\ \hline
+fr.inria.gforge.spoon spoon-core 8.2.0 & org.eclipse.platform org.eclipse.equinox.preferences 3.8.0 \\ \hline
+fr.inria.gforge.spoon spoon-core 8.2.0 & org.eclipse.platform\newline org.eclipse.equinox.common 3.13.0 \\ \hline
+com.puppycrawl.tools checkstyle 8.36.2 & log4j log4j 1.2.17 \\ \hline
+com.puppycrawl.tools checkstyle 8.36.2 & org.apache.geronimo.specs\newline geronimo-jms 1.1\_spec\_1.0 \\ \hline
+\end{tabularx}
+\end{center}
+\caption{Sensitivity analysis, list of dependencies used}
+\label{table:sensitivity-dependencies}
+\end{table}
 
 \subsection{Results}
 With the data obtained from running the experiment, we calculate the covariance of the metrics \texttt{TMIC} and \texttt{TAC} with the \textit{propagation factor}. The values of the covariance are displayed in Table \ref{table:covariance-sensitivity}.
 
-\unsure{This table seems too big. Should I display only the values of the covariance? Or should I keep the names of the libraries?}
 \begin{table}[ht!]
 \begin{center}
-\begin{tabularx}{\textwidth}{|X|X|l|l|}
+\begin{tabular}{|l|l|}
 \hline
-\textbf{Client   library} & \textbf{Server library} & \textbf{TMIC Covariance} & \textbf{TAC Covariance} \\ \hline
-org.asynchttpclient\_\newline async-http-client\_2.12.1 & io.netty\_netty-common\_4.1.48.Final & 21.39853 & 7.740404 \\ \hline
-org.asynchttpclient\_\newline async-http-client\_2.12.1 & io.netty\_netty-buffer\_4.1.48.Final & 35.28688 & 4.461675 \\ \hline
-org.easymock\_easymock\_\newline 4.2 & org.hamcrest\_\newline hamcrest-core\_1.3 & 0.6733333 & 1.515 \\ \hline
-org.apache.maven\_maven-project\_3.0-alpha-2 & org.codehaus.plexus\_\newline plexus-classworlds\_1.3 & 1.431675 & 0.6767 \\ \hline
-org.springframework.\newline boot\_spring-boot-\newline autoconfigure & org.springframework\_\newline spring-core\_5.2.9.RELEASE & 15.34022 & 2.278392 \\ \hline
-org.springframework.\newline boot\_spring-boot-\newline autoconfigure & org.springframework\_\newline spring-jcl\_5.2.9.\newline RELEASE & 5.914392 & 1.01505 \\ \hline
-org.springframework.\newline boot\_spring-boot-\newline autoconfigure & org.springframework\_\newline spring-beans\_5.2.9.RELEASE & 3.535 & 0.9258333 \\ \hline
-org.eclipse.jetty\_jetty-server\_11.0.0.beta1 & org.eclipse.jetty\_jetty-util\_11.0.0.beta1 & 16.83586 & 4.545 \\ \hline
-org.asynchttpclient\_\newline async-http-client\_2.12.1 & log4j\_log4j\_1.2.17 & 0.3400333 & 2.014634 \\ \hline
-org.alluxio\_alluxio-core-transport\_2.3.0 & com.google.protobuf\_\newline protobuf-javalite\_3.11.0 & 35.94001 & 6.228333 \\ \hline
-fr.inria.gforge.spoon\_\newline spoon-core\_8.2.0 & org.eclipse.platform\_org.\newline eclipse.osgi\_3.16.0 & 10.21567 & 0.5870659 \\ \hline
-fr.inria.gforge.spoon\_\newline spoon-core\_8.2.0 & org.eclipse.platform\_org.\newline eclipse.equinox.\newline preferences\_3.8.0 & 9.179277 & 1.225487 \\ \hline
-fr.inria.gforge.spoon\_\newline spoon-core\_8.2.0 & org.eclipse.platform\_org.\newline eclipse.equinox.common\_\newline3.13.0 & 31.63428 & 1.783189 \\ \hline
-com.puppycrawl.tools\_\newline checkstyle\_8.36.2 & log4j\_log4j\_1.2.17 & 1.323955 & 0.674175 \\ \hline
-com.puppycrawl.tools\_\newline checkstyle\_8.36.2 & org.apache.geronimo.\newline specs\_geronimo-jms\_1.1\_spec\_1.0 & 2.916436 & 1.360133 \\ \hline
-\end{tabularx}
+\textbf{TMIC Covariance} & \textbf{TAC Covariance} \\ \hline
+21.39853 & 7.740404 \\ \hline
+35.28688 & 4.461675 \\ \hline
+0.6733333 & 1.515 \\ \hline
+1.431675 & 0.6767 \\ \hline
+15.34022 & 2.278392 \\ \hline
+5.914392 & 1.01505 \\ \hline
+3.535 & 0.9258333 \\ \hline
+16.83586 & 4.545 \\ \hline
+0.3400333 & 2.014634 \\ \hline
+35.94001 & 6.228333 \\ \hline
+10.21567 & 0.5870659 \\ \hline
+9.179277 & 1.225487 \\ \hline
+31.63428 & 1.783189 \\ \hline
+1.323955 & 0.674175 \\ \hline
+2.916436 & 1.360133 \\ \hline
+\end{tabular}
 \end{center}
 \caption{Covariance of the dependencies used in the sensitivity analysis}
 \label{table:covariance-sensitivity}
 \end{table}
 
-\unsure{Here, should I add a table with all the coefficients?}
-In addition, we also calculate the \textit{Pearson correlation coefficient}. The values of the correlation range from $0.941282$ to $1$ for \texttt{TMIC}, and from $0.9445726
-$ to $1$ for \texttt{TAC}. In Figure \ref{correlation-sensitivity}, one can see a scatter plot displaying the correlation between the value of \texttt{TMIC} (upper plot) and \texttt{TAC} (lower plot), and the \textit{propagation factor}. The figure shows the values of the sensitivity analysis done for the client library \textit{fr.inria.gforge.spoon:spoon-core:8.2.0} and the server library \textit{org.eclipse.platform:org.eclipse.osgi:3.16.0}.
+\unsure{Here, should I add a table with all the coefficients? Or maybe add them to the previous table?}
+In addition, we also calculate the \textit{Pearson correlation coefficient}. The values of the correlation range from $0.941282$ to $1$ for \texttt{TMIC}, and from $0.9445726$ to $1$ for \texttt{TAC}. In Figure \ref{correlation-sensitivity}, one can see a scatter plot displaying the correlation between the value of \texttt{TMIC} (upper plot) and \texttt{TAC} (lower plot), and the \textit{propagation factor}. The figure shows the values of the sensitivity analysis done for the client library \textit{fr.inria.gforge.spoon:spoon-core:8.2.0} and the server library \textit{org.eclipse.platform:org.eclipse.osgi:3.16.0}.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -293,22 +317,57 @@ $ to $1$ for \texttt{TAC}. In Figure \ref{correlation-sensitivity}, one can see 
   \begin{subfigure}[b]{0.7\textwidth}
     \includegraphics[width=\textwidth]{figures/results/Rplot_spoon-core_eclipse-osgi_TAC.png}
   \end{subfigure}
-\caption{Scatter plot sensitivity analysis correlation \texttt{TMIC} and \texttt{TAC}}
+\caption{Scatter plot sensitivity analysis, correlation \textit{propagation factor} with \texttt{TMIC}, and \texttt{TAC}}
 \label{fig:correlation-sensitivity}
 \end{center}
 \end{figure}
 
 \subsection{Discussion}
-The sensitivity analysis results indicate a high sensitivity of the two coupling metrics to the propagation factor since the correlation between these two factors is high (always higher than $0.94$).
+The sensitivity analysis results indicate a high sensitivity of the two coupling metrics to the propagation factor since there is a high correlation between these two values, the \textit{Pearson correlation coefficient} is always higher than $0.94$.
 
 \begin{finding}
 	The value of the metrics \texttt{TMIC} and \texttt{TAC} is highly sensitive to the value of the \textit{propagation factor}.
 	\label{find:high-sensitivity}
 \end{finding}
 
-There are only three cases in which the \textit{Pearson correlation coefficient} is less than $0.95$. These three cases have in common that the server libraries are reachable at different distances, and the distance is always greater or equal to 3. Therefore, the greater the distance, the less correlation there is between the value of the metrics and the propagation factor. Also, all the cases in which the correlation coefficient equals $1$, the distance at which transitive coupling is measured is $2$.
+There are only three cases in which the \textit{Pearson correlation coefficient} is less than $0.95$. These three cases have in common that the server libraries are reachable at different distances, sum of all the distances is above the average. Therefore, we create a scatter plot comparing  Therefore, the greater the distance, the less correlation there is between the value of the metrics and the propagation factor. Also, all the cases in which the correlation coefficient equals $1$, the distance at which transitive coupling is measured is $2$.
 
-In Table \ref{table:covariance-sensitivity}, we can see that the values of the covariance for \texttt{TMIC} are always greater than those of \texttt{TAC}. This seems to be related to the fact that the values measured for \texttt{TMIC} are greater than those measured for \texttt{TAC}. In line with these results, the values of the cases in which the covariance is less than $1$ have values measured per distance always lower than $12$. Meanwhile, all the cases with covariance greater than $30$ have at least a distance with a measured value greater than $100$.
+In Table \ref{table:covariance-sensitivity}, we can see that the values of the covariance for \texttt{TMIC} are always greater than those of \texttt{TAC}. This seems to be related to the fact that the values measured for \texttt{TMIC} are greater than those measured for \texttt{TAC}. Also, the cases in which the covariance is greater than $30$ seem to have greater coupling values measured as well. To confirm this intuition we create a scatter plot to compare the covariance with the sum of the coupling measured at each distance. These plots can be seen in Figure \ref{fig:cov-value-tmic} and \ref{fig:cov-value-tac}, for \texttt{TMIC} and \texttt{TAC} respectively. In these plots, we have added the correlation between the two values, which confirms that the covariance between the \textit{propagation factor} and the value of the metrics, is higher when more coupling is measured.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{figures/results/covariance-values-tmic.png}
+\caption{Scatter plot, covariance of \textit{propagation factor} and \texttt{TMIC}, and the sumation of the coupling measured at each distance}
+\label{fig:cov-value-tmic}
+\end{center}
+\end{figure}
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{figures/results/covariance-values-tac.png}
+\caption{Scatter plot, covariance of \textit{propagation factor} and \texttt{TAC}, and the sumation of the coupling measured at each distance}
+\label{fig:cov-value-tac}
+\end{center}
+\end{figure}
+
+Finally, in the results of the correlation coefficient between the propagation factor and the metrics, we also observe that the cases with lowest correlation coefficients, tend to be dependencies in which there is more distance between the client library and the server library. To compare the correlation and the distances, we create a scatter plot with the correlation coefficient calculated for the sensitivity analysis, and the maximum distance at which coupling is found. The confirmation of this intuition can be found in Figures \ref{fig:cor-dist-tmic} and \ref{fig:cor-dist-tac}.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{figures/results/covariance-values-tmic.png}
+\caption{Scatter plot, correlation of \textit{propagation factor} and \texttt{TMIC}, and the maximum distance}
+\label{fig:cor-dist-tmic}
+\end{center}
+\end{figure}
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{figures/results/covariance-values-tac.png}
+\caption{Scatter plot, correlation of \textit{propagation factor} and \texttt{TAC}, and the maximum distance}
+\label{fig:cor-dist-tac}
+\end{center}
+\end{figure}
+
 
 \section{Experiment 4: Expert Interviews}
 This last experiment has various goals. The main one is to validate the design of the visualization. According to Munzner \cite{Munzner2009}, there are four levels at which this validation can be done:
@@ -320,7 +379,7 @@ This last experiment has various goals. The main one is to validate the design o
   \item Algorithm Design
 \end{enumerate}
 
-In this case, we focus on the third option: Visual Encoding and Interaction Design. To carry out this validation, we designed an \textit{Expert Review} through interviews. In addition, we included questions about the clarity and actionability of the metrics of the model. Therefore, these two aspects of the metrics, which are included in the set of validation criteria defined by Meneely et al. \cite{Meneely2012}, are also validated.
+In this case, we focus on the third option: Visual Encoding and Interaction Design. To carry out this validation, we designed an \textit{Expert Review} by the means of interviews. In addition, we included questions about the clarity and actionability of the metrics of the model. Therefore, these two aspects of the metrics, which are included in the set of validation criteria defined by Meneely et al. \cite{Meneely2012}, can also be validated.
 
 \subsection{Experimental set up}
 The interview consists on 19 and a demonstration of the PoC, with two proposed scenarios in which the interviewee uses the tool. The questions are divided in four sections, dividing the interview in a total of five parts:
