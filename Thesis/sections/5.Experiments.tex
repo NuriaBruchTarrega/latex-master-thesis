@@ -742,11 +742,11 @@ Then, the calculation of the metrics of the model is performed. For each analyze
 
 \subsection{Results}
 
-In Figures \ref{fig:MIC-benchmark} and \ref{fig:AC-benchmark}, we show the histograms representing the distribution of the values of \texttt{MIC} and \texttt{AC} respectively.
+We have analyzed a total of $299$ direct dependencies and $470$ transitive dependencies. We filter each metric's zeros since it means that there is no coupling in this case, and we plot the rest of the values. In Figures \ref{fig:MIC-benchmark} and \ref{fig:AC-benchmark}, we show the histograms representing the distribution of the values of \texttt{MIC} and \texttt{AC} respectively.
 
 \begin{figure}[ht!]
 \begin{center}
-  \includegraphics[width=0.7\textwidth]{figures/results/MIC_benchmark.png}
+  \includegraphics[width=0.7\textwidth]{figures/benchmark/MIC_benchmark.png}
   \caption{Histogram \texttt{MIC} benchmark}
   \label{fig:MIC-benchmark}
 \end{center}
@@ -754,8 +754,64 @@ In Figures \ref{fig:MIC-benchmark} and \ref{fig:AC-benchmark}, we show the histo
 
 \begin{figure}[ht!]
 \begin{center}
-\includegraphics[width=0.7\textwidth]{figures/results/AC_benchmark.png}
+\includegraphics[width=0.7\textwidth]{figures/benchmark/AC_benchmark.png}
 \caption{Histogram \texttt{AC} benchmark}
 \label{fig:AC-benchmark}
 \end{center}
 \end{figure}
+
+For the transitive metrics, namely \texttt{TMIC} and \texttt{TAC}, we have calculated the benchmarking with two different values for the \textit{propagation factor}: $1$ and $0.1$. The histogram of these benchmarks can be found in Figures \ref{fig:TMIC-benchmark-1}, \ref{fig:TAC-benchmark-1}, \ref{fig:TMIC-benchmark-0.1}, and \ref{fig:TAC-benchmark-0.1}.
+
+\begin{figure}[ht!]
+\begin{center}
+  \includegraphics[width=0.7\textwidth]{figures/benchmark/TMIC_PF_1.png}
+  \caption{Histogram \texttt{TMIC} benchmark, propagation factor = 1}
+  \label{fig:TMIC-benchmark-1}
+\end{center}
+\end{figure}
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{figures/benchmark/TAC_PF_1.png}
+\caption{Histogram \texttt{TAC} benchmark, propagation factor = 1}
+\label{fig:TAC-benchmark-1}
+\end{center}
+\end{figure}
+
+\begin{figure}[ht!]
+\begin{center}
+  \includegraphics[width=0.7\textwidth]{figures/benchmark/TMIC_PF_0.1.png}
+  \caption{Histogram \texttt{TMIC} benchmark, propagation factor = 0.1}
+  \label{fig:TMIC-benchmark-0.1}
+\end{center}
+\end{figure}
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{figures/benchmark/TAC_PF_0.1.png}
+\caption{Histogram \texttt{TAC} benchmark, propagation factor = 0.1}
+\label{fig:TAC-benchmark-0.1}
+\end{center}
+\end{figure}
+
+Finally, we also generated 70\%, 80\%, and 90\% quantiles of each of the metrics, which can be found in Table \ref{table:quantiles}.
+
+\begin{table}[ht!]
+    \begin{center}
+    \begin{tabular}{|r|l|l|l|}
+    \hline
+    \textbf{Metric} & \textbf{70\%} & \textbf{80\%} & \textbf{90\%} \\ \hline\hline
+    \textbf{MIC} & 79 & 118.8 & 305.4 \\ \hline
+    \textbf{AC} & 21.5 & 35 & 61 \\ \hline
+    \textbf{TMIC (PF = 1)} & 59.5 & 129 & 215 \\ \hline
+    \textbf{TAC (PF = 1)} & 19.5 & 24 & 56 \\ \hline
+    \textbf{TMIC (PF = 0.1)} & 11.4015 & 33 & 105.7 \\ \hline
+    \textbf{TAC (PF = 0.1)} & 7.35 & 7.77 & 25.15 \\ \hline
+    \end{tabular}
+    \end{center}
+    \caption{70\%, 80\%, and 90\% of the coupling metrics}
+    \label{table:quantiles}
+\end{table}
+
+
+\subsection{Discussion}
