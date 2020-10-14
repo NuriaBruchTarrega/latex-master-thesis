@@ -102,7 +102,7 @@ Next, we take a look at the detection of used dependencies. There are 9 cases in
 	\label{find:source-code-analysis}
 \end{finding}
 
-\section{Experiment 2: Significance of the coupling metrics}
+\section{Experiment 2: Significance of the coupling metrics}\label{sec:experiment2}
 
 The goal of this experiment is to validate if the coupling metrics designed in the model, namely \texttt{MIC}, \texttt{AC}, \texttt{TMIC}, and \texttt{TAC}, are a good indicator of the usage of the dependencies by the clients. As a partial validation of the metrics' significance, we compare it with the results gathered from the usage metrics. We want to know how often a dependency is used, either by using classes or methods, and it is detected as uncoupled by the coupling metrics. This way, we know if there are many cases in which a dependency is only used with a type of connection other than method invocation or field declaration.
 
