@@ -45,8 +45,6 @@ When conducting the interviews, we also noticed that there are apparent differen
 
 \section{Proof-of-Concept}
 
-To complete the answers to the questions, we have created the proof-of-concept tool to calculate the metrics of the model for an entire dependency tree, given a client library. The tool is limited to 
-- Maven libraries
-- Bytecode analysis: missing variables
-- Testing libraries
--
+To complete the answers to the questions, we have created the proof-of-concept tool to calculate the metrics of the model for an entire dependency tree, given a client library. The tool works with Maven libraries, obtaining the \textit{.jar} files from the \textit{Maven Central Repository}. This decision restricts the type of software product which can be analyzed. Moreover, it excludes the testing dependencies from the analysis since the tests are not included in the sources that can be obtained from Maven. However, using libraries available in Maven made possible the comparison with the results of the paper by Soto-Valero et al. \cite{soto2020comprehensive}.
+
+Another decision was to do bytecode analysis, which, as has been already discussed, can be obtained more often from the \textit{Maven Central Repository} than source-code. However, bytecode analysis has its limitations. The main one that we have encountered while developing the proof-of-concept is that the declaration of variables cannot be found in the bytecode. Declaration of variables is one of the types of connections defined by Briand et al. \cite{briand1999unified}, and therefore should be considered in the calculation of the coverage metric \textit{Percentage of reachable classes}. Nevertheless, the possible usages of a variable can be detected using bytecode. For example, if a method is called on the variable, the variable is declared based on the return of a method call, or if the variable is sent as a parameter on a method call. All these usages are detected by the bytecode and included in the calculation of the metric. Since the coverage metrics do not consider how many times a class or a method has been reached, if a local variable is used in any way, the type of the variable is counted as reached.

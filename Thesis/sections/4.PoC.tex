@@ -11,7 +11,7 @@ Several techniques could have been used to implement the PoC that calculates the
   \item Call-level dependency graph
 \end{itemize}
 
-After an initial try, source code analysis has been discarded. The reason for it is that the source code is needed for both the client library and all its dependencies. Although it is sometimes available in Maven, it is not available as often as the bytecode.
+After an initial try, source code analysis has been discarded. The reason for it is that the source code is needed for both the client library and all its dependencies. Although it is sometimes available in Maven, it is not available as often as the bytecode. Furthermore, obtaining the code from GitHub created issues when resolving the dependency tree, since in many cases, the version of the dependency being used in the repository, was not yet available in Maven. Therefore, the dependency tree could not be resolved.
 
 The option of call-level dependency graphs is useful for the metrics that measure method invocations. However, the information needed to measure aggregation coupling is not contained in the call-level graphs. Therefore, the approach to develop this PoC has been bytecode analysis. Furthermore, obtaining the complete dependency tree's call-graphs is still a work in progress within the FASTEN project.
 
