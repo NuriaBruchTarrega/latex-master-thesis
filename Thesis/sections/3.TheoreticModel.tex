@@ -208,7 +208,15 @@ classes implemented in $L_s$ ($\verb|C|(L_s)$). Finally, to count the  individua
 \subsubsection{Theoretical validation}
 The theoretical validation of the metrics consists of demonstrating the properties of the metrics. Theoretical validation is necessary since it proves that the metrics share some properties with the attribute; these metrics measure coupling. In particular, for coupling metrics, there are five properties defined by Briand et al. \cite{briand1996property}, which have been largely used by the literature \cite{poshyvanyk2006conceptual, allen1999measuring, zhao2004measuring}.
 
-These five properties are: nonnegativity, null value, monotonicity, merging of classes and merging of unconnected classes. To describe the properties, we use $\verb|Coupling|(L_c, L_s)$ to refer to both $\verb|AC|$ and $\verb|MIC|$, and $\verb|R|(L_c, L_s)$ to refer to the set of relationships between $L_c$ and $L_s$. $\verb|Coupling|(L_c, L_s)$ uses $\verb|R|(L_c, L_s)$ to evaluate the coupling between the two elements, but the way it is used differs per metric. The description of the properties is based on the description done by Briand et al. \cite{briand1996property}, which was meant for coupling metrics that measure the coupling within an element, or between an element and all the other elements. Therefore, the properties' description has been adapted for metrics that measure coupling between two different elements. Also, since all the defined metrics measure import coupling, the properties' definitions are focused on this locus of impact.
+\begin{enumerate}
+  \item \textbf{Nonnegativity:} The value of the coupling metrics should never be negative.
+  \item \textbf{Null value:} The value of the coupling is expected to be zero if there is no relationship of from the client library to the server library.
+  \item \textbf{Monotonicity:} It is expected that if more relationships are added from the client library to the server library, the metric value does not decrease.
+  \item \textbf{Merging of classes:} If two classes of the client library are merged, the total coupling between the client library and the server library should not increase.
+  \item \textbf{Merging of unconnected classes:} When two classes of the client library, which do not share usage of the server library, are merged, the total coupling between the client library and the server library should remain equal.
+\end{enumerate}
+
+To describe the properties in greater detail, we use $\verb|Coupling|(L_c, L_s)$ to refer to both $\verb|AC|$ and $\verb|MIC|$, and $\verb|R|(L_c, L_s)$ to refer to the set of relationships between $L_c$ and $L_s$. $\verb|Coupling|(L_c, L_s)$ uses $\verb|R|(L_c, L_s)$ to evaluate the coupling between the two elements, but the way it is used differs per metric. The description of the properties is based on the description done by Briand et al. \cite{briand1996property}, which was meant for coupling metrics that measure the coupling within an element, or between an element and all the other elements. Therefore, the properties' description has been adapted for metrics that measure coupling between two different elements. Also, since all the defined metrics measure import coupling, the properties' definitions are focused on this locus of impact.
 
 \paragraph{Nonnegativity}
 
@@ -655,7 +663,7 @@ Based on the criteria discussed above, we define two metrics. The summary of the
 \end{table}
 
 \subsection{Formal definition of the metrics}
-\unsure{I am not sure about which names to use here}
+In this section, we provide a formal definition of the metrics \textit{method invocations per class} and \textit{field declarations per class}.
 
 \paragraph{Method invocations per class}
 Having a client library ($L_c$), and a server library ($L_s$). The result of this metric for a class of the client library ($c_c \in \verb|C|(L_c)$) corresponds to the number of method invocations contained in the methods of $c_c$ ($m_c \in \verb|M|(c_c)$) such that, the call graph created from these method invocations reach a method implemented in the client library ($m_s \in \verb|M|(L_s)$). The set with the method invocations in $m_c$ that reach a method in $L_s$ is $\verb|nIR|(m_c, L_s)$.
