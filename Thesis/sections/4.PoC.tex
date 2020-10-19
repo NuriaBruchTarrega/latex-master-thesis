@@ -40,7 +40,7 @@ To store the information needed to calculate the coupling metrics, there are two
 
 Each \texttt{DependencyTreeNode} has an object \texttt{MicBehaviors} and \texttt{AcClasses} for each of the distances at which the metric is measured, stored as a map, where the distance is the key and \texttt{MicBehaviors} or \texttt{AcClasses}, the value.
 
-Also, for the metrics that measure the dependencies' usage, two additional fields have been created: \texttt{ReachableClasses} and \texttt{ReachableBehaviors}. The first field is to calculate the \(\verb|%ReachableClasses|\), and the second one for \(\verb|%ReachableMethods|\). Both \texttt{ReachableClasses} and \texttt{ReachableBehaviors}, are sets containing the classes, in the first case, and behaviors in the second case, of the library represented by the \texttt{DependencyTreeNode}, which are reachable from the client library.
+Also, for the metrics that measure the dependencies' coverage, two additional fields have been created: \texttt{ReachableClasses} and \texttt{ReachableBehaviors}. The first field is to calculate the \(\verb|%ReachableClasses|\), and the second one for \(\verb|%ReachableMethods|\). Both \texttt{ReachableClasses} and \texttt{ReachableBehaviors}, are sets containing the classes, in the first case, and behaviors in the second case, of the library represented by the \texttt{DependencyTreeNode}, which are reachable from the client library.
 
 \begin{figure}[ht]
 \begin{center}
@@ -257,11 +257,11 @@ During the calculation of \texttt{TMIC} and \texttt{TAC}, it is possible that on
 \subsection{Propagation Formula}
 To calculate the actual value of both, \texttt{TMIC} and \texttt{TAC}, we use the values stored in \texttt{MicBehaviorsAtDistance} and \texttt{AcClassesAtDistance} (see Figure \ref{fig:class-diagram-tree}). Then, using the value calculated at each distance, we apply the formula described in the equations \ref{eqn:tmic} and \ref{eqn:tac}. The only value of these formulas that cannot be extracted from the analysis of the bytecode, is the \textit{propagation factor}. This variable depends on the real-world behavior of these metrics, and its value will be discussed in Chapter \ref{ch:Experiments}.
 
-\section{Measuring usage metrics}
+\section{Measuring coverage metrics}
 This section describes how the metrics \(\verb|%ReachableClasses|\) and \(\verb|%ReachableMethods|\) are calculated in the proof-of-concept, including the pseudo-code of the implementation. Both metrics are calculated at the same time since some of the connections are entangled. For example, one class can be reachable because it is the return type of a method. The implementation is done in two steps: finding the classes and methods of the direct dependencies directly reachable from the client library, and a second one to find the rest of the reachable methods and classes of all the dependency tree.
 
 \subsection{Step 1}
-The pseudo-code to perform the first step of the calculation of the usage metrics can be found in Figures \ref{fig:algorithm-usage-step1-1}, \ref{fig:algorithm-usage-step1-2}, and \ref{fig:algorithm-usage-step1-3}. First, in Figure \ref{fig:algorithm-usage-step1-1}, the implementation iterates through all the classes in the client library to find the usage of the dependencies (line 3). In the case of these metrics, the usage can be any type of connection, in the methods of each of the classes (line 4) or in the class itself (line 5). In Figure \ref{fig:algorithm-usage-step1-2}, we show which connections are detected in the client library methods.
+The pseudo-code to perform the first step of the calculation of the coverage metrics can be found in Figures \ref{fig:algorithm-usage-step1-1}, \ref{fig:algorithm-usage-step1-2}, and \ref{fig:algorithm-usage-step1-3}. First, in Figure \ref{fig:algorithm-usage-step1-1}, the implementation iterates through all the classes in the client library to find the usage of the dependencies (line 3). In the case of these metrics, the coverage can be due to any type of connection, in the methods of each of the classes (line 4) or in the class itself (line 5). In Figure \ref{fig:algorithm-usage-step1-2}, we show which connections are detected in the client library methods.
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -271,7 +271,7 @@ for each clientClass in clientClasses
   findDependencyUsageInBehaviors(clientClass)
   findDependencyUsageInClass(clientClass)
 \end{lstlisting}
-\caption{Pseudo-code of the step 1 to calculate usage of the dependencies (Part 1)}
+\caption{Pseudo-code of the step 1 to calculate coverage of the dependencies (Part 1)}
 \label{fig:algorithm-usage-step1-1}
 \end{figure}
 
@@ -312,7 +312,7 @@ findDependencyUsageInBehaviors(clientClass)
       if (classPoolManager.belongsToDependency(annotation))
         dependencyTreeNode.addReachableClass(annotation)
 \end{lstlisting}
-\caption{Pseudo-code of the step 1 to calculate usage of the dependencies (Part 2)}
+\caption{Pseudo-code of the step 1 to calculate coverage of the dependencies (Part 2)}
 \label{fig:algorithm-usage-step1-2}
 \end{figure}
 
@@ -341,12 +341,12 @@ findDependencyUsageInClass(clientClass)
     if (classPoolManager.belongsToDependency(annotation))
       dependencyTreeNode.addReachableClass(annotation)
 \end{lstlisting}
-\caption{Pseudo-code of the step 1 to calculate usage of the dependencies (Part 3)}
+\caption{Pseudo-code of the step 1 to calculate coverage of the dependencies (Part 3)}
 \label{fig:algorithm-usage-step1-3}
 \end{figure}
 
 \subsection{Step 2}
-The pseudo-code of the second step can be found in Figures \ref{fig:algorithm-usage-step2-1}, \ref{fig:algorithm-usage-step2-2}, and \ref{fig:algorithm-usage-step2-3}. The code which iterates through all the dependencies is in Figure \ref{fig:algorithm-usage-step2-1}. It contains a \textit{BFS}, which visits the entire dependency tree. For each one of the libraries in the tree, all the reachable methods and classes are found and the usage of the dependencies of the visited library. This is because the initial step only finds those methods directly used by the client library, but other methods and classes are indirectly reachable.
+The pseudo-code of the second step can be found in Figures \ref{fig:algorithm-usage-step2-1}, \ref{fig:algorithm-usage-step2-2}, and \ref{fig:algorithm-usage-step2-3}. The code which iterates through all the dependencies is in Figure \ref{fig:algorithm-usage-step2-1}. It contains a \textit{BFS}, which visits the entire dependency tree. For each one of the libraries in the tree, all the reachable methods and classes are found to calculate the coverage of the dependencies of the visited library. This is because the initial step only finds those methods directly used by the client library, but other methods and classes are indirectly reachable.
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -360,7 +360,7 @@ while (!toVisit.isEmpty())
 
   toVisit.add(visiting.getChildren())
 \end{lstlisting}
-\caption{Pseudo-code of the step 2 to calculate usage of the dependencies (Part 1)}
+\caption{Pseudo-code of the step 2 to calculate coverage of the dependencies (Part 1)}
 \label{fig:algorithm-usage-step2-1}
 \end{figure}
 
@@ -379,7 +379,7 @@ findAllReachableMethodsAndUsageOfDependencies(dependencyTreeNode)
       findConnectionsInBehavior(toVisit)
       visitedBehaviors.add(visiting)
 \end{lstlisting}
-\caption{Pseudo-code of the step 2 to calculate usage of the dependencies (Part 2)}
+\caption{Pseudo-code of the step 2 to calculate coverage of the dependencies (Part 2)}
 \label{fig:algorithm-usage-step2-2}
 \end{figure}
 
@@ -398,7 +398,7 @@ findAllReachableClassesAndUsageOfDependencies(dependencyTreeNode)
       findConnectionsInClass(toVisit)
       visitedClasses.add(visiting)
 \end{lstlisting}
-\caption{Pseudo-code of the step 2 to calculate usage of the dependencies (Part 3)}
+\caption{Pseudo-code of the step 2 to calculate coverage of the dependencies (Part 3)}
 \label{fig:algorithm-usage-step2-3}
 \end{figure}
 
@@ -449,21 +449,21 @@ Each node displays the following information about the library: \texttt{GroupID}
 For this visualization, the shape of each of the nodes is the same, an ellipse. This is because the differentiation between the nodes is done with the node's color, not the shape. Furthermore, the ellipse is the shape that allows us to display all the necessary information in the node, without taking too much extra space.
 
 \paragraph{Color}
-To indicate the state of the dependency with the nodes' color, we have used three different colors. The nodes representing libraries for which no usage has been found are light grey. Then, the rest of the dependencies have different blue shades, going from lighter blue for the less used, and darker blue for the most used. Furthermore, the color of the node representing the client library is dark pink. Finally, when a node is selected (see next paragraph), the color of the node changes to light pink.
+To indicate the state of the dependency with the nodes' color, we have used three different colors. The nodes representing libraries for which no coverage has been found are light grey. Then, the rest of the dependencies have different blue shades, going from lighter blue for the less used, and darker blue for the most used. Furthermore, the color of the node representing the client library is dark pink. Finally, when a node is selected (see next paragraph), the color of the node changes to light pink.
 
 \paragraph{Interaction}
 The main problem with the dependency tree visualization is that if the tree contains too many nodes, it is very difficult to see the nodes' content. To fix this, all the nodes can be selected. When a node is selected, the visualization zooms in the selected node so that the user can see the content.
 
 There are two ways to select a node. The first one is by clicking the node. The second option is by finding the node in the search bar. The search bar has been implemented to give suggestions containing all the libraries' names displayed in the tree. To clear the node selection, the user has to click in the graph view, outside of the nodes.
 
-The second type of interaction has been implemented to display some additional information on the nodes. When a user hovers over a node, a \textit{tooltip} appears. The \textit{tooltip} contains the data of the library and the value of the coupling and usage metrics. For the coupling metrics, two tables are displaying, for each metric, the value measured, and the distance at which the value was measured.
+The second type of interaction has been implemented to display some additional information on the nodes. When a user hovers over a node, a \textit{tooltip} appears. The \textit{tooltip} contains the data of the library and the value of the coupling and coverage metrics. For the coupling metrics, two tables are displaying, for each metric, the value measured, and the distance at which the value was measured.
 
 \subsection{Dependency Table}
 The dependency tree visualization gives an overview of the dependencies. However, it is not useful to compare the values of the metrics among dependencies. Therefore, this second visualization is focused on seeing together all the values to sort and compare.
 \todo{Add image}
 
 \paragraph{Layout}
-To be easy to compare the value of the metrics among all the dependencies, the layout chosen for this visualization is a table. The table displays one dependency on each row, while the columns display information about the dependency, and the coupling and usage metrics calculated for the dependency. For each library, there is a column for the \textit{groupId}, the \textit{artifactId}, the \textit{version}, and whether the dependency is direct or transitive. Then, the rest of the columns the values displayed are \texttt{MIC} and \texttt{AC} (or \texttt{TMIC} and \texttt{TAC} for transitive dependencies), and the metrics \texttt{\%ReachableClasses} and \texttt{\%ReachableMethods}.
+To be easy to compare the value of the metrics among all the dependencies, the layout chosen for this visualization is a table. The table displays one dependency on each row, while the columns display information about the dependency, and the coupling and coverage metrics calculated for the dependency. For each library, there is a column for the \textit{groupId}, the \textit{artifactId}, the \textit{version}, and whether the dependency is direct or transitive. Then, the rest of the columns the values displayed are \texttt{MIC} and \texttt{AC} (or \texttt{TMIC} and \texttt{TAC} for transitive dependencies), and the metrics \texttt{\%ReachableClasses} and \texttt{\%ReachableMethods}.
 
 \paragraph{Shape}
 For this visualization, the shape is already defined by the layout, which is a table.
