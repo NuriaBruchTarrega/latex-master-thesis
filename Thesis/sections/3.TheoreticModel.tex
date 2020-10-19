@@ -481,9 +481,7 @@ Then, there exists a field declaration in $c_1$ or $c_2$ which reaches a class i
 Therefore, the metric $\verb|TAC|$ fulfills property \textit{Merging of unconnected classes}.
 
 \section{Measuring coverage of the dependency}\label{sec:coverageMetrics}
-The metrics presented in this section measure the dependencies from a different perspective. Instead of measuring import coupling between the client library and the server library, we look at how much of the server library is used by the client library.
-
-\unsure{Maybe explain why? To know if that library is really necessary, or only a submodule is needed, to see if there is another library that offers only the functionality that you use, to know which is the probability that a breaking change affects your code...}
+The metrics presented in this section measure the dependencies from a different perspective. Instead of measuring import coupling between the client library and the server library, we look at how much of the server library is used by the client library. With these metrics, the developers, for example, can estimate the probability that a breaking change in a library affects their code.
 
 \subsection{Definition of coverage}\label{subsect:usage-definition}
 Just as with the coupling metrics, it is necessary to define the characteristics of the coverage that will be measured. In this case, there is no framework indicating which are the relevant characteristics to define, and with which criteria.
@@ -506,7 +504,7 @@ Given class \textit{a} and class \textit{b}...
 \end{itemize}
 
 \paragraph{Granularity}
-In this case, we have to define a unit to measure which percentage of the server library units are being used by the client library. According to the type of connections, two different kinds of units can be used: methods and classes. Therefore, we define two metrics, one for each of the units. Nevertheless, the metrics' aggregation level is still at the library level since the goal is to measure the percentage of reachable units.
+In this case, we have to define a unit to measure which percentage of the server library units are being used by the client library. According to the type of connections, two different kinds of units can be used: methods and classes. For the goal of these metrics it is also necessary to use both units of measure. For example, the breaking changes of a library can be at a metric, or for an entire class, and we want to measure it for both cases. Therefore, we define two metrics, one for methods and another for classes. Nevertheless, the metrics' aggregation level is still at the library level since the goal is to measure the percentage of reachable units.
 
 The last aspect of the granularity to consider is how the connections are evaluated. Since the goal is not to know how many times a connection occurs, we count the distinct items at the other end of the connections.
 
