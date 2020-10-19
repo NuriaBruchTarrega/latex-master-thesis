@@ -3,10 +3,10 @@
 This chapter contains a description of the metrics proposed to measure dependencies from various points of view. Each metric is also validated theoretically, by proving the metrics fulfill certain properties that the aspect being measured has.
 
 \section{Measuring the degree of dependency}\label{sect:degree-dependency}
-To define the metrics to measure the degree of dependency, as has been explained earlier, we use coupling metrics. Therefore, we define which coupling are we measure, and then design the metrics accordingly. Finally, the five properties of coupling used in the literature, are proven for the designed metrics.
+To define the metrics to measure the degree of dependency, we use coupling metrics. We first define which coupling we measure, and then design the metrics accordingly. Finally, the five properties of coupling used in the literature \cite{briand1996property}, are proven for the designed metrics.
 
 \subsection{Definition of coupling}\label{subsect:defCoupling}
-To measure the degree of dependency, we define the characteristics of the coupling between libraries to measure. Following the framework defined by Briand et al. \cite{briand1999unified}, described in Section \ref{section:bg-coupling}, we define the coupling to measure according to the six criteria in the framework.
+To measure the degree of dependency, we investigate the characteristics of the coupling between libraries to measure. Following the framework defined by Briand et al. \cite{briand1999unified}, described in Section \ref{section:bg-coupling}, we define the coupling to measure according to the six criteria in the framework.
 
 \paragraph{Criterion 1 - Type of connection:}
 This criterion defines which type of connection creates coupling between the two items, previously defined as two separate sets of classes. Several and clearly distinguished mechanisms can create coupling, as defined by Briand et al. \cite{briand1999unified}, listed below.
@@ -206,33 +206,32 @@ classes implemented in $L_s$ ($\verb|C|(L_s)$). Finally, to count the  individua
 \end{equation}
 
 \subsubsection{Theoretical validation}
-\unsure{Should I move the description of the properties to background, or is it fine here?}
 The theoretical validation of the metrics consists of demonstrating the properties of the metrics. Theoretical validation is necessary since it proves that the metrics share some properties with the attribute; these metrics measure coupling. In particular, for coupling metrics, there are five properties defined by Briand et al. \cite{briand1996property}, which have been largely used by the literature \cite{poshyvanyk2006conceptual, allen1999measuring, zhao2004measuring}.
 
-For the description of the properties, we use $\verb|Coupling|(L_c, L_s)$ to refer to both $\verb|AC|$ and $\verb|MIC|$, and $\verb|R|(L_c, L_s)$ to refer to the set of relationships between $L_c$ and $L_s$. $\verb|Coupling|(L_c, L_s)$ uses $\verb|R|(L_c, L_s)$ to evaluate the coupling between the two elements, but the way it is used differs per metric. The description of the properties is based on the description done by Briand et al. \cite{briand1996property}, which was meant for coupling metrics that measure the coupling within an element, or between an element and all the other elements. Therefore, the properties' description has been adapted for metrics that measure coupling between two different elements. Also, since all the defined metrics measure import coupling, the properties' definitions are focused on this locus of impact.
+These five properties are: nonnegativity, null value, monotonicity, merging of classes and merging of unconnected classes. To describe the properties, we use $\verb|Coupling|(L_c, L_s)$ to refer to both $\verb|AC|$ and $\verb|MIC|$, and $\verb|R|(L_c, L_s)$ to refer to the set of relationships between $L_c$ and $L_s$. $\verb|Coupling|(L_c, L_s)$ uses $\verb|R|(L_c, L_s)$ to evaluate the coupling between the two elements, but the way it is used differs per metric. The description of the properties is based on the description done by Briand et al. \cite{briand1996property}, which was meant for coupling metrics that measure the coupling within an element, or between an element and all the other elements. Therefore, the properties' description has been adapted for metrics that measure coupling between two different elements. Also, since all the defined metrics measure import coupling, the properties' definitions are focused on this locus of impact.
 
-\paragraph{Property 1: Nonnegativity}
+\paragraph{Nonnegativity}
 
-Let $L_c$ be a client library and $L_s$ be a server library. The coupling between the two libraries is non-negative. $\verb|Coupling|(L_c, L_s) \ge 0$.
+Let $L_c$ be a client library and $L_s$ be a server library. The coupling between the two libraries is non-negative, $\verb|Coupling|(L_c, L_s) \ge 0$.
 
-\paragraph{Property 2: Null value}
+\paragraph{Null value}
 Coupling is expected to be null (zero) when there is no import relationship between the client and the server libraries.
 
 Let $L_c$ be a client library and $L_s$ be a server library. The coupling between the two libraries is null if the set of import relationships from $L_c$ to $L_s$, $\verb|R|(L_c, L_s)$, is empty. Therefore, $\verb|R|(L_c, L_s) = \emptyset \implies \verb|Coupling|(L_c, L_s) = 0$.
 
-\paragraph{Property 3: Monotonicity}
+\paragraph{Monotonicity}
 Considering the definition of coupling, it is expected that when more relationships are added between the libraries, coupling does not decrease.
 
 Let $L_c$ be a client library, $L_s$ be a server library, and $c \in L_c$ be a class in $L_c$. If we modify class $c$ to form a new class $c'$ which is identical to $c$ except that $\verb|R|(c, L_s) \subseteq \verb|R|(c', L_s)$. For example, some method invocations have been added from $c$ to classes implemented in $L_s$. Let $L_c'$ be a library identical to $L_c$ but in which $c$ has been replaced by $c'$. Then, $\verb|Coupling|(L_c, L_s) \le \verb|Coupling|(L_c', L_s)$.
 
-\paragraph{Property 4: Merging of classes}
+\paragraph{Merging of classes}
 The original definition of the property is created for metrics that measure coupling within a system, and therefore it is necessary to reformulate it. It is expected that if two classes of a system are merged, the system's coupling does not increase. If two classes are merged, the coupling between the two classes is subtracted from the system's total coupling.
 
 When considering the coupling between a client library and a server library, if two client library classes are merged, the two libraries' coupling would not increase. It could decrease, depending on how the refactoring is performed. If the classes share usage of the server library, one of the usages may be removed.
 
 Therefore, let $L_c$ be a client library, $L_s$ be a server library, and $c_1, c_2 \in L_c$ two classes in $L_c$. Let $c'$ be the class that results from merging  $c_1$ and $c_2$, and $L_c'$ be the library resulting from $L_c$ when $c_1$ and $c_2$ have been replaced by $c'$. Then, $\verb|Coupling|(c_1, L_s) + \verb|Coupling|(c_2, L_s) \ge \verb|Coupling|(c', L_s)$ and $\verb|Coupling|(C, L_s) \ge \verb|Coupling|(C', L_s)$.
 
-\paragraph{Property 5: Merging of unconnected classes}
+\paragraph{Merging of unconnected classes}
 This property is a variation of the previous one, and it has to be adapted to the use case of this thesis. It is expected that the system's coupling will stay the same if two classes of a system, which have no relationship, are merged. This is because the class that results in the merging will have the same number of relationships with other classes as the original two.
 
 When measuring the coupling between a client library and a server library, the two unconnected classes are not using the server library in the same way. Therefore, none of the relationships with the server library can be merged when merging the two classes, and the coupling with the server library stays the same.
@@ -241,7 +240,7 @@ Let $L_c$ be a client library, $L_s$ a server library, and $c_1, c_2 \in L_c$ tw
 
 \subsubsection{Theoretical validation: MIC}
 
-\paragraph{Property 1: Nonnegativity}
+\paragraph{Nonnegativity}
 If we assume that the metric $\verb|MIC|$ does not fulfill the property Nonnegativity, there should be a client library $L_s$ and a server library $L_c$ such that $\verb|MIC|(L_c, L_s) < 0$.
 According to the equation \ref{eqn:mic}, this means that exists at least one client method $m_c \in \verb|M|(L_c)$ such that $\verb|nII|(m_c, L_c) < 0$. Following the equation of $\verb|nII|$ \ref{eqn:mic-nii}, this opens two possibilities.
 
@@ -251,26 +250,26 @@ The other option is that there is a method $m_s \in \verb|SIM|(m_c)$ such that $
 
 Therefore, the initial assumption is not true, and \textit{Nonnegativity} holds for the metric $\verb|MIC|$.
 
-\paragraph{Property 2: Null value}
+\paragraph{Null value}
 Assuming there is no null value for metric $\verb|MIC|$, there is a client library $L_c$ and a server library $L_s$ such that $\verb|R|(L_c, L_s) = \emptyset$, and $\verb|MIC|(L_c, L_s)	\neq 0$. As non-negativity holds, we have that $\verb|MIC|(L_c, L_s) \ge 0$. Therefore, $\verb|MIC|(L_c, L_s) > 0$. Hence, following equation \ref{eqn:mic} there is a client method $m_c \in M(L_c)$ such that $\verb|nII|(m_c, L_s) > 0$.
 
 Thus, according to equation \ref{eqn:mic-nii}, there is a server method $m_s \in \verb|SIM|(m_c)$, such that $\verb|nI|(m_c, m_s) > 0$ and $\verb|nP|(m_s, L_s) > 0$. Therefore, the method $m_s$ is called at least one time by the method $m_c$ from the client library $L_c$, and at the same time is implemented by the server library $L_s$, which means that there is a relationship between $L_c$ and $L_s$, which contradicts the original assumption that $\verb|R|(L_c, L_s) = 0$.
 
 Consequently, there is a \textit{null value} for metric $\verb|MIC|$.
 
-\paragraph{Property 3: Monotonicity}
+\paragraph{Monotonicity}
 Let $L_c$ be a client library that contains class $c_c$, and let $c_c'$ be a class resulting from adding relationships with the server library $L_s$ to the class $c_c$. Then, $\verb|R|(c_c, L_s) \subseteq \verb|R|(c_c', L_s)$. Let $L_c'$ be a client library identical to $L_c$ but in which the class $c_c$ has been replaced by $c_c'$. Therefore, $\verb|R|(L_c, L_s) \subseteq \verb|R|(L_c', L_s)$.
 
 Let's assume that the $\verb|MIC|$ metric does not fulfill the property monotonicity, this would mean that $\verb|MIC|(L_c, L_s) > \verb|MIC|(L_c', L_s)$. Since the only difference between $L_c$ and $L_c'$ is the substitution of $c_c$ by $c_c'$, then $\sum_{m_c \in \verb|M|(c_c)} \verb|nII|(m_c, L_s) > \sum_{m_c' \in \verb|M|(c_c')} \verb|nII|(m_c', L_s)$ (see equation \ref{eqn:mic}). Therefore, the methods of class $c_c$ have more individual invocations to $L_s$ than the methods from class $c_c'$. This contradicts the initial assumption that $\verb|R|(c_c, L_s) \subseteq \verb|R|(c_c', L_s)$.
 
 Therefore, \textit{Monotonicity} holds for the metric $\verb|MIC|$.
 
-\paragraph{Property 4: Merging of classes}
+\paragraph{Merging of classes}
 Let $L_c$ be a client library that includes the classes $c_1$ and $c_2$. Let $c'$ be a class such that $c_1 + c_2 = c'$ and $L_c'$ be a client library identical to $L_c$ but where $c_1$ and $c_2$ have been replaced by $c'$. If we assume that the property merging of classes does not hold for metric $\verb|MIC|$, it would mean that $\verb|R|(c_1, L_s) \subseteq \verb|R|(c', L_s) \land \verb|R|(c_2, L_s) \subseteq \verb|R|(c', L_s)$ and at the same time $\verb|MIC|(L_c, L_s) > \verb|MIC|(L_c', L_s)$.
 
 Therefore, there is a method $m_c$ which is implemented in $c_1$ or $c_2$ such that contains a call to a method $m_s$ which does not exist in any of the methods implemented in $c'$. This is a contradition with the initial affirmation $\verb|R|(c_1, L_s) \subseteq \verb|R|(c', L_s) \land \verb|R|(c_2, L_s) \subseteq \verb|R|(c', L_s)$. Therefore, the property \textit{Merging of classes} holds for metric $\verb|MIC|$.
 
-\paragraph{Property 5: Merging of unconnected classes}
+\paragraph{Merging of unconnected classes}
 Let $L_c$ be a client library and $L_s$ be a server library. Let $c_1$ and $c_2$ be classes implemented in $L_c$, such that $\verb|R|(c_1, L_s) \cap \verb|R|(c_2, L_s) = \emptyset$. Let $c'$ be a class such that $c_1 + c_2 = c'$. Therefore, $\verb|R|(c_1, L_s) + \verb|R|(c_2, L_s) = \verb|R|(c', L_s)$. Let $L_c'$ be a client library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. We assume that the metric $\verb|MIC|$ does not fulfill this property.
 
 Therefore, $\verb|MIC|(L_c, L_s) \neq \verb|MIC|(L_c', L_s)$. According to property \textit{Merging of classes}, $\verb|MIC|(L_c, L_s)$ cannot be less than $\verb|MIC|(L_c', L_s)$. Thus, $\verb|MIC|(L_c, L_s) > \verb|MIC|(L_c', L_s)$. This means that there is a $m_c$ implemented in $c_1$ or $c_2$ that contains an invocation to a method $m_s$ implemented in $L_s$, which is not included in $c'$. This contradicts that $\verb|R|(c_1, L_s) + \verb|R|(c_2, L_s) = \verb|R|(c', L_s)$.
@@ -279,7 +278,7 @@ Therefore, property \textit{Merging of unconnected classes} holds for metric $\v
 
 \subsubsection{Theoretical validation: AC}
 
-\paragraph{Property 1: Nonnegativity}
+\paragraph{Nonnegativity}
 Supose that the metric $\verb|AC|$ does not have the nonnegativity property. Thus, there is a client library $L_c$ and a server library $L_s$ such that $\verb|AC|(L_c, L_s) < 0$. Then, according to equation \ref{eqn:ac} there is a client class $c_c \in \verb|C|(L_c)$ and a server class $c_s \in \verb|SAT|(c_c)$ such that either $\verb|NA|(c_c, c_s)$ or $\verb|nDC|(c_s, L_s)$ have a negative value.
 
 Let's assume that $\verb|NA|(c_c, c_s) < 0$. This means that the $c_s$ is a class that is included in the set of stable classes declared as fields in $c_c$ ($c_s \in \verb|SAT|(c_c)$) and, at the same time is declared a negative number of times, which is a contradiction.
@@ -288,12 +287,12 @@ Therefore, $\verb|nDC|(c_s, L_s)$ has to be negative. According to equation \ref
 
 In conclusion, \textit{Nonnegativity} holds for the metric $\verb|AC|$.
 
-\paragraph{Property 2: Null value}
+\paragraph{Null value}
 If we assume that property null value does not hold for metric $\verb|AC|$, there has to be a client library $L_c$ and a server library $L_s$ such that have no relationship ($\verb|R|(L_c, L_s) = 0$) and $\verb|AC|(L_c, L_s)	\neq 0$. Since $\verb|AC|$ has the property \textit{Nonnegativity}, the result cannot be negative, which means that $\verb|AC|(L_c, L_s) > 0$. Hence, following equation \ref{eqn:ac}, there is a client class $c_c \in \verb|C|(L_c)$ and a server class $c_s \in \verb|SAT|(c_c)$ such that $\verb|NA|(c_c, c_s) > 0$ and $\verb|nDC|(c_s, L_s) > 0$. This means that the class $c_s$ is at the same time declared at least once by the client class $c_c$ ($\verb|NA|(c_c, c_s) > 0$) and implemented in the server library $L_s$. However, this would create a relationship between $L_c$ and $L_s$, which contradicts the initial assumption.
 
  Therefore, the property \textit{Null value} holds for metric $\verb|AC|$.
 
-\paragraph{Property 3: Monotonicity}
+\paragraph{Monotonicity}
 Let $L_c$ be a client library that contains class $c_c$, and let $c_c'$ be a class identical to $c_c$ but more relationships with the server library $L_s$. Then, $\verb|R|(c_c, L_s) \subseteq \verb|R|(c_c', L_s)$. Let $L_c'$ be a client library identical to $L_c$ but in which the class $c_c$ has been replaced by $c_c'$. Therefore, $\verb|R|(L_c, L_s) \subseteq \verb|R|(L_c', L_s)$.
 
 If we assume that the metric $\verb|AC|$ does not fulfill this property, means that $\verb|AC|(L_c, L_s) > \verb|AC|(L_c', L_s)$. The only difference between these two calculations is the result of the calculation for $c_c$ and $c_c'$. Therefore, $\sum_{c_s \in \verb|SAT|(c_c)} \verb|NA|(c_c, c_s) * \verb|nDC|(c_s, L_s) > \sum_{c_s \in \verb|SAT|(c_c')} \verb|NA|(c_c', c_s) * \verb|nDC|(c_s, L_s)$, see equation \ref{eqn:ac}.
@@ -302,12 +301,12 @@ This means that there is a server class $c_s \in \verb|SAT|(c_c)$, that is imple
 
 Therefore, \textit{Monotonicity} holds for the metric $\verb|AC|$.
 
-\paragraph{Property 4: Merging of classes}
+\paragraph{Merging of classes}
 Let $L_c$ be a client library that includes the classes $c_1$ and $c_2$. Let $c'$ be a class such that $c_1 + c_2 = c'$ and $L_c'$ be a client library identical to $L_c$ but where $c_1$ and $c_2$ have been replaced by $c'$. We assume that the property merging of classes does not hold for metric $\verb|AC|$. Therefore, $\verb|R|(c_1, L_s) \subseteq \verb|R|(c', L_s) \land \verb|R|(c_2, L_s) \subseteq \verb|R|(c', L_s)$ and, also $\verb|AC|(L_c, L_s) > \verb|AC|(L_c', L_s)$.
 
 Thus, either $c_1$ or $c_2$ contain an attribute of type $c_s$, such that $c_s$ is implemented in $L_s$ and it is not included $c'$. This creates a contradition with the initial affirmation $\verb|R|(c_1, L_s) \subseteq \verb|R|(c', L_s) \land \verb|R|(c_2, L_s) \subseteq \verb|R|(c', L_s)$, since the declaration of an attribute of type $c_s$ is included in $\verb|R|(c_1, L_s)$ or $\verb|R|(c_2, L_s)$. Therefore, \textit{Merging of classes} holds for metric $\verb|AC|$.
 
-\paragraph{Property 5: Merging of unconnected classes}
+\paragraph{Merging of unconnected classes}
 Let $L_c$ be a client library and $L_s$ be a server library. Let $c_1$ and $c_2$ be classes implemented in $L_c$, such that $\verb|R|(c_1, L_s) \cap \verb|R|(c_2, L_s) = \emptyset$. Let $c'$ be a class such that $c_1 + c_2 = c'$. Therefore, $\verb|R|(c_1, L_s) + \verb|R|(c_2, L_s) = \verb|R|(c', L_s)$. Let $L_c'$ be a client library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. We assume that the metric $\verb|AC|$ does not fulfill property \textit{Merging of unconnected classes}.
 
 Therefore, $\verb|AC|(L_c, L_s) \neq \verb|AC|(L_c', L_s)$. According to property \textit{Merging of classes}, it cannot happen that $\verb|AC|(L_c, L_s) < \verb|AC|(L_c', L_s)$. Therefore, $\verb|AC|(L_c, L_s) > \verb|AC|(L_c', L_s)$. The only way this is if there is an attribute of type $c_s$ declared in $c_1$ or $c_2$ and implemented in $L_s$, such that is not included in $c'$. This creates a contradition with the initial affirmation that $\verb|R|(c_1, L_s) + \verb|R|(c_2, L_s) = \verb|R|(c', L_s)$.
@@ -322,7 +321,7 @@ In the set of metrics reviewed by Briand et al. \cite{briand1999unified}, there 
 
 Therefore, both metrics \#3 and \#4 are different from those reviewed by Briand et al. \cite{briand1999unified}.
 
-\subsubsection{Concepts related to transitive dependencies}\improvement{should this go in background instead?}
+\subsubsection{Concepts related to transitive dependencies}
 Other factors have to be taken into account to define the coupling for transitive metrics, which are not needed for the direct metrics.
 
 \paragraph{Reachability}
@@ -342,10 +341,9 @@ The propagation represents how the impact of a change can spread across dependen
 \subsubsection{Formal definition}
 
 \paragraph{Metric \#3: Transitive method invocation coupling (\texttt{TMIC})}
-\todo{decide what to call each formula and whether to use indirect or transitive or something else}
 If we look at how the metric $\verb|MIC|$ is calculated, it could be summarized as follows: find all the methods in $L_s$ that are reachable from $L_c$. Then, for each one, count how many method calls exist in $L_c$ that reach this method, and sum up the results. The main difference between $\verb|MIC|$ and $\verb|TMIC|$ is that the calls in $L_c$ will not directly execute a reachable method of $L_s$. The execution of a method in $L_s$ is indirect since $L_s$ is not a direct dependency of $L_c$.
 
-Therefore, it is necessary to take into account the distance between $L_c$ and $L_s$. In addition, it could happen that $L_s$ is reachable from $L_c$ at different distances. For instance, if $L_s$ appeared twice in the dependency tree of $L_c$, this is is the case in Figure \ref{fig:dependency-tree} if we take \texttt{Lib1} as $L_c$ and \textit{Lib4} as $L_s$.
+Therefore, it is necessary to take into account the distance between $L_c$ and $L_s$. In addition, it could happen that $L_s$ is reachable from $L_c$ at different distances. For instance, if $L_s$ appeared twice in the dependency tree of $L_c$, this is is the case in Figure \ref{fig:dependency-tree} if we take \texttt{Lib1} as $L_c$ and \texttt{Lib4} as $L_s$.
 
 \begin{figure}[ht]
 \begin{center}
@@ -356,7 +354,7 @@ Therefore, it is necessary to take into account the distance between $L_c$ and $
 \end{figure}
 
 Therefore, the coupling will be measured for a certain $\verb|distance|$, denoted $\verb|TMICD|(L_c,L_s, \verb|distance|)$.
-The value of the metric $\verb|TMIC|(L_c,L_s)$, will be measured as follows. For each $\verb|distance|$ at which there is coupling between $L_c$ and $L_s$, sum up the coupling measured by $\verb|TMICD|(L_c,L_s, \verb|distance|)$, multiplied by a propagation factor ($\verb|PF|$) to the power of the $\verb|distance| - 1$. Where $\verb|PF| \in (0,1)$. We have designed the formula by taking the propagation factor to the power of $\verb|distance| - 1$, because this way, the coupling of the direct dependencies ($\verb|distance| = 1$) is not mitigated. Also, then when $\verb|distance| = 2$, which corresponds to the first level of transitivity, the coupling is mitigated only once.
+The value of the metric $\verb|TMIC|(L_c,L_s)$, will be measured as follows. For each $\verb|distance|$ at which there is coupling between $L_c$ and $L_s$, sum up the coupling measured by $\verb|TMICD|(L_c,L_s, \verb|distance|)$, multiplied by a propagation factor ($\verb|PF|$) to the power of the $\verb|distance| - 1$, where $\verb|PF| \in (0,1)$. We have designed the formula by taking the propagation factor to the power of $\verb|distance| - 1$, because this way, the coupling of the direct dependencies ($\verb|distance| = 1$) is not mitigated. Also, then when $\verb|distance| = 2$, which corresponds to the first level of transitivity, the coupling is mitigated only once.
 
 \begin{equation}
 \label{eqn:tmic}
@@ -387,21 +385,21 @@ The transitive aggregation coupling per distance ($\verb|TACD|(L_c, L_s, \verb|d
 
 \subsubsection{Theoretical validation: TMIC}
 
-\paragraph{Property 1: Nonnegativity}
+\paragraph{Nonnegativity}
 Assume that nonnegativity does not hold for metric $\verb|TMIC|$. Then, there exists a client library $L_c$, and a server library $L_s$ such that $\verb|TMIC|(L_c, L_s) < 0$. According to equation \ref{eqn:tmic}, there is a $\verb|distance|$ for which either $\verb|TMICD|(L_c,L_s, \verb|distance|) < 0$ or $\verb|PF|^{\verb|distance - 1|} < 0$. Since $\verb|distance|$ is a positive integer, and $\verb|PF| \in (0,1)$, the second option is not possible.
 
 Let's assume that $\verb|TMICD|(L_c,L_s, \verb|distance|) < 0$. Looking at the equation \ref{eqn:imic}, we see that there has to be at least one method, $rm$, from $L_s$ and reachable from $L_c$ at a certain distance ($rm \in \verb|RM|(L_c,L_s,\verb|distance|)$), such that $\verb|nIR|(rm,L_c) < 0$ or $\verb|nP|(rm, L_s) < 0$. Since $\verb|nP|(rm, L_s)$ corresponds to the number of polymorphic implementations of $rm$ in $L_s$, and we know that $rm$ belongs to $L_s$, then $\verb|nP|(rm, L_s) \geq 1$. Finally, for $\verb|nIR|(rm,L_c) < 0$ to be true, there should be less than zero method invocations in $L_c$ from which $rm$ is reachable. However, since $rm \in \verb|RM|(L_c,L_s,\verb|distance|)$, and $\verb|RM|(L_c,L_s,\verb|distance|)$ corresponds to the set of methods from $L_s$ that are reachable from $L_c$, we have that $\verb|nIR|(rm,L_c) \geq 1$, which constitutes a contradition.
 
 Therefore, the metric $\verb|TMIC|$ fulfills the property \textit{Nonnegativity}.
 
-\paragraph{Property 2: Null value}
+\paragraph{Null value}
 Assuming that $\verb|TMIC|$ does not fulfill property \textit{Null value}, there exists a client library $L_c$, and a server library $L_s$ such that $\verb|R|(L_c, L_s) = \emptyset$ and $\verb|TMIC|(L_c, L_s) \neq 0$.
 
 For $\verb|TMIC|(L_c, L_s) \neq 0$ to be true, according to equation \ref{eqn:imic}, there has to be a method $rm$ such that  $rm \in \verb|RM|(L_c,L_s,\verb|distance|)$. However, that would mean that $rm$ belongs to $L_s$, and is reachable from $L_c$, which constitutes a relation between $L_c$ and $L_s$, and contradicts $\verb|R|(L_c, L_s) = \emptyset$.
 
 Hence, the property \textit{null value} holds for metric $\verb|TMIC|$ .
 
-\paragraph{Property 3: Monotonicity}
+\paragraph{Monotonicity}
 Let $L_c$ be a client library containing class $c_c$, and $c_c'$ be a class resulting from adding relationships with the server library $L_s$ to class $c_c$. Then, $\verb|R|(c_c, L_s) \subseteq \verb|R|(c_c', L_s)$. Let $L_c'$ be a client library resulting from replacing class $c_c$ by $c_c'$ in $L_c$. Therefore, $\verb|R|(L_c, L_s) \subseteq \verb|R|(L_c', L_s)$.
 
 If we assume that $\verb|TMIC|$ does not fulfill property \textit{Monotonicity}, it would be true that $\verb|TMIC|(L_c, L_s) > \verb|TMIC|(L_c', L_s)$. Therefore, for a certain distance, we have that $\verb|TMICD|(L_c,L_s,\verb|distance|) > \verb|TMICD|(L_c',L_s,\verb|distance|)$, according to equation \ref{eqn:tmic}. According to the equation \ref{eqn:imic}, this opens two possibilities.
@@ -412,14 +410,14 @@ The second option is that for a certain $rm \in \verb|RM|(L_c,L_s,\verb|distance
 
 Therefore, property 3 \textit{Monotonicity} holds for $\verb|TMIC|$.
 
-\paragraph{Property 4: Merging of classes}
+\paragraph{Merging of classes}
 Let $L_c$ be a client library that includes the classes $c_1$ and $c_2$. Let $c'$ be a class such that $c_1 + c_2 = c'$ and $L_c'$ be a client library resulting from replacing $c_1$ and $c_2$ by $c'$ in $L_c$. If we assume that the property merging of classes does not hold for $\verb|TMIC|$, then $\verb|R|(c_1, L_s) \subseteq \verb|R|(c', L_s) \land \verb|R|(c_2, L_s) \subseteq \verb|R|(c', L_s)$ and $\verb|TMIC|(L_c, L_s) > \verb|TMIC|(L_c', L_s)$.
 
 Since the only difference between $L_c$ and $L_c'$ is the replacement of $c_1$ and $c_2$ by $c'$, there has to be a method invocation from $c_1$ or $c_2$ to a method $rm \in \verb|RM|(L_c,L_s,\verb|distance|)$, which is not included in $c'$. However, the method invocation has to be a relation included in $\verb|R|(c_1, L_s)$ or $\verb|R|(c_2, L_s)$, and we have that $\verb|R|(c_1, L_s) \subseteq \verb|R|(c', L_s) \land \verb|R|(c_2, L_s) \subseteq \verb|R|(c', L_s)$. Therefore it is a contradiction.
 
 Hence, the property \textit{Merging of classes} holds for $\verb|TMIC|$.
 
-\paragraph{Property 5: Merging of unconnected classes}
+\paragraph{Merging of unconnected classes}
 Let $L_c$ be a client library and $L_s$ be a server library. Let $c_1$ and $c_2$ be classes implemented in $L_c$, such that $\verb|R|(c_1, L_s) \cap \verb|R|(c_2, L_s) = \emptyset$. Let $c'$ be a class such that $c_1 + c_2 = c'$. Therefore, $\verb|R|(c_1, L_s) + \verb|R|(c_2, L_s) = \verb|R|(c', L_s)$. Let $L_c'$ be a client library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. We assume that the metric $\verb|TMIC|$ does not fulfill this property.
 
 Therefore, $\verb|TMIC|(L_c, L_s) \neq \verb|TMIC|(L_c', L_s)$. According to property \textit{Merging of classes}, $\verb|TMIC|(L_c, L_s) \geq \verb|TMIC|(L_c', L_s)$. Hence, $\verb|TMIC|(L_c, L_s) > \verb|TMIC|(L_c', L_s)$.
@@ -430,7 +428,7 @@ We conclude that $\verb|TMIC|$ fulfills property \textit{Merging of unconnected 
 
 \subsubsection{Theoretical validation: TAC}
 
-\paragraph{Property 1: Nonnegativity}
+\paragraph{Nonnegativity}
 Assuming that nonnegativity does not hold for metric $\verb|TAC|$, there exists a client library $L_c$, and a server library $L_s$ such that $\verb|TAC|(L_c, L_s) < 0$. In line with equation \ref{eqn:tac}, there is a $\verb|distance|$ for which two things can happen. First, $\verb|PF|^{\verb|distance| - 1} < 0$. However, since $\verb|distance|$ is a positive integer, and $\verb|PF| \in (0,1)$, this is not possible.
 
 The second option is that $\verb|TACD|(L_c,L_s, \verb|distance|) < 0$. Looking at the equation \ref{eqn:iac}, we see that there has to be at least one class, $rc \in \verb|RC|(L_c,L_s,\verb|distance|)$, that belongs to $L_s$ and is reachable from $L_c$, such that $\verb|nFR|(rc,L_c) < 0$ or $\verb|nDC|(rm, L_s) < 0$. $\verb|nDC|(rm, L_s)$ is the number of descendants of $rc$ in $L_s$. As we know that $rc$ belongs to $L_s$, we have that $\verb|nDC|(rm, L_s) \geq 1$.
@@ -439,14 +437,14 @@ Finally, if $\verb|nFR|(rc,L_c) < 0$ is true, there are less than zero field dec
 
 Therefore, the property \textit{Nonnegativity} holds for metric $\verb|TAC|$.
 
-\paragraph{Property 2: Null value}
+\paragraph{Null value}
 Let's assume that $\verb|TAC|$ does not fulfill property \textit{Null value}. Therefore, there exists a client library $L_c$, and a server library $L_s$ such that $\verb|R|(L_c, L_s) = \emptyset$ and $\verb|TAC|(L_c, L_s) \neq 0$.
 
 If $\verb|TAC|(L_c, L_s) \neq 0$ then, as stated in equation \ref{eqn:iac}, there has to be a class $rc$ such that  $rc \in \verb|RC|(L_c,L_s,\verb|distance|)$. However, if $rc \in \verb|RC|(L_c,L_s,\verb|distance|)$, then $rc$ belongs to $L_s$, and is reachable from $L_c$. This creates a relation between $L_c$ and $L_s$, and therefore contradicts $\verb|R|(L_c, L_s) = \emptyset$.
 
 In conclusion, the property \textit{Null value} holds for metric $\verb|TAC|$.
 
-\paragraph{Property 3: Monotonicity}
+\paragraph{Monotonicity}
 Assuming that property \textit{Monotonicity} does not hold for metric $\verb|TAC|$, let $L_c$ be a client library containing class $c_c$, and $L_s$ be a server library. Also, let $c_c'$ be the resulting class of adding new relationships with $L_s$ to class $c_c$. Then, $\verb|R|(c_c, L_s) \subseteq \verb|R|(c_c', L_s)$. Let $L_c'$ be the client library resulting from replacing class $c_c$ by $c_c'$ in $L_c$. Therefore, $\verb|R|(L_c, L_s) \subseteq \verb|R|(L_c', L_s)$.
 
 Since $\verb|TAC|$ does not fulfill property \textit{Monotonicity}, we have that $\verb|TAC|(L_c, L_s) > \verb|TAC|(L_c', L_s)$. Hence, for a certain distance, it is true that $\verb|TACD|(L_c,L_s,\verb|distance|) > \verb|TACD|(L_c',L_s,\verb|distance|)$, according to equation \ref{eqn:tac}. As equation \ref{eqn:iac} indicates, this can be true in two cases.
@@ -458,14 +456,14 @@ Therefore, the last option is that there is a class $rc \in \verb|RC|(L_c,L_s,\v
 
 Therefore, property \textit{Monotonicity} holds for $\verb|TAC|$.
 
-\paragraph{Property 4: Merging of classes}
+\paragraph{Merging of classes}
 Let $L_c$ be a client library, and let classes $c_1$ and $c_2$ be classes implemented in $L_c$. Also, let $c'$, created as follows $c' = c_1 + c_2$, and $L_c'$ be a client library based on $L_c$ in which $c_1$ and $c_2$ have been replaced by $c'$. Assuming \textit{merging of classes} does not hold for $\verb|TAC|$, we have that $\verb|R|(c_1, L_s) \subseteq \verb|R|(c', L_s) \land \verb|R|(c_2, L_s) \subseteq \verb|R|(c', L_s) \land \verb|TAC|(L_c, L_s) > \verb|TAC|(L_c', L_s)$.
 
 $L_c$ and $L_c'$ are only different in the replacement of $c_1$ and $c_2$ by $c'$. Hence, there has to be a field declaration from $c_1$ or $c_2$ which reaches a class $rc \in \verb|RC|(L_c,L_s,\verb|distance|)$, and is not found in $c'$. However, the reachability through a field declaration is a relation included in $\verb|R|(c_1, L_s)$ or $\verb|R|(c_2, L_s)$, and we have that $\verb|R|(c_1, L_s) \subseteq \verb|R|(c', L_s) \land \verb|R|(c_2, L_s) \subseteq \verb|R|(c', L_s)$, which constitutes a contradiction.
 
 Therefore, $\verb|TAC|$ fulfills property \textit{Merging of classes}.
 
-\paragraph{Property 5: Merging of unconnected classes}
+\paragraph{Merging of unconnected classes}
 Let $L_c$ and $L_s$ be a client and a server library respecively. Let $c_1$ and $c_2$ be classes implemented in $L_c$, such that $\verb|R|(c_1, L_s) \cap \verb|R|(c_2, L_s) = \emptyset$. Let $c'$ defined as $c' = c_1 + c_2$. Hence, $\verb|R|(c_1, L_s) + \verb|R|(c_2, L_s) = \verb|R|(c', L_s)$. Let $L_c'$ be a client library which is the result of replacing $c_1$ and $c_2$ by $c'$ in $L_c$.
 
 Assume that the $\verb|TAC|$ does not fulfill \textit{Merging of unconnected classes}. This means that $\verb|TAC|(L_c, L_s) \neq \verb|TAC|(L_c', L_s)$. Since $\verb|TAC|$ has the property \textit{Merging of classes}, we know that $\verb|TAC|(L_c, L_s) \geq \verb|TAC|(L_c', L_s)$, which leaves $\verb|TAC|(L_c, L_s) > \verb|TAC|(L_c', L_s)$.
@@ -475,18 +473,17 @@ Then, there exists a field declaration in $c_1$ or $c_2$ which reaches a class i
 Therefore, the metric $\verb|TAC|$ fulfills property \textit{Merging of unconnected classes}.
 
 \section{Measuring coverage of the dependency}\label{sec:coverageMetrics}
-\unsure{Should I talk about usage or maybe about coverage?}
 The metrics presented in this section measure the dependencies from a different perspective. Instead of measuring import coupling between the client library and the server library, we look at how much of the server library is used by the client library.
 
 \unsure{Maybe explain why? To know if that library is really necessary, or only a submodule is needed, to see if there is another library that offers only the functionality that you use, to know which is the probability that a breaking change affects your code...}
 
-\subsection{Definition of usage}\label{subsect:usage-definition}
-Just as with the coupling metrics, it is necessary to define the characteristics of the user that will be measured. In this case, there is no framework indicating which are the relevant characteristics to define, and with which criteria.
+\subsection{Definition of coverage}\label{subsect:usage-definition}
+Just as with the coupling metrics, it is necessary to define the characteristics of the coverage that will be measured. In this case, there is no framework indicating which are the relevant characteristics to define, and with which criteria.
 
-Therefore, based on the criteria discussed for the definition of coupling, we have created the list of the criterion applied in the usage of a dependency.
+Therefore, based on the criteria discussed for the definition of coupling, we have created the list of the criterion applied in the coverage of a dependency.
 
 \paragraph{Type of connection}
-For these metrics, since it is not about coupling, but about how much of the server library is used by the client library, the metrics will not be focused solely on one type of connection. Instead, we will consider every type of connection as usage.
+For these metrics, since it is not about coupling, but about how much of the server library is used by the client library, the metrics will not be focused solely on one type of connection. Instead, we will consider every type of connection in the measurement of coverage.
 
 The types of connections discussed previously (see section \ref{subsect:defCoupling}) are some of the most common types of connection. Nevertheless, there are others which are also considered.
 
@@ -501,33 +498,34 @@ Given class \textit{a} and class \textit{b}...
 \end{itemize}
 
 \paragraph{Granularity}
-In this case, we have to define a unit to measure which percentage of the server library units are being used by the client library. According to the type of connections, two different kinds of units can be used: methods and classes. Therefore, we define two metrics, one for each of the units. Nevertheless, the metrics' aggregation level is still at the library level since the goal is to measure the percentage of units used.
+In this case, we have to define a unit to measure which percentage of the server library units are being used by the client library. According to the type of connections, two different kinds of units can be used: methods and classes. Therefore, we define two metrics, one for each of the units. Nevertheless, the metrics' aggregation level is still at the library level since the goal is to measure the percentage of reachable units.
 
 The last aspect of the granularity to consider is how the connections are evaluated. Since the goal is not to know how many times a connection occurs, we count the distinct items at the other end of the connections.
 
 \paragraph{Direct \& Indirect}
-Finally, we have to decide whether to consider indirect usage or not. Since we want to know the total percentage of usage of the server library, we will consider both the units that are directly used and those indirectly used.
+Finally, we have to decide whether to consider indirect usage or not. Since we want to know the total percentage of coverage of the server library, we will consider both the units that are directly used and those indirectly used.
 
 \paragraph{Result}
+The metrics resulting from the description of coverage, can be found in Table \ref{table:usage-metric-characteristics}.
 
-\begin{table}[h]
+\begin{table}[ht!]
     \begin{center}
     \begin{tabular}{|l|l|l|l|l|l|}
     \hline
     \rot{Metric} & \rot{Type of connection} & \rot{Unit of measure} & \rot{Aggregation level} & \rot{Counting connections    } & \rot{Direct/Indirect} \\ \hline
-    \% Used classes & All & Class   & Library & Distinct items & Both \\
-    \% Used methods & All & Method  & Library & Distinct items & Both \\
+    \% Reachable classes & All & Class   & Library & Distinct items & Both \\
+    \% Reachable methods & All & Method  & Library & Distinct items & Both \\
     \hline
     \end{tabular}
     \end{center}
-    \caption{Criteria of the set of metrics}
+    \caption{Characteristics of the coverage metrics}
     \label{table:usage-metric-characteristics}
 \end{table}
 
 \subsection{Formal definition of the metrics}
 
 \subsubsection{Percentage of reachable classes}
-This metric calculates the percentage of usage of a dependency using classes as the unit of measure. Therefore, it calculates the cardinality of the set of classes implemented in the server library ($L_s$) that are reachable from the code of the client library ($L_c$), denoted $\verb|RC|(L_c, L_s)$. The number of reachable classes is divided by the total number of classes in $L_s$.
+This metric calculates the percentage of coverage of a dependency using classes as the unit of measure. Therefore, it calculates the cardinality of the set of classes implemented in the server library ($L_s$) that are reachable from the code of the client library ($L_c$), denoted $\verb|RC|(L_c, L_s)$. The number of reachable classes is divided by the total number of classes in $L_s$.
 
 As explained in section \ref{subsect:usage-definition}, all types of connections are considered for this metric. Hence, $\verb|RC|(L_c, L_s)$ includes all the classes reachable through any of the types of connection or a combination of these.
 
@@ -559,10 +557,10 @@ The properties chosen for these metrics are the ones that the aspect being measu
   \item \textbf{Monotonicity:} It is expected that if more usage is added from the client library to the server library, the metric value does not decrease.
 \end{enumerate}
 
-\paragraph{Property 1: Noncoarseness}
-Let's take the two cases in Figure \ref{fig:example-noncoarseness-reachable-classes}. In the first case, \textit{Lib1} would be the client library, and \textit{Lib2} the server library. In the example, we can see that the number of classes in the server library is: $|\verb|C|(Lib2)| = 3$. Also, the number of classes of the server library, reached by the client library is $|RM(Lib1, Lib2)| = 2$. Therefore, following the equation \ref{eqn:reachable-classes}, we have that \(\verb|%ReachableClasses|(Lib1, Lib2) = \frac{2}{3} = 0.66\).
+\paragraph{Noncoarseness}
+Let's take the two cases in Figure \ref{fig:example-noncoarseness-reachable-classes}. In the first case, \texttt{Lib1} would be the client library, and \texttt{Lib2} the server library. In the example, we can see that the number of classes in the server library is: $|\verb|C|(Lib2)| = 3$. Also, the number of classes of the server library, reached by the client library is $|RM(Lib1, Lib2)| = 2$. Therefore, following the equation \ref{eqn:reachable-classes}, we have that \(\verb|%ReachableClasses|(Lib1, Lib2) = \frac{2}{3} = 0.66\).
 
-In the second case in Figure \ref{fig:example-noncoarseness-reachable-classes} we take \textit{Lib3} as the client library, and \textit{Lib4} as the server library. Therefore, we have $|\verb|C|(Lib4)| = 3$ and $|RM(Lib3, Lib4)| = 3$, which means that the value of the metric is  \(\verb|%ReachableClasses|(Lib3, Lib4) = \frac{3}{3} = 1\).
+In the second case in Figure \ref{fig:example-noncoarseness-reachable-classes} we take \texttt{Lib3} as the client library, and \texttt{Lib4} as the server library. Therefore, we have $|\verb|C|(Lib4)| = 3$ and $|RM(Lib3, Lib4)| = 3$, which means that the value of the metric is  \(\verb|%ReachableClasses|(Lib3, Lib4) = \frac{3}{3} = 1\).
 
 Therefore, two different libraries can have different values for \(\verb|%ReachableClasses|\), which means that this metric fulfills the property \textit{Noncoarseness}.
 
@@ -574,10 +572,10 @@ Therefore, two different libraries can have different values for \(\verb|%Reacha
 \end{center}
 \end{figure}
 
-\paragraph{Property 2: Nonuniqueness}
-Following the first example in Figure \ref{fig:example-nonuniqueness-reachable-classes} we take \textit{Lib1} as the client library, and \textit{Lib2} the server library. Therefore, we can see that $|\verb|C|(Lib2)| = 3$, and $|RM(Lib1, Lib2)| = 2$. Hence, calculating the metric using equation \ref{eqn:reachable-classes}, we obtain \(\verb|%ReachableClasses|(Lib1, Lib2) = \frac{2}{3} = 0.66\).
+\paragraph{Nonuniqueness}
+Following the first example in Figure \ref{fig:example-nonuniqueness-reachable-classes} we take \texttt{Lib1} as the client library, and \texttt{Lib2} the server library. Therefore, we can see that $|\verb|C|(Lib2)| = 3$, and $|RM(Lib1, Lib2)| = 2$. Hence, calculating the metric using equation \ref{eqn:reachable-classes}, we obtain \(\verb|%ReachableClasses|(Lib1, Lib2) = \frac{2}{3} = 0.66\).
 
-In the second case in Figure \ref{fig:example-noncoarseness-reachable-classes} we have \textit{Lib3} as the client library, and \textit{Lib4} as the server library. Looking at the example, we know that $|\verb|C|(Lib4)| = 3$ and $|RM(Lib3, Lib4)| = 2$. Therefore, the metric for these two libraries is \(\verb|%ReachableClasses|(Lib3, Lib4) = \frac{2}{3} = 0.66\).
+In the second case in Figure \ref{fig:example-noncoarseness-reachable-classes} we have \texttt{Lib3} as the client library, and \texttt{Lib4} as the server library. Looking at the example, we know that $|\verb|C|(Lib4)| = 3$ and $|RM(Lib3, Lib4)| = 2$. Therefore, the metric for these two libraries is \(\verb|%ReachableClasses|(Lib3, Lib4) = \frac{2}{3} = 0.66\).
 
 Therefore, two different libraries can have the same value for metric \(\verb|%ReachableClasses|\). Hence, the property \textit{Nonuniqueness} holds for this metric.
 
@@ -589,27 +587,25 @@ Therefore, two different libraries can have the same value for metric \(\verb|%R
 \end{center}
 \end{figure}
 
-\paragraph{Property 3: Nonnegativity}
+\paragraph{Nonnegativity}
 Assume that the metric \(\verb|%ReachableClasses|\) does not fulfill this property.
 Let $L_c$ be a client library, and $L_s$ be a server library, such that \(\verb|%ReachableClasses|(L_c, L_s) < 0\). Then, we have that $|RC(L_c, L_s)| < 0 \oplus |C(L_s)| < 0$. This means that the cardinality of a set is negative, which is not true by definition. Therefore, it is a contradition.
 
 Hence, the metric fulfills property \textit{Nonnegativity}.
 
-\paragraph{Property 4: Null value}
+\paragraph{Null value}
 Let $L_c$ be a client library, and $L_s$ be a server library. There is no usage in $L_c$ of library $L_s$, $RC(L_c, L_s) = \emptyset$. Assuming that the property null value does not hold for \(\verb|%ReachableClasses|\), then \(\verb|%ReachableClasses|(L_c, L_s) \neq 0\). Since this metric has the property nonnegativity, then  \(\verb|%ReachableClasses|(L_c, L_s) > 0\).
 Therefore, $\frac{|RC(L_c, L_s)|}{|C(L_s)|} > 0$ and $|RC(L_c, L_s)| > 0$, which contradicts that $RC(L_c, L_s) = \emptyset$.
 
 Therefore, the property \textit{Null value} holds for metric \(\verb|%ReachableClasses|\).
 
-\paragraph{Property 5: Monotonicity}
+\paragraph{Monotonicity}
 Having $L_c$ a client library, and $L_s$ a server library. Let $c_c$ be a class in $L_c$, and $c_c'$ a class created as the result of adding more connections to $L_s$ in $c_c$. Then, let $L_c'$ be a client library resulting of replacing $c_c$ by $c_c'$ in $L_c$. Assuming that the property does not hold, we would have that \(\verb|%ReachableClasses|(L_c, L_s) > \verb|%ReachableClasses|(L_c', L_s)\).
 Therefore, since $|C(L_s)|$ is the same in both cases because $L_s$ does not change, we have that $|RC(L_c, L_s)| > |RC(L_c', L_s)|$. This means that there is some $c_s$ in $L_s$, which is reachable from $c_c$ and not reachable from $c_c'$. However, $c_c'$ contains all the connections between $c_c$ and $L_s$, and that is therefore not possible.
 
 In conclusion, the metric \(\verb|%ReachableClasses|\) has the property \textit{Monotonicity}.
 
 \section{Measuring impact per class}
-\unsure{I'm not sure if impact is really the word I want to use here}
-\unsure{Also, I'm not sure about the level of detail needed for these metrics, since it seems pretty simple. Let me know if there is something I should remove or add. Or if I should not treat these as metrics in the same way as the others}
 
 In this case, the goal is to give a bit more low-level information on the impact of the dependency on the client library. It can be useful for a developer or a maintainer to know exactly which the dependency can impact parts of your code. For example, if there is a breaking change, or if the library with a dependency has to be replaced.
 
@@ -627,7 +623,7 @@ First, the \textit{method invocation}, since it is the only type of connection t
 
 As the title of the section indicates, these metrics are measuring the impact \textit{per class}. Hence, the aggregation level of the metric is the \textit{class} level for the client library. In other words, we calculate the metric taking a class of the client library and a server library.
 
-The way the connections are counted for these metrics is not considered in the original list created by Briand et al. \cite{briand1999unified}. Instead, it is counted the number of places of the client class where a connection is originated. For instance, let's take \textit{Lib1} from Figure \ref{fig:example-impact-per-class} as the client library, and \textit{Lib3} as the server library. From \textit{Class1} to \textit{Lib3} there are four different connections, but there are only two origins of these connections. The same happens with \textit{Class2}, in which there are two connections with \textit{Lib3}, but only one origin.
+The way the connections are counted for these metrics is not considered in the original list created by Briand et al. \cite{briand1999unified}. Instead, it is counted the number of places of the client class where a connection is originated. For instance, let's take \texttt{Lib1} from Figure \ref{fig:example-impact-per-class} as the client library, and \texttt{Lib3} as the server library. From \texttt{Class1} to \texttt{Lib3} there are four different connections, but there are only two origins of these connections. The same happens with \texttt{Class2}, in which there are two connections with \texttt{Lib3}, but only one origin.
 
 \begin{figure}[ht]
 \begin{center}
@@ -690,10 +686,10 @@ The properties chosen in this case are the same as the ones chosen in Section \r
   \item \textbf{Monotonicity:} It is expected that if more usage is added from the client class to the server library, the metric value does not decrease.
 \end{enumerate}
 
-\paragraph{Property 1: Noncoarseness}
-Following the first case in Figure \ref{fig:example-noncoarseness-method-invocation}, we take textit{Lib1} as the client library, \textit{Lib2} as the server library, and the only class in \textit{Lib1} as $c_c$. We can see that the class has only one method, for which $|\verb|nIR|(Method, Lib2)| = 1$. Therefore, following the equation \ref{eqn:mi}, we have that $\verb|#MethodInvocations|(c_c, Lib2) = 1$.
+\paragraph{Noncoarseness}
+Following the first case in Figure \ref{fig:example-noncoarseness-method-invocation}, we take textit{Lib1} as the client library, \texttt{Lib2} as the server library, and the only class in \texttt{Lib1} as $c_c$. We can see that the class has only one method, for which $|\verb|nIR|(Method, Lib2)| = 1$. Following the equation \ref{eqn:mi}, $\verb|#MethodInvocations|(c_c, Lib2) = 1$.
 
-Now we move to the second case in Figure \ref{fig:example-noncoarseness-method-invocation}. In this case we take \textit{Lib3} as the client library, \textit{Lib4} as the server library, and the class in \textit{Lib3} as $c_c$. $c_c$ has only one method, for which $|\verb|nIR|(Method, Lib4)| = 3$. Hence, $\verb|#MethodInvocations|(c_c, Lib4) = 3$.
+Now we move to the second case in Figure \ref{fig:example-noncoarseness-method-invocation}. In this case we take \texttt{Lib3} as the client library, \texttt{Lib4} as the server library, and the class in \texttt{Lib3} as $c_c$. Class $c_c$ has only one method, for which $|\verb|nIR|(Method, Lib4)| = 3$. Hence, $\verb|#MethodInvocations|(c_c, Lib4) = 3$.
 
 In conclusion, two different classes can have different values for metric $\verb|#MethodInvocations|$, which fulfills property \textit{Noncoarseness}.
 
@@ -705,10 +701,10 @@ In conclusion, two different classes can have different values for metric $\verb
 \end{center}
 \end{figure}
 
-\paragraph{Property 2: Nonuniqueness}
-Now we look at Figure \ref{fig:example-nonuniqueness-method-invocation}, and in the first example we take \textit{Lib1} as the client library, \textit{Lib2} the server library, and the class in \textit{Lib1} as the client class, $c_c$. The client class has only one method, for which $|\verb|nIR|(Method, Lib2)| = 2$. Therefore, the value of the metric in this case, is as follows, $\verb|#MethodInvocations|(c_c, Lib2) = 2$.
+\paragraph{Nonuniqueness}
+Now we look at Figure \ref{fig:example-nonuniqueness-method-invocation}, and in the first example we take \texttt{Lib1} as the client library, \texttt{Lib2} the server library, and the class in \texttt{Lib1} as the client class, $c_c$. The client class has only one method, for which $|\verb|nIR|(Method, Lib2)| = 2$. Therefore, $\verb|#MethodInvocations|(c_c, Lib2) = 2$.
 
-Focusing on the second case in Figure \ref{fig:example-nonuniqueness-method-invocation}, we have that \textit{Lib3} is the client library and \textit{Lib4} the server library. Also, the client class, $c_c$, is the only class in \textit{Lib3}. We can see that there is one method in $c_c$, which calls \textit{Lib4} a total of 2 times, $|\verb|nIR|(Method, Lib4)| = 2$. Hence, $\verb|#MethodInvocations|(c_c, Lib4) = 2$.
+Focusing on the second case in Figure \ref{fig:example-nonuniqueness-method-invocation}, we have that \texttt{Lib3} is the client library and \texttt{Lib4} the server library. Also, the client class, $c_c$, is the only class in \texttt{Lib3}. We can see that there is one method in $c_c$, which calls \texttt{Lib4} a total of 2 times, $|\verb|nIR|(Method, Lib4)| = 2$. Hence, $\verb|#MethodInvocations|(c_c, Lib4) = 2$.
 
 With this example, we see that two different classes can have the same value for $\verb|#MethodInvocations|$. Therefore, this metric fulfills the property \textit{Nonuniqueness}.
 
@@ -720,19 +716,19 @@ With this example, we see that two different classes can have the same value for
 \end{center}
 \end{figure}
 
-\paragraph{Property 3: Nonnegativity}
+\paragraph{Nonnegativity}
 If the property does not hold for $\verb|#MethodInvocations|$, there exists a client library $L_c$ containing $c_c$ and a server library $L_s$, such that $\verb|#MethodInvocations|(c_c, L_s)
-< 0$. Therefore, exsists a method $m_c \in \verb|M|(c_c)$, such that $|\verb|nIR|(m_c, L_s)| < 0$. However, the cardinality of a set cannot be negative by definition, and therefore it is a contradition.
+< 0$. Therefore, a method $m_c \in \verb|M|(c_c)$, exists such that $|\verb|nIR|(m_c, L_s)| < 0$. However, the cardinality of a set cannot be negative by definition, and therefore it is a contradition.
 
 Hence, the property \textit{Nonnegativity} holds for metric $\verb|#MethodInvocations|$.
 
-\paragraph{Property 4: Null value}
+\paragraph{Null value}
 Assume that the metric does not fulfill property null value. Let $L_c$ and $L_s$ be a client library and a server library, adn $c_c$ a class in $L_c$. Assume that $c_c$ does not have any connection to $L_s$, and given that the metric does not fulfill \textit{null value}, $\verb|#MethodInvocations|(c_c, L_s) \neq 0$. From the previous proof we know that $\verb|#MethodInvocations|(c_c, L_s) \geq 0$, then  $\verb|#MethodInvocations|(c_c, L_s) > 0$.
 Hence, there is a method $m_c \in \verb|M|(c_c)$ such that $|\verb|nIR|(m_c, L_s)| > 0$. Since $\verb|nIR|(m_c, L_s)$ is the set of method invocations in $c_c$ that reach $L_s$, there has to be a connection between $c_c$ and $L_s$, which constitutes a contradition.
 
 Therefore, the metric fulfills property \textit{Null value}.
 
-\paragraph{Property 5: Monotonicity}
+\paragraph{Monotonicity}
 Let $L_c$ be a client library, and let $L_s$ be a server library. Given a class $c_c$ in $L_c$, we define $c_c'$ as a copy $c_c$ with added connections to $L_s$. Let $L_c'$ be a client library identical to $L_c$,. but in which $c_c$ has been replaced by $c_c'$. Assume that metric $\verb|#MethodInvocations|$ does not fulfill \textit{Monotonicity}. Therefore, $\verb|#MethodInvocations|(c_c, L_s) > \verb|#MethodInvocations|(c_c, L_s)$.
 Then, for a given $m_c \in \verb|M|(c_c)$, and its copy in $c_c'$, $m_c' \in \verb|M|(c_c')$, such that $|\verb|nIR|(m_c, L_s)| > |\verb|nIR|(m_c', L_s)|$. This means that $m_c$ contains a method invocation which reaches $L_s$ and it is not included in $m_c'$. However, all the method invocations contained in $c_c$ are maintained in $c_c'$. Therefore, it is a contradition.
 
