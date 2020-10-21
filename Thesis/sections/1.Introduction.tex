@@ -68,12 +68,22 @@ Also, the research will include experiments. These experiments will be conducted
 Considering the current state of the art in the domain of this thesis project, the main contributions made by this research are the following:
 
 \begin{enumerate}
-	\item Defining a model for software dependencies, including both direct and transitive dependencies of a software product. The model includes modified coupling metrics to measure the coupling between two different software products, redefining the metrics' meaning and usage.
-  \blankls
+  \item \textbf{Model for software dependencies:}
 
-	\item Evaluation and validation of the proposed metrics and model, through a proof-of-concept tool, to calculate the metrics.
+    We have created a model for both direct and transitive software dependencies. It contains three types of metrics, which measure the dependency from a different point of view. In total, there are eight metrics in the model. For each of the metrics, we provide a formal definition and a property-based theoretical validation.
 
-  \item A proposed visualization of the model, validated through expert review.
+  	\item \textbf{Proof-of-Concept tool:}
+
+    To complement the model and be able to evaluate it, we create a proof-of-concept implementation. The tool can calculate all the model metrics for the dependency tree of a given library by using Java bytecode analysis. To calculate the metrics for each library in the dependency tree, all the libraries have to be available in the \textit{Maven Central Repository}.
+
+    The proof-of-concept includes a front-end which contains three visualizations of the model: a tree graph, a table, and a class distribution bar-chart.
+
+    \item \textbf{Validation:}
+
+    To validate the other contributions, we have conducted five experiments. First, we have compared our results with the results of the research by Soto-Valero et al. \cite{soto2020comprehensive}. For the first type of metrics, the coupling metrics, we have evaluated their significance and created a benchmark. Then, for the coupling metrics for transitive dependencies, which have a propagation factor, we have conducted a sensitivity analysis of this factor.
+
+    Finally, to validate the visualizations as well as the actionability and clarity of all the metrics, we have conducted expert interviews. We interviewed 15 professional developers who used the tool during the interview, considering certain usage scenarios.
+    
 \end{enumerate}
 
 \section{Outline}
