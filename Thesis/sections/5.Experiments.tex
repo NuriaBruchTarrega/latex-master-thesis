@@ -10,7 +10,7 @@ Soto-Valero et al. perform a qualitative analysis, in which they analyze 31 libr
 
 With the information in the paper, we collect the \textit{GroupId} and \textit{ArtifactId} of the 31 artifacts. Out of the 31, 2 could not be found in the \textit{Maven Repository Central}. For the other 29, the \textit{version} to use in the experiment is determined by finding the last version released before the experiment by Soto-Valero et al. was conducted - November of 2019.
 
-Of the 29 artifacts, the PoC could not use 13 because either the artifact itself or some dependency could not be downloaded from \textit{Maven Central}. Therefore, we have a set of 16 libraries to analyze and compare the results with the results obtained by Soto-Valero et al. The table containing the identifiers of the artifacts used in this experiment can be found in Table \ref{table:comparison-artifacts}.
+Of the 29 artifacts, the PoC could not use 13 because either the artifact itself or some dependency could not be downloaded from \textit{Maven Central}. Therefore, we have a set of 16 libraries to analyze and compare the results with the results obtained by Soto-Valero et al. Table \ref{table:comparison-artifacts} contains the identifiers of the artifacts used in this experiment.
 
 \begin{table}[ht!]
     \begin{center}
@@ -106,15 +106,14 @@ Next, we take a look at the detection of used dependencies. There are 9 cases in
 
 The goal of this experiment is to validate if the coupling metrics designed in the model, namely \texttt{MIC}, \texttt{AC}, \texttt{TMIC}, and \texttt{TAC}, are a good indicator of the usage of the dependencies by the clients. As a partial validation of the metrics' significance, we compare it with the results gathered from the usage metrics. We want to know how often a dependency is used, either by using classes or methods, and it is detected as uncoupled by the coupling metrics. This way, we know if there are many cases in which a dependency is only used with a type of connection other than method invocation or field declaration.
 
-\unsure{I'm not sure if this is the right place for the explanation of the failed data recollection, or if it is too long}
-
+\paragraph{Data collection}
 The original idea was to measure real-world data about how the clients update the dependencies and their impact on the code. We could then have seen the correlation of this impact with the degree of dependency measured with the coupling metrics. Different approaches were taken to obtain real-world data.
 
-First, we tried to find in GitHub commits in which there had been an update of a dependency. However, the search engine in GitHub does not allow to filter the results by the language of the commit. Therefore, most of the results obtained were not useful. Also, most of the updates are only patches, which require only a bump in the version number of the declared dependency.
+First, we tried to find GitHub commits in which there had been an update of a dependency. However, the search engine in GitHub does not allow to filter the results by the language of the commit. Therefore, most of the results obtained were not useful. Also, most of the updates are only patches, which require only a bump in the version number of the declared dependency.
 
-Based on these findings, the second approach we took was to look for updates that contained breaking changes. To find the libraries that had these types of changes and versions, we used the \textit{Maven Dependency Dataset} \cite{Raemaekers2013}. Raemaekers et al. used this dataset to analyze the use of semantic versioning and the possible impact of breaking changes \cite{Raemaekers2017}. It is possible to query this dataset to obtain libraries with breaking changes, with version numbers and other libraries that depended on these. However, we need to find the commit of the client library in which the update containing a breaking change was made, and it is not always possible. We considered some of the requirements to be able to analyze a dependency with the PoC. For instance, we need all the dependencies of the client library available in Maven, and testing dependencies cannot be used since they are not analyzed by the tool. Considering all these requirements, obtaining enough data for the experiment from the \textit{Maven Dependency Dataset} on time, since all these checks had to be done manually.
+Based on these findings, the second approach we took was to look for updates that contained breaking changes. To find the libraries that had these types of changes and versions, we used the \textit{Maven Dependency Dataset} \cite{Raemaekers2013}. Raemaekers et al. used this dataset to analyze the use of semantic versioning and the possible impact of breaking changes \cite{Raemaekers2017}. It is possible to query this dataset to obtain libraries with breaking changes, with version numbers and other libraries that depended on these. However, we need to find the commit of the client library in which the update containing a breaking change was made, and it is not always possible. We considered some of the requirements to be able to analyze a dependency with the PoC. For instance, we need all the dependencies of the client library available in Maven, and testing dependencies cannot be used since they are not analyzed by the tool. Considering all these requirements, obtaining enough data for the experiment from the \textit{Maven Dependency Dataset} had to be done manually.
 
-Next, we contacted the first author of the paper \textit{"Why and How Java Developers Break APIs"} \cite{Brito2018}, which mines GitHub repositories to find possible breaking changes in APIs, to obtain the dataset of breaking changes created based on their findings. Brito, the author, shared the dataset with us. The dataset includes 24 commits containing breaking changes, which correspond to 19 different libraries. Out of the 25 commits, 12 are from Gradle libraries instead of Maven and cannot be used with the PoC. Besides, we could not find 4 of the commits in GitHub, and two others correspond to testing libraries, which are out of the scope of the analysis performed by the PoC. Therefore, there were only six breaking changes left, for which three the Maven artifact that these belong to had no dependants for which to do the analysis. The last three have only one dependant, and therefore is not possible to compare the impact of the breaking changes.
+Next, we contacted the first author of the paper \textit{"Why and How Java Developers Break APIs"} \cite{Brito2018}, which mines GitHub repositories to find possible breaking changes in APIs, to obtain the dataset of breaking changes created based on their findings. Brito, the author, shared the dataset with us. The dataset includes 24 commits containing breaking changes, which correspond to 19 different libraries. Out of the 25 commits, 12 are from Gradle libraries instead of Maven and cannot be used with the PoC. Besides, we could not find four of the commits in GitHub, and two others correspond to testing libraries, which are out of the scope of the analysis performed by the PoC. Therefore, there were only six breaking changes left, for which three the Maven artifact that these belong to had no dependants for which to do the analysis. The last three have only one dependant, and therefore is not possible to compare the impact of the breaking changes.
 
 Finally, we tried to manually search for deprecated libraries and other libraries that used them — however, similar problems where encountered. Finding commits which replaced a deprecated dependency and the client library and all the dependencies are available in \textit{Maven Central Repository}, is a manual task that, after multiple hours of work, gave no results.
 
@@ -153,7 +152,7 @@ To analyze more client libraries and, therefore, more dependencies, we extended 
   \item The artifact and all its dependencies can be obtained from the \textit{Maven Central Repository}.
 \end{itemize}
 
-\unsure{Should I show the exact content of the file? In case I should, should I do it in a Table here or in an appendix at the end of the document?}
+\todo{Show content of the file in appendix}
 
 \subsection{Results}
 
@@ -246,30 +245,30 @@ A \textit{Sensitivity Analysis} consists of analyzing how much an input variable
 
 To run this analysis, we have set up a new request in the API of the PoC. This request receives a list of Maven artifacts in a \textit{.txt} file (tab-delimited). The file includes three columns, containing for each artifact, the following information: \textit{group id}, \textit{artifact id}, and \textit{version}.
 
-The first step is to run the dependency model's calculation for each of the dependencies of the artifacts. Then, for each one of the transitive dependencies with coupling, we run the sensitivity analysis. Since the \textit{propagation factor} is a value in the range $(0,1)$, we calculate the value of the metrics incrementing the propagation factor by $0.01$ from $0.01$ to $0.99$.
+The first step is to run the dependency model's calculation for each of the dependencies of the artifacts. Then, for each one of the transitive dependencies with coupling, we run the sensitivity analysis. Since the \textit{propagation factor} is a value in the range $(0,1]$, we calculate the value of the metrics incrementing the propagation factor by $0.01$ from $0.01$ to $1$.
 
-We run this experiment with a randomly selected subset of the libraries used for the significance experiment. Then, out of the set of dependencies that can be used for the sensitivity analysis, we select a representative subset. This subset is chosen to have dependencies with different distances, and values measured at each distance. The dependencies used for the sensitivity analysis can be found in Table \ref{table:sensitivity-dependencies}.
+We run this experiment with a randomly selected subset of the libraries used for the significance experiment. Then, out of the set of dependencies that can be used for the sensitivity analysis, we select a representative subset of $15$ dependencies. This subset is chosen to have dependencies with different distances, and values measured at each distance. The dependencies used for the sensitivity analysis can be found in Table \ref{table:sensitivity-dependencies}.
 
 \begin{table}[ht!]
 \begin{center}
-\begin{tabularx}{\textwidth}{|X|X|}
+\begin{tabularx}{\textwidth}{|c|X|X|}
 \hline
-\textbf{Client library} & \textbf{Server library} \\ \hline
-org.asynchttpclient async-http-client 2.12.1 & io.netty netty-common 4.1.48.Final \\ \hline
-org.asynchttpclient async-http-client 2.12.1 & io.netty netty-buffer 4.1.48.Final \\ \hline
-org.easymock easymock 4.2 & org.hamcrest hamcrest-core 1.3 \\ \hline
-org.apache.maven maven-project 3.0-alpha-2 & org.codehaus.plexus plexus-classworlds 1.3 \\ \hline
-org.springframework.boot\newline spring-boot-autoconfigure 2.3.4.RELEASE & org.springframework\newline spring-core  5.2.9.RELEASE \\ \hline
-org.springframework.boot\newline spring-boot-autoconfigure 2.3.4.RELEASE & org.springframework\newline spring-jcl  5.2.9.RELEASE \\ \hline
-org.springframework.boot\newline spring-boot-autoconfigure 2.3.4.RELEASE & org.springframework\newline spring-beans  5.2.9.RELEASE \\ \hline
-org.eclipse.jetty jetty-server 11.0.0.beta1 & org.eclipse.jetty jetty-util 11.0.0.beta1 \\ \hline
-org.asynchttpclient async-http-client 2.12.1 & log4j log4j 1.2.17 \\ \hline
-org.alluxio alluxio-core-transport 2.3.0 & com.google.protobuf protobuf-javalite 3.11.0 \\ \hline
-fr.inria.gforge.spoon spoon-core 8.2.0 & org.eclipse.platform org.eclipse.osgi 3.16.0 \\ \hline
-fr.inria.gforge.spoon spoon-core 8.2.0 & org.eclipse.platform org.eclipse.equinox.preferences 3.8.0 \\ \hline
-fr.inria.gforge.spoon spoon-core 8.2.0 & org.eclipse.platform\newline org.eclipse.equinox.common 3.13.0 \\ \hline
-com.puppycrawl.tools checkstyle 8.36.2 & log4j log4j 1.2.17 \\ \hline
-com.puppycrawl.tools checkstyle 8.36.2 & org.apache.geronimo.specs\newline geronimo-jms 1.1\_spec\_1.0 \\ \hline
+\# &\textbf{Client library} & \textbf{Server library} \\ \hline
+1 & org.asynchttpclient async-http-client 2.12.1 & io.netty netty-common 4.1.48.Final \\ \hline
+2 & org.asynchttpclient async-http-client 2.12.1 & io.netty netty-buffer 4.1.48.Final \\ \hline
+3 & org.easymock easymock 4.2 & org.hamcrest hamcrest-core 1.3 \\ \hline
+4 & org.apache.maven maven-project 3.0-alpha-2 & org.codehaus.plexus plexus-classworlds 1.3 \\ \hline
+5 & org.springframework.boot\newline spring-boot-autoconfigure 2.3.4.RELEASE & org.springframework\newline spring-core  5.2.9.RELEASE \\ \hline
+6 & org.springframework.boot\newline spring-boot-autoconfigure 2.3.4.RELEASE & org.springframework\newline spring-jcl  5.2.9.RELEASE \\ \hline
+7 & org.springframework.boot\newline spring-boot-autoconfigure 2.3.4.RELEASE & org.springframework\newline spring-beans  5.2.9.RELEASE \\ \hline
+8 & org.eclipse.jetty jetty-server 11.0.0.beta1 & org.eclipse.jetty jetty-util 11.0.0.beta1 \\ \hline
+9 & org.asynchttpclient async-http-client 2.12.1 & log4j log4j 1.2.17 \\ \hline
+10 & org.alluxio alluxio-core-transport 2.3.0 & com.google.protobuf protobuf-javalite 3.11.0 \\ \hline
+11 & fr.inria.gforge.spoon spoon-core 8.2.0 & org.eclipse.platform org.eclipse.osgi 3.16.0 \\ \hline
+12 & fr.inria.gforge.spoon spoon-core 8.2.0 & org.eclipse.platform org.eclipse.equinox.preferences 3.8.0 \\ \hline
+13 & fr.inria.gforge.spoon spoon-core 8.2.0 & org.eclipse.platform\newline org.eclipse.equinox.common 3.13.0 \\ \hline
+14 & com.puppycrawl.tools checkstyle 8.36.2 & log4j log4j 1.2.17 \\ \hline
+15 & com.puppycrawl.tools checkstyle 8.36.2 & org.apache.geronimo.specs\newline geronimo-jms 1.1\_spec\_1.0 \\ \hline
 \end{tabularx}
 \end{center}
 \caption{Sensitivity analysis, list of dependencies used}
@@ -281,44 +280,46 @@ With the data obtained from running the experiment, we calculate the covariance 
 
 \begin{table}[ht!]
 \begin{center}
-\begin{tabular}{|l|l|}
+\begin{tabular}{|l|l|l|}
 \hline
-\textbf{TMIC Covariance} & \textbf{TAC Covariance} \\ \hline
-21.39853 & 7.740404 \\ \hline
-35.28688 & 4.461675 \\ \hline
-0.6733333 & 1.515 \\ \hline
-1.431675 & 0.6767 \\ \hline
-15.34022 & 2.278392 \\ \hline
-5.914392 & 1.01505 \\ \hline
-3.535 & 0.9258333 \\ \hline
-16.83586 & 4.545 \\ \hline
-0.3400333 & 2.014634 \\ \hline
-35.94001 & 6.228333 \\ \hline
-10.21567 & 0.5870659 \\ \hline
-9.179277 & 1.225487 \\ \hline
-31.63428 & 1.783189 \\ \hline
-1.323955 & 0.674175 \\ \hline
-2.916436 & 1.360133 \\ \hline
+\# & \textbf{TMIC Covariance} & \textbf{TAC Covariance} \\ \hline
+1 & 21.39853 & 7.740404 \\ \hline
+2 & 35.28688 & 4.461675 \\ \hline
+3 & 0.6733333 & 1.515 \\ \hline
+4 & 1.431675 & 0.6767 \\ \hline
+5 & 15.34022 & 2.278392 \\ \hline
+6 & 5.914392 & 1.01505 \\ \hline
+7 & 3.535 & 0.9258333 \\ \hline
+8 & 16.83586 & 4.545 \\ \hline
+9 & 0.3400333 & 2.014634 \\ \hline
+10 & 35.94001 & 6.228333 \\ \hline
+11 & 10.21567 & 0.5870659 \\ \hline
+12 & 9.179277 & 1.225487 \\ \hline
+13 & 31.63428 & 1.783189 \\ \hline
+14 & 1.323955 & 0.674175 \\ \hline
+15 & 2.916436 & 1.360133 \\ \hline
 \end{tabular}
 \end{center}
-\caption{Covariance of the dependencies used in the sensitivity analysis}
+\caption{Covariance of the metrics \texttt{TMIC} and \texttt{TAC} with the \textit{propagation factor}, for all the dependencies used in the sensitivity analysis}
 \label{table:covariance-sensitivity}
 \end{table}
 
 \unsure{Here, should I add a table with all the coefficients? Or maybe add them to the previous table?}
-In addition, we also calculate the \textit{Pearson correlation coefficient}. The values of the correlation range from $0.941282$ to $1$ for \texttt{TMIC}, and from $0.9445726$ to $1$ for \texttt{TAC}. In Figure \ref{fig:correlation-sensitivity}, one can see a scatter plot displaying the correlation between the value of \texttt{TMIC} (upper plot) and \texttt{TAC} (lower plot), and the \textit{propagation factor}. The figure shows the values of the sensitivity analysis done for the client library \textit{fr.inria.gforge.spoon:spoon-core:8.2.0} and the server library \textit{org.eclipse.platform:org.eclipse.osgi:3.16.0}.
+In addition, we also calculate the \textit{Pearson correlation coefficient}. The values of the correlation range from $0.941282$ to $1$ for \texttt{TMIC}, and from $0.9445726$ to $1$ for \texttt{TAC}. Figures \ref{fig:correlation-tmic} and \ref{fig:correlation-tac} show the correlation between the \textit{propagation factor} and the values of the metrics \texttt{TMIC} and \texttt{TAC} for the client library \textit{fr.inria.gforge.spoon:spoon-core:8.2.0} and the server library \textit{org.eclipse.platform:org.eclipse.osgi:3.16.0}.
 
 \begin{figure}[ht!]
 \begin{center}
-  \begin{subfigure}[b]{0.7\textwidth}
-    \includegraphics[width=\textwidth]{figures/results/Rplot_spoon-core_eclipse-osgi_TMIC.png}
-  \end{subfigure}
-  %
-  \begin{subfigure}[b]{0.7\textwidth}
-    \includegraphics[width=\textwidth]{figures/results/Rplot_spoon-core_eclipse-osgi_TAC.png}
-  \end{subfigure}
-\caption{Scatter plot sensitivity analysis, correlation \textit{propagation factor} with \texttt{TMIC}, and \texttt{TAC}}
-\label{fig:correlation-sensitivity}
+\includegraphics[width=0.7\textwidth]{figures/results/Rplot_spoon-core_eclipse-osgi_TMIC.png}
+\caption{Correlation between \textit{propagation factor} and \texttt{TMIC}. \textit{R} is the Pearson correlation coefficient, and \textit{p} corresponds to the confidence interval}
+\label{fig:correlation-tmic}
+\end{center}
+\end{figure}
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{figures/results/Rplot_spoon-core_eclipse-osgi_TAC.png}
+\caption{Correlation between \textit{propagation factor} and \texttt{TAC}. \textit{R} is the Pearson correlation coefficient, and \textit{p} corresponds to the confidence interval}
+\label{fig:correlation-tac}
 \end{center}
 \end{figure}
 
@@ -330,12 +331,12 @@ The sensitivity analysis results indicate a high sensitivity of the two coupling
 	\label{find:high-sensitivity}
 \end{finding}
 
-In Table \ref{table:covariance-sensitivity}, we can see that the values of the covariance for \texttt{TMIC} are always greater than those of \texttt{TAC}. This seems to be related to the fact that the values measured for \texttt{TMIC} are greater than those measured for \texttt{TAC}. Also, the cases in which the covariance is greater than $30$ seem to have greater coupling values measured as well. To confirm this intuition, we create a scatter plot to compare the covariance with the sum of the coupling measured at each distance. These plots can be seen in Figure \ref{fig:cov-value-tmic} and \ref{fig:cov-value-tac}, for \texttt{TMIC} and \texttt{TAC} respectively. In these plots, we have added the correlation between the two values, which confirms that the covariance between the \textit{propagation factor} and the value of the metrics is higher when more coupling is measured.
+In Table \ref{table:covariance-sensitivity}, we can see that the values of the covariance for \texttt{TMIC} are generally greater than those of \texttt{TAC}. This seems to be related to the fact that the values measured for \texttt{TMIC} are greater than those measured for \texttt{TAC}. Also, the cases in which the covariance is greater than $30$ seem to have greater coupling values at each distance. If we look at equation \ref{eqn:tmic}, the coupling measured at each distance ($\verb|TMICD|(L_c,L_s, \verb|distance|)$), is the value multiplied by the \textit{propagation factor}. Therefore if the \textit{propagation factor} is increased, the total value of the metric will increase more in consequence if the value of $\verb|TMICD|(L_c,L_s, \verb|distance|)$ is greater. To confirm this intuition, we create a plot to compare the covariance with the sum of the coupling measured at each distance. These plots can be seen in Figure \ref{fig:cov-value-tmic} and \ref{fig:cov-value-tac}, for \texttt{TMIC} and \texttt{TAC} respectively. In these plots, we have added the correlation between the two values, which confirms that the covariance between the \textit{propagation factor} and the value of the metrics is higher when more coupling is measured.
 
 \begin{figure}[ht!]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{figures/results/covariance-values-tmic.png}
-\caption{Scatter plot, covariance of \textit{propagation factor} and \texttt{TMIC}, and the sumation of the coupling measured at each distance}
+\caption{Correlation between the covariance of \textit{propagation factor} and \texttt{TMIC} and the sumation of the coupling measured at each distance. \textit{R} is the Pearson correlation coefficient, and \textit{p} corresponds to the confidence interval}
 \label{fig:cov-value-tmic}
 \end{center}
 \end{figure}
@@ -343,17 +344,17 @@ In Table \ref{table:covariance-sensitivity}, we can see that the values of the c
 \begin{figure}[ht!]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{figures/results/covariance-values-tac.png}
-\caption{Scatter plot, covariance of \textit{propagation factor} and \texttt{TAC}, and the sumation of the coupling measured at each distance}
+\caption{Correlation between the covariance of \textit{propagation factor} and \texttt{TAC} and the sumation of the coupling measured at each distance. \textit{R} is the Pearson correlation coefficient, and \textit{p} corresponds to the confidence interval}
 \label{fig:cov-value-tac}
 \end{center}
 \end{figure}
 
-Finally, in the results of the correlation coefficient between the propagation factor and the metrics, we also observe that the cases with the lowest correlation coefficients tend to be dependencies in which there is more distance between the client library and the server library. To compare the correlation and the distances, we create a scatter plot with the correlation coefficient calculated for the sensitivity analysis and the maximum distance at which coupling is found. The confirmation of this intuition can be found in Figures \ref{fig:cor-dist-tmic} and \ref{fig:cor-dist-tac}.
+Finally, in the results of the correlation coefficient between the propagation factor and the metrics, we also observe that the cases with the lowest correlation coefficients tend to be dependencies in which there is more distance between the client library and the server library. To compare the correlation and the distances, we create a plot with the correlation coefficient calculated for the sensitivity analysis and the maximum distance at which coupling is found. The confirmation of this intuition can be found in Figures \ref{fig:cor-dist-tmic} and \ref{fig:cor-dist-tac}.
 
 \begin{figure}[ht!]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{figures/results/covariance-values-tmic.png}
-\caption{Scatter plot, correlation of \textit{propagation factor} and \texttt{TMIC}, and the maximum distance}
+\caption{Correlation between the correlation of \textit{propagation factor} and \texttt{TMIC} and the maximum distance at which coupling is measured. \textit{R} is the Pearson correlation coefficient, and \textit{p} corresponds to the confidence interval}
 \label{fig:cor-dist-tmic}
 \end{center}
 \end{figure}
@@ -361,7 +362,7 @@ Finally, in the results of the correlation coefficient between the propagation f
 \begin{figure}[ht!]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{figures/results/covariance-values-tac.png}
-\caption{Scatter plot, correlation of \textit{propagation factor} and \texttt{TAC}, and the maximum distance}
+\caption{Correlation between the correlation of \textit{propagation factor} and \texttt{TAC} and the maximum distance at which coupling is measured. \textit{R} is the Pearson correlation coefficient, and \textit{p} corresponds to the confidence interval}
 \label{fig:cor-dist-tac}
 \end{center}
 \end{figure}
@@ -428,14 +429,14 @@ The interviews contain three types of questions: open answer, binary, and scaled
     \label{table:interview-questions}
 \end{table}
 
-The interviews are done via \textit{Zoom}\footnote{\url{https://zoom.us/}}. \textit{Zoom} offers the possibility of sharing the control of the mouse with other participants and the option of recording the interview. The interviews are recorded to rewatch it afterward and take notes of the interviewees' answers. Therefore, the interview itself feels more like a normal conversation, and there are no pauses. The control of the mouse was shared with the interviewees to try to use the tool themselves, to get a better idea of how it works and how they would use it.
+The interviews were done via \textit{Zoom}\footnote{\url{https://zoom.us/}}. \textit{Zoom} offers the possibility of sharing the control of the mouse with other participants and the option of recording the interview. The interviews are recorded to rewatch it afterward and take notes of the interviewees' answers. Therefore, the interview itself feels more like a normal conversation, and there are no pauses. The control of the mouse was shared with the interviewees to try to use the tool themselves, to get a better idea of how it works and how they would use it.
 
 \subsection{Results}
 In this section, we show the answers obtained during the interviews. The results will be discussed in section \ref{sec:discussion-interviews}: the suitability of the visualizations, as well as the clarity and actionability of the metrics.
 
 \subsubsection{Demographics}
 
-The roles of the 15 participants in the interviews include: Software developer, Software engineer, Technology lead, Head of innovation, Head of development, and Head of product. In some of the results, we differentiate between the answers given by developers and managers. In the developers' group, we consider the interviewees who answered with the role of software developer and engineer, and the rest of the interviewees are considered managers. \unsure{I am not sure whether to call this manager or another name. What I mean is that they have tasks that involve software architecture, or reporting, effort estimation. Instead, the developers have programming as their main task}
+The roles of the 15 participants in the interviews include: Software developer, Software engineer, Technology lead, Head of innovation, Head of development, and Head of product. In some of the results, we differentiate between the answers given by developers and non-developers. In the developers' group, we consider the interviewees who answered with the role of software developer and engineer, and the rest of the interviewees are considered non-developers. The key difference is that the non-developers have tasks related to architecture or management, and therefore their needs and their perspective is different.
 
 The years of experience range from 1 to 20, with an average of 7.13. Half of the interviewees have worked in backend development and web services systems. In addition, some of the other types of projects include mobile applications and frontend development. The languages in which the interviewees have experience can be seen in Figure \ref{fig:interview-3}.
 
@@ -459,7 +460,7 @@ The 15 interviewees have experience with dependency management. However, some of
 \end{center}
 \end{figure}
 
- Figure \ref{fig:interview-7} the answers to question 7 about the importance of monitoring the dependencies' vulnerabilities. The interviewees which considered that the importance of monitoring the dependencies' vulnerabilities was less than \textit{Very important} reasoned about it. For example, some said that it is something that they do, but not regularly. They just update when there is a new version, to make sure that if a vulnerability has been discovered, the patch is always used. Finally, the last reason depends on the type of dependency that it is, since if it is not a customer-facing dependency, it is not that important.
+ Figure \ref{fig:interview-7} shows the answers to question 7 about the importance of monitoring the dependencies' vulnerabilities. The interviewees which considered that the importance of monitoring the dependencies' vulnerabilities was less than \textit{Very important} reasoned about it. For example, some said that it is something that they do, but not regularly. They just update when there is a new version, to make sure that if a vulnerability has been discovered, the patch is always used. Finally, the last reason depends on the type of dependency that it is, since if it is not a customer-facing dependency, it is not that important.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -511,7 +512,7 @@ Figure \ref{fig:interview-11} we can see the results for Question 11. In this ca
 \end{center}
 \end{figure}
 
-For Question 12, about which visualizations are most useful, most of the interviews answered with more than one visualization. Table \ref{table:interview-12} summarizes the answers. The $\oplus$ indicates that the interviewee considered that visualization to be the most useful, and the $\odot$ is used when the interviewee said that the visualization was useful but in a clear second position. If the cell is empty, the interviewee did not mention the visualization in the answer.
+For Question 12, about which visualizations are most useful, most of the interviews answered with more than one visualization. Table \ref{table:interview-12} summarizes the answers.
 
 \begin{table}[ht!]
     \begin{center}
@@ -536,7 +537,7 @@ For Question 12, about which visualizations are most useful, most of the intervi
     $\oplus$	& $\oplus$	& $\oplus$ \\\hline
     \end{tabular}
     \end{center}
-    \caption{Answers to Question 12 of the interview}
+    \caption{Answers to Question 12 of the interview. $\oplus$ indicates that the interviewee considered that visualization to be the most useful, the $\odot$ is used when the visualization was considered useful but in a clear second position, and an empty cell means that the the visualization was not mentioned.}
     \label{table:interview-12}
 \end{table}
 
@@ -568,7 +569,7 @@ With Question 14, the interviewees gave their suggestions for improvements to th
 
 \subsubsection{Metrics}
 
-The answers to question 15 can be found in Figure \ref{fig:interview-15}; for each metric, the number of times an interviewee answered with each number of the options. In addition, Table \ref{table:interview-15} shows the average mark given to each metric, first considering only the marks given by developers, then my managers, and finally, the total average.
+The answers to question 15 can be found in Figure \ref{fig:interview-15}; for each metric, the number of times an interviewee answered with each number of the options. In addition, Table \ref{table:interview-15} shows the average mark given to each metric, first considering only the marks given by developers, then by non-developers, and finally, the total average.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -582,7 +583,7 @@ The answers to question 15 can be found in Figure \ref{fig:interview-15}; for ea
     \begin{center}
     \begin{tabular}{|l|l|l|l|}
     \hline
-    Metric                      & Average developers  & Average managers  & Total Average \\
+    Metric                      & Average developers  & Average non-developers  & Total Average \\
     \hline
     MIC/TMIC                    & 3.8                 & 4.6               & 4.06 \\
     AC/TAC                      & 3.6                 & 4.2               & 3.8 \\
@@ -593,7 +594,7 @@ The answers to question 15 can be found in Figure \ref{fig:interview-15}; for ea
     \hline
     \end{tabular}
     \end{center}
-    \caption{Results Question 15: Average marks of the metrics, given by developers, managers, and all}
+    \caption{Results Question 15: Average marks of the metrics, given by developers, non-developers, and all}
     \label{table:interview-15}
 \end{table}
 
@@ -617,7 +618,7 @@ The answers to question 17 can be found in Figure \ref{fig:interview-17}. The in
 \end{center}
 \end{figure}
 
-For question 18, the interviewees answered with which metrics they considered more useful. Their answers can be found in Table \ref{table:interview-18}. As in question 12, a $\oplus$ means that the interviewee mentioned the metric as one of the most useful, $\odot$ is for the metrics mentioned in second place. And finally, if the cell is empty means that the metric was not mentioned. In addition, in the last column, we show the type of role the interviewee had, either development or management.
+For question 18, the interviewees answered with which metrics they considered more useful. Their answers can be found in Table \ref{table:interview-18}.
 
 \begin{table}[ht!]
     \begin{center}
@@ -631,18 +632,18 @@ For question 18, the interviewees answered with which metrics they considered mo
     ~	        & ~	       & ~	      & ~	        & $\odot$	  & $\oplus$ & Developer \\\hline
     ~	        & ~	       & $\oplus$	& $\oplus$	& ~	        & ~        & Developer \\\hline
     ~	        & ~	       & $\oplus$	& $\oplus$	& ~	        & ~        & Developer \\\hline
-    $\oplus$	& ~	       & $\oplus$	& $\oplus$	& ~	        & ~        & Manager   \\\hline
-    $\oplus$	& ~	       & ~	      & ~	        & ~	        & ~        & Manager   \\\hline
+    $\oplus$	& ~	       & $\oplus$	& $\oplus$	& ~	        & ~        & Non-developer   \\\hline
+    $\oplus$	& ~	       & ~	      & ~	        & ~	        & ~        & Non-developer   \\\hline
     $\oplus$	& $\oplus$ & $\oplus$	& $\oplus$	& ~	        & ~        & Developer \\\hline
     ~	        & ~	       & $\oplus$	& $\oplus$	& $\oplus$	& $\oplus$ & Developer \\\hline
-    $\oplus$	& $\oplus$ & $\oplus$	& $\oplus$	& $\oplus$  & $\oplus$ & Manager   \\\hline
+    $\oplus$	& $\oplus$ & $\oplus$	& $\oplus$	& $\oplus$  & $\oplus$ & Non-developer   \\\hline
     $\oplus$	& $\oplus$ & ~	      & ~	        & ~	        & ~        & Developer \\\hline
-    $\oplus$	& $\oplus$ & ~	      & ~	        & ~	        & ~        & Manager   \\\hline
+    $\oplus$	& $\oplus$ & ~	      & ~	        & ~	        & ~        & Non-developer   \\\hline
     ~	        & ~        & $\oplus$ & $\oplus$	& ~         & ~        & Developer \\\hline
-    $\oplus$	& ~	       & $\oplus$ & ~	        & ~	        & ~        & Manager   \\\hline
+    $\oplus$	& ~	       & $\oplus$ & ~	        & ~	        & ~        & Non-developer   \\\hline
     \end{tabular}
     \end{center}
-    \caption{Answers to Question 18 of the interview}
+    \caption{Answers to Question 18 of the interview. $\oplus$ indicates that the interviewee considered the metric to be the most useful, the $\odot$ is used when the metric was considered useful but in a clear second position, and an empty cell means that the the metric was not mentioned.}
     \label{table:interview-18}
 \end{table}
 
@@ -663,16 +664,16 @@ Finally, the suggestions made for improving the current metrics or adding new on
 \subsection{Discussion}\label{sec:discussion-interviews}
 In this section, we discuss the answers to the interviews, divided into sections. First, there is a discussion on the interviewees' general evaluation, according to their role.
 
-We have found a difference in how the interviewees evaluate the model and the visualizations according to whether the interviewee's main focus is development or architecture and analysis.
+We have found a difference in how the interviewees evaluate the model and the visualizations according to whether the interviewee's main focus is development or not.
 
 The developers want more information that can be directly transformed into development actions. For example, they suggested seeing the list of reachable methods of the dependencies, which can answer a vulnerable method is used or not. Another example is the lines of code where the calls to a dependency are made, so the developer can directly go to that line of code to make the necessary changes.
 
-However, the other type of interviewee is interested in more high-level information. One of the suggestions made by several of these interviewees was to create a metric regarding how much of the client library depends on the server library. Also, how widespread the usage is in the client library. These two metrics would be related to the architecture of the system.
+However, non-developers are interested in more high-level information. One of the suggestions made was to create a metric regarding how much of the client library depends on the server library. Also, how widespread the usage is in the client library. These two metrics would be related to the architecture of the system.
 
-Furthermore, there is also an indicator of this difference in their answers to the preferred metric. The coupling metrics are more useful at an architectural level to understand how much a client depends on a server library. In Table \ref{table:interview-18}, we can see that the interviewees with manager role, always mentioned at least \texttt{MIC}/\texttt{TMIC} as the most useful metric. If we compare the average marks of the developers and managers in Table \ref{table:interview-15}, we can see this same difference. The marks given by managers to the coupling metrics are higher than those given by developers.
+Furthermore, there is also an indicator of this difference in their answers to the preferred metric. The coupling metrics are more useful at an architectural level to understand how much a client depends on a server library. In Table \ref{table:interview-18}, we see the the interviewees with non-developer role, always mentioned at least \texttt{MIC}/\texttt{TMIC} as the most useful metric. If we compare the average marks of the developers and non-developers in Table \ref{table:interview-15}, we can see this same difference. The marks given by non-developers to the coupling metrics are higher than those given by developers.
 
 \subsubsection{Dependency Management}
-With the questions answered in the \textit{Dependency Management} section, we know that all the interviewees have experience with this type of task. Also, the interviewees considered it more important to monitor the dependencies' vulnerabilities than the update to the last version (see Figures \ref{fig:interview-6}, and \ref{fig:interview-7}). This is also confirmed by some interviewees' comments, saying that the main reason to update a dependency is to avoid being affected by possible vulnerabilities. \unsure{Should I add a finding of this? Even if it does not relate directly to any of the research questions}
+With the questions answered in the \textit{Dependency Management} section, we know that all the interviewees have experience with this type of task. Also, the interviewees considered it more important to monitor the dependencies' vulnerabilities than the update to the last version (see Figures \ref{fig:interview-6}, and \ref{fig:interview-7}). This is also confirmed by some interviewees' comments, saying that the main reason to update a dependency is to avoid being affected by possible vulnerabilities.
 
 \subsubsection{Visualizations}
 When asked about the tool's usefulness, there is a general agreement that the tool is useful in the scenarios discussed during the interview, Figure \ref{fig:interview-10}. There are some negative answers to whether the tool can make dependency management easier. However, most of the comments about these answers are related to the tool being useful for particular cases. Therefore, the negative responses are not associated with the tool, not making the tasks easier.
@@ -692,8 +693,6 @@ In the answers to Question 12, only four interviewees answer only one of the vis
 With the last question about the visualizations, the interviewees suggested some improvements to be made. Certain suggestions are small improvements in terms of interaction with the visualizations, and some other additions to make it easier to use. According to the research method, the next step would be implementing some of these suggestions and doing more interviews. However, due to time limitations, we cannot do these tasks.
 
 Also, some interviewees expressed a need to integrate the different sources of information about dependency management. This data includes vulnerability data, the new versions available of the dependencies, and the licenses of the libraries used. Some related suggestions into making this tool's features into another type of tool are to make it an IDE Plugin and a command interface. Hence, there is a general interest in the tool, but it might be important to consider changing the format in which these are supplied.
-
-\unsure{Should these last two points be made into a finding?}
 
 \subsubsection{Metrics}
 Regarding the clarity and comprehensibility of the metrics, the interviewees' average grade for all the metrics is positive, being a 3.8/5, the lowest one, and a 4.73/5 the highest one, as shown in Table \ref{table:interview-15}.
@@ -742,7 +741,7 @@ Then, the calculation of the metrics of the model is performed. For each analyze
 
 \subsection{Results}
 
-We have analyzed a total of $299$ direct dependencies and $470$ transitive dependencies. We filter each metric's zeros since it means that there is no coupling in this case, and we plot the rest of the values. In Figures \ref{fig:MIC-benchmark} and \ref{fig:AC-benchmark}, we show the histograms representing the distribution of the values of \texttt{MIC} and \texttt{AC} respectively.
+We have analyzed a total of $299$ direct dependencies and $470$ transitive dependencies \todo{Add reference to dataset in appendix}. We filtered out zero values since it means that there is no coupling in this case, and we plot the rest of the values. In Figures \ref{fig:MIC-benchmark} and \ref{fig:AC-benchmark}, we show the histograms representing the distribution of the values of \texttt{MIC} and \texttt{AC} respectively.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -760,7 +759,7 @@ We have analyzed a total of $299$ direct dependencies and $470$ transitive depen
 \end{center}
 \end{figure}
 
-For the transitive metrics, namely \texttt{TMIC} and \texttt{TAC}, we have calculated the benchmarking with two different values for the \textit{propagation factor}: $1$ and $0.1$. The histogram of these benchmarks can be found in Figures \ref{fig:TMIC-benchmark-1}, \ref{fig:TAC-benchmark-1}, \ref{fig:TMIC-benchmark-0.1}, and \ref{fig:TAC-benchmark-0.1}.
+For the transitive metrics, namely \texttt{TMIC} and \texttt{TAC}, we have calculated the benchmarking with two different values for the \textit{propagation factor}: $1$ and $0.1$. The histogram of the benchmarks for metrics \texttt{TMIC} and \texttt{TAC} with propagation factor $1$ and $0.1$, can be found in Figures \ref{fig:TMIC-benchmark-1}, \ref{fig:TAC-benchmark-1}, \ref{fig:TMIC-benchmark-0.1} and \ref{fig:TAC-benchmark-0.1}, respectively.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -794,13 +793,13 @@ For the transitive metrics, namely \texttt{TMIC} and \texttt{TAC}, we have calcu
 \end{center}
 \end{figure}
 
-Finally, we also generated 70\%, 80\%, and 90\% quantiles of each of the metrics, which can be found in Table \ref{table:quantiles}.
+Finally, we also generated 70th, 80th, and 90th percentiles of each of the metrics, which can be found in Table \ref{table:percentiles}.
 
 \begin{table}[ht!]
     \begin{center}
     \begin{tabular}{|r|l|l|l|}
     \hline
-    \textbf{Metric} & \textbf{70\%} & \textbf{80\%} & \textbf{90\%} \\ \hline\hline
+    \textbf{Metric} & \textbf{70th} & \textbf{80th} & \textbf{90th} \\ \hline\hline
     \textbf{MIC} & 79 & 118.8 & 305.4 \\ \hline
     \textbf{AC} & 21.5 & 35 & 61 \\ \hline
     \textbf{TMIC (PF = 1)} & 59.5 & 129 & 215 \\ \hline
@@ -809,8 +808,8 @@ Finally, we also generated 70\%, 80\%, and 90\% quantiles of each of the metrics
     \textbf{TAC (PF = 0.1)} & 7.35 & 7.77 & 25.15 \\ \hline
     \end{tabular}
     \end{center}
-    \caption{70\%, 80\%, and 90\% of the coupling metrics}
-    \label{table:quantiles}
+    \caption{70th, 80th, and 90th percentiles of the coupling metrics}
+    \label{table:percentiles}
 \end{table}
 
 
@@ -818,7 +817,7 @@ Finally, we also generated 70\%, 80\%, and 90\% quantiles of each of the metrics
 
 In the results of all the metrics, one can see that the majority of the values are the lowest ones. In other words, many dependencies are loosely coupled, while there are a few which are highly coupled. Also, it is possible to observe a difference in the values of the metrics measuring method invocation coupling (\texttt{MIC} and \texttt{TMIC}), with those measuring aggregation coupling - namely \texttt{AC} and \texttt{TAC}. The method invocation metrics generally have higher values. This can also be intuitively perceived: for each field declared, multiple method calls can occur.
 
-In Table \ref{table:quantiles}, there are the 70\%, 80\%, and 90\% quantiles of each of the metrics. These quantiles have been previously used for software metrics for risk assessment \cite{alves2010deriving}. Considering the percentages in Table \ref{table:quantiles}, the risk assessment for each of the metrics can be found in Table \ref{table:risk-profile}, with four risk profiles: low risk, medium risk, high risk, and very high risk.
+In Table \ref{table:percentiles}, there are the 70th, 80th, and 90th percentiles of each of the metrics. These percentiles have been previously used for software metrics for risk assessment \cite{alves2010deriving}. Considering the values in Table \ref{table:percentiles}, the risk assessment for each of the metrics can be found in Table \ref{table:risk-profile}, with four risk profiles: low risk, medium risk, high risk, and very high risk. It is worth saying that for this risk profile to be completely useful, the percentiles should be calculated with other datasets, with different types of client library. Therefore, this risk profile is only valid for the current dataset.
 
 \begin{table}[ht!]
     \begin{center}
