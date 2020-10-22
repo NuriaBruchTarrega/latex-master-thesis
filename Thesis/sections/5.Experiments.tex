@@ -746,7 +746,7 @@ We have analyzed a total of $299$ direct dependencies and $470$ transitive depen
 \begin{figure}[ht!]
 \begin{center}
   \includegraphics[width=0.7\textwidth]{figures/benchmark/MIC_benchmark.png}
-  \caption{Histogram \texttt{MIC} benchmark}
+  \caption{Histogram \texttt{MIC} benchmark, 60 bins}
   \label{fig:MIC-benchmark}
 \end{center}
 \end{figure}
@@ -754,17 +754,17 @@ We have analyzed a total of $299$ direct dependencies and $470$ transitive depen
 \begin{figure}[ht!]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{figures/benchmark/AC_benchmark.png}
-\caption{Histogram \texttt{AC} benchmark}
+\caption{Histogram \texttt{AC} benchmark, 60 bins}
 \label{fig:AC-benchmark}
 \end{center}
 \end{figure}
 
-For the transitive metrics, namely \texttt{TMIC} and \texttt{TAC}, we have calculated the benchmarking with two different values for the \textit{propagation factor}: $1$ and $0.1$. The histogram of the benchmarks for metrics \texttt{TMIC} and \texttt{TAC} with propagation factor $1$ and $0.1$, can be found in Figures \ref{fig:TMIC-benchmark-1}, \ref{fig:TAC-benchmark-1}, \ref{fig:TMIC-benchmark-0.1} and \ref{fig:TAC-benchmark-0.1}, respectively.
+For the transitive metrics, namely \texttt{TMIC} and \texttt{TAC}, we have calculated the benchmarking with different values for the \textit{propagation factor}. The histogram of the benchmarks for metrics \texttt{TMIC} and \texttt{TAC} with propagation factor $1$, $0.5$, and $0.1$, can be found in Figures \ref{fig:TMIC-benchmark-1}, \ref{fig:TAC-benchmark-1}, \ref{fig:TMIC-benchmark-0.5} and \ref{fig:TAC-benchmark-0.5}, \ref{fig:TMIC-benchmark-0.1}, and \ref{fig:TAC-benchmark-0.1}, respectively.
 
 \begin{figure}[ht!]
 \begin{center}
   \includegraphics[width=0.7\textwidth]{figures/benchmark/TMIC_PF_1.png}
-  \caption{Histogram \texttt{TMIC} benchmark, propagation factor = 1}
+  \caption{Histogram \texttt{TMIC} benchmark, propagation factor = 1, 60 bins}
   \label{fig:TMIC-benchmark-1}
 \end{center}
 \end{figure}
@@ -772,15 +772,31 @@ For the transitive metrics, namely \texttt{TMIC} and \texttt{TAC}, we have calcu
 \begin{figure}[ht!]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{figures/benchmark/TAC_PF_1.png}
-\caption{Histogram \texttt{TAC} benchmark, propagation factor = 1}
+\caption{Histogram \texttt{TAC} benchmark, propagation factor = 1, 60 bins}
 \label{fig:TAC-benchmark-1}
 \end{center}
 \end{figure}
 
 \begin{figure}[ht!]
 \begin{center}
+  \includegraphics[width=0.7\textwidth]{figures/benchmark/TMIC_PF_0.5.png}
+  \caption{Histogram \texttt{TMIC} benchmark, propagation factor = 0.5, 60 bins}
+  \label{fig:TMIC-benchmark-0.5}
+\end{center}
+\end{figure}
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{figures/benchmark/TAC_PF_0.5.png}
+\caption{Histogram \texttt{TAC} benchmark, propagation factor = 0.5, 60 bins}
+\label{fig:TAC-benchmark-0.5}
+\end{center}
+\end{figure}
+
+\begin{figure}[ht!]
+\begin{center}
   \includegraphics[width=0.7\textwidth]{figures/benchmark/TMIC_PF_0.1.png}
-  \caption{Histogram \texttt{TMIC} benchmark, propagation factor = 0.1}
+  \caption{Histogram \texttt{TMIC} benchmark, propagation factor = 0.1, 60 bins}
   \label{fig:TMIC-benchmark-0.1}
 \end{center}
 \end{figure}
@@ -788,7 +804,7 @@ For the transitive metrics, namely \texttt{TMIC} and \texttt{TAC}, we have calcu
 \begin{figure}[ht!]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{figures/benchmark/TAC_PF_0.1.png}
-\caption{Histogram \texttt{TAC} benchmark, propagation factor = 0.1}
+\caption{Histogram \texttt{TAC} benchmark, propagation factor = 0.1, 60 bins}
 \label{fig:TAC-benchmark-0.1}
 \end{center}
 \end{figure}
@@ -800,11 +816,13 @@ Finally, we also generated 70th, 80th, and 90th percentiles of each of the metri
     \begin{tabular}{|r|l|l|l|}
     \hline
     \backslashbox{\textbf{Metric}}{\textbf{Percentile}} & \textbf{70th} & \textbf{80th} & \textbf{90th} \\ \hline\hline
-    \textbf{MIC} & 79 & 118.8 & 305.4 \\ \hline
-    \textbf{AC} & 21.5 & 35 & 61 \\ \hline
-    \textbf{TMIC (PF = 1)} & 59.5 & 129 & 215 \\ \hline
-    \textbf{TAC (PF = 1)} & 19.5 & 24 & 56 \\ \hline
-    \textbf{TMIC (PF = 0.1)} & 11.4015 & 33 & 105.7 \\ \hline
+    \textbf{MIC} & 79.00 & 118.80 & 305.40 \\ \hline
+    \textbf{AC} & 21.50 & 35.00 & 61.00 \\ \hline
+    \textbf{TMIC (PF = 1)} & 59.50 & 129.00 & 215.00 \\ \hline
+    \textbf{TAC (PF = 1)} & 19.50 & 24.00 & 56.00 \\ \hline
+    \textbf{TMIC (PF = 0.5)} & 30.37 & 87.00 & 141.87 \\ \hline
+    \textbf{TAC (PF = 0.5)} & 10.50 & 12.25 & 39.12 \\ \hline
+    \textbf{TMIC (PF = 0.1)} & 11.40 & 33.00 & 105.70 \\ \hline
     \textbf{TAC (PF = 0.1)} & 7.35 & 7.77 & 25.15 \\ \hline
     \end{tabular}
     \end{center}
@@ -817,7 +835,7 @@ Finally, we also generated 70th, 80th, and 90th percentiles of each of the metri
 
 In the results of all the metrics, one can see that the majority of the values are the lowest ones. In other words, many dependencies are loosely coupled, while there are a few which are highly coupled. Also, it is possible to observe a difference in the values of the metrics measuring method invocation coupling (\texttt{MIC} and \texttt{TMIC}), with those measuring aggregation coupling - namely \texttt{AC} and \texttt{TAC}. The method invocation metrics generally have higher values. This can also be intuitively perceived: for each field declared, multiple method calls can occur.
 
-When comparing the results of the metrics \texttt{TMIC} and \texttt{TAC} with different values of \textit{propagation factor}, the comparison is not exactly as it could be intuitively expected. In Figures \ref{fig:TMIC-benchmark-1} and \ref{fig:TMIC-benchmark-0.1} we can see the benchmark of \texttt{TMIC} with \textit{propagation factor} $1$ and $0.1$, respectively. Given that one \textit{propagation factor} is 10 times smaller than the first one, we would expect the results of the metrics to be 10 times smaller as well. However, we can see that on the right side of the plot; there is at least one dependency with \texttt{TMIC} around $5000$ for both \textit{propagation factors}. We looked at the values measured to understand why this happened. The dependency has two distances at which coupling is measured: 1 and 2. These distances have a coupling of 4958 and 11, respectively. Following the equation \ref{eqn:tmic}, since the \textit{propagation factor} is used to the power of $\verb|distance| - 1$, it is not applied when distance is 1. This is also consistent with the fact that distance 1 means that the server library is, in this case, a direct dependency, and therefore there is no mitigation of the coupling. Hence, that is why this value appears with both \textit{propagation factors} because it is only applied for distance 2, which has a small value, in comparison with distance 1. The same scenario can be seen in the case of \texttt{TAC} (Figures \ref{fig:TAC-benchmark-1} and \ref{fig:TAC-benchmark-0.1}).
+When comparing the results of the metrics \texttt{TMIC} and \texttt{TAC} with different values of \textit{propagation factor}, the comparison is not exactly as it could be intuitively expected. In Figures \ref{fig:TMIC-benchmark-1} and \ref{fig:TMIC-benchmark-0.1} we can see the benchmark of \texttt{TMIC} with \textit{propagation factor} $1$ and $0.1$, respectively. Given that one \textit{propagation factor} is 10 times smaller than the other one, we would expect the results of the metrics to be 10 times smaller as well. However, we can see that on the right side of the plot; there is at least one dependency with \texttt{TMIC} around $5000$ for both \textit{propagation factors}. We looked at the values measured to understand why this happened. The dependency has two distances at which coupling is measured: 1 and 2. These distances have a coupling of 4958 and 11, respectively. Following the equation \ref{eqn:tmic}, since the \textit{propagation factor} is used to the power of $\verb|distance| - 1$, it is not applied when distance is 1. This is also consistent with the fact that distance 1 means that the server library is, in this case, a direct dependency, and therefore there is no mitigation of the coupling. Hence, that is why this value appears with both \textit{propagation factors} because it is only applied for distance 2, which has a small value, in comparison with distance 1. The same scenario can be seen in the case of \texttt{TAC} (Figures \ref{fig:TAC-benchmark-1} and \ref{fig:TAC-benchmark-0.1}).
 
 
 
@@ -833,6 +851,8 @@ In Table \ref{table:percentiles}, there are the 70th, 80th, and 90th percentiles
     TMIC (PF = 1) & \textless 59.5 & \textless 129 & \textless 215 & \textgreater 215 \\ \hline
     TAC (PF = 1) & \textless 19.5 & \textless 24 & \textless 56 & \textgreater 56 \\ \hline
     TMIC (PF = 0.1) & \textless 11.4015 & \textless 33 & \textless 105.7 & \textgreater 105.7 \\ \hline
+    TMIC (PF = 0.5) & \textless 30.37 & \textless 87.00 & \textless 141.87 & \textgreater \textgreater 141.87 \\ \hline
+    TAC (PF = 0.5) & \textless 10.50 & \textless 12.25 & \textless 39.12 & \textgreater 39.12 \\ \hline
     TAC (PF = 0.1) & \textless 7.35 & \textless 7.77 & \textless 25.15 & \textgreater 25.15 \\ \hline
     \end{tabular}
     \end{center}
