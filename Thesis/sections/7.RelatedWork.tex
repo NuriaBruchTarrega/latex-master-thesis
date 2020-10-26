@@ -89,4 +89,60 @@ In Table \ref{table:summary-software-dependencies}, one can find a summary of th
 
 \section{Coupling metrics}
 
+\paragraph{Defining metrics for software components \cite{Vernazza2000}}
+
+Vernazza et al. create a set of metrics for software components. In the paper, software component is defined as a set of classes, similar to how we treat a library as a set of classes to define the coupling metrics. The set of metrics defined in the paper is based on the set of metrics by Chidamber and Kemerer, which include the coupling metrics \textit{CBO} and \textit{RFC}. To validate the metrics created, they use a theoretical approach by using the properties defined by Briand et al. \cite{briand1996property}, just as we did for our coupling metrics. In addition, the authors manually calculate the value of the metrics for various architecture patterns to illustrate their usage.
+
+\paragraph{Detecting Indirect Coupling \cite{yang2005detecting}}
+
+Yang and Berrigan propose a way to measure indirect coupling, which is different from the one suggested by Briand et al. \cite{briand1999unified}, which consists of a transitive closure of the direct coupling. Consider transitive coupling created by more than one type of connection, which differs from the transitive coupling metrics defined in this thesis, focusing on a kind of connection. The authors describe the concept of \textit{use-def} indirect coupling, which is used to identify coupling between the definitions of variables (\textit{def}) and the place where these variables are used (\textit{use}).
+
+Although there is no theoretical validation of the \textit{use-def} indirect coupling, a tool is created to measure this type of coupling in Java projects using source-code analysis. The tool is used to measure the \textit{use-def} indirect coupling in several projects, including the tool itself. With the tool, the authors validate the actionability of \textit{use-def} indirect coupling by relating it to design issues and problems encountered during development.
+
+\paragraph{Measuring Indirect Coupling \cite{Yang2010}}
+
+This thesis by Yang continues with the work done in the last paper \cite{yang2005detecting}. In the thesis, Yang defines a set of indirect coupling metrics based on the \textit{use-def} indirect coupling. In addition, the relation between the metrics and the maintenance effort is also modeled.
+
+The metrics and their relation with maintenance are empirically validated by using a tool developed for this thesis. The tool uses static-code analysis to calculate the set of metrics. First, they calculate the metrics for a corpus of Java projects to see their distribution. The results obtained are similar to those obtained by us in the coupling metrics benchmarking: a lot of loose coupling cases and a few with higher coupling.
+
+The second part of the empirical validation consists of experiments to compare the value of the metrics for different software products and the time the participants needed to resolve certain tasks.
+
+\paragraph{Deriving Coupling Metrics from Call Graphs \cite{Allier2010}}
+
+In this paper, Allier et al. use call-graphs to measure existing coupling metrics. Using call-graphs helps to improve the precision of the measurement since dynamic features used by a system can be accounted for. In particular, they focus on how are polymorphy and dynamic class loading accounted for. Allier et al. use the coupling metrics \textit{CBO} and \textit{RFC} (see Section \ref{section:bg-coupling}), and modify then to account for the dynamic features. The metrics are calculated using call-graphs generated with different techniques. The results show that the call-graph used to calculate the metrics has an important impact on the values.
+
+In this thesis, we have also created our own strategy to account for polymorphy in our coupling metrics. However, we have not included the detection of reflection constructs in the analysis. Using call-graphs to calculate the metrics designed in this thesis could help improve the precision of the measurement. Nevertheless, we would need to generate call-graphs for the entire dependency tree and combine them to create a general call graph. This is not currently available since it is a work in progress within the \textit{FASTEN project}, but it is part of the future work.
+
+\paragraph{Using indirect coupling metrics to predict package maintainability and testability \cite{Almugrin2016}}
+
+In this paper, Almugrin et al. calculated and validated the new indirect coupling metrics they defined in previous work \cite{AlmugrinMelton2015}, which are based on the metrics by Martin \cite{martin2002agile}. The metrics are empirically validated by showing their relationship with maintainability and testability. The experiments done for this validation used previously defined maintainability and testing metrics to compare these metrics' values with the values of the indirect coupling metrics. To run the experiments, they used a set of existing tools and one custom tool to obtain all the necessary data and calculate the values of all the metrics for the seven systems involved in their experiment. The authors calculate the linear regression and correlation between coupling metrics and the maintainability and testability metrics. The results show that the lower values of the coupling metrics tend to have better results for maintainability and testability.
+
 \subsection{Summary}
+
+The summary of the comparison of the papers included in the coupling metrics related work can be found in Table \ref{table:summary-coupling}. The papers are compared according to whether there are new metrics defined or not and if these metrics account for indirect coupling, and the type of coupling measured. Then, we compare the technique used to measure the metrics and the type of validation conducted in the paper.
+
+\begin{table}[ht!]
+\begin{center}
+
+\begin{tabular}{|c|l|c|c|c|c|c|}
+\hline
+&  & \cite{Vernazza2000} & \cite{yang2005detecting} & \cite{Yang2010} & \cite{Allier2010} & \cite{Almugrin2016} \\ \hline\hline
+\multirow{2}{*}{Defined new metric(s)} & Yes & x & x & x &  & x \\ \cline{2-7}
+& No &  &  &  & x &  \\ \hline\hline
+\multirow{2}{*}{Indirect coupling} & Yes &  & x & x &  & x \\ \cline{2-7}
+& No & x &  &  & x &  \\ \hline\hline
+\multirow{4}{*}{Type of coupling} & Method invocation & x &  &  & x &  \\ \cline{2-7}
+& Field access & x &  &  & x &  \\ \cline{2-7}
+& use-def &  & x & x &  &  \\ \cline{2-7}
+& N/A &  &  &  &  & x \\ \hline\hline
+\multirow{3}{*}{Measurement technique} & Source-code analysis &  & x & x &  & x \\ \cline{2-7}
+& Call-graph analysis &  &  &  & x &  \\ \cline{2-7}
+& Manual calculation & x &  &  &  &  \\ \hline\hline
+\multirow{2}{*}{Validation} & Theoretical & x &  &  &  &  \\ \cline{2-7}
+& Empirical &  & x & x & x & x \\ \hline
+\end{tabular}
+
+\end{center}
+\caption{Summary comparison, coupling metrics related work}
+\label{table:summary-coupling}
+\end{table}

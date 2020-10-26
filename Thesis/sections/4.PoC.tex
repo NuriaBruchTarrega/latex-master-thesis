@@ -135,7 +135,7 @@ for each serverClass in serverLibraryClasses
 The process to find descendants in the case of the metric \texttt{AC} is the same as the one in Figure \ref{fig:algorithm-polymorphy}, but iterating over the \texttt{reachableClassesMap} instead of the \texttt{reachableBehaviorsMap}. Therefore, if the server class is sub-class of a reachable class, it is added to the \texttt{AcClasses} of the library.
 
 \blankl
-As can be observed in the previous explanation of how the detection of inheritance is done, in this PoC implementation, it is not detected if a class is extended in the client library instead of in the server library.\todo{Find out how often does this happen}
+As can be observed in the previous explanation of how the detection of inheritance is done, in this PoC implementation, it is not detected if a class is extended in the client library instead of in the server library.
 
 \subsection{Transitive Method Invocation Coupling}\label{subsec:tmic}
 The calculation of \texttt{TMIC} takes place after calculating \texttt{MIC} for all the direct dependencies of the client library. The methods used in the calculation of \texttt{MIC} from these dependencies are used as a base to calculate \texttt{TMIC}.
