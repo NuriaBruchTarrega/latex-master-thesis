@@ -19,12 +19,12 @@ Given class \textit{a} of library \textit{A}, and class \textit{b} of library \t
   \item ... method of class \textit{a} has a parameter of type \textit{b} or has return type \textit{b}.
   \item ... method of class \textit{a} has a local variable of type \textit{b}.
   \item ... method of class \textit{a} calls a method which has a parameter of type \textit{b}.
-  \item ... method of class \textit{a} references attribute of class \textit{b}.
-  \item ... method of class \textit{a} invokes method of class \textit{b}.
+  \item ... method of class \textit{a} references an? attribute of class \textit{b}.
+  \item ... method of class \textit{a} invokes a? method of class \textit{b}.
   \item ... class \textit{a} and class \textit{b} have a relationship such as uses or consists-of.
 \end{enumerate}
 
-Having one metric measure more than one of these types of connections is not recommended for various reasons. To begin with, the strengths of every type of connection have to be justified: Has the coupling created by a local variable (type 5) the same strength as the one created by a method invocation (type 6)? Also, when mixing types of connection, there is information missing; it is impossible to know how much of the coupling is created by which type of connection. Therefore, all relevant types of connections in the use case of RQ1 will be measured by different metrics.
+Having one metric measure more than one of these types of connections is not recommended for various reasons. To begin with, the strengths of every type of connection have to be justified: Has the coupling created by a local variable (type 5) the same strength as the one created by a method invocation (type 6)? Also, when mixing types of connections, there is information missing; it is impossible to know how much of the coupling is created by which type of connection. Therefore, all relevant types of connections in the use case of RQ1 will be measured by different metrics.
 
 To decide which types of connections to measure, we reviewed the literature on coupling metrics to understand which connections are the most measured and why.
 
