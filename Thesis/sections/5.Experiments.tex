@@ -305,12 +305,12 @@ With the data obtained from running the experiment, we calculate the covariance 
 \end{table}
 
 \unsure{Here, should I add a table with all the coefficients? Or maybe add them to the previous table?}
-In addition, we also calculate the \textit{Pearson correlation coefficient} \cite{everitt2002cambridge}. The values of the correlation range from $0.941282$ to $1$ for \texttt{TMIC}, and from $0.9445726$ to $1$ for \texttt{TAC}. Figures \ref{fig:correlation-tmic} and \ref{fig:correlation-tac} show the correlation between the \textit{propagation factor} and the values of the metrics \texttt{TMIC} and \texttt{TAC} for the client library \textit{fr.inria.gforge.spoon:spoon-core:8.2.0} and the server library \textit{org.eclipse.platform:org.eclipse.osgi:3.16.0}.
+In addition, we also calculate the \textit{Pearson correlation coefficient} \cite{everitt2002cambridge}. The values of the correlation range from $0.941282$ to $1$ for \texttt{TMIC}, and from $0.9446$ to $1$ for \texttt{TAC}. Figures \ref{fig:correlation-tmic} and \ref{fig:correlation-tac} show the correlation between the \textit{propagation factor} and the values of the metrics \texttt{TMIC} and \texttt{TAC} for the client library \textit{fr.inria.gforge.spoon:spoon-core:8.2.0} and the server library \textit{org.eclipse.platform:org.eclipse.osgi:3.16.0}.
 
 \begin{figure}[ht!]
 \begin{center}
 \includegraphics[width=0.75\textwidth]{figures/results/Rplot_spoon-core_eclipse-osgi_TMIC.png}
-\caption{Correlation between \textit{propagation factor} and \texttt{TMIC}. \textit{R} is the Pearson correlation coefficient, and \textit{p} corresponds to the confidence interval}
+\caption{Plot \textit{propagation factor} vs \texttt{TMIC}, with regression line. \textit{R} is the Pearson correlation coefficient, and \textit{p} corresponds to the confidence interval}
 \label{fig:correlation-tmic}
 \end{center}
 \end{figure}
@@ -318,13 +318,13 @@ In addition, we also calculate the \textit{Pearson correlation coefficient} \cit
 \begin{figure}[ht!]
 \begin{center}
 \includegraphics[width=0.75\textwidth]{figures/results/Rplot_spoon-core_eclipse-osgi_TAC.png}
-\caption{Correlation between \textit{propagation factor} and \texttt{TAC}. \textit{R} is the Pearson correlation coefficient, and \textit{p} corresponds to the confidence interval}
+\caption{Plot \textit{propagation factor} vs \texttt{TAC}, with regression line. \textit{R} is the Pearson correlation coefficient, and \textit{p} corresponds to the confidence interval}
 \label{fig:correlation-tac}
 \end{center}
 \end{figure}
 
 \subsection{Discussion}
-The sensitivity analysis results indicate a high sensitivity of the two coupling metrics to the propagation factor since there is a high correlation between these two values, the \textit{Pearson correlation coefficient} is always higher than $0.94$ (see Table \ref{fig:correlation-tmic}).
+The sensitivity analysis results indicate a high sensitivity of the two coupling metrics to the propagation factor since there is a high correlation between these two values, the \textit{Pearson correlation coefficient} is always higher than $0.94$ (see Table \ref{table:covariance-sensitivity}).
 
 \begin{finding}
 	The value of the metrics \texttt{TMIC} and \texttt{TAC} is highly sensitive to the value of the \textit{propagation factor}.
@@ -336,7 +336,7 @@ In Table \ref{table:covariance-sensitivity}, we can see that the values of the c
 \begin{figure}[ht!]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{figures/results/covariance-values-tmic.png}
-\caption{Correlation between the covariance of \textit{propagation factor} and \texttt{TMIC} and the sumation of the coupling measured at each distance (\texttt{DTMIC}). \textit{R} is the Pearson correlation coefficient, and \textit{p} corresponds to the confidence interval}
+\caption{Plot of the sumation of the coupling measured at each distance (\texttt{DTMIC}) vs the covariance of \textit{propagation factor} and \texttt{TMIC}. \textit{p} corresponds to the confidence interval}
 \label{fig:cov-value-tmic}
 \end{center}
 \end{figure}
@@ -344,7 +344,7 @@ In Table \ref{table:covariance-sensitivity}, we can see that the values of the c
 \begin{figure}[ht!]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{figures/results/covariance-values-tac.png}
-\caption{Correlation between the covariance of \textit{propagation factor} and \texttt{TAC} and the sumation of the coupling measured at each distance (\texttt{DTAC}). \textit{R} is the Pearson correlation coefficient, and \textit{p} corresponds to the confidence interval}
+\caption{Plot of the sumation of the coupling measured at each distance (\texttt{DTAC}) vs the covariance of \textit{propagation factor} and \texttt{TAC}. \textit{p} corresponds to the confidence interval}
 \label{fig:cov-value-tac}
 \end{center}
 \end{figure}
@@ -354,7 +354,7 @@ Finally, in the results of the correlation coefficient between the propagation f
 \begin{figure}[ht!]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{figures/results/correlation_max_distance_TMIC.png}
-\caption{Correlation between the correlation of \textit{propagation factor} and \texttt{TMIC} and the maximum distance at which coupling is measured. \textit{R} is the Pearson correlation coefficient, and \textit{p} corresponds to the confidence interval}
+\caption{Plot of the maximum distance at which coupling is measured vs the correlation of \textit{propagation factor} and \texttt{TMIC}. \textit{p} corresponds to the confidence interval}
 \label{fig:cor-dist-tmic}
 \end{center}
 \end{figure}
@@ -362,7 +362,7 @@ Finally, in the results of the correlation coefficient between the propagation f
 \begin{figure}[ht!]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{figures/results/correlation_max_distance_TAC.png}
-\caption{Correlation between the correlation of \textit{propagation factor} and \texttt{TAC} and the maximum distance at which coupling is measured. \textit{R} is the Pearson correlation coefficient, and \textit{p} corresponds to the confidence interval}
+\caption{Plot of the maximum distance at which coupling is measured vs the correlation of \textit{propagation factor} and \texttt{TAC}. \textit{p} corresponds to the confidence interval}
 \label{fig:cor-dist-tac}
 \end{center}
 \end{figure}
