@@ -280,27 +280,27 @@ With the data obtained from running the experiment, we calculate the covariance 
 
 \begin{table}[ht!]
 \begin{center}
-\begin{tabular}{|l|l|l|}
+\begin{tabular}{|l|l|l|l|l|}
 \hline
-\# & \textbf{TMIC Covariance} & \textbf{TAC Covariance} \\ \hline
-1 & 21.40 & 7.74 \\ \hline
-2 & 35.29 & 4.46 \\ \hline
-3 & 0.67 & 1.52 \\ \hline
-4 & 1.43 & 0.68 \\ \hline
-5 & 15.34 & 2.28 \\ \hline
-6 & 5.91 & 1.02 \\ \hline
-7 & 3.54 & 0.93 \\ \hline
-8 & 16.84 & 4.55 \\ \hline
-9 & 0.34 & 2.01 \\ \hline
-10 & 35.94 & 6.23 \\ \hline
-11 & 10.22 & 0.59 \\ \hline
-12 & 9.18 & 1.23 \\ \hline
-13 & 31.63 & 1.78 \\ \hline
-14 & 1.32 & 0.67 \\ \hline
-15 & 2.92 & 1.36 \\ \hline
+\# & \textbf{TMIC Covariance} & \textbf{TAC Covariance} & \textbf{TMIC Correlation} & \textbf{TAC Correlation}\\ \hline
+1   & 21.40 & 7.74 & 0.9921 & 0.9915 \\ \hline
+2   & 35.29 & 4.46 & 0.9999 & 0.9999 \\ \hline
+3   & 0.67  & 1.52 & 1      & 1      \\ \hline
+4   & 1.43  & 0.68 & 0.9999 & 0.9919 \\ \hline
+5   & 15.34 & 2.28 & 0.9993 & 0.9978 \\ \hline
+6   & 5.91  & 1.02 & 0.9951 & 0.9919 \\ \hline
+7   & 3.54  & 0.93 & 1      & 1      \\ \hline
+8   & 16.84 & 4.55 & 0.9999 & 1      \\ \hline
+9   & 0.34  & 2.01 & 0.9689 & 0.9446 \\ \hline
+10  & 35.94 & 6.23 & 0.9999 & 1      \\ \hline
+11  & 10.22 & 0.59 & 0.9412 & 0.9634 \\ \hline
+12  & 9.18  & 1.23 & 0.9797 & 0.9613 \\ \hline
+13  & 31.63 & 1.78 & 0.9742 & 0.9749 \\ \hline
+14  & 1.32  & 0.67 & 0.9777 & 0.9995 \\ \hline
+15  & 2.92  & 1.36 & 0.9471 & 0.9689 \\ \hline
 \end{tabular}
 \end{center}
-\caption{Covariance of the metrics \texttt{TMIC} and \texttt{TAC} with the \textit{propagation factor}, for all the dependencies used in the sensitivity analysis}
+\caption{Covariance and Pearson correlation of the metrics \texttt{TMIC} and \texttt{TAC} with the \textit{propagation factor}, for all the dependencies used in the sensitivity analysis}
 \label{table:covariance-sensitivity}
 \end{table}
 
@@ -324,7 +324,7 @@ In addition, we also calculate the \textit{Pearson correlation coefficient} \cit
 \end{figure}
 
 \subsection{Discussion}
-The sensitivity analysis results indicate a high sensitivity of the two coupling metrics to the propagation factor since there is a high correlation between these two values, the \textit{Pearson correlation coefficient} is always higher than $0.94$.
+The sensitivity analysis results indicate a high sensitivity of the two coupling metrics to the propagation factor since there is a high correlation between these two values, the \textit{Pearson correlation coefficient} is always higher than $0.94$ (see Table \ref{fig:correlation-tmic}).
 
 \begin{finding}
 	The value of the metrics \texttt{TMIC} and \texttt{TAC} is highly sensitive to the value of the \textit{propagation factor}.
