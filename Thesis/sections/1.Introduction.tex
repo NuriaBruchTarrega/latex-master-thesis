@@ -1,9 +1,9 @@
 % !TEX root = ../main.tex
 \chapter{Introduction}\label{ch:Introduction}
 
-Currently, many libraries are available for developers to reuse the features that these libraries implement, both commercial and open-source. This practice is becoming more and more popular since it allows reusing previously developed code and helps developers avoid implementing the same functionalities multiple times. For example, the Maven Repository Central contained 2.8M artifacts in 2018, which is 13.5x more artifacts than in 2011  \cite{Benelallam2019}.
+Currently, many libraries are available for developers, both commercial and open-source. Using libraries is becoming more and more popular \cite{kikas2017structure} since it allows reusing previously developed code and helps developers avoid implementing the same functionalities multiple times. For example, the Maven Repository Central, which contains the artifacts of a large amount of Java libraries, included 2.8M artifacts in 2018, which is 13.5x more artifacts than in 2011  \cite{Benelallam2019}.
 
-When a developer uses a library in a project, it creates a dependency between the project and the library. It implies that a significant number of projects depend on other libraries. The Maven Repository Central includes more than 9M dependencies between artifacts, dated 2018 \cite{Benelallam2019}. This adds the task of managing these dependencies to the maintenance tasks of the project, since proper maintenance of the dependencies of a project is also part of the software applications' health and security. The management of dependencies is one of the problems that software engineering is trying to solve \cite{kula2014visualizing}. For instance, an update of a dependency can involve changing part of the code if the update contains breaking changes \cite{Raemaekers2017}.
+When a developer uses a library in a project, it creates a dependency between the project and the library. It implies that a significant number of projects depend on other libraries. The Maven Repository Central includes more than 9M dependencies between artifacts, dated 2018 \cite{Benelallam2019}. This adds the task of managing these dependencies to the maintenance tasks of the project, since proper maintenance of the dependencies of a project is also part of the software applications' health and security. The management of dependencies is one of the problems that software engineering is trying to solve \cite{kula2014visualizing}. For instance, an update of a dependency may require changing part of the code if the update contains breaking changes \cite{Raemaekers2017}.
 
 The management and maintenance of the dependencies of a project is an important task. External libraries, just like any other software product, can have security vulnerabilities that may affect the projects that depend on these libraries. For example, some security vulnerabilities can become problems that can negatively impact a software product regarding integrity, privacy, or availability.
 
@@ -11,9 +11,9 @@ The management and maintenance of the dependencies of a project is an important 
 Currently, developers have package managers at their disposal to ease managing the dependencies of their projects. However, the dependency management available in these package managers only evaluates if a dependency exists or not, and a more detailed evaluation is missing \cite{hejderup2018prazi}. For instance, there is no way to evaluate how much a project depends on a library. Therefore, there is no way to know how likely it is that the project is affected by a vulnerability in the library, or how much of the project's code would need updating in case of a breaking change in the library..
 
 \blankl
-Therefore, this thesis aims to create a model to evaluate the dependencies to obtain information on the \textit{actual usage} of the dependencies. A set of metrics is proposed to measure the dependencies between projects and the dependencies these have. The metrics are designed to evaluate the dependencies according to two different perspectives, the code affected by the dependency and how much of a dependency is used.
+Therefore, this thesis aims to create a model to evaluate the dependencies to obtain information on the \textit{actual usage} of the dependencies. A set of metrics is proposed to measure the dependencies between projects and the dependencies these have. The metrics are designed to evaluate the dependencies according to three different perspectives: (1) the code affected by the dependency, (2) how much of a library is used and (3) the usage of the dependency per class.
 
-This project has been carried out in collaboration with the company \textit{Software Improvement Group (SIG)}, and it is motivated by the \textit{FASTEN} project \footnote{\url{https://www.fasten-project.eu/}}. The \textit{FASTEN} project aims to improve the quality of open-source development environments to make them more secure and reliable. For this reason, the FASTEN project aims to analyze the software library dependencies that the projects have in more detail.
+This project has been carried out in collaboration with the company \textit{Software Improvement Group (SIG)}, and it is motivated by the \textit{FASTEN} project \footnote{\url{https://www.fasten-project.eu/}}. The \textit{FASTEN} project aims to improve the quality of open-source development environments to make them more secure and reliable. For this reason, the FASTEN project aims to analyze the software library dependencies in more detail.
 
 \subsection{Research questions}
 To address the problems described in the previous section, we formulate the following research questions:
@@ -35,7 +35,7 @@ With this question, we want to propose a set of metrics to measure a dependency 
 
   \item \textbf{RQ1.3:} \textit{How can we validate the proposed metrics?}
 
-  There are many approaches to validate metrics used in the literature, some of which are used to validate the proposed metrics in this thesis. We need to understand which ones are suitable for our metrics.
+  There are many approaches to validate metrics used in the literature, some of which are used to validate the proposed metrics in this thesis, based on which are applicable for the proposed metrics.
 \end{itemize}
 
 \blankl
@@ -45,7 +45,7 @@ With this question, we want to propose a set of metrics to measure a dependency 
 Transitive dependencies involve more factors than direct dependencies, such as the propagation of the dependency, and the impact it can have. Therefore, the metrics proposed for the direct dependencies have to be adapted for the transitive ones.
 
 \blankl
-\textbf{RQ3:} \textit{How can we measure how much is a dependency used by a software product?}
+\textbf{RQ3:} \textit{How can we measure how much a library is used by a software product?}
 
 \blankls
 For this question, we look at the dependency from another perspective. The RQ1, focused on how much does the software product depend on a library. In this case, we measure how much of the library is being used by the software product.
@@ -54,11 +54,11 @@ For this question, we look at the dependency from another perspective. The RQ1, 
 \textbf{RQ4:} \textit{How can we visualize the metrics designed to model the software dependencies?}
 
 \blankls
-For the model to be usable by developers, it is necessary to create a way to visualize the results, which is usable for the target audience. The visualizations are presented to software developers to discuss the usefulness and actionability.
+For the model to be usable by developers, it is necessary to create a way to visualize the results, which is usable for the target audience. The visualizations are presented to software developers to discuss their usefulness and actionability, based on the situation on which these would be used.
 
 \subsection{Research method}
 The main research method we use during this project is \textit{Technical Action Research} (TAR) \cite{wieringa2012technical}.
-This research method is artifact-based, which means that the first step is to produce the artifact meant to be used in certain situations envisioned by the researcher. The testing of this artifact, to see if it is effective in these situations, is done through several iterations. First, under ideal conditions, and subsequently changing the experiments step by step to reach a real-world situation. In the context of this master thesis, because of time constraints, performing multiple iterations is not possible. However, there is the option of continuing with this part of the work in the future.
+This research method is artifact-based, which means that the first step is to produce the artifact meant to be used in certain situations envisioned by the researcher. The testing of this artifact, to see if it is effective in these situations, is done through several iterations. First, under ideal conditions, and subsequently changing the experiments step by step to reach a real-world situation. In the context of this master thesis, the artifact is the proof-of-concept that implements the model for software dependencies, and the proposed visualizations. Because of time constraints, performing multiple iterations is not possible. Therefore, we created a setting with an example input, in which the interviewees can use the artifact. However, there is the option of continuing with this part of the work in the future.
 
 \blankl
 Also, the research includes experiments. These experiments will be conducted as the empirical part of the validation of the metrics and the proof-of-concept implementation of both the model and the proposed visualizations.
@@ -69,7 +69,7 @@ Considering the current state of the art in the domain of this thesis project, t
 \begin{enumerate}
   \item \textbf{Model for software dependencies:}
 
-    We have created a model for both direct and transitive software dependencies. It contains three types of metrics, which measure the dependency from a different point of view. In total, there are eight metrics in the model. For each of the metrics, we provide a formal definition and a property-based theoretical validation.
+    We have created a model for both direct and transitive software dependencies. It contains three types of metrics, which measure the dependency from a different point of view: coupling, coverage, and usage per class. In total, there are eight metrics in the model. For each of the metrics, we provide a formal definition and a property-based theoretical validation.
 
   	\item \textbf{Proof-of-Concept tool:}
 
@@ -79,9 +79,7 @@ Considering the current state of the art in the domain of this thesis project, t
 
     \item \textbf{Validation:}
 
-    To validate the other contributions, we have conducted five experiments. First, we have compared our results with the results of the research by Soto-Valero et al. \cite{soto2020comprehensive}. For the first type of metrics, the coupling metrics, we have evaluated their significance and created a benchmark. Then, for the coupling metrics for transitive dependencies, which have a propagation factor, we have conducted a sensitivity analysis of this factor.
-
-    Finally, to validate the visualizations as well as the actionability and clarity of all the metrics, we have conducted expert interviews. We interviewed 15 professional developers who used the tool during the interview, considering certain usage scenarios.
+    To validate the other contributions, we have conducted five experiments. First, we have compared our results with the results of the research by Soto-Valero et al. \cite{soto2020comprehensive}. Second, for the first type of metrics, the coupling metrics, we have evaluated their significance. Third, for the coupling metrics for transitive dependencies, which have a propagation factor, we have conducted a sensitivity analysis of this factor. Next, to validate the visualizations as well as the actionability and clarity of all the metrics, we have conducted expert interviews. We interviewed 15 professional developers who used the tool during the interview, considering certain usage scenarios. Finally, we have created a benchmark of the coupling metrics, to understand the scale and distribution of these.
     
 \end{enumerate}
 
