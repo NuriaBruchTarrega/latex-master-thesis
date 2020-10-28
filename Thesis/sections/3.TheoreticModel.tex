@@ -24,9 +24,9 @@ Given class \textit{a} of library \textit{A}, and class \textit{b} of library \t
   \item ... class \textit{a} and class \textit{b} have a relationship such as uses or consists-of.
 \end{enumerate}
 
-Having one metric measure more than one of these types of connections is not recommended for various reasons. To begin with, the strengths of every type of connection have to be justified: Has the coupling created by a local variable (type 5) the same strength as the one created by a method invocation (type 6)? Also, when mixing types of connections, there is information missing; it is impossible to know how much of the coupling is created by which type of connection. Therefore, all relevant types of connections in the use case of RQ1 will be measured by different metrics.
+Having one metric measure more than one of these types of connections is not recommended for various reasons. To begin with, the strengths of every type of connection have to be justified: Has the coupling created by a local variable (type 5) the same strength as the one created by a method invocation (type 6)? Also, when mixing types of connections, there is information missing; it is impossible to know how much of the coupling is created by which type of connection. Therefore, all relevant types of connections in the use case of RQ1 are measured by different metrics.
 
-To decide which types of connections to measure, we reviewed the literature on coupling metrics to understand which connections are the most measured and why.
+To decide which types of connections to measure, we reviewed the literature on coupling metrics to understand which connections are the most measured and why. Our findings are summarized in Table~\ref{tab:type-con-literature}.
 
 \begin{table}[ht!]
     \centering
@@ -49,7 +49,7 @@ To decide which types of connections to measure, we reviewed the literature on c
 \end{table}
 
 Types 1 and 6 are the most used in the literature and, in particular, method invocation coupling is
-hypothesized to be the most relevant type of connection \cite{briand1999unified}, therefore we define a metric to measure \textbf{type 6: method invocation}.
+hypothesized to be the most relevant type of connection \cite{briand1999unified}, therefore we define a first metric to measure \textbf{type 6: method invocation}.
 
 The second metric that we consider is \textbf{type 1: aggregation coupling}, for two key reasons. First, it is used as much as type 6 in the reviewed literature. Besides, in some cases, measuring method invocations may not be enough to understand how much impact a dependency may have on a library. There is the possibility that a class contains a field with the type of another class but never calls a method that belongs to that class.
 

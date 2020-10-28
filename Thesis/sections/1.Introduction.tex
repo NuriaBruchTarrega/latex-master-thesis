@@ -1,29 +1,28 @@
 % !TEX root = ../main.tex
 \chapter{Introduction}\label{ch:Introduction}
 
-\section{Problem statement}
 Currently, many libraries are available for developers to reuse the features that these libraries implement, both commercial and open-source. This practice is becoming more and more popular since it allows reusing previously developed code and helps developers avoid implementing the same functionalities multiple times. For example, the Maven Repository Central contained 2.8M artifacts in 2018, which is 13.5x more artifacts than in 2011  \cite{Benelallam2019}.
 
-When a developer uses a library in a project, it creates a dependency between the project and the library. It implies that a significant number of projects depend on other libraries. The Maven Repository Central includes more than 9M dependencies between artifacts, dated 2018 \cite{Benelallam2019}. This adds the task of managing these dependencies to the maintenance tasks of the project. Proper maintenance of the dependencies of a project is also part of the software applications' health and security. The management of dependencies is one of the problems that software engineering is trying to solve \cite{kula2014visualizing}. For instance, an update of a dependency can involve changing part of the code if the update contains breaking changes \cite{Raemaekers2017}.
+When a developer uses a library in a project, it creates a dependency between the project and the library. It implies that a significant number of projects depend on other libraries. The Maven Repository Central includes more than 9M dependencies between artifacts, dated 2018 \cite{Benelallam2019}. This adds the task of managing these dependencies to the maintenance tasks of the project, since proper maintenance of the dependencies of a project is also part of the software applications' health and security. The management of dependencies is one of the problems that software engineering is trying to solve \cite{kula2014visualizing}. For instance, an update of a dependency can involve changing part of the code if the update contains breaking changes \cite{Raemaekers2017}.
 
 The management and maintenance of the dependencies of a project is an important task. External libraries, just like any other software product, can have security vulnerabilities that may affect the projects that depend on these libraries. For example, some security vulnerabilities can become problems that can negatively impact a software product regarding integrity, privacy, or availability.
 
 \blankl
-Currently, developers have package managers at their disposal to ease managing the dependencies of their projects. However, the dependency management available in these package managers only evaluates if a dependency exists or not, and a more detailed evaluation is missing \cite{hejderup2018prazi}. For instance, there is no way to evaluate how much a project depends on a library.
+Currently, developers have package managers at their disposal to ease managing the dependencies of their projects. However, the dependency management available in these package managers only evaluates if a dependency exists or not, and a more detailed evaluation is missing \cite{hejderup2018prazi}. For instance, there is no way to evaluate how much a project depends on a library. Therefore, there is no way to know how likely it is that the project is affected by a vulnerability in the library, or how much of the project's code would need updating in case of a breaking change in the library..
 
 \blankl
 Therefore, this thesis aims to create a model to evaluate the dependencies to obtain information on the \textit{actual usage} of the dependencies. A set of metrics is proposed to measure the dependencies between projects and the dependencies these have. The metrics are designed to evaluate the dependencies according to two different perspectives, the code affected by the dependency and how much of a dependency is used.
 
-This project has been carried out in collaboration with the company \textit{Software Improvement Group (SIG)}, and it is motivated by the \textit{FASTEN} project \footnote{\url{https://www.fasten-project.eu/}}. This project aims to improve the quality of open-source development environments to make them more secure and reliable. For this reason, the FASTEN project aims to analyze the software library dependencies that the projects have in more detail.
+This project has been carried out in collaboration with the company \textit{Software Improvement Group (SIG)}, and it is motivated by the \textit{FASTEN} project \footnote{\url{https://www.fasten-project.eu/}}. The \textit{FASTEN} project aims to improve the quality of open-source development environments to make them more secure and reliable. For this reason, the FASTEN project aims to analyze the software library dependencies that the projects have in more detail.
 
 \subsection{Research questions}
-To address the problems described in the previous section, we specify the following research questions:
+To address the problems described in the previous section, we formulate the following research questions:
 
 \blankl
 \textbf{RQ1:} \textit{How can we measure the degree of code dependency between two software products with a direct dependency?}
 
 \blankls
-With this question, we want to propose a set of metrics to measure a dependency from the point of view of the product that has a dependency on another product. How much it is affected by the dependency.
+With this question, we want to propose a set of metrics to measure a dependency from the point of view of the product that has a dependency on another product. we want to measure how much is the project affected by the dependency.
 
 \begin{itemize}
   \item \textbf{RQ1.1:} \textit{What constitutes a dependency between two products?}
@@ -32,37 +31,37 @@ With this question, we want to propose a set of metrics to measure a dependency 
 
   \item \textbf{RQ1.2:} \textit{Which metrics can be used to measure the dependency?}
 
-  We propose metrics to measure the dependency described. Existing metrics are considered, as well as new ones.
+  We propose metrics to measure the dependency described in the previous subquestion. Existing metrics are considered, as well as new ones.
 
-  \item \textbf{RQ1.3:} \textit{How can the proposed metrics be validated?}
+  \item \textbf{RQ1.3:} \textit{How can we validate the proposed metrics?}
 
-  There are many approaches to validate metrics used in the literature, some of which are used to validate the proposed metrics in this thesis.
+  There are many approaches to validate metrics used in the literature, some of which are used to validate the proposed metrics in this thesis. We need to understand which ones are suitable for our metrics.
 \end{itemize}
 
 \blankl
 \textbf{RQ2:} \textit{How can we measure the degree of code dependency between two software products with a transitive dependency?}
 
 \blankls
-Transitive dependencies involve more factors than direct dependencies. Therefore, the metrics proposed for the direct dependencies have to be adapted for the transitive ones.
+Transitive dependencies involve more factors than direct dependencies, such as the propagation of the dependency, and the impact it can have. Therefore, the metrics proposed for the direct dependencies have to be adapted for the transitive ones.
 
 \blankl
 \textbf{RQ3:} \textit{How can we measure how much is a dependency used by a software product?}
 
 \blankls
-For this question, we look at the dependency from another perspective. In this case, we measure how much of the dependency is being used by a software product.
+For this question, we look at the dependency from another perspective. The RQ1, focused on how much does the software product depend on a library. In this case, we measure how much of the library is being used by the software product.
 
 \blankl
 \textbf{RQ4:} \textit{How can we visualize the metrics designed to model the software dependencies?}
 
 \blankls
-For the model to be usable by developers, it is necessary to create a way to visualize the results, which is usable for the target users. The visualizations are presented to software developers to discuss the usefulness and actionability.
+For the model to be usable by developers, it is necessary to create a way to visualize the results, which is usable for the target audience. The visualizations are presented to software developers to discuss the usefulness and actionability.
 
 \subsection{Research method}
-The main research method that is going to be employed during this project is \textit{Technical Action Research} (TAR) \cite{wieringa2012technical}.
+The main research method we use during this project is \textit{Technical Action Research} (TAR) \cite{wieringa2012technical}.
 This research method is artifact-based, which means that the first step is to produce the artifact meant to be used in certain situations envisioned by the researcher. The testing of this artifact, to see if it is effective in these situations, is done through several iterations. First, under ideal conditions, and subsequently changing the experiments step by step to reach a real-world situation. In the context of this master thesis, because of time constraints, performing multiple iterations is not possible. However, there is the option of continuing with this part of the work in the future.
 
 \blankl
-Also, the research will include experiments. These experiments will be conducted as the empirical part of the validation of the metrics and the proof-of-concept implementation of both the model and the proposed visualizations.
+Also, the research includes experiments. These experiments will be conducted as the empirical part of the validation of the metrics and the proof-of-concept implementation of both the model and the proposed visualizations.
 
 \section{Contributions}
 Considering the current state of the art in the domain of this thesis project, the main contributions made by this research are the following:
@@ -87,7 +86,7 @@ Considering the current state of the art in the domain of this thesis project, t
 \end{enumerate}
 
 \section{Outline}
-In Chapter~\ref{ch:Background}, we describe the background of this thesis based on the existing literature of the domain.
+In Chapter~\ref{ch:Background}, we describe the background of this thesis based on the literature of the domain.
 Chapter \ref{ch:TheoreticModel} describes the metrics used to model the dependencies between software products.
 This theoretical model is used in Chapter \ref{ch:PoC}, which describes the creation of the proof-of-concept of this model.
 In Chapter \ref{ch:Experiments}, the setup and execution of the experiments are explained, and the results of the experiments are shown. These results are discussed in Chapter \ref{ch:Discussion}. Chapter \ref{ch:RelatedWork} contains the work related to the domain of this thesis.
