@@ -1,15 +1,15 @@
 % !TEX root = ../main.tex
 \chapter{Dependency evaluation model}\label{ch:TheoreticModel}
-This chapter contains a description of the metrics proposed to measure dependencies from various points of view. Each metric is also validated theoretically, by proving the metrics fulfill certain properties that the aspect being measured has.
+This chapter contains a description of the metrics proposed to measure dependencies from various points of view: coupling, coverage, and usage per class. Each metric is also validated theoretically, by proving the metrics fulfill certain properties that the aspect being measured has.
 
 \section{Measuring the degree of dependency}\label{sect:degree-dependency}
-To define the metrics to measure the degree of dependency, we use coupling metrics. We first define which coupling we measure, and then design the metrics accordingly. Finally, the five properties of coupling used in the literature \cite{briand1996property}, are proven for the designed metrics.
+To define the metrics measuring the degree of dependency, we use coupling metrics. We first define which coupling we measure, and then design the metrics accordingly. Finally, the five properties of coupling used in the literature \cite{briand1996property}, are proven for the designed metrics.
 
 \subsection{Definition of coupling}\label{subsect:defCoupling}
 To measure the degree of dependency, we investigate the characteristics of the coupling between libraries to measure. Following the framework defined by Briand et al. \cite{briand1999unified}, described in Section \ref{section:bg-coupling}, we define the coupling to measure according to the six criteria in the framework.
 
 \paragraph{Criterion 1 - Type of connection:}
-This criterion defines which type of connection creates coupling between the two items, previously defined as two separate sets of classes. Several and clearly distinguished mechanisms can create coupling, as defined by Briand et al. \cite{briand1999unified}, listed below.
+This criterion defines which type of connection creates coupling between the two items. Several and clearly distinguishable mechanisms can create coupling, as defined by Briand et al. \cite{briand1999unified}, listed below.
 
 \blankls
 Given class \textit{a} of library \textit{A}, and class \textit{b} of library \textit{B}...
@@ -19,12 +19,12 @@ Given class \textit{a} of library \textit{A}, and class \textit{b} of library \t
   \item ... method of class \textit{a} has a parameter of type \textit{b} or has return type \textit{b}.
   \item ... method of class \textit{a} has a local variable of type \textit{b}.
   \item ... method of class \textit{a} calls a method which has a parameter of type \textit{b}.
-  \item ... method of class \textit{a} references an? attribute of class \textit{b}.
-  \item ... method of class \textit{a} invokes a? method of class \textit{b}.
+  \item ... method of class \textit{a} references an attribute of class \textit{b}.
+  \item ... method of class \textit{a} invokes a method of class \textit{b}.
   \item ... class \textit{a} and class \textit{b} have a relationship such as uses or consists-of.
 \end{enumerate}
 
-Having one metric measure more than one of these types of connections is not recommended for various reasons. To begin with, the strengths of every type of connection have to be justified: Has the coupling created by a local variable (type 5) the same strength as the one created by a method invocation (type 6)? Also, when mixing types of connections, there is information missing; it is impossible to know how much of the coupling is created by which type of connection. Therefore, all relevant types of connections in the use case of RQ1 are measured by different metrics.
+Having a single metric measure more than one of these types of connections is not recommended for various reasons. To begin with, the strengths of every type of connection have to be justified: Has the coupling created by a local variable (type 5) the same strength as the one created by a method invocation (type 6)? How is the strenght quantified? Also, when mixing types of connections, there is information missing; it is impossible to know how much of the coupling is created by which type of connection, and therefore which fix has a priority. Therefore, all relevant types of connections in the use case of RQ1 are measured by different metrics.
 
 To decide which types of connections to measure, we reviewed the literature on coupling metrics to understand which connections are the most measured and why. Our findings are summarized in Table~\ref{tab:type-con-literature}.
 
