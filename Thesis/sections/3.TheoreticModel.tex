@@ -53,13 +53,13 @@ hypothesized to be the most relevant type of connection \cite{briand1999unified}
 
 The second metric that we consider is \textbf{type 1: aggregation coupling}, for two key reasons. First, it is used as much as type 6 in the reviewed literature. Besides, in some cases, measuring method invocations may not be enough to understand how much impact a dependency may have on a library. There is the possibility that a class contains a field with the type of another class but never calls a method that belongs to that class.
 
-The above-mentioned type of connections are those that we consider for these metrics, and we will explain them in greater detail in Section~\ref{section:defMetrics}. Nevertheless, it might be necessary to include additional metrics in the future, to account for other connection types.
+The above-mentioned types of connections are those that we consider for these metrics, and we will explain them in greater detail in Section~\ref{section:defMetrics}. Nevertheless, it might be necessary to include additional metrics in the future, to account for other connection types.
 
 \paragraph{Criterion 2 - Locus of impact:}
 As explained in Section~\ref{section:bg-coupling}, Briand et al. define two options for the locus of impact: import and export \cite{briand1999unified}. According to the definition of the problem, this measurement aims to know how much a library depends on another. Therefore, the point of view of this evaluation is from the library that uses another one. Hence, the locus of impact of the coupling to be measured in this thesis is \textbf{import}. We measure the dependency from the point of view of the library that acts as a client of a server library.
 
 \paragraph{Criterion 3 - Granularity of the measure:}
-In this criterion, there are two aspects to define. (1) The aggregation level of the measure, and (2) how the metric counts the connections. To begin with, we are going to discuss the aggregation level. Briand et al. \cite{briand1999unified} define the following levels:
+In this criterion, there are two aspects to define. (1) The aggregation level of the measure, and (2) how the metric counts the connections. We first discuss the aggregation level. Briand et al. \cite{briand1999unified} define the following levels:
 
 \begin{itemize}[noitemsep]
   \renewcommand\labelitemi{--}
