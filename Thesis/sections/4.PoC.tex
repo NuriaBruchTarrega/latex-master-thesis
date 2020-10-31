@@ -1,6 +1,6 @@
 % !TEX root = ../main.tex
 \chapter{Proof of Concept}\label{ch:PoC}
-In this section, we describe the different parts of the proof-of-concept implementation of the model. First, we discuss the possible techniques to implement it and describe the chosen one. Then, there is an explanation of how each metric is measured, including pseudo-code, to illustrate it.
+In this section, we describe the proof-of-concept implementation to calculate the metrics of the model, which can be found publicly in GitHub \footnote{\url{https://github.com/NuriaBruchTarrega/alexandria}}. In order to empirically validate the metrics defined in the previous section, it is necessary to be able to calculate them. Therefore, we decided to create a proof-of-concept tool to calculate the metrics for real-world libraries, and be able to experiment with the results. First, we discuss the possible techniques to implement it and describe the chosen one. Then, there is an explanation of how each metric is calculated, including pseudo-code, to illustrate it.
 
 \section{Analysis technique}
 Several techniques could have been used to implement the PoC that calculates the different metrics proposed.
@@ -11,12 +11,12 @@ Several techniques could have been used to implement the PoC that calculates the
   \item Call-level dependency graph
 \end{itemize}
 
-After an initial try, source code analysis has been discarded. The reason for it is that the source code is needed for both the client library and all its dependencies. Although it is sometimes available in Maven, it is not available as often as the bytecode. Furthermore, obtaining the code from GitHub created issues when resolving the dependency tree, since in many cases, the version of the dependency being used in the repository, was not yet available in Maven. Therefore, the dependency tree could not be resolved.
+After an initial effort, source code analysis has been discarded. The reason for it is that the source code is needed for both the client library and all its dependencies. Although it is sometimes available in Maven, it is not available as often as the bytecode. Furthermore, obtaining the code from GitHub created issues when resolving the dependency tree, since in many cases, the version of the dependency being used in the repository, was not yet available in Maven. Therefore, the dependency tree could not be resolved.
 
-The option of call-level dependency graphs is useful for the metrics that measure method invocations. However, the information needed to measure aggregation coupling is not contained in the call-level graphs. Therefore, the approach to develop this PoC has been bytecode analysis. Furthermore, obtaining the complete dependency tree's call-graphs is still a work in progress within the FASTEN project.
+The option of call-level dependency graphs is useful for the metrics that measure method invocations. However, the information needed to calculate aggregation coupling is not contained in the call-level graphs. Therefore, the approach to develop this PoC has been bytecode analysis. Furthermore, obtaining the complete dependency tree's call-graphs is still a work in progress within the FASTEN project \footnote{\url{https://www.fasten-project.eu/}}.
 
 \subsection{Bytecode analysis}
-The model proposed in this research is meant to be language-agnostic. Nevertheless, the proof-of-concept scope is limited to Java, since the bytecode analysis performed by the proof-of-concept is limited to this programming language. Furthermore, the PoC is focused on the libraries available in Maven.
+The model proposed in this research is meant to be language-agnostic. Nevertheless, the proof-of-concept scope is limited to Java, since the bytecode analysis performed by the proof-of-concept is limited to this programming language. Furthermore, the PoC is focused on the libraries available in Maven. It has been decided to limit the scope to Java and Maven, since it allows to compare the results with the research by Soto-Valero et al. \cite{soto2020comprehensive} (see Section \ref{sec:Exp1}). Furthermore, the work done by the FASTEN project, is also focused in Maven, and therefore it will be easier in the future to compare the results when measuring the metrics with byte-code analysis and call-graphs, since the source will be the same.
 
 The PoC implementation is supported by the libraries  \textit{Aether}\footnote{\url{https://wiki.eclipse.org/Aether/What_Is_Aether}}, and \textit{Javassist}\footnote{\url{http://www.javassist.org/}}.
 
@@ -40,7 +40,7 @@ To store the information needed to calculate the coupling metrics, there are two
 
 Each \texttt{DependencyTreeNode} has an object \texttt{MicBehaviors} and \texttt{AcClasses} for each of the distances at which the metric is measured, stored as a map, where the distance is the key and \texttt{MicBehaviors} or \texttt{AcClasses}, the value.
 
-Also, for the metrics that measure the dependencies' coverage, two additional fields have been created: \texttt{ReachableClasses} and \texttt{ReachableBehaviors}. The first field is to calculate the \(\verb|%ReachableClasses|\), and the second one for \(\verb|%ReachableMethods|\). Both \texttt{ReachableClasses} and \texttt{ReachableBehaviors}, are sets containing the classes, in the first case, and behaviors in the second case, of the library represented by the \texttt{DependencyTreeNode}, which are reachable from the client library.
+Also, for the metrics that measure the dependencies' coverage, two additional fields have been created: \texttt{ReachableClasses} and \texttt{ReachableBehaviors}. The first field is to calculate the \texttt{\%ReachableClasses}, and the second one for \texttt{\%ReachableMethods}. Both \texttt{ReachableClasses} and \texttt{ReachableBehaviors} are sets containing the classes, in the first case, and behaviors in the second case, of the library represented by the \texttt{DependencyTreeNode}, which are reachable from the client library.
 
 \begin{figure}[ht]
 \begin{center}
@@ -50,7 +50,8 @@ Also, for the metrics that measure the dependencies' coverage, two additional fi
 \end{center}
 \end{figure}
 
-\section{Measuring coupling metrics}
+
+\section{Calculating coupling metrics}
 This section contains the description of how the metrics \texttt{MIC}, \texttt{AC}, \texttt{TMIC}, and \texttt{TAC} are calculated in the implementation of the PoC. During this section, we use the terminology of the library Javassist. For example, to refer to methods and constructors, we say behaviors. Also, the classes used from Javassist are named as \texttt{Ct<name of the element>}, where \texttt{Ct} means compile-time. Therefore, the class representing a java class is \texttt{CtClass}.
 
 \subsection{Method Invocation Coupling}
@@ -257,7 +258,7 @@ During the calculation of \texttt{TMIC} and \texttt{TAC}, it is possible that on
 \subsection{Propagation Formula}
 To calculate the actual value of both, \texttt{TMIC} and \texttt{TAC}, we use the values stored in \texttt{MicBehaviorsAtDistance} and \texttt{AcClassesAtDistance} (see Figure \ref{fig:class-diagram-tree}). Then, using the value calculated at each distance, we apply the formula described in the equations \ref{eqn:tmic} and \ref{eqn:tac}. The only value of these formulas that cannot be extracted from the analysis of the bytecode, is the \textit{propagation factor}. This variable depends on the real-world behavior of these metrics, and its value will be discussed in Chapter \ref{ch:Experiments}.
 
-\section{Measuring coverage metrics}
+\section{Calculating coverage metrics}
 This section describes how the metrics \(\verb|%ReachableClasses|\) and \(\verb|%ReachableMethods|\) are calculated in the proof-of-concept, including the pseudo-code of the implementation. Both metrics are calculated at the same time since some of the connections are entangled. For example, one class can be reachable because it is the return type of a method. The implementation is done in two steps: finding the classes and methods of the direct dependencies directly reachable from the client library, and a second one to find the rest of the reachable methods and classes of all the dependency tree.
 
 \subsection{Step 1}
@@ -402,7 +403,7 @@ findAllReachableClassesAndUsageOfDependencies(dependencyTreeNode)
 \label{fig:algorithm-usage-step2-3}
 \end{figure}
 
-\section{Measuring usage per class metrics}
+\section{Calculating usage per class metrics}
 These two metrics are calculated after the calculation of the coupling metrics. In order to calculate the usage per class, the sets of \texttt{MethodCall} and \texttt{CtField} from \texttt{MicBehaviors} and \texttt{AcClasses}, are used (see Figure \ref{fig:class-diagram-tree}).
 
 The pseudo-code used to calculate the metric $\verb|#MethodInvocations|$, for a certain dependency and all the client classes from which it is reachable, can be found in Figure \ref{fig:algorithm-method-invocations}. The \texttt{micBehaviors} of the \texttt{DependencyTreeNode} are iterated (line 4). For each one of the \texttt{methodCall} involved (line 7), the class where the \texttt{methodCall} takes place is added to the map of the $\verb|#MethodInvocations|$ with value 1, or summed 1 to the value of the metric for that class, in case the class is already included in the map. In the case of the $\verb|#FieldDeclarations|$ the process is the same, but using the \texttt{CtField} stored in \texttt{AcClasses} instead.
@@ -483,7 +484,7 @@ Only the classes for which at least one of the two metrics is measured appear in
 
 \paragraph{Shape}
 The shape chosen for this chart is the bar. The line was discarded since it is not the goal to show progression between the different classes. Hence, the chart used is a multi-bar chart.
-At the x-axis of the chart, only the simple names of the classes are displayed to avoid having too much text in the chart. In the y-axis, there is a numeric scale, which corresponds to the measured \(\verb|#MethodInvocations|\) and \(\verb|#FieldDeclarations|\).
+At the x-axis of the chart, only the simple names of the classes are displayed to avoid having too much text in the chart. In the y-axis, there is a numeric scale, which corresponds to the calculated \(\verb|#MethodInvocations|\) and \(\verb|#FieldDeclarations|\).
 
 \paragraph{Color}
 To follow the palette used for the rest of this tool's frontend, we use the dark blue color for the bars displaying the metric \(\verb|#MethodInvocations|\), while the bars displaying the \(\verb|#FieldDeclarations|\) are pink.
@@ -491,4 +492,4 @@ To follow the palette used for the rest of this tool's frontend, we use the dark
 \paragraph{Interaction}
 This visualization appears and disappears according to the node selection of the dependency tree and table visualizations.
 
-Also, if the user hovers the cursor over a column, a \textit{tooltip} appears. This \textit{tooltip} contains the values of the measured metrics since these values are not displayed in the chart. In addition, it also contains the fully-qualified name of the class, to indicate the user the exact path to find the class within the project.
+Also, if the user hovers the cursor over a column, a \textit{tooltip} appears. This \textit{tooltip} contains the values of the calculated metrics since these values are not displayed in the chart. In addition, it also contains the fully-qualified name of the class, to indicate the user the exact path to find the class within the project.

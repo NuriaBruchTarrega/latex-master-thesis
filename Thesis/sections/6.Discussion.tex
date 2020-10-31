@@ -2,9 +2,7 @@
 \chapter{Discussion}\label{ch:Discussion}
 This chapter discusses the answers to the research questions formulated in this thesis and the process used to obtain these answers and possible threats to validity.
 
-\section{Research Questions}
-
-\subsection{RQ1: How can we measure the degree of code dependency between two software products with a direct dependency?}
+\section{RQ1: How can we measure the degree of code dependency between two software products with a direct dependency?}
 
 To answer this question, we have created the metrics \texttt{MIC} and \texttt{AC}. These metrics measure the coupling between the code of the client and the server library.
 
@@ -22,20 +20,20 @@ The answer to this question is described in Section \ref{section:defMetrics}. Ba
 
 To validate the metrics, we have taken different approaches. First, we have provided proof that both metrics fulfill the five properties of coupling metrics, defined by Briand et al. \cite{briand1996property}, which have been largely used in the literature. Then, from the set of validation criteria for software metrics described by Meneely et al. \cite{Meneely2012}, we selected the actionability and clear definition. Professional developers have conducted the validation of these two criteria. In order to improve the actionability of these metrics, we have created a benchmark. This benchmark allows us to create a scale or a risk evaluation, which helps de users understand what a certain value for the metric means and how to react to it.
 
-\subsection{RQ2: How can we measure the degree of code dependency between two software products with a transitive dependency?}
+\section{RQ2: How can we measure the degree of code dependency between two software products with a transitive dependency?}
 
 We have adapted the metrics designed for the previous question to measure code dependency of a transitive dependency. The result is the metrics Transitive Method Invocation Coupling \texttt{TMIC} and Transitive Aggregation Coupling \texttt{TAC}. These two metrics consider the distance between the client and the server library, and according to it, apply a \textit{propagation factor}. Due to the libraries between the client library and the server library, the coupling's impact is mitigated. This mitigation modeled with the \textit{propagation factor}. Moreover, the metrics \texttt{TMIC} and \texttt{TAC} use the reachability to measure the coupling. Therefore, only the parts of the server library that are reachable are measured. We have provided a formal definition of both of the coupling metrics for transitive dependencies. However, the value of the \textit{propagation factor} cannot be determined since we have not been able to measure the impact of coupling in the real world and how it behaves. The \textit{propagation factor} may also change depending on why you are looking at the coupling metrics (e.g., vulnerabilities or breaking changes). Since we cannot set only one value for the \textit{propagation factor}, we have conducted a sensitivity analysis, which indicated that the value of the metrics is highly sensitive to the value of the \textit{propagation factor}.
 
 The metrics are validated by proving that they fulfill the five properties of coupling metrics. And as the metrics for direct dependencies, these are included in the expert interviews to evaluate their clarity and actionability. Moreover, these two metrics also have a benchmarking. We have created it twice, one with \textit{propagation factor} set to $1$ and another one set to $0.1$. This way, we have to extremes of the value, and we can see the differences.
 
-\subsection{RQ3: How can we measure how much of a dependency is used by a software product?}
+\section{RQ3: How can we measure how much of a dependency is used by a software product?}
 
 This question is answered by creating the coverage metrics: \textit{Percentage of reachable classes} and \textit{percentage of reachable methods}. These two metrics measure how much of a dependency is used by considering the reachable classes and methods compared to the total classes and methods of the dependency. The reachability is measured by considering all possible types of connections between the client and the server. Both of the coverage metrics, are formally defined in Section \ref{sec:coverageMetrics}.
 
 For these metrics, we have conducted a theoretical validation by proving a subset of software metrics' properties that apply to the coverage metrics. Moreover, these metrics were also evaluated by professional developers to validate their actionability and the clarity of their definition.
 
 
-\subsection{RQ4: How can we visualize the metrics designed to model the software dependencies?}
+\section{RQ4: How can we visualize the metrics designed to model the software dependencies?}
 
 To visualize the model created during the previous questions, we have added a front-end to the proof-of-concept tool, which contains three visualizations. The first one is a tree graph visualization, which shows the dependency tree's hierarchy, and the unused parts are easily identifiable. Each node of the tree displays the coupling and coverage metrics for the client library and the server library. The second visualization is a table visualization. It shows the data of the server library of each dependency and the metrics measured for each. The table allows the user to filter the dependencies to be displayed and sort according to any values of the table. Finally, there is a third visualization when a dependency is selected. This visualization shows the distribution per class of the server library usage by displaying the usage per class metrics.
 

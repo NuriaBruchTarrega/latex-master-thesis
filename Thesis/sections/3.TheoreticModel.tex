@@ -3,10 +3,10 @@
 This chapter contains a description of the metrics proposed to measure dependencies from various points of view: coupling, coverage, and usage per class. Each metric is also validated theoretically, by proving the metrics fulfill certain properties that the aspect being measured has.
 
 \section{Measuring the degree of dependency}\label{sect:degree-dependency}
-To define the metrics measuring the degree of dependency, we use coupling metrics. We first define which coupling we measure, and then design the metrics accordingly. Finally, the five properties of coupling used in the literature \cite{briand1996property}, are proven for the designed metrics.
+Although we have not been able to find any other research which proposes metrics to measure the degree of code dependency in a dependency with a library, this has been previously done to measure the degree of dependency within a library, or any other software product. The type of metrics used are coupling metrics. Therefore, we are going to define coupling metrics which can be used in our use case. In order to create the metrics, we first need to define the coupling we measure. Then, we define the metrics which measure the type of coupling defined. Finally, the five properties of coupling established in the literature \cite{briand1996property}, are proven for the designed metrics.
 
 \subsection{Definition of coupling}\label{subsect:defCoupling}
-To measure the degree of dependency, we investigate the characteristics of the coupling between libraries to measure. Following the framework defined by Briand et al. \cite{briand1999unified}, described in Section \ref{section:bg-coupling}, we define the coupling to measure according to the six criteria in the framework.
+To measure the degree of dependency, we investigate the characteristics of the coupling between libraries. Following the framework defined by Briand et al. \cite{briand1999unified}, described in Section~\ref{section:bg-coupling}, we define the coupling to measure according to the six criteria in the framework, which were defined based on the characteristics of existing coupling definitions.
 
 \paragraph{Criterion 1 - Type of connection:}
 This criterion defines which type of connection creates coupling between the two items. Several and clearly distinguishable mechanisms can create coupling, as defined by Briand et al. \cite{briand1999unified}, listed below.
@@ -24,7 +24,7 @@ Given class \textit{a} of library \textit{A}, and class \textit{b} of library \t
   \item ... class \textit{a} and class \textit{b} have a relationship such as uses or consists-of.
 \end{enumerate}
 
-Having a single metric measure more than one of these types of connections is not recommended for various reasons. To begin with, the strengths of every type of connection have to be justified: Has the coupling created by a local variable (type 5) the same strength as the one created by a method invocation (type 6)? How is the strenght quantified? Also, when mixing types of connections, there is information missing; it is impossible to know how much of the coupling is created by which type of connection, and therefore which fix has a priority. Therefore, all relevant types of connections in the use case of RQ1 are measured by different metrics.
+Having a single metric measure more than one of these types of connections is not recommended for various reasons. To begin with, the strengths of every type of connection have to be justified: Has the coupling created by a local variable (type 5) the same strength as the one created by a method invocation (type 6)? How is the strenght quantified? Also, when mixing types of connections, there is information missing; it is impossible to know how much of the coupling is created by which type of connection, and therefore which fix has a priority. Therefore, all relevant types of connections in the use case of RQ1, measuring the degree of dependencies between libraries, are measured by different metrics.
 
 To decide which types of connections to measure, we reviewed the literature on coupling metrics to understand which connections are the most measured and why. Our findings are summarized in Table~\ref{tab:type-con-literature}.
 
@@ -49,14 +49,14 @@ To decide which types of connections to measure, we reviewed the literature on c
 \end{table}
 
 Types 1 and 6 are the most used in the literature and, in particular, method invocation coupling is
-hypothesized to be the most relevant type of connection \cite{briand1999unified}, therefore we define a first metric to measure \textbf{type 6: method invocation}.
+hypothesized to be the most relevant type of connection by Briand et al. \cite{briand1999unified}. Therefore, we define a first metric to measure \textbf{type 6: method invocation}.
 
 The second metric that we consider is \textbf{type 1: aggregation coupling}, for two key reasons. First, it is used as much as type 6 in the reviewed literature. Besides, in some cases, measuring method invocations may not be enough to understand how much impact a dependency may have on a library. There is the possibility that a class contains a field with the type of another class but never calls a method that belongs to that class.
 
-The above-mentioned types of connections are those that we consider for these metrics, and we will explain them in greater detail in Section~\ref{section:defMetrics}. Nevertheless, it might be necessary to include additional metrics in the future, to account for other connection types.
+The above-mentioned types of connections are those that we consider for these metrics, and we will explain them in greater detail in Section~\ref{section:defMetrics}. Nevertheless, it might be necessary to include additional metrics in the future, to account for other connection types.We discuss this in the experiment 2 (see Section \ref{sec:experiment2}).
 
 \paragraph{Criterion 2 - Locus of impact:}
-As explained in Section~\ref{section:bg-coupling}, Briand et al. define two options for the locus of impact: import and export \cite{briand1999unified}. According to the definition of the problem, this measurement aims to know how much a library depends on another. Therefore, the point of view of this evaluation is from the library that uses another one. Hence, the locus of impact of the coupling to be measured in this thesis is \textbf{import}. We measure the dependency from the point of view of the library that acts as a client of a server library.
+As explained in Section~\ref{section:bg-coupling}, Briand et al. define two options for the locus of impact: import and export \cite{briand1999unified}. According to the definition of the problem, this measurement aims to know how much a library depends on another, from the point of view of the library that uses another one. Hence, the locus of impact of the coupling to be measured in this thesis is \textbf{import}. We measure the dependency from the point of view of the library that acts as a client of a server library.
 
 \paragraph{Criterion 3 - Granularity of the measure:}
 In this criterion, there are two aspects to define. (1) The aggregation level of the measure, and (2) how the metric counts the connections. We first discuss the aggregation level. Briand et al. \cite{briand1999unified} define the following levels:
@@ -71,16 +71,16 @@ In this criterion, there are two aspects to define. (1) The aggregation level of
 \end{itemize}
 
 \blankls
-The goal is to measure the coupling between the set of classes of the client library and the server library classes. The measurement is done by aggregating the coupling of the more fine-grained levels \cite{briand1999unified}. For consistency, we name this aggregation level \textbf{library level}.
+The goal is to measure the coupling between the set of classes of the client library and the server library classes. The measurement is done by aggregating the coupling of the more fine-grained levels \cite{briand1999unified}. For consistency with the terminology used in this thesis, we name this aggregation level \textbf{library level}.
 
-Next, we define how the metric has to count connections. The options for counting connections defined by Briand et al. \cite{briand1999unified} are explained in Table \ref{table:counting-connections}. The options B), D), E), and F) are not useful for this use case. These options count the distinct items at the other end of the connection, not considering how many times those items are at the other end of the connection.
+Next, we define how the metric has to count connections. The options for counting connections defined by Briand et al. \cite{briand1999unified} are explained in Table \ref{table:counting-connections}. The options B), D), E), and F) are not useful for our use case. These options count the distinct items at the other end of the connection, not considering how many times those items are at the other end of the connection.
 
-The two other options are A) and C), which count individual connections. The difference between A and C is the aggregation level at which the connections are counted. Option C) counts the connections as in A), but adding up the result for each class's method or attribute. Since the level of the domain of the metrics is not class but library, a new option for counting connections is defined. The definition is created following the same style as Briand et al.: \textbf{Add up the number of connections counted as in C) for each class of the library}. By following this method of aggregating the number of connections through aggregation levels, a fine-grained analysis is maintained for the aggregation level of the metrics.
+The two other options are A) and C), which count individual connections. The difference between A and C is the aggregation level at which the connections are counted. Option C) counts the connections as in A), but adding up the result for each class's method or attribute. Since the level of the domain of the metrics is not class but library, a new option for counting connections is defined, which would be option G. The definition is created following the same style as Briand et al.: \textbf{Add up the number of connections counted as in C) for each class of the library}. By following this method of aggregating the number of connections through aggregation levels, a fine-grained analysis is maintained for the aggregation level of the metrics.
 
 \paragraph{Criterion 4 - Stability of the server:}
-Briand et al. define stable classes as \textit{"Classes that are not subject to change in the project at hand"} \cite{briand1999unified}. Following this definition, the server has to be stable in this case. Therefore, we are going to count connections from non-stable elements to \textbf{stable servers}. According to the previously defined locus of impact, the non-stable classes are the stable classes' clients.
+Briand et al. define stable classes as \textit{"Classes that are not subject to change in the project at hand"} \cite{briand1999unified}. Following this definition, the server of the connection has to be stable in this case. Therefore, we are going to count connections from non-stable elements to \textbf{stable servers}. According to the previously defined locus of impact, the non-stable classes are the stable classes' clients.
 
-However, in this thesis, the differentiation between stable and unstable classes is not enough. The goal is to measure coupling only with classes that are part of other libraries. Therefore, the classes that belong to standard libraries and the programming language types, although being stable, will not be considered by these metrics.
+However, in this thesis, the differentiation between stable and unstable classes is not enough. The goal is to measure coupling only with classes that are part of other libraries. Therefore, the classes that belong to standard libraries and the programming language types, although stable, will not be considered by these metrics.
 
 \paragraph{Criterion 5 - Direct and indirect coupling:}
 To decide whether the metrics count or not indirect coupling, we need to distinguish two alternative scenarios in which we want to measure coupling: Direct dependencies and transitive dependencies. When measuring direct dependencies, we want to measure only direct coupling between the libraries, whereas, for transitive dependencies, it is necessary to measure indirect coupling. Hence, \textbf{both types of coupling} will be measured, with two different metrics for each selected type of connection: One for direct dependencies and another for transitive dependencies.
@@ -105,10 +105,10 @@ In the case of the second question, polymorphism, we look at the methods of \tex
 
 We first analyze whether a call to a method of \texttt{Class1} would create coupling with \texttt{Class2} and \texttt{Class3}, and if it makes a difference when the method is overridden or not. The method \texttt{ma} invokes \texttt{m1}, which is not overridden by any of the descendants of \texttt{Class1}. When a change is made in \texttt{Class2} or \texttt{Class3} no change is required as the invoked method remains the same. In contrast, method \texttt{mb} calls \texttt{m2}, which is overridden in \texttt{Class2}. Here, the implementation of \texttt{m2} in \texttt{Class2} could be updated, and this may affect the way \texttt{ClassA} uses it, and therefore changes may be needed. Thus, it is necessary to \textbf{account for polymorphism}.
 
-Lastly, we discuss about how to decide whether a method belongs to a class or not. We have two options: (1) a method belongs to the class that implements it (could be more than one since we account for polymorphism), or (2) a method belongs to the class that it is referenced from. An example of this can be found in the last two lines of the method \texttt{mc} of \texttt{ClassB} call method \texttt{m1} and \texttt{m2} on an object of type \texttt{Class2}. The difference is that \texttt{m1} is implemented in \texttt{Class1} and \texttt{m2} is overridden in \texttt{Class2}. From a maintenance perspective, when the method \texttt{m1} is updated in \texttt{Class1}, this probably requires update in \texttt{ClassB} as well. However, changes in \texttt{Class2} will not generate a need to update the method call in \texttt{ClassB}. When  \texttt{m2} is updated in \texttt{Class1}, it will not make a difference for this call to \texttt{m2} since it is not executing the implementation of \texttt{Class1}. Therefore, \textbf{a method call creates coupling with the class that contains the implementation}.
+Lastly, we discuss about how to decide whether a method belongs to a class or not. We have two options: (1) a method belongs to the class that implements it (could be more than one since we account for polymorphism), or (2) a method belongs to the class that it is referenced from. An example of this can be found in the last two lines of the method \texttt{mc} of \texttt{ClassB} call method \texttt{m1} and \texttt{m2} on an object of type \texttt{Class2}. The difference is that \texttt{m1} is implemented in \texttt{Class1} and \texttt{m2} is overridden in \texttt{Class2}. From a maintenance perspective, when the method \texttt{m1} is updated in \texttt{Class1}, this probably requires update in \texttt{ClassB} as well. However, changes in \texttt{Class2} will not generate a need to update the method call \texttt{m1} in \texttt{ClassB}. When \texttt{m2} is updated in \texttt{Class1}, it will not make a difference for the call to \texttt{m2} in \texttt{ClassB} since it is not executing the implementation of \texttt{Class1}. Therefore, \textbf{a method call creates coupling with the class that contains the implementation}.
 
-\paragraph{Result}
-All the metrics that are used to measure the dependencies between libraries by considering coupling, are classified in Table \ref{table:metric-characteristics} according to the previous discussion on the criteria.
+\paragraph{Summary}
+Based on the criteria discussed above, we have four different definitions of coupling. Therefore, we create four metrics, each one measuring one type of coupling. The summary of the definitions of coupling created can be found in Table~\ref{table:metric-characteristics}.
 
 \begin{table}[h]
     \begin{center}
@@ -116,11 +116,11 @@ All the metrics that are used to measure the dependencies between libraries by c
     \hline
     \rot{Metric} & \rot{Type of connection} & \rot{Locus of impact} & \rot{Domain of measure} & \rot{Counting connections   } & \rot{Direct/Indirect} & \rot{Inheritance} & \rot{Polymorphism} & \rot{Item belongs to class} \\ \hline
     \hline
-    \#1   & 6 & Import & Library & G & Direct   & Both, no distinction & Yes & Implemented \\\hline
-    \#2   & 1 & Import & Library & G & Direct   & Both, no distinction & Yes & Implemented \\\hline
+    \#1   & 6 & Import & Library & Individual connections & Direct   & Both & Yes & Implemented \\\hline
+    \#2   & 1 & Import & Library & Individual connections & Direct   & Both & Yes & Implemented \\\hline
     \hline
-    \#3   & 6 & Import & Library & G & Indirect & Both, no distinction & Yes & Implemented \\\hline
-    \#4   & 1 & Import & Library & G & Indirect & Both, no distinction & Yes & Implemented \\\hline
+    \#3   & 6 & Import & Library & Individual connections & Indirect & Both & Yes & Implemented \\\hline
+    \#4   & 1 & Import & Library & Individual connections & Indirect & Both & Yes & Implemented \\\hline
     \end{tabular}
     \end{center}
     \caption{Criteria of the set of metrics}
@@ -128,13 +128,13 @@ All the metrics that are used to measure the dependencies between libraries by c
 \end{table}
 
 \subsection{Metrics for direct dependencies}\label{section:defMetrics}
-This section begins with a brief discussion in which the definition of coupling of the proposed metrics is compared with the existing metrics in the literature described in Section \ref{section:bg-coupling}. Next, there is the formal definition of each of the metrics. To end the section, the metrics' theoretical validation is done by proving the five properties of coupling metrics for each one of the metrics.
+This section begins with a brief discussion in which the definition of coupling of the proposed metrics is compared with the existing metrics in the literature described in Section~\ref{section:bg-coupling}. Next, there is the formal definition of each our metrics. To end the section, the metrics' theoretical validation is done by proving the five properties of coupling metrics as defined by Briand et al. \cite{briand1996property}, for each one of the new metrics.
 
 \subsubsection{Revisiting existing metrics}
-Once we have defined the coupling that is going to be measured by each of the metrics (see Table \ref{table:metric-characteristics}), we can compare it with the existing coupling metrics, according to Table \ref{table:coupling-metrics} in Section \ref{section:bg-coupling}.
+Once we have defined the coupling that is going to be measured by each of the metrics (see Table \ref{table:metric-characteristics}), we can compare it with the existing coupling metrics, according to Table~\ref{table:coupling-metrics} in Section~\ref{section:bg-coupling}, to decide whether there are metrics measuring the same coupling we previously defined, or if it is necessary to create new metrics.
 
 \paragraph{Metric \#1}
-To compare the coupling defined for this first metric defined in Table \ref{table:metric-characteristics} with the existing metrics, we focus on the ones that have the following characteristics:
+To compare the coupling defined for this first metric defined in Table~\ref{table:metric-characteristics} with the coupling measured by existing metrics, we focus on the ones that have the following characteristics:
 
 \begin{itemize}
   \item Type of connection: method invocations (type 6 in Table \ref{table:types-connections})
@@ -143,29 +143,29 @@ To compare the coupling defined for this first metric defined in Table \ref{tabl
   \item Counting connections: count individual connections (option A or C in Table \ref{table:counting-connections}).
 \end{itemize}
 
-The metrics that share these characteristics are \textit{MPC}, the group \textit{ICP}, and the metrics \textit{AMMIC}, \textit{IFMMIC} and \textit{OMMIC}. However, \textit{MPC} does not consider polymorphic implementations of the called methods. \textit{IFMMIC} is a metric formulated specifically for C++ \cite{briand1997investigation} and therefore is not useful for our model.
+The metrics that share these characteristics are \textit{MPC}, the group \textit{ICP}, and the metrics \textit{AMMIC}, \textit{IFMMIC} and \textit{OMMIC}. However, \textit{MPC} does not consider polymorphic implementations of the called methods. \textit{IFMMIC} is a metric formulated specifically for C++ \cite{briand1997investigation} and therefore is not useful for our model. The metric \textit{IFMMIC} focuses on method invocations between classes with a \textit{friend} relationship, which does not exist in most languages. Furthermore, in case the language is C++ no distinction should be made between \textit{friend} and \textit{non-friend} classes.
 
-From the group of metrics \textit{ICP}, the metric \textit{ICP}  considers both inheritance and non-inheritance coupling and therefore shares the definition of coupling with our metric. Nevertheless, according to the definition of \textit{ICP}, the coupling created by each method call is weighted by the number of parameters of the called method. In this aspect, it differs from metric \#1 from Table \ref{table:metric-characteristics}.
+From the group of metrics \textit{ICP}, the metric \textit{ICP}  considers both inheritance and non-inheritance coupling and therefore shares the definition of coupling with our metric. However, according to the definition of \textit{ICP}, the coupling created by each method call is weighted by the number of parameters of the called method. In this aspect, it differs from metric \#1 from Table~\ref{table:metric-characteristics}.
 
-Finally, the metrics \textit{AMMIC} and \textit{OMMIC} use the same definition of coupling as metric \#1 except that \textit{AMMIC} counts the method invocations to ancestors and \textit{OMMIC} to other classes. Therefore, metric \#1 is the sum of \textit{AMMIC} and \textit{OMMIC} but aggregated to the library aggregation level instead of class level.
+Finally, the metrics \textit{AMMIC} and \textit{OMMIC} use the same definition of coupling as metric \#1 except that \textit{AMMIC} counts the method invocations to ancestors and \textit{OMMIC} to other classes. Therefore, metric \#1 is the sum of \textit{AMMIC} and \textit{OMMIC}, but aggregated at the library level instead of the class level.
 
 \paragraph{Metric \#2}
-In the case of the second metric as defined in Table \ref{table:metric-characteristics}, we focus on the metrics with the following characteristics:
+In the case of the second metric, which measures the coupling as defined in Table \ref{table:metric-characteristics}, we focus on the metrics with the following characteristics:
 
 \begin{itemize}
   \item Type of connection: client class contains an attribute of type server class, aggregation coupling (type 1 in Table \ref{table:types-connections})
   \item Locus of impact: import
   \item Direct or indirect coupling: direct
-  \item Counting connections: count individual connections (option A or C in Table \ref{table:counting-connections})
+  \item Counting connections: count individual connections (option A and C in Table \ref{table:counting-connections}, measure individual connections at the method and class level respectively)
 \end{itemize}
 
-According to Table \ref{table:coupling-metrics}, the metrics that share these characteristics are \textit{DAC}, and from the suite of metrics by Briand et al. \cite{briand1997investigation} the metrics \textit{IFCAIC}, \textit{ACAIC} and \textit{OCAIC}. However, \textit{IFCAIC} is an extension for C++ and will not be considered.
+According to Table \ref{table:coupling-metrics}, the metrics that share these characteristics are \textit{DAC}, and from the suite of metrics by Briand et al. \cite{briand1997investigation} the metrics \textit{IFCAIC}, \textit{ACAIC} and \textit{OCAIC}. However, \textit{IFCAIC} is an extension for C++ and will not be considered, for the same reasons for which we discarded \textit{IFMMIC} for metric \#1.
 
 According to the definition of \textit{DAC}, it counts the number of attributes of a class that have any other class as type. Therefore, instead of calculating the coupling between two classes, it calculates a class's coupling with every other class. However, metric \#2 is used at the library level and calculates coupling between two libraries instead of the coupling of one library with all the others.
 
 Finally, \textit{ACAIC} and \textit{OCAIC} consider aggregation coupling with ancestors and others respectively. Therefore, metric  \#2 is the sum of these two metrics, but aggregated to library aggregation level, since the metrics are designed for class level.
 
-\subsubsection{Formal definition}\label{subsec:metric-definition}
+\subsubsection{Formal definitions}\label{subsec:metric-definition}
 
 \paragraph{Metric \#1: Direct method invocation coupling (\texttt{MIC})}
 The $\verb|MIC|$ metric measures the dependency between two libraries, one acting as a client ($L_c$) and the other as a server ($L_s$).
@@ -190,10 +190,10 @@ According to the criterion inheritance, it is necessary to consider all the poly
 
 \paragraph{Metric \#2: Direct aggregation coupling (\texttt{AC})}
 
-The $\verb|AC|$ metric counts the number of times when a class of $L_c$ has an attribute whose type is a class implemented in $L_s$. Therefore, the metric is calculated for each class implemented in $L_c$ ($\verb|C|(L_c)$). We consider only those attributes types that are stable classes (not implemented in $L_c$) for each class. The set of stable attribute types in a class $c$ is $\verb|SAT|(c_c)$.
+The $\verb|AC|$ metric counts the number of times when a class of $L_c$ has an attribute whose type is a class implemented in $L_s$. Therefore, the metric is calculated for each class implemented in $L_c$ ($c_c \in \verb|C|(L_c)$). We consider only those attributes types that are stable classes (not implemented in $L_c$) for each class $c_c$. The set of stable attribute types in a class $c$ is $\verb|SAT|(c_c)$.
 
 To account for polymorphism (criterion \textit{inheritance}), we count all the descendants of the class that are implemented in $L_s$. Therefore, we intersect the set of the descendants of the class, $\verb|DC|(c_s)$, with the set of
-classes implemented in $L_s$ ($\verb|C|(L_s)$). Finally, to count the  individual connections, we multiply the number of times a client class $c_c$ has an attribute of type the server class $c_s$ $\verb|NA|(c_c, c_s)$ by the number of class descendants (class included) implemented in $L_s$ ($\verb|nDC|(c_s,L_s)$).
+classes implemented in $L_s$ ($\verb|C|(L_s)$). Finally, to count the  individual connections, we multiply the number of times a client class $c_c$ has an attribute of type the server class $c_s$ ($\verb|NA|(c_c, c_s)$) by the number of class descendants (class included) implemented in $L_s$ ($\verb|nDC|(c_s,L_s)$).
 
 \begin{equation}
 \label{eqn:ac}
@@ -206,17 +206,17 @@ classes implemented in $L_s$ ($\verb|C|(L_s)$). Finally, to count the  individua
 \end{equation}
 
 \subsubsection{Theoretical validation}
-The theoretical validation of the metrics consists of demonstrating the properties of the metrics. Theoretical validation is necessary since it proves that the metrics share some properties with the attribute; these metrics measure coupling. In particular, for coupling metrics, there are five properties defined by Briand et al. \cite{briand1996property}, which have been largely used by the literature \cite{poshyvanyk2006conceptual, allen1999measuring, zhao2004measuring}.
+The theoretical validation of the metrics consists of demonstrating the properties of the metrics. Theoretical validation is necessary since it proves that the metrics share properties with the attribute measured; in this case, the attribute is coupling. In particular, for coupling metrics, there are five properties defined by Briand et al. \cite{briand1996property}, which have been largely used by literature \cite{poshyvanyk2006conceptual, allen1999measuring, zhao2004measuring}. First, we describe each of the properties, and then, we prove them for each of the metrics.
 
 \begin{enumerate}
   \item \textbf{Nonnegativity:} The value of the coupling metrics should never be negative.
-  \item \textbf{Null value:} The value of the coupling is expected to be zero if there is no relationship of from the client library to the server library.
+  \item \textbf{Null value:} The value of the coupling is expected to be zero if there is no relationship from the client library to the server library.
   \item \textbf{Monotonicity:} It is expected that if more relationships are added from the client library to the server library, the metric value does not decrease.
   \item \textbf{Merging of classes:} If two classes of the client library are merged, the total coupling between the client library and the server library should not increase.
   \item \textbf{Merging of unconnected classes:} When two classes of the client library, which do not share usage of the server library, are merged, the total coupling between the client library and the server library should remain equal.
 \end{enumerate}
 
-To describe the properties in greater detail, we use $\verb|Coupling|(L_c, L_s)$ to refer to both $\verb|AC|$ and $\verb|MIC|$, and $\verb|R|(L_c, L_s)$ to refer to the set of relationships between $L_c$ and $L_s$. $\verb|Coupling|(L_c, L_s)$ uses $\verb|R|(L_c, L_s)$ to evaluate the coupling between the two elements, but the way it is used differs per metric. The description of the properties is based on the description done by Briand et al. \cite{briand1996property}, which was meant for coupling metrics that measure the coupling within an element, or between an element and all the other elements. Therefore, the properties' description has been adapted for metrics that measure coupling between two different elements. Also, since all the defined metrics measure import coupling, the properties' definitions are focused on this locus of impact.
+To describe the properties in greater detail, we use $\ve$\verb|Coupling|(L_c, L_s)$.ling|(L_c, L_s)$ uses $\verb|R|(L_c, L_s)$ to evaluate the coupling between the two elements, but the way it is used differs per metric. To refer to the relations between a class of the client library, $c_c$, and the server library, we use $\verb|R|(c_c, L_s)$, and the coupling between the class and the server library is $\verb|Coupling|(c_c, L_s)$. The description of the properties is based on the description done by Briand et al. \cite{briand1996property}, which was meant for coupling metrics that measure the coupling within an element, or between an element and all the other elements. Therefore, the properties' description has been adapted for metrics that measure coupling between two different elements. Also, since all the newly introduced metrics measure import coupling, the properties' definitions are focused on this locus of impact.
 
 \paragraph{Nonnegativity}
 
@@ -230,19 +230,19 @@ Let $L_c$ be a client library and $L_s$ be a server library. The coupling betwee
 \paragraph{Monotonicity}
 Considering the definition of coupling, it is expected that when more relationships are added between the libraries, coupling does not decrease.
 
-Let $L_c$ be a client library, $L_s$ be a server library, and $c \in L_c$ be a class in $L_c$. If we modify class $c$ to form a new class $c'$ which is identical to $c$ except that $\verb|R|(c, L_s) \subseteq \verb|R|(c', L_s)$. For example, some method invocations have been added from $c$ to classes implemented in $L_s$. Let $L_c'$ be a library identical to $L_c$ but in which $c$ has been replaced by $c'$. Then, $\verb|Coupling|(L_c, L_s) \le \verb|Coupling|(L_c', L_s)$.
+Let $L_c$ be a client library, $L_s$ be a server library, and $c \in L_c$ be a class in $L_c$. We modify class $c$ to form a new class $c'$ which is identical to $c$ except that $\verb|R|(L_c, L_s) \subseteq \verb|R|(L_c', L_s)$. For example, some method invocations have been added from $c$ to classes implemented in $L_s$. Let $L_c'$ be a library identical to $L_c$ but in which $c$ has been replaced by $c'$. Then, $\verb|Coupling|(L_c, L_s) \le \verb|Coupling|(L_c', L_s)$.
 
 \paragraph{Merging of classes}
 The original definition of the property is created for metrics that measure coupling within a system, and therefore it is necessary to reformulate it. It is expected that if two classes of a system are merged, the system's coupling does not increase. If two classes are merged, the coupling between the two classes is subtracted from the system's total coupling.
 
 When considering the coupling between a client library and a server library, if two client library classes are merged, the two libraries' coupling would not increase. It could decrease, depending on how the refactoring is performed. If the classes share usage of the server library, one of the usages may be removed.
 
-Therefore, let $L_c$ be a client library, $L_s$ be a server library, and $c_1, c_2 \in L_c$ two classes in $L_c$. Let $c'$ be the class that results from merging  $c_1$ and $c_2$, and $L_c'$ be the library resulting from $L_c$ when $c_1$ and $c_2$ have been replaced by $c'$. Then, $\verb|Coupling|(c_1, L_s) + \verb|Coupling|(c_2, L_s) \ge \verb|Coupling|(c', L_s)$ and $\verb|Coupling|(C, L_s) \ge \verb|Coupling|(C', L_s)$.
+Therefore, let $L_c$ be a client library, $L_s$ be a server library, and $c_1, c_2 \in L_c$ two classes in $L_c$. Let $c'$ be the class that results from merging  $c_1$ and $c_2$, and $L_c'$ be the library resulting from $L_c$ when $c_1$ and $c_2$ have been replaced by $c'$. Then, $\verb|Coupling|(c_1, L_s) + \verb|Coupling|(c_2, L_s) \ge \verb|Coupling|(c', L_s)$ and $\verb|Coupling|(L_c, L_s) \ge \verb|Coupling|(L_c', L_s)$.
 
 \paragraph{Merging of unconnected classes}
 This property is a variation of the previous one, and it has to be adapted to the use case of this thesis. It is expected that the system's coupling will stay the same if two classes of a system, which have no relationship, are merged. This is because the class that results in the merging will have the same number of relationships with other classes as the original two.
 
-When measuring the coupling between a client library and a server library, the two unconnected classes are not using the server library in the same way. Therefore, none of the relationships with the server library can be merged when merging the two classes, and the coupling with the server library stays the same.
+When measuring the coupling between a client library and a server library, we define two unconnected classes as classes which do not share usage of the server library. Therefore, none of the relationships with the server library can be merged when merging the two classes, and the coupling with the server library stays the same.
 
 Let $L_c$ be a client library, $L_s$ a server library, and $c_1, c_2 \in L_c$ two classes from $L_c$ which do not share the same relationship with $L_s$. Let $c'$ be the class that is the union of  $c_1$ and $c_2$, and $L_c'$ be the library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. If there are no relationships between $c_1$ and $c_2$, then, $\verb|Coupling|(c_1, L_s) + \verb|Coupling|(c_2, L_s) = \verb|Coupling|(c', L_s)$ and $\verb|Coupling|(L_c, L_s) = \verb|Coupling|(L_c', L_s)$.
 
@@ -327,13 +327,13 @@ In this section, the metrics to measure transitive dependencies are described. F
 \subsubsection{Revisiting existing metrics}
 In the set of metrics reviewed by Briand et al. \cite{briand1999unified}, there is only one metric that does count indirect coupling, $RFC'$ (see Table \ref{table:coupling-metrics}). This metric also counts inheritance-based coupling, and it is focused on the client element, just as the metrics \#3 and \#4 defined in Table \ref{table:metric-characteristics}. However, $RFC'$ is calculated at the class aggregation level, whereas the metrics for this work are calculated at the library level. Furthermore, the strategy to count connections is E, which means that it counts the number of elements with which the class has a connection, not how many connections.
 
-Therefore, both metrics \#3 and \#4 are different from those reviewed by Briand et al. \cite{briand1999unified}.
+Therefore, both metrics \#3 and \#4 are entirely unrelated to those reviewed by Briand et al. \cite{briand1999unified}.
 
 \subsubsection{Concepts related to transitive dependencies}
 Other factors have to be taken into account to define the coupling for transitive metrics, which are not needed for the direct metrics.
 
 \paragraph{Reachability}
-To measure the transitive dependencies, only those methods or classes of the transitive dependencies that are \textit{reachable} from the analysed client library. For a given call-graph, a method is reachable if there is a path from the client library to the method. For example, in Figure \ref{fig:reachability}, there is no path from \texttt{Lib1} (the client library) to the method \texttt{Method10}. Therefore, \texttt{Method10} is not reachable form \texttt{Lib1} and the call from \texttt{Method6} to \texttt{Method10} will not be considered when measuring the transitive dependency between \texttt{Lib1} and \texttt{Lib3}, in the case of method invocation coupling.
+To measure the transitive dependencies, only those methods or classes of the transitive dependencies that are \textit{reachable} from the analysed client library are considered. For a given call-graph, a method is reachable if there is a path from the client library to the method \cite{fasten2020D3.2}. For example, in Figure \ref{fig:reachability}, there is no path from \texttt{Lib1} (the client library) to the method \texttt{Method10}. Therefore, \texttt{Method10} is not reachable form \texttt{Lib1} and the call from \texttt{Method6} to \texttt{Method10} will not be considered when measuring the transitive dependency between \texttt{Lib1} and \texttt{Lib3}, in the case of method invocation coupling.
 
 \begin{figure}[ht]
 \begin{center}
@@ -344,7 +344,7 @@ To measure the transitive dependencies, only those methods or classes of the tra
 \end{figure}
 
 \paragraph{Propagation Factor}
-The propagation represents how the impact of a change can spread across dependencies. In Figure \ref{fig:reachability}, a change in \texttt{Method3} would affect directly the client  library (\texttt{Lib1}). However, a change in \texttt{Method7}, affects first \texttt{Method3}, and then it can spread to \texttt{Method1}, in case it is not mitigated in \texttt{Method3}. This possible mitigation is accounted for by the \textit{Propagation Factor}.
+The propagation represents how the impact of a change can spread across dependencies \cite{fasten2019survey}. In Figure \ref{fig:reachability}, a change in \texttt{Method3} would affect directly the client  library (\texttt{Lib1}). However, a change in \texttt{Method7}, affects first \texttt{Method3}, and then it can spread to \texttt{Method1}, in case it is not mitigated in \texttt{Method3}. This possible mitigation is accounted for by the \textit{Propagation Factor}.
 
 \subsubsection{Formal definition}
 
@@ -396,7 +396,7 @@ The transitive aggregation coupling per distance ($\verb|TACD|(L_c, L_s, \verb|d
 \paragraph{Nonnegativity}
 Assume that nonnegativity does not hold for metric $\verb|TMIC|$. Then, there exists a client library $L_c$, and a server library $L_s$ such that $\verb|TMIC|(L_c, L_s) < 0$. According to equation \ref{eqn:tmic}, there is a $\verb|distance|$ for which either $\verb|TMICD|(L_c,L_s, \verb|distance|) < 0$ or $\verb|PF|^{\verb|distance - 1|} < 0$. Since $\verb|distance|$ is a positive integer, and $\verb|PF| \in (0,1)$, the second option is not possible.
 
-Let's assume that $\verb|TMICD|(L_c,L_s, \verb|distance|) < 0$. Looking at the equation \ref{eqn:imic}, we see that there has to be at least one method, $rm$, from $L_s$ and reachable from $L_c$ at a certain distance ($rm \in \verb|RM|(L_c,L_s,\verb|distance|)$), such that $\verb|nIR|(rm,L_c) < 0$ or $\verb|nP|(rm, L_s) < 0$. Since $\verb|nP|(rm, L_s)$ corresponds to the number of polymorphic implementations of $rm$ in $L_s$, and we know that $rm$ belongs to $L_s$, then $\verb|nP|(rm, L_s) \geq 1$. Finally, for $\verb|nIR|(rm,L_c) < 0$ to be true, there should be less than zero method invocations in $L_c$ from which $rm$ is reachable. However, since $rm \in \verb|RM|(L_c,L_s,\verb|distance|)$, and $\verb|RM|(L_c,L_s,\verb|distance|)$ corresponds to the set of methods from $L_s$ that are reachable from $L_c$, we have that $\verb|nIR|(rm,L_c) \geq 1$, which constitutes a contradition.
+Let us assume that $\verb|TMICD|(L_c,L_s, \verb|distance|) < 0$. Looking at the equation \ref{eqn:imic}, we see that there has to be at least one method, $rm$, from $L_s$ and reachable from $L_c$ at a certain distance ($rm \in \verb|RM|(L_c,L_s,\verb|distance|)$), such that $\verb|nIR|(rm,L_c) < 0$ or $\verb|nP|(rm, L_s) < 0$. Since $\verb|nP|(rm, L_s)$ corresponds to the number of polymorphic implementations of $rm$ in $L_s$, and we know that $rm$ belongs to $L_s$, then $\verb|nP|(rm, L_s) \geq 1$. Finally, for $\verb|nIR|(rm,L_c) < 0$ to be true, there should be less than zero method invocations in $L_c$ from which $rm$ is reachable. However, since $rm \in \verb|RM|(L_c,L_s,\verb|distance|)$, and $\verb|RM|(L_c,L_s,\verb|distance|)$ corresponds to the set of methods from $L_s$ that are reachable from $L_c$, we have that $\verb|nIR|(rm,L_c) \geq 1$, which constitutes a contradition.
 
 Therefore, the metric $\verb|TMIC|$ fulfills the property \textit{Nonnegativity}.
 
@@ -446,7 +446,7 @@ Finally, if $\verb|nFR|(rc,L_c) < 0$ is true, there are less than zero field dec
 Therefore, the property \textit{Nonnegativity} holds for metric $\verb|TAC|$.
 
 \paragraph{Null value}
-Let's assume that $\verb|TAC|$ does not fulfill property \textit{Null value}. Therefore, there exists a client library $L_c$, and a server library $L_s$ such that $\verb|R|(L_c, L_s) = \emptyset$ and $\verb|TAC|(L_c, L_s) \neq 0$.
+Let us assume that $\verb|TAC|$ does not fulfill property \textit{Null value}. Therefore, there exists a client library $L_c$, and a server library $L_s$ such that $\verb|R|(L_c, L_s) = \emptyset$ and $\verb|TAC|(L_c, L_s) \neq 0$.
 
 If $\verb|TAC|(L_c, L_s) \neq 0$ then, as stated in equation \ref{eqn:iac}, there has to be a class $rc$ such that  $rc \in \verb|RC|(L_c,L_s,\verb|distance|)$. However, if $rc \in \verb|RC|(L_c,L_s,\verb|distance|)$, then $rc$ belongs to $L_s$, and is reachable from $L_c$. This creates a relation between $L_c$ and $L_s$, and therefore contradicts $\verb|R|(L_c, L_s) = \emptyset$.
 
@@ -486,7 +486,7 @@ The metrics presented in this section measure the dependencies from a different 
 \subsection{Definition of coverage}\label{subsect:usage-definition}
 Just as with the coupling metrics, it is necessary to define the characteristics of the coverage that will be measured. In this case, there is no framework indicating which are the relevant characteristics to define, and with which criteria.
 
-Therefore, based on the criteria discussed for the definition of coupling, we have created the list of the criterion applied in the coverage of a dependency.
+Therefore, based on the criteria discussed for the definition of coupling, we have created the list criteria applied in the coverage of a dependency.
 
 \paragraph{Type of connection}
 For these metrics, since it is not about coupling, but about how much of the server library is used by the client library, the metrics will not be focused solely on one type of connection. Instead, we will consider every type of connection in the measurement of coverage.
@@ -506,7 +506,7 @@ Given class \textit{a} and class \textit{b}...
 \paragraph{Granularity}
 In this case, we have to define a unit to measure which percentage of the server library units are being used by the client library. According to the type of connections, two different kinds of units can be used: methods and classes. For the goal of these metrics it is also necessary to use both units of measure. For example, the breaking changes of a library can be at a metric, or for an entire class, and we want to measure it for both cases. Therefore, we define two metrics, one for methods and another for classes. Nevertheless, the metrics' aggregation level is still at the library level since the goal is to measure the percentage of reachable units.
 
-The last aspect of the granularity to consider is how the connections are evaluated. Since the goal is not to know how many times a connection occurs, we count the distinct items at the other end of the connections.
+The last aspect of the granularity to consider is how the connections are evaluated. The goal is know how many items are reached, but not how many times. Therefore, we count the distinct items at the other end of the connections.
 
 \paragraph{Direct \& Indirect}
 Finally, we have to decide whether to consider indirect usage or not. Since we want to know the total percentage of coverage of the server library, we will consider both the units that are directly used and those indirectly used.
@@ -553,7 +553,7 @@ For this metric, since the unit of measure is the method, the only type of conne
 \subsection{Theoretical validation}\label{subsect:theoretical-validation-usage}
 In this section, the theoretical validation of the metrics \(\verb|%ReachableClasses|\) and \(\verb|%ReachableMethods|\) is done by proving the properties that these metrics should fulfill. Given that the two metrics are highly similar, the proofs are done for the first metric, namely \(\verb|%ReachableClasses|\), but could easily be done for the second one with the same reasoning.
 
-The properties chosen for these metrics are the ones that the aspect being measured should have. We based the properties on the work by Srinivasan and Devi \cite{srinivasan2014software}, which reviews the methodologies to validate metrics in software engineering. We obtained the following list of properties, which apply to these metrics. The first two properties were originally described by Weyuker \cite{weyuker1988evaluating} and the last three by Briand et al. \cite{briand1996property}. Some properties are originally defined using the class as the aggregation level. Therefore, we adapted the properties to be used with the library aggregation level.
+The properties chosen for these metrics are the ones that the aspect being measured should have. We based the properties on the work by Srinivasan and Devi \cite{srinivasan2014software}, which reviews the methodologies to validate metrics in software engineering. We obtained the following list of properties, which apply to these metrics. The first two properties were originally described by Weyuker \cite{weyuker1988evaluating} and the last three by Briand et al. \cite{briand1996property}. Some properties are originally defined using the class as the aggregation level. Therefore, we adapted the definition of the properties to library as the aggregation level.
 
 \begin{enumerate}
   \item \textbf{Noncoarseness:} Two different libraries can have different values for the same metric.
@@ -564,7 +564,7 @@ The properties chosen for these metrics are the ones that the aspect being measu
 \end{enumerate}
 
 \paragraph{Noncoarseness}
-Let's take the two cases in Figure \ref{fig:example-noncoarseness-reachable-classes}. In the first case, \texttt{Lib1} would be the client library, and \texttt{Lib2} the server library. In the example, we can see that the number of classes in the server library is: $|\verb|C|(Lib2)| = 3$. Also, the number of classes of the server library, reached by the client library is $|RM(Lib1, Lib2)| = 2$. Therefore, following the equation \ref{eqn:reachable-classes}, we have that \(\verb|%ReachableClasses|(Lib1, Lib2) = \frac{2}{3} = 0.66\).
+Let us consider the two cases in Figure \ref{fig:example-noncoarseness-reachable-classes}. In the first case, \texttt{Lib1} would be the client library, and \texttt{Lib2} the server library. In the example, we can see that the number of classes in the server library is: $|\verb|C|(Lib2)| = 3$. Also, the number of classes of the server library, reached by the client library is $|RM(Lib1, Lib2)| = 2$. Therefore, following the equation \ref{eqn:reachable-classes}, we have that \(\verb|%ReachableClasses|(Lib1, Lib2) = \frac{2}{3} = 0.66\).
 
 In the second case in Figure \ref{fig:example-noncoarseness-reachable-classes} we take \texttt{Lib3} as the client library, and \texttt{Lib4} as the server library. Therefore, we have $|\verb|C|(Lib4)| = 3$ and $|RM(Lib3, Lib4)| = 3$, which means that the value of the metric is  \(\verb|%ReachableClasses|(Lib3, Lib4) = \frac{3}{3} = 1\).
 
@@ -600,7 +600,7 @@ Let $L_c$ be a client library, and $L_s$ be a server library, such that \(\verb|
 Hence, the metric fulfills property \textit{Nonnegativity}.
 
 \paragraph{Null value}
-Let $L_c$ be a client library, and $L_s$ be a server library. There is no usage in $L_c$ of library $L_s$, $RC(L_c, L_s) = \emptyset$. Assuming that the property null value does not hold for \(\verb|%ReachableClasses|\), then \(\verb|%ReachableClasses|(L_c, L_s) \neq 0\). Since this metric has the property nonnegativity, then  \(\verb|%ReachableClasses|(L_c, L_s) > 0\).
+Let $L_c$ be a client library, and $L_s$ be a server library. There is no usage in $L_c$ of library $L_s$, $RC(L_c, L_s) = \emptyset$. Assuming that the property null value does not hold for \(\verb|%ReachableClasses|\), then \(\verb|%ReachableClasses|(L_c, L_s) \neq 0\). Since this metric has the property nonnegativity, it follows that  \(\verb|%ReachableClasses|(L_c, L_s) > 0\).
 Therefore, $\frac{|RC(L_c, L_s)|}{|C(L_s)|} > 0$ and $|RC(L_c, L_s)| > 0$, which contradicts that $RC(L_c, L_s) = \emptyset$.
 
 Therefore, the property \textit{Null value} holds for metric \(\verb|%ReachableClasses|\).
@@ -613,7 +613,7 @@ In conclusion, the metric \(\verb|%ReachableClasses|\) has the property \textit{
 
 \section{Measuring usage per class}
 
-In this case, the goal is to give a bit more low-level information on the usage of the dependency from the client library. It can be useful for a developer or a maintainer to know exactly which parts of the code are using the dependency. For example, if there is a breaking change, or if the library with a dependency has to be replaced.
+In this case, the goal is to give a lower-level information on the usage of the dependency from the client library. It can be useful for a developer or a maintainer to know exactly which parts of the code are using the dependency. For example, if there is a breaking change, or if the library with a dependency has to be replaced.
 
 This section describes how the usage is measured by these metrics and provides a formal definition of the metrics. Finally, we perform a theoretical validation of the metrics.
 
@@ -648,11 +648,11 @@ Based on the criteria discussed above, we define two metrics. The summary of the
 
 \begin{table}[h]
     \begin{center}
-    \begin{tabular}{|l|l|l|l|}
+    \begin{tabular}{|l|l|l|l|l|}
     \hline
-    Type of connection & Aggregation level & Counting connections & Direct/Indirect \\ \hline
-    Method invocation & Class & \#origin of connection & Both \\
-    Field declaration & Class & \#origin of connection & Both \\
+    Metric & Type of connection & Aggregation level & Counting connections & Direct/Indirect \\ \hline
+    \#1 & Method invocation & Class & \#origin of connection & Both \\
+    \#2 & Field declaration & Class & \#origin of connection & Both \\
     \hline
     \end{tabular}
     \end{center}

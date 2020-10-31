@@ -3,9 +3,9 @@
 In this section, we describe the experiments conducted with the dependency model created in this thesis, as well as the PoC. For each of the experiments, we explain the goal, the setup, the results, and finally, we discuss the results and the conclusions extracted from these.
 
 \section{Experiment 1: Comparison}\label{sec:Exp1}
-The goal of this experiment is to provide validation of the implementation in the PoC. We compare the results of the paper \textit{"A Comprehensive Study of Bloated Dependencies in the Maven Ecosystem"} by Soto-Valero et al. \cite{soto2020comprehensive}. In this work, a byte-code analysis is performed on Maven Artifacts to detect which of these artifacts' dependencies are \textit{bloated}, which we refer to as \textit{unused}. Although the PoC created in this thesis does not perform the same kind of analysis, we consider that a dependency is \textit{unused} if all the model's metrics detects no usage.
+The goal of this experiment is to validate the implementation in the PoC. We compare against the results of the study \textit{"A Comprehensive Study of Bloated Dependencies in the Maven Ecosystem"} by Soto-Valero et al. \cite{soto2020comprehensive}. In this work, a byte-code analysis is performed on Maven Artifacts to detect which of these artifacts' dependencies are \textit{bloated}, which we refer to as \textit{unused}. Although the PoC created in this thesis does not perform the same kind of analysis, we consider that a dependency is \textit{unused} if all the model's metrics detects no usage.
 
-\subsection{Experimental set up}
+\subsection{Experimental setup}
 Soto-Valero et al. perform a qualitative analysis, in which they analyze 31 libraries available as Maven artifacts. If unused dependencies are found during the analysis, a \textit{Pull Request} is made to the \textit{GitHub} repository of the artifact in which the unused dependencies are deleted from the \textit{pom} file.
 
 With the information in the paper, we collect the \textit{GroupId} and \textit{ArtifactId} of the 31 artifacts. Out of the 31, 2 could not be found in the \textit{Maven Repository Central}. For the other 29, the \textit{version} to use in the experiment is determined by finding the last version released before the experiment by Soto-Valero et al. was conducted - November of 2019.
@@ -102,7 +102,7 @@ Next, we take a look at the detection of used dependencies. There are 9 cases in
 	\label{find:source-code-analysis}
 \end{finding}
 
-\section{Experiment 2: Significance of the coupling metrics}\label{sec:experiment2}
+\section{Experiment 2: Coupling metrics significance}\label{sec:experiment2}
 
 The goal of this experiment is to validate if the coupling metrics designed in the model, namely \texttt{MIC}, \texttt{AC}, \texttt{TMIC}, and \texttt{TAC}, are a good indicator of the usage of the dependencies by the clients. As a partial validation of the metrics' significance, we compare it with the results gathered from the usage metrics. We want to know how often a dependency is used, either by using classes or methods, and it is detected as uncoupled by the coupling metrics. This way, we know if there are many cases in which a dependency is only used with a type of connection other than method invocation or field declaration.
 
@@ -115,7 +115,7 @@ Based on these findings, the second approach we took was to look for updates tha
 
 Next, we contacted the first author of the paper \textit{"Why and How Java Developers Break APIs"} \cite{Brito2018}, which mines GitHub repositories to find possible breaking changes in APIs, to obtain the dataset of breaking changes created based on their findings. Brito, the author, shared the dataset with us. The dataset includes 24 commits containing breaking changes, which correspond to 19 different libraries. Out of the 25 commits, 12 are from Gradle libraries instead of Maven and cannot be used with the PoC. Besides, we could not find four of the commits in GitHub, and two others correspond to testing libraries, which are out of the scope of the analysis performed by the PoC. Therefore, there were only six breaking changes left, for which three the Maven artifact that these belong to had no dependants for which to do the analysis. The last three have only one dependant, and therefore is not possible to compare the impact of the breaking changes.
 
-Finally, we tried to manually search for deprecated libraries and other libraries that used them — however, similar problems where encountered. Finding commits which replaced a deprecated dependency and the client library and all the dependencies are available in \textit{Maven Central Repository}, is a manual task that, after multiple hours of work, gave no results.
+Finally, we tried to manually search for deprecated libraries and other libraries that used them — however, similar problems where encountered. Finding commits which replaced a deprecated dependency and the client library and all the dependencies are available in \textit{Maven Central Repository}, was a laborious manual task that eventually gave no results.
 
 \subsection{Experimental set up}
 To run this experiment, we prepared a new request in the API of the PoC. The request has to contain a path to a \textit{.txt} file (tab-delimited). The file has to contain three columns (with headers): Group Id, Artifact Id, and version. For each one of the rows, the analysis of the dependencies is performed. The result of each of the analysis is processed, summarizing all the analysis with the following information:
@@ -237,7 +237,7 @@ During the process of this thesis, it was intended to create this type of coupli
 \end{figure}
 
 \section{Experiment 3: Sensitivity Analysis}
-As explained before, we have not been able to obtain the real-world data to understand how the impact of the transitive dependencies behaves, and correlate it with our transitive coupling metrics \texttt{TMIC}, and \texttt{TAC}. Therefore, we cannot know which would be the actual value of the \textit{propagation factor} for these two metrics. Instead, what we do is a sensitivity analysis of the \textit{propagation factor} on these two metrics.
+As explained before, we have not been able to obtain the real-world data to understand how the impact of the transitive dependencies behaves, and correlate it with our transitive coupling metrics \texttt{TMIC}, and \texttt{TAC}. Therefore, we cannot know which would be the actual value of the \textit{propagation factor} for these two metrics. Instead, we conduct a sensitivity analysis of the \textit{propagation factor} on these two metrics.
 
 A \textit{Sensitivity Analysis} consists of analyzing how much an input variable affects the output. In this case, the input variable is the \textit{propagation factor}, and the output is the value of the metrics.
 
@@ -304,8 +304,7 @@ With the data obtained from running the experiment, we calculate the covariance 
 \label{table:covariance-sensitivity}
 \end{table}
 
-\unsure{Here, should I add a table with all the coefficients? Or maybe add them to the previous table?}
-In addition, we also calculate the \textit{Pearson correlation coefficient} \cite{everitt2002cambridge}. The values of the correlation range from $0.941282$ to $1$ for \texttt{TMIC}, and from $0.9446$ to $1$ for \texttt{TAC}. Figures \ref{fig:correlation-tmic} and \ref{fig:correlation-tac} show the a plot with the values of the metrics \texttt{TMIC} and \texttt{TAC} as a function of \textit{propagation factor}. On the left side, for the client library \textit{fr.inria.gforge.spoon:spoon-core:8.2.0} and the server library \textit{org.eclipse.platform:org.eclipse.osgi:3.16.0}, and on the right side for \textit{org.easymock:easymock:4.2} and \textit{org.hamcrest:hamcrest-core:1.3}.
+In addition, we also calculate the \textit{Pearson correlation coefficient} \cite{everitt2002cambridge}, since it is the most used when measuring the degree of relationship between two variables. The values of the correlation range from $0.941282$ to $1$ for \texttt{TMIC}, and from $0.9446$ to $1$ for \texttt{TAC}. Figures \ref{fig:correlation-tmic} and \ref{fig:correlation-tac} show the a plot with the values of the metrics \texttt{TMIC} and \texttt{TAC} as a function of \textit{propagation factor}. On the left side, for the client library \textit{fr.inria.gforge.spoon:spoon-core:8.2.0} and the server library \textit{org.eclipse.platform:org.eclipse.osgi:3.16.0}, and on the right side for \textit{org.easymock:easymock:4.2} and \textit{org.hamcrest:hamcrest-core:1.3}.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -389,10 +388,10 @@ This last experiment has various goals. The main one is to validate the design o
   \item Algorithm Design
 \end{enumerate}
 
-In this case, we focus on the third option: Visual Encoding and Interaction Design. To carry out this validation, we designed an \textit{Expert Review} by the means of interviews. In addition, we included questions about the clarity and actionability of the metrics of the model. Therefore, these two aspects of the metrics, which are included in the set of validation criteria defined by Meneely et al. \cite{Meneely2012}, can also be validated.
+In this case, we focus on the third option: Visual Encoding and Interaction Design. To carry out this validation, we designed an \textit{Expert Review} by the means of interviews. In addition, the second goal of this experiment is to evaluate the clarity and actionability of the metrics included in the model. Therefore, we added questions about clarity and actionablity, so the participants could give their view. Therefore, these two aspects of the metrics, which are included in the set of validation criteria defined by Meneely et al. \cite{Meneely2012}, can also be validated.
 
 \subsection{Experimental set up}
-The interview consists on 19 questions and a demonstration of the PoC, with two proposed scenarios in which the interviewee uses the tool. The questions are divided in four sections, dividing the interview in a total of five parts:
+The interview consists on 19 questions and a demonstration of the PoC, with two proposed scenarios in which the interviewee uses the tool. The questions are divided in four sections, which together with the demonstration divide the interview in a total of five parts:
 
 \begin{enumerate}
   \item \textbf{Demographics:} The questions of this section are related to the interviewee's professional experience and current job.
@@ -744,7 +743,7 @@ Finally, one of the suggestions to improve the actionability of the coupling met
 \section{Experiment 5: Benchmarking}
 One of the main remarks received for the coupling metrics during the interviews is that there is no clear scale for those metrics. Therefore, the metrics' value can be hard to interpret, since there is no indicator of which number is very high or very low.
 
-Hence, we have done a benchmarking of the values of the metrics \texttt{MIC}, \texttt{AC}, \texttt{TMIC}, and \texttt{TAC}. The goal is to understand, which is the distribution of the values and be able to indicate which are the outliers of these metrics.
+Hence, we have benchmarked the values of the metrics \texttt{MIC}, \texttt{AC}, \texttt{TMIC}, and \texttt{TAC}. The goal is to understand, which is the distribution of the values and be able to indicate which are the outliers of these metrics.
 
 \subsection{Experimental set up}
 To execute this experiment, we have set a new request in the backend of the PoC. This request should contain the path to a \textit{.txt} file, which includes three different columns, tab-delimited. Each row represents a Maven artifact, and for each column it indicates: \textit{group id}, \textit{artifact id}, and \textit{version}.
