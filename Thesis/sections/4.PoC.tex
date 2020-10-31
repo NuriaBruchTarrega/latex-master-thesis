@@ -438,8 +438,15 @@ For each part of the visualization, we discuss different visual aspects of the v
 The visualization has been implemented using the framework \texttt{Angular}\footnote{\url{https://angular.io/}}. Most of the UI elements used are obtained from \texttt{Angular Material}\footnote{\url{https://material.angular.io/}}. Finally, for graph representations we have used \texttt{vis.js}\footnote{\url{https://visjs.org/}}, and \texttt{ngx-charts}\footnote{\url{https://github.com/swimlane/ngx-charts}} to display charts.
 
 \subsection{Dependency Tree}\label{sec:visualization-dependency-tree}
-The first visualization element's goal is to provide an overview of the client library's dependency tree after being resolved with the Maven algorithm. In this overview, the maintainer should be able to see the degree of dependency with each of the client library's dependencies. Furthermore, the unused dependencies, as well as the most used ones, should be easily identifiable.
-\todo{add example image}
+The first visualization element's goal is to provide an overview of the client library's dependency tree after being resolved with the Maven algorithm. In this overview, the maintainer should be able to see the degree of dependency with each of the client library's dependencies. Furthermore, the unused dependencies, as well as the most used ones, should be easily identifiable. An example of this visualization for the client library \textit{org.apache.flink:flink-core:1.9.1} can be found in Figure \ref{fig:tree-visualization}
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/tree-visualization.png}
+\caption{Example of the tree visualization}
+\label{fig:tree-visualization}
+\end{center}
+\end{figure}
 
 \paragraph{Layout}
 Since this visualization displays the dependency tree of the client library, the chosen layout is a \textit{graph}. In particular, it is a \textit{tree}. In this graph, each node represents a library, and each edge a dependency between the nodes. The tree is organized by levels, such that the first level only contains the client library, and the second level the direct dependencies. The rest of the levels are organized according to the dependencies of the previous levels.
@@ -460,8 +467,15 @@ There are two ways to select a node. The first one is by clicking the node. The 
 The second type of interaction has been implemented to display some additional information on the nodes. When a user hovers over a node, a \textit{tooltip} appears. The \textit{tooltip} contains the data of the library and the value of the coupling and coverage metrics. For the coupling metrics, two tables are displaying, for each metric, the value measured, and the distance at which the value was measured.
 
 \subsection{Dependency Table}
-The dependency tree visualization gives an overview of the dependencies. However, it is not useful to compare the values of the metrics among dependencies. Therefore, this second visualization is focused on seeing together all the values to sort and compare.
-\todo{Add image}
+The dependency tree visualization gives an overview of the dependencies. However, it is not useful to compare the values of the metrics among dependencies. Therefore, this second visualization is focused on seeing together all the values to sort and compare. Figure \ref{fig:table-visualization} shows the table visualization for the client library \textit{org.apache.flink:flink-core:1.9.1}.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/table-visualization.png}
+\caption{Example of the table visualization}
+\label{fig:table-visualization}
+\end{center}
+\end{figure}
 
 \paragraph{Layout}
 To be easy to compare the value of the metrics among all the dependencies, the layout chosen for this visualization is a table. The table displays one dependency on each row, while the columns display information about the dependency, and the coupling and coverage metrics calculated for the dependency. For each library, there is a column for the \textit{groupId}, the \textit{artifactId}, the \textit{version}, and whether the dependency is direct or transitive. Then, the rest of the columns the values displayed are \texttt{MIC} and \texttt{AC} (or \texttt{TMIC} and \texttt{TAC} for transitive dependencies), and the metrics \texttt{\%ReachableClasses} and \texttt{\%ReachableMethods}.
@@ -476,7 +490,15 @@ The color is used in this visualization only to indicate which library has been 
 As explained earlier, this visualization is meant to compare the values easier, and therefore the first interaction implemented for this visualization is sorting. The rows of the table can be sorted according to the values of any of the columns. Also, it is possible to filter the content of the table. The rows can be filtered based on whether the dependencies are direct or transitive, and if the client library uses the dependencies or not.
 
 \subsection{Distribution per class}
-With the previous visualizations, the user has an overview of the dependency tree. However, there is no way the user can have more detailed information about a specific library of the dependency tree. Therefore, and making use of the node selection implemented in the visualization described in section \ref{sec:visualization-dependency-tree}, we have created a visualization to display how the distribution of the dependency among the classes of the client library.\todo{Add example visualization}
+With the previous visualizations, the user has an overview of the dependency tree. However, there is no way the user can have more detailed information about a specific library of the dependency tree. Therefore, and making use of the node selection implemented in the visualization described in section \ref{sec:visualization-dependency-tree}, we have created a visualization to display the usage per class metrics for the analyzed client library, and the selected server library. An example of this visualization for the client library \textit{org.apache.flink:flink-core:1.9.1} and the server library \textit{com.esotericsoftware.kryo:kryo:2.24.0}, can be found in Figure \ref{fig:per-class-visualization}.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/per-class-visualization.png}
+\caption{Example of the distribution per class visualization}
+\label{fig:per-class-visualization}
+\end{center}
+\end{figure}
 
 \paragraph{Layout}
 The chosen layout for this visualization is a multi-chart. The chart contains two values for each represented class, the metrics \(\verb|#MethodInvocations|\) and \(\verb|#FieldDeclarations|\).
