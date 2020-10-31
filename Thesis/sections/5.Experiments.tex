@@ -118,7 +118,7 @@ Next, we contacted the first author of the paper \textit{"Why and How Java Devel
 Finally, we tried to manually search for deprecated libraries and other libraries that used them — however, similar problems where encountered. Finding commits which replaced a deprecated dependency and the client library and all the dependencies are available in \textit{Maven Central Repository}, was a laborious manual task that eventually gave no results.
 
 \subsection{Experimental set up}
-In this experiment, we calculated the coupling and coverage metrics of the model, for a set of Maven libraries \todo{Add reference}, to compare the results between the two types of metrics.To run this experiment, we prepared a new request in the API of the PoC. The request has to contain a path to a \textit{.txt} file (tab-delimited). The file has to contain three columns (with headers): \textit{Group Id}, \textit{Artifact Id}, and \textit{version}. For each one of the rows, the metrics are calculated for each of the dependencies. The result of each of the analyses is processed, summarizing all the analyses with the following information:
+In this experiment, we calculated the coupling and coverage metrics of the model, for a set of Maven libraries (see list of libraries in Appendix \ref{appendix:data-set}), to compare the results between the two types of metrics.To run this experiment, we prepared a new request in the API of the PoC. The request has to contain a path to a \textit{.txt} file (tab-delimited). The file has to contain three columns (with headers): \textit{Group Id}, \textit{Artifact Id}, and \textit{version}. For each one of the rows, the metrics are calculated for each of the dependencies. The result of each of the analyses is processed, summarizing all the analyses with the following information:
 
 \begin{itemize}
   \item \textbf{Total number of dependencies:} Number of dependencies of all the analyzed client libraries, including both direct and indirect.
@@ -151,8 +151,6 @@ To analyze more client libraries and, therefore, more dependencies, we extended 
   \item The artifact of the last version of the library should have at least one dependency with scope compile.
   \item The artifact and all its dependencies can be obtained from the \textit{Maven Central Repository}.
 \end{itemize}
-
-\todo{Show content of the file in appendix}
 
 \subsection{Results}
 
@@ -752,7 +750,7 @@ Then, the calculation of the metrics of the model is performed. For each analyze
 
 \subsection{Results}
 
-We have analyzed a total of $299$ direct dependencies and $470$ transitive dependencies \todo{Add reference to dataset in appendix}. We filtered out zero values since it means that there is no coupling in this case, and we plot the rest of the values. In Figures \ref{fig:MIC-benchmark} and \ref{fig:AC-benchmark}, we show the histograms representing the distribution of the values of \texttt{MIC} and \texttt{AC} respectively.
+We have analyzed a total of $299$ direct dependencies and $470$ transitive dependencies, obtained from analyzing a set of Maven libraries (see list of libraries in Appendix \ref{appendix:data-set}). We filtered out zero values since it means that there is no coupling in this case, and we plot the rest of the values. In Figures \ref{fig:MIC-benchmark} and \ref{fig:AC-benchmark}, we show the histograms representing the distribution of the values of \texttt{MIC} and \texttt{AC} respectively.
 
 \begin{figure}[ht!]
 \begin{center}
