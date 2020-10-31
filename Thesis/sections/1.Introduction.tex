@@ -8,7 +8,7 @@ When a developer uses a library in a project, it creates a dependency between th
 The management and maintenance of the dependencies of a project is an important task. External libraries, just like any other software product, can have security vulnerabilities that may affect the projects that depend on these libraries. For example, some security vulnerabilities can become problems that can negatively impact a software product regarding integrity, privacy, or availability.
 
 \blankl
-Currently, developers have package managers at their disposal to ease managing the dependencies of their projects. However, the dependency management available in these package managers only evaluates if a dependency exists or not, and a more detailed evaluation is missing \cite{hejderup2018prazi}. For instance, there is no way to evaluate how much a project depends on a library. Therefore, there is no way to know how likely it is that the project is affected by a vulnerability in the library, or how much of the project's code would need updating in case of a breaking change in the library..
+Currently, developers have package managers at their disposal to ease managing the dependencies of their projects. However, the dependency management available in these package managers only evaluates if a dependency exists or not, and a more detailed evaluation is missing \cite{hejderup2018prazi}. For instance, there is no way to evaluate how much a project depends on a library, or how much of the library is used. Therefore, there is no way to know how likely it is that the project is affected by a vulnerability in the library, or how much of the project's code would need updating in case of a breaking change in the library..
 
 \blankl
 Therefore, this thesis aims to create a model to evaluate the dependencies to obtain information on the \textit{actual usage} of the dependencies. A set of metrics is proposed to measure the dependencies between projects and the dependencies these have. The metrics are designed to evaluate the dependencies according to three different perspectives: (1) the code affected by the dependency, (2) how much of a library is used and (3) the usage of the dependency per class.
@@ -80,7 +80,7 @@ Considering the current state of the art in the domain of this thesis project, t
     \item \textbf{Validation:}
 
     To validate the other contributions, we have conducted five experiments. First, we have compared our results with the results of the research by Soto-Valero et al. \cite{soto2020comprehensive}. Second, for the first type of metrics, the coupling metrics, we have evaluated their significance. Third, for the coupling metrics for transitive dependencies, which have a propagation factor, we have conducted a sensitivity analysis of this factor. Next, to validate the visualizations as well as the actionability and clarity of all the metrics, we have conducted expert interviews. We interviewed 15 professional developers who used the tool during the interview, considering certain usage scenarios. Finally, we have created a benchmark of the coupling metrics, to understand the scale and distribution of these.
-    
+
 \end{enumerate}
 
 \section{Outline}

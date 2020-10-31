@@ -58,7 +58,7 @@ The cases that can happen for the rest of the libraries, the ones that are found
 
 \begin{itemize}
   \item \textbf{Correct:} All the used dependencies, according to the paper, are also used according to the tool.
-  \item \textbf{Shadowed:} At least one dependency is detected as unused because it is shadowed within the jar file of the client library in the building process.
+  \item \textbf{Shaded:} At least one dependency is detected as unused because it is shaded within the jar file of the client library in the building process.
   \item \textbf{Testing:} At least one dependency is found as unused since it is only used for testing, but not marked with scope \textit{testing}.
   \item \textbf{Unused:} At least one dependency found as used by the paper is unused in the tool's analysis.
 \end{itemize}
@@ -70,14 +70,14 @@ In Table \ref{table:comparison-results}, there are the results for each one of t
 \begin{tabular}{|l|l|l|}
 \hline
 \textbf{Library} & \textbf{Unused in paper} & \textbf{Used in paper} \\ \hline
-org.mybatis:mybatis:3.5.3                                   & Testing       & Shadowed        \\ \hline
+org.mybatis:mybatis:3.5.3                                   & Testing       & Shaded        \\ \hline
 org.apache.flink:flink-core:1.9.1                           & Testing       & Unused          \\ \hline
 com.puppycrawl.tools:checkstyle:8.27                        & Testing       & Correct         \\ \hline
 com.google.auto:auto-common:0.10                            & Testing       & Unused          \\ \hline
 edu.stanford.nlp:stanford-corenlp:3.9.2                     & Correct       & Unused          \\ \hline
 com.squareup.moshi:moshi-kotlin:1.9.2                       & Correct       & Correct         \\ \hline
 org.neo4j:neo4j-collections:3.5.13                          & Correct       & Unused          \\ \hline
-org.asynchttpclient:async-http-client:2.10.4                & Used          & Shadowed        \\ \hline
+org.asynchttpclient:async-http-client:2.10.4                & Used          & Shaded        \\ \hline
 org.alluxio:alluxio-core-transport:2.1.0                    & Correct       & Unused          \\ \hline
 com.github.javaparser:javaparser-symbol-solver-logic:3.15.5 & Correct       & Correct         \\ \hline
 io.undertow:undertow-benchmarks:2.0.27.Final                & Parent        & Correct         \\ \hline
@@ -95,10 +95,10 @@ org.jacop:jacop:4.7.0                                       & Correct       & Te
 \subsection{Discussion}
 To evaluate the results of this experiment, we will discuss the meaning of the different cases to detect unused dependencies. There are 9 cases in which the unused dependencies were not correctly detected. Out of these 9, 4 can completely be fixed, if the tool could also analyze the tests defined in the client library. This could be fixed by doing source-code analysis including the testing, instead of bytecode analysis. Also, the 2 cases in which the dependencies are inherited from the parent, and the algorithm used to resolve the dependencies does not include them. Finally, there are 3 cases in which there is at least one dependency which according to the paper should be unused, and it was detected used by the PoC. Therefore, the PoC implementation is overestimating in certain measure the usage of the dependencies.
 
-Next, we take a look at the detection of used dependencies. There are 9 cases in which at least one of the dependencies that were supposed to be used has no usage detected. Two of these cases are due to the dependencies being shadowed within the client library's jar during the build process. Also, one case includes a dependency used for testing. These scenarios could be fixed by doing source-code analysis, since the dependencies would not be shadowed yet. Finally, the other 7 cases include dependencies detected as unused, according to the paper by Soto-Valero et al. \cite{soto2020comprehensive}. Therefore, there are some false negatives, which could be related to the way we defined an unused dependency: based on the metrics of the model. It is possible that there are still some types of connections not detected by the tool (e.g., reflection constructs). In some other cases is could happen that it is a very specific type of library, the usage of which cannot be detected on the code. For example, we researched the server libraries of these cases, and it includes a case in which the dependency is related to the compilation of the project. Another case involves a client library in which the part that uses the dependency is not shipped with Maven, and therefore it cannot be detected in the jar file. Finally, there are some empty dependencies - have no classes. A next step could be to investigate what are these libraries used for, and how to detect it.
+Next, we take a look at the detection of used dependencies. There are 9 cases in which at least one of the dependencies that were supposed to be used has no usage detected. Two of these cases are due to the dependencies being shaded within the client library's jar during the build process. Also, one case includes a dependency used for testing. These scenarios could be fixed by doing source-code analysis, since the dependencies would not be shaded yet, and the tests could be included in the analysis. Finally, the other 7 cases include dependencies detected as unused, according to the paper by Soto-Valero et al. \cite{soto2020comprehensive}. Therefore, there are some false negatives, which could be related to the way we defined an unused dependency: based on the metrics of the model. It is possible that there are still some types of connections not detected by the tool (e.g., reflection constructs). In some other cases it could happen that it is a very specific type of library, the usage of which cannot be detected on the code. For example, we researched the server libraries of these cases, and it includes a case in which the dependency is related to the compilation of the project. Another case involves a client library in which the part that uses the dependency is not shipped with Maven, and therefore it cannot be detected in the jar file. Finally, there are some empty dependencies - have no classes. A next step could be to investigate what are these libraries used for, and how to detect it.
 
 \begin{finding}
-	Replacing bytecode analysis with source-code analysis would help improving the detection of the dependencies usage, and would allow to analyze testing dependencies.
+	The scope of the PoC has limited the analysis in some cases such as testing and shaded dependencies. This could be fixed by either including the tests in the jar files, or doing source-code analysis instead.
 	\label{find:source-code-analysis}
 \end{finding}
 
@@ -118,7 +118,7 @@ Next, we contacted the first author of the paper \textit{"Why and How Java Devel
 Finally, we tried to manually search for deprecated libraries and other libraries that used them — however, similar problems where encountered. Finding commits which replaced a deprecated dependency and the client library and all the dependencies are available in \textit{Maven Central Repository}, was a laborious manual task that eventually gave no results.
 
 \subsection{Experimental set up}
-To run this experiment, we prepared a new request in the API of the PoC. The request has to contain a path to a \textit{.txt} file (tab-delimited). The file has to contain three columns (with headers): Group Id, Artifact Id, and version. For each one of the rows, the analysis of the dependencies is performed. The result of each of the analysis is processed, summarizing all the analysis with the following information:
+In this experiment, we calculated the coupling and coverage metrics of the model, for a set of Maven libraries \todo{Add reference}, to compare the results between the two types of metrics.To run this experiment, we prepared a new request in the API of the PoC. The request has to contain a path to a \textit{.txt} file (tab-delimited). The file has to contain three columns (with headers): \textit{Group Id}, \textit{Artifact Id}, and \textit{version}. For each one of the rows, the metrics are calculated for each of the dependencies. The result of each of the analyses is processed, summarizing all the analyses with the following information:
 
 \begin{itemize}
   \item \textbf{Total number of dependencies:} Number of dependencies of all the analyzed client libraries, including both direct and indirect.
@@ -130,10 +130,10 @@ To run this experiment, we prepared a new request in the API of the PoC. The req
   \item \textbf{List server libraries AC/TAC not enough:} The list of \textit{GroupId}, \textit{ArtifactId}, and \textit{version} of the server libraries for which the metrics \texttt{AC} and \texttt{TAC} were not enough to indicate if there is usage or not.
 \end{itemize}
 
-As can be seen, in addition to the number of times that a dependency was used and it was not detected by the metrics (or at least by one of them), the list of server libraries of these dependencies is also stored. This way, it is possible to analyze which types of libraries are those, and why the coupling metrics are not relevant.
+As can be seen, in addition to the number of times that a dependency was used and it was not detected by the metrics (or at least by one of them), the list of server libraries of these dependencies is also stored. This way, it is possible to analyze which types of libraries are those, and why the coupling metrics are not enough to detect their usage.
 
 \blankl
-The experiment was run with a file containing 49 client libraries from the \textit{Maven Central Repository}.  We selected the client libraries to use for this experiment with the following criteria. First, we used the same libraries as in the comparison experiment (see Section \ref{sec:Exp1}), but using the last version of each library. We decided to reuse these libraries because the criteria used to select these libraries by Soto-Valero et al. \cite{soto2020comprehensive} is aligned with the needs of this experiment, and are listed below:
+The experiment was run with a file containing 67 client libraries from the \textit{Maven Central Repository}.  We selected the client libraries to use for this experiment with the following criteria. First, we used the same libraries as in the comparison experiment (see Section \ref{sec:Exp1}), but using the last version of each library. We decided to reuse these libraries because the criteria used to select these libraries by Soto-Valero et al. \cite{soto2020comprehensive} is aligned with the needs of this experiment, and are listed below:
 
 \begin{itemize}
   \item The library is relevant - has more than 100 stars on GitHub.
@@ -208,7 +208,7 @@ org.yaml                    & snakeyaml                       & Other       \\\h
 
 \subsection{Discussion}
 
-Based on the results shown in Table \ref{table:summary-significance}, we can see that the combination of the two types of coupling metrics allows us to detect used dependencies in 664/699 of the cases. In addition, the metrics \texttt{MIC} and \texttt{TMIC} alone, detect 659/699 of the cases. This means that \texttt{AC} and \texttt{TAC} are only really needed in 5 of these dependencies. However, this only talks about whether or not the metrics can perform a binary evaluation of the dependencies, which was not the goal of this thesis. Therefore, \texttt{AC} and \texttt{TAC} are also necessary to consider the type of coupling measured by this metric.
+Based on the results shown in Table \ref{table:summary-significance}, we can see that the combination of the two types of coupling metrics allows us to detect used dependencies in 664/699 of the cases. In addition, the metrics \texttt{MIC} and \texttt{TMIC} alone, detect 659/699 of the cases. This means that \texttt{AC} and \texttt{TAC} are only really needed in 5 of these dependencies. However, this only talks about whether or not the metrics can define whether a dependency is used or not at all, which was not the goal of this thesis. Therefore, \texttt{AC} and \texttt{TAC} are also necessary to consider the type of coupling measured by this metric.
 
 Nevertheless, if we compare the number of times that \texttt{AC}/\texttt{TAC} are not able to detect whether a dependency is used or not, with the times that the same happens with \texttt{MIC}/\texttt{TMIC}, we can conclude that:
 
@@ -217,7 +217,7 @@ Nevertheless, if we compare the number of times that \texttt{AC}/\texttt{TAC} ar
 	\label{find:significance-mic}
 \end{finding}
 
-This is inlined with the intuition that method invocation is the most significant type of connection. Generally, if there is an object of a particular class type in the code, at some point, a method call will be done on this object. However, an object can exist in the code through mechanisms other than field declaration (e.g., return type of a method call, or a variable).
+This is in line with the intuition that method invocation is the most significant type of connection. Generally, if there is an object of a particular class type in the code, at some point, a method call will be done on this object. However, an object can exist in the code through mechanisms other than field declaration (e.g., return type of a method call, or a variable).
 
 Nevertheless, since there are cases in which the combination of both types of metrics was not enough, it indicates that there are some other types of connections to be considered and measured. Given that half of the server libraries used but not detected by the coupling metrics contain annotations, creating a metric to measure the coupling created by annotations would improve these results.
 
@@ -237,7 +237,7 @@ During the process of this thesis, it was intended to create this type of coupli
 \end{figure}
 
 \section{Experiment 3: Sensitivity Analysis}
-As explained before, we have not been able to obtain the real-world data to understand how the impact of the transitive dependencies behaves, and correlate it with our transitive coupling metrics \texttt{TMIC}, and \texttt{TAC}. Therefore, we cannot know which would be the actual value of the \textit{propagation factor} for these two metrics. Instead, we conduct a sensitivity analysis of the \textit{propagation factor} on these two metrics.
+As explained before, we have not been able to obtain the real-world data to understand what the impact of the transitive dependencies is, or can be, and correlate it with our transitive coupling metrics \texttt{TMIC}, and \texttt{TAC}. Therefore, we cannot derive an actual value of the \textit{propagation factor} for these two metrics. Instead, we conduct a sensitivity analysis of the \textit{propagation factor} on these two metrics.
 
 A \textit{Sensitivity Analysis} consists of analyzing how much an input variable affects the output. In this case, the input variable is the \textit{propagation factor}, and the output is the value of the metrics.
 
@@ -276,7 +276,7 @@ We run this experiment with a randomly selected subset of the libraries used for
 \end{table}
 
 \subsection{Results}
-With the data obtained from running the experiment, we calculate the covariance of the metrics \texttt{TMIC} and \texttt{TAC} with the \textit{propagation factor}. The values of the covariance are displayed in Table \ref{table:covariance-sensitivity}.
+With the data obtained from running the experiment, we calculate the covariance of the metrics \texttt{TMIC} and \texttt{TAC} with the \textit{propagation factor}, to understand how much the value of the metrics changes due to a change in the \textit{propagation factor}. The values of the covariance are displayed in Table \ref{table:covariance-sensitivity}.
 
 \begin{table}[ht!]
 \begin{center}
@@ -342,7 +342,7 @@ The sensitivity analysis results indicate a high sensitivity of the two coupling
 	\label{find:high-sensitivity}
 \end{finding}
 
-In Table \ref{table:covariance-sensitivity}, we can see that the values of the covariance for \texttt{TMIC} are generally greater than those of \texttt{TAC}. This seems to be related to the fact that the values measured for \texttt{TMIC} are greater than those measured for \texttt{TAC}. Also, the cases in which the covariance is greater than $30$ seem to have greater coupling values at each distance. If we look at equation \ref{eqn:tmic}, the coupling measured at each distance ($\verb|TMICD|(L_c,L_s, \verb|distance|)$), is the value multiplied by the \textit{propagation factor}. Therefore if the \textit{propagation factor} is increased, the total value of the metric will increase more in consequence if the value of $\verb|TMICD|(L_c,L_s, \verb|distance|)$ is greater. To confirm this intuition, we create a plot to compare the covariance with the sum of the coupling measured at each distance. These plots can be seen in Figure \ref{fig:cov-value-tmic} and \ref{fig:cov-value-tac}, for \texttt{TMIC} and \texttt{TAC} respectively. In these plots, we have added the correlation between the two values, which confirms that the covariance between the \textit{propagation factor} and the value of the metrics is higher when more coupling is measured.
+In Table \ref{table:covariance-sensitivity}, we can see that the values of the covariance for \texttt{TMIC} are generally greater than those of \texttt{TAC}. This seems to be related to the fact that the values measured for \texttt{TMIC} are greater than those measured for \texttt{TAC}. Also, the cases in which the covariance is greater than $30$ seem to have greater coupling values at each distance. If we look at equation \ref{eqn:tmic}, the coupling measured at each distance ($\verb|TMICD|(L_c,L_s, \verb|distance|)$), is the value multiplied by the \textit{propagation factor}. Therefore if the \textit{propagation factor} is increased, the total value of the metric will increase more in consequence if the value of $\verb|TMICD|(L_c,L_s, \verb|distance|)$ is greater. To confirm this intuition, we create a plot to compare the covariance with the sum of the coupling measured at each distance. These plots can be seen in Figure \ref{fig:cov-value-tmic} and \ref{fig:cov-value-tac}, for \texttt{TMIC} and \texttt{TAC} respectively.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -360,7 +360,7 @@ In Table \ref{table:covariance-sensitivity}, we can see that the values of the c
 \end{center}
 \end{figure}
 
-Finally, in the results of the correlation coefficient between the propagation factor and the metrics, we also observe that the cases with the lowest correlation coefficients tend to be dependencies in which there is more distance between the client library and the server library. To compare the correlation and the distances, we create a plot with the correlation coefficient calculated for the sensitivity analysis and the maximum distance at which coupling is found. The confirmation of this intuition can be found in Figures \ref{fig:cor-dist-tmic} and \ref{fig:cor-dist-tac}.
+Finally, in the results of the correlation coefficient between the propagation factor and the metrics, we also observe that the cases with the lowest correlation coefficients tend to be dependencies in which there is more distance between the client library and the server library. To compare the correlation and the distances, we create a plot with the correlation coefficient calculated for the sensitivity analysis and the maximum distance at which coupling is found, the plots for \texttt{TMIC} and \texttt{TAC} can be found in Figures \ref{fig:cor-dist-tmic} and \ref{fig:cor-dist-tac} respectively.
 
 \begin{figure}[ht!]
 \begin{center}
