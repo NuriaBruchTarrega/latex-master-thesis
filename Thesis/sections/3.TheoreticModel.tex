@@ -242,7 +242,7 @@ Therefore, let $L_c$ be a client library, $L_s$ be a server library, and $c_1, c
 \paragraph{Merging of unconnected classes}
 This property is a variation of the previous one, and it has to be adapted to the use case of this thesis. It is expected that the system's coupling will stay the same if two classes of a system, which have no relationship, are merged. This is because the class that results in the merging will have the same number of relationships with other classes as the original two.
 
-When measuring the coupling between a client library and a server library, the two unconnected classes are not using the server library in the same way. Therefore, none of the relationships with the server library can be merged when merging the two classes, and the coupling with the server library stays the same.
+When measuring the coupling between a client library and a server library, we define two unconnected classes as classes which do not share usage of the server library. Therefore, none of the relationships with the server library can be merged when merging the two classes, and the coupling with the server library stays the same.
 
 Let $L_c$ be a client library, $L_s$ a server library, and $c_1, c_2 \in L_c$ two classes from $L_c$ which do not share the same relationship with $L_s$. Let $c'$ be the class that is the union of  $c_1$ and $c_2$, and $L_c'$ be the library identical to $L_c$ but in which $c_1$ and $c_2$ have been replaced by $c'$. If there are no relationships between $c_1$ and $c_2$, then, $\verb|Coupling|(c_1, L_s) + \verb|Coupling|(c_2, L_s) = \verb|Coupling|(c', L_s)$ and $\verb|Coupling|(L_c, L_s) = \verb|Coupling|(L_c', L_s)$.
 
