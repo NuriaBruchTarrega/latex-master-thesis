@@ -35,16 +35,6 @@ In this paper, Hejderup et al. propose extending dependency networks with a vers
 
 Therefore, in this work, Hejderup et al. propose a different approach to create call-level dependency networks, which considers each library's historical data. The focus of the research is an impact analysis of changes and bugs. Nevertheless, the dependency network could also have other applications, such as calculating the metrics proposed in this thesis. The prototype created by Hejderup et al. is focused on JavaScript and the \textit{npm} ecosystem. In this case, to create the call-graph, they used \textit{Jalangi}\footnote{\href{https://github.com/Samsung/jalangi2}{https://github.com/Samsung/jalangi2}}, which uses dynamic analysis.
 
-\begin{comment}
-%% I'm not sure whether to add this paper or not
-\paragraph{Vulnerable Open Source Dependencies: Counting Those That Matter \cite{pashchenko2018vulnerable}} % This is the paper that talks about halted dependencies.
-In this research, Pashchenko et al. propose a new method to count the dependencies of libraries. This method is used to analyze the dependencies of 200 libraries of the Maven ecosystem. With their method, they differentiate between libraries from the same project and third-party libraries. Furthermore, the dependencies that are not deployed in production (only used for testing or development purposes) are filtered out since these dependencies' vulnerabilities do not affect the final product. Furthermore, they consider the special case of halted dependencies, which are the ones that are not being actively developed. Vulnerabilities in halted dependencies suppose an important threat to the software projects that depend on these since the vulnerability will not be fixed.
-
-One of the main contributions of this research is implementing the method defined in the paper to detect the vulnerabilities that matter according to their definition.
-
-However, Pashchenko et al. do not perform a call-level analysis of the dependencies since their dependency resolution is based only on the \textit{POM} file of the libraries. Hence, the transitive dependencies that are not really used in the studied library are still counted.
-\end{comment}
-
 \paragraph{A Comprehensive Study of Bloated Dependencies in the Maven Ecosystem \cite{soto2020comprehensive}}
 Soto-Valero et al. conducted a study of the unused dependencies included in other libraries' dependency tree in the Maven ecosystem. The research includes every type of dependency: direct, transitive, and inherited from the parent module.
 
@@ -86,6 +76,9 @@ In Table \ref{table:summary-software-dependencies}, one can find a summary of th
 \label{table:summary-software-dependencies}
 \end{table}
 
+As one can see in Table \ref{table:summary-software-dependencies}, the basic terminology, when researching about software dependencies, changes from paper to paper. The reason is that the terms \textit{Library}, \textit{Package}, and \textit{Artifact}, can be used more or less with the same meaning. The difference is that some of these terms are specific for certain software ecosystems (e.g., Maven has artifacts). And the term \textit{Application} is used to denote the software product that uses a library. In the context of this thesis, we have used client library and server library instead. The most used software ecosystems are npm for JavaScript and Maven for Java. This might be because these are two of the largest package repositories. This is precisely the reason for which Hejderup et al. \cite{hejderup2018prazi} decided not to use these two and use \textit{Crates.io} instead.
+
+In evaluating the dependencies, we can see that there is interest in making it more precise. The papers that do a binary evaluation do it by parsing the file where the dependencies are declared and perform the same evaluation as the package manager does. The fine-grained evaluation is done with bytecode analysis or dynamic analysis. In the goals of the papers, we can see that there is interest in determining via a fine-grained evaluation, whether a vulnerability in a library is affecting the client that depends on this library. The same happens for deprecation and changes in a library.
 
 \section{Coupling metrics}
 
@@ -103,13 +96,13 @@ Although there is no theoretical validation of the \textit{use-def} indirect cou
 
 This thesis by Yang continues with the work done in the last paper \cite{yang2005detecting}. In the thesis, Yang defines a set of indirect coupling metrics based on the \textit{use-def} indirect coupling. In addition, the relation between the metrics and the maintenance effort is also modeled.
 
-The metrics and their relation with maintenance are empirically validated by using a tool developed for this thesis. The tool uses static-code analysis to calculate the set of metrics. First, they calculate the metrics for a corpus of Java projects to see their distribution. The results obtained are similar to those obtained by us in the coupling metrics benchmarking: a lot of loose coupling cases and a few with higher coupling.
+The metrics and their relation with maintenance are empirically validated by using a tool developed for this thesis. The tool uses static-code analysis to calculate the set of metrics. First, they calculate the metrics for a corpus of Java projects to see their distribution. The results obtained are similar to those obtained by us in the coupling metrics benchmarking: a lot of loose coupled cases and a few with higher coupling.
 
 The second part of the empirical validation consists of experiments to compare the value of the metrics for different software products and the time the participants needed to resolve certain tasks.
 
 \paragraph{Deriving Coupling Metrics from Call Graphs \cite{Allier2010}}
 
-In this paper, Allier et al. use call-graphs to measure existing coupling metrics. Using call-graphs helps to improve the precision of the measurement since dynamic features used by a system can be accounted for. In particular, they focus on how are polymorphy and dynamic class loading accounted for. Allier et al. use the coupling metrics \textit{CBO} and \textit{RFC} (see Section \ref{section:bg-coupling}), and modify then to account for the dynamic features. The metrics are calculated using call-graphs generated with different techniques. The results show that the call-graph used to calculate the metrics has an important impact on the values.
+In this paper, Allier et al. use call-graphs to measure existing coupling metrics. Using call-graphs helps to improve the precision of the measurement since dynamic features used by a system can be accounted for. In particular, they focus on how are polymorphy and dynamic class loading accounted for. Allier et al. use the coupling metrics \textit{CBO} and \textit{RFC} (see Section \ref{section:bg-coupling}), and modify them to account for the dynamic features. The metrics are calculated using call-graphs generated with different techniques. The results show that the call-graph used to calculate the metrics has an important impact on the values.
 
 In this thesis, we have also created our own strategy to account for polymorphy in our coupling metrics. However, we have not included the detection of reflection constructs in the analysis. Using call-graphs to calculate the metrics designed in this thesis could help improve the precision of the measurement. Nevertheless, we would need to generate call-graphs for the entire dependency tree and combine them to create a general call graph. This is not currently available since it is a work in progress within the \textit{FASTEN project}, but it is part of the future work.
 
@@ -146,3 +139,5 @@ The summary of the comparison of the papers included in the coupling metrics rel
 \caption{Summary comparison, coupling metrics related work}
 \label{table:summary-coupling}
 \end{table}
+
+In Table \ref{table:summary-coupling}, it is possible to see that most of the papers included in the related work create new coupling metrics, two of them by adapting previously existing metrics \cite{Vernazza2000, Almugrin2016} and the other two are focused on a type of coupling which has not been measured before: \textit{use-def} \cite{yang2005detecting, Yang2010}. Allier et al. \cite{Allier2010}, instead of creating new metrics, evaluate how much the value of the metrics change, depending on which technique is used to calculate them, they compare different call-graph generators based on how they deal with inheritance. There is source-code analysis in the related work about coupling metrics, which was not used in any of the papers related to software dependencies. This seems to be because the papers about coupling metrics analyze only one software product at a time. In contrast, the papers about software dependencies analyze dependency trees or even entire ecosystems, making other options such as bytecode or dynamic analysis a better option. Four out of the five papers do an empirical validation of their work. Two of the papers validate their metrics by looking at the effect these have in terms of maintainability \cite{Yang2010, Almugrin2016}. Yang and Berrigan \cite{yang2005detecting}, compare the places of their tool with \textit{use-def} coupling, with the places where they had issues during development, and finally, Allier et al. \cite{Allier2010} compare the results obtained with different call-graphs generators.
