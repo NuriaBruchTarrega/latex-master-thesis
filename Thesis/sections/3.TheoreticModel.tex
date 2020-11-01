@@ -110,7 +110,7 @@ Lastly, we discuss about how to decide whether a method belongs to a class or no
 \paragraph{Summary}
 Based on the criteria discussed above, we have four different definitions of coupling. Therefore, we create four metrics, each one measuring one type of coupling. The summary of the definitions of coupling created can be found in Table~\ref{table:metric-characteristics}.
 
-\begin{table}[h]
+\begin{table}[ht!]
     \begin{center}
     \begin{tabular}{|l|l|l|l|l|l|l|l|l|}
     \hline
@@ -408,13 +408,9 @@ For $\verb|TMIC|(L_c, L_s) \neq 0$ to be true, according to equation \ref{eqn:im
 Hence, the property \textit{null value} holds for metric $\verb|TMIC|$ .
 
 \paragraph{Monotonicity}
-Let $L_c$ be a client library containing class $c_c$, and $c_c'$ be a class resulting from adding relationships with the server library $L_s$ to class $c_c$. Then, $\verb|R|(c_c, L_s) \subseteq \verb|R|(c_c', L_s)$. Let $L_c'$ be a client library resulting from replacing class $c_c$ by $c_c'$ in $L_c$. Therefore, $\verb|R|(L_c, L_s) \subseteq \verb|R|(L_c', L_s)$.
+Let $L_c$ be a client library containing class $c_c$, and $c_c'$ be a class resulting from adding relationships with the server library $L_s$ to class $c_c$. Then, $\verb|R|(c_c, L_s) \subseteq \verb|R|(c_c', L_s)$. Let $L_c'$ be a client library resulting from replacing class $c_c$ by $c_c'$ in $L_c$. Therefore, $\verb|R|(L_c, L_s) \subseteq \verb|R|(L_c', L_s)$. If we assume that $\verb|TMIC|$ does not fulfill property \textit{Monotonicity}, it would be true that $\verb|TMIC|(L_c, L_s) > \verb|TMIC|(L_c', L_s)$. Therefore, for a certain distance, we have that $\verb|TMICD|(L_c,L_s,\verb|distance|) > \verb|TMICD|(L_c',L_s,\verb|distance|)$, according to equation \ref{eqn:tmic}. According to the equation \ref{eqn:imic}, this opens two possibilities.
 
-If we assume that $\verb|TMIC|$ does not fulfill property \textit{Monotonicity}, it would be true that $\verb|TMIC|(L_c, L_s) > \verb|TMIC|(L_c', L_s)$. Therefore, for a certain distance, we have that $\verb|TMICD|(L_c,L_s,\verb|distance|) > \verb|TMICD|(L_c',L_s,\verb|distance|)$, according to equation \ref{eqn:tmic}. According to the equation \ref{eqn:imic}, this opens two possibilities.
-
-First, we have that $|\verb|RM|(L_c,L_s,\verb|distance|)| > |\verb|RM|(L_c',L_s,\verb|distance|)|$, which means that there are more methods from $L_s$ reachable from $L_c$ than from $L_c'$. This is not possible since, the only difference between $L_c$ and $L_c'$ is the substitution of class $c_c$ by class $c_c'$, which only adds relationships with $L_s$.
-
-The second option is that for a certain $rm \in \verb|RM|(L_c,L_s,\verb|distance|)$, and therefore also $rm \in \verb|RM|(L_c',L_s,\verb|distance|)$, such that   $\verb|nIR|(rm,L_c) > \verb|nIR|(rm,L_c')$. However, that means that in $L_c$ there are more method invocations that reach $rm$, than in $L_c'$. As discussed earlier, this constitutes a contradicion with the way $L_c'$ is created.
+First, we have that $|\verb|RM|(L_c,L_s,\verb|distance|)| > |\verb|RM|(L_c',L_s,\verb|distance|)|$, which means that there are more methods from $L_s$ reachable from $L_c$ than from $L_c'$. This is not possible since, the only difference between $L_c$ and $L_c'$ is the substitution of class $c_c$ by class $c_c'$, which only adds relationships with $L_s$. The second option is that for a certain $rm \in \verb|RM|(L_c,L_s,\verb|distance|)$, and therefore also $rm \in \verb|RM|(L_c',L_s,\verb|distance|)$, such that   $\verb|nIR|(rm,L_c) > \verb|nIR|(rm,L_c')$. However, that means that in $L_c$ there are more method invocations that reach $rm$, than in $L_c'$. As discussed earlier, this constitutes a contradicion with the way $L_c'$ is created.
 
 Therefore, property 3 \textit{Monotonicity} holds for $\verb|TMIC|$.
 
@@ -486,7 +482,7 @@ The metrics presented in this section measure the dependencies from a different 
 \subsection{Definition of coverage}\label{subsect:usage-definition}
 Just as with the coupling metrics, it is necessary to define the characteristics of the coverage that will be measured. In this case, there is no framework indicating which are the relevant characteristics to define, and with which criteria.
 
-Therefore, based on the criteria discussed for the definition of coupling, we have created the list criteria applied in the coverage of a dependency.
+Therefore, based on the criteria discussed for the definition of coupling, we have created the list criteria to define the coverage of a dependency, discarding those that are only relevants for coupling.
 
 \paragraph{Type of connection}
 For these metrics, since it is not about coupling, but about how much of the server library is used by the client library, the metrics will not be focused solely on one type of connection. Instead, we will consider every type of connection in the measurement of coverage.
@@ -511,16 +507,20 @@ The last aspect of the granularity to consider is how the connections are evalua
 \paragraph{Direct \& Indirect}
 Finally, we have to decide whether to consider indirect usage or not. Since we want to know the total percentage of coverage of the server library, we will consider both the units that are directly used and those indirectly used.
 
+\paragraph{Inheritance}
+ Although these metrics are going to measure coverage and not coupling, we still have to decide how are the metrics going to deal with inheritance. Just as in the case of the coupling metrics, all the polymorphic implementations of the methods and the descendants of the classes will be considered in the calculation of the coverage metrics. This is because all the possible implementations might be executed, and therefore should be considered as covered. Finally, we have defined that a method belongs to both, the class that declares it, and the class that implements it. Both classes, the one which declares and the one which implements are reachable from the client, and should be considered as covered.
+
+
 \paragraph{Summary}
 The metrics resulting from the description of coverage, can be found in Table \ref{table:usage-metric-characteristics}.
 
 \begin{table}[ht!]
     \begin{center}
-    \begin{tabular}{|l|l|l|l|l|l|}
+    \begin{tabular}{|l|l|l|l|l|l|l|}
     \hline
-    \rot{Metric} & \rot{Type of connection} & \rot{Unit of measure} & \rot{Aggregation level} & \rot{Counting connections    } & \rot{Direct/Indirect} \\ \hline
-    \% Reachable classes & All & Class   & Library & Distinct items & Both \\
-    \% Reachable methods & All & Method  & Library & Distinct items & Both \\
+    \rot{Metric} & \rot{Type of connection} & \rot{Unit of measure} & \rot{Aggregation level} & \rot{Counting connections    } & \rot{Direct/Indirect} & \rot{Inheritance} \\ \hline
+    \% Reachable classes & All & Class   & Library & Distinct items & Both & Accounted for \\
+    \% Reachable methods & All & Method  & Library & Distinct items & Both & Accounted for \\
     \hline
     \end{tabular}
     \end{center}
@@ -533,7 +533,7 @@ The metrics resulting from the description of coverage, can be found in Table \r
 \subsubsection{Percentage of reachable classes}
 This metric calculates the percentage of coverage of a dependency using classes as the unit of measure. Therefore, it calculates the cardinality of the set of classes implemented in the server library ($L_s$) that are reachable from the code of the client library ($L_c$), denoted $\verb|RC|(L_c, L_s)$. The number of reachable classes is divided by the total number of classes in $L_s$.
 
-As explained in section \ref{subsect:usage-definition}, all types of connections are considered for this metric. Hence, $\verb|RC|(L_c, L_s)$ includes all the classes reachable through any of the types of connection or a combination of these.
+As explained in section \ref{subsect:usage-definition}, all types of connections are considered for this metric. Hence, $\verb|RC|(L_c, L_s)$ includes all the classes reachable through any of the types of connection or a combination of these, accounting for inheritance.
 
 \begin{equation}
 \label{eqn:reachable-classes}
@@ -543,7 +543,7 @@ As explained in section \ref{subsect:usage-definition}, all types of connections
 \subsubsection{Pergentage of reachable methods}
 This metric works exactly as the previous one, but instead of using the class as the unit of measure, it uses methods. Therefore, it divides the number of elements in the set of methods from the server library ($L_s$) that are reachable from the code of the client library ($L_c$), $RM(L_c, L_s)$, by the total number of methods ($|M(L_s)|$).
 
-For this metric, since the unit of measure is the method, the only type of connection through which a method is reachable is the method call or method invocation. Thus, the methods included in the reachable classes are not considered reachable by default, since it is not sure if the method has been invoked.
+For this metric, since the unit of measure is the method, the only type of connection through which a method is reachable is the method call or method invocation. Thus, the methods included in the reachable classes are not considered reachable by default, since it is not sure if the method has been invoked. Nevertheless, for the reachable methods, the polymorpic implementations of these are also considered.
 
 \begin{equation}
 \label{eqn:reachable-methods}
@@ -613,17 +613,21 @@ In conclusion, the metric \(\verb|%ReachableClasses|\) has the property \textit{
 
 \section{Measuring usage per class}
 
-In this case, the goal is to give a lower-level information on the usage of the dependency from the client library. It can be useful for a developer or a maintainer to know exactly which parts of the code are using the dependency. For example, if there is a breaking change, or if the library with a dependency has to be replaced.
+In this case, the goal is to give a lower-level information on the usage of the server library of a dependency from the client library. It can be useful for a developer or a maintainer to know exactly which parts of the code of the client are using the server library. For example, if there is a breaking change, or if the server library has to be replaced. Therefore, the goal is to know, for each class of the client library, how much usage there is of a server library.
 
 This section describes how the usage is measured by these metrics and provides a formal definition of the metrics. Finally, we perform a theoretical validation of the metrics.
 
 \subsection{Definition of usage per class}
-To define the usage to be measured by these metrics, we use the relevant criteria for this case.
+To define the usage to be measured by these metrics, we use the relevant criteria for this case. We based the list on the criteria used to define coupling, removing those not applicable for the definition of usage.
 
 \paragraph{Type of connection}
 Just as with the coupling metrics, all the types of connection can be relevant, but the usage of each type of connection might have a different impact. Therefore, these should not be measured together. Since this work is meant to be the first approach, we select two possible connection types.
 
 First, the \textit{method invocation}, since it is the only type of connection that refers to the methods used in the dependencies, and therefore is the only one indicating where the server libraries' methods can be invoked from. Then, to represent how the classes of the server libraries are used, and for consistency with the previous metrics, we select the \textit{field declaration}.
+
+\paragraph{Locus of impact}
+
+In the case of the usage per class metrics, the locus of impact is \textit{import}. This is because we look at the usage from the point of view of the client class which uses a server library through a dependency.
 
 \paragraph{Granularity}
 
@@ -643,16 +647,20 @@ The way the connections are counted for these metrics is not considered in the o
 
 The connection measured can be either direct or indirect, depending on the dependency between the client and the server library. However, this does not change the calculation of the metric. Hence, both types of dependencies are calculated with the same metric.
 
+\paragraph{Inheritance}
+
+In order to fully calculate whether a method invocation reaches a server library or not, it is necessary to consider inheritance when computing the reachability. It is possible that a server library is only reachable through one of the polymorphic implementations of a method, or through a descendant of a reachable class. Therefore, the usage per class metrics, do \textit{account for inheritance}.
+
 \paragraph{Summary}
 Based on the criteria discussed above, we define two metrics. The summary of the characteristics of these two metrics can be found in Table \ref{table:per-class-characteristics}.
 
-\begin{table}[h]
+\begin{table}[ht!]
     \begin{center}
-    \begin{tabular}{|l|l|l|l|l|}
+    \begin{tabular}{|l|l|l|l|l|l|}
     \hline
-    Metric & Type of connection & Aggregation level & Counting connections & Direct/Indirect \\ \hline
-    \#1 & Method invocation & Class & \#origin of connection & Both \\
-    \#2 & Field declaration & Class & \#origin of connection & Both \\
+    \rot{Metric} & \rot{Type of connection} & \rot{Aggregation level} & \rot{Counting connections       } & \rot{Direct/Indirect} & \rot{Inheritance} \\ \hline
+    \#1 & Method invocation & Class & \#origin of connection & Both & Accounted for \\
+    \#2 & Field declaration & Class & \#origin of connection & Both & Accounted for \\
     \hline
     \end{tabular}
     \end{center}
@@ -664,7 +672,7 @@ Based on the criteria discussed above, we define two metrics. The summary of the
 In this section, we provide a formal definition of the metrics \textit{method invocations per class} and \textit{field declarations per class}.
 
 \paragraph{Method invocations per class}
-Having a client library ($L_c$), and a server library ($L_s$). The result of this metric for a class of the client library ($c_c \in \verb|C|(L_c)$) corresponds to the number of method invocations contained in the methods of $c_c$ ($m_c \in \verb|M|(c_c)$) such that, the call graph created from these method invocations reach a method implemented in the client library ($m_s \in \verb|M|(L_s)$). The set with the method invocations in $m_c$ that reach a method in $L_s$ is $\verb|nIR|(m_c, L_s)$.
+Having a client library ($L_c$), and a server library ($L_s$). The result of this metric for a class of the client library ($c_c \in \verb|C|(L_c)$) corresponds to the number of method invocations contained in the methods of $c_c$ ($m_c \in \verb|M|(c_c)$) such that, the call graph created from these method invocations reach a method implemented in the client library ($m_s \in \verb|M|(L_s)$). The set with the method invocations in $m_c$ that reach a method in $L_s$ is $\verb|nIR|(m_c, L_s)$, where the computation of the reachability accounts for inheritance.
 
 \begin{equation}
 \label{eqn:mi}
@@ -672,7 +680,7 @@ Having a client library ($L_c$), and a server library ($L_s$). The result of thi
 \end{equation}
 
 \paragraph{Field declaration per class}
-This metric is calculated in the following manner. For a class $c_c$ of a client library $L_c$ ($c_c \in \verb|C|(L_c)$), and a server library $L_s$. The result of the metric for $c_c$, corresponds to the number of field declarations in $c_c$ such that, through field declarations reach a class implemented in $L_s$. The set of field declarations that reach $L_s$ is denoted $\verb|nFR|(c_c, L_s)$.
+This metric is calculated in the following manner. For a class $c_c$ of a client library $L_c$ ($c_c \in \verb|C|(L_c)$), and a server library $L_s$. The result of the metric for $c_c$, corresponds to the number of field declarations in $c_c$ such that, through field declarations reach a class implemented in $L_s$. The set of field declarations that reach $L_s$ is denoted $\verb|nFR|(c_c, L_s)$, where the computation of the reachability of $L_s$ considers inheritance.
 
 \begin{equation}
 \label{eqn:fd}
