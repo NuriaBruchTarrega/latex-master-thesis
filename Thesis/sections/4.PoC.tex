@@ -15,10 +15,9 @@ After an initial effort, source code analysis has been discarded. The reason for
 
 The option of call-level dependency graphs is useful for the metrics that measure method invocations. However, the information needed to calculate aggregation coupling is not contained in the call-level graphs. Therefore, the approach to develop this PoC has been bytecode analysis. Furthermore, obtaining the complete dependency tree's call-graphs is still a work in progress within the FASTEN project \footnote{\url{https://www.fasten-project.eu/}}.
 
-\subsection{Bytecode analysis}
 The model proposed in this research is meant to be language-agnostic. Nevertheless, the proof-of-concept scope is limited to Java, since the bytecode analysis performed by the proof-of-concept is limited to this programming language. Furthermore, the PoC is focused on the libraries available in Maven. It has been decided to limit the scope to Java and Maven, since it allows to compare the results with the research by Soto-Valero et al. \cite{soto2020comprehensive} (see Section \ref{sec:Exp1}). Furthermore, the work done by the FASTEN project, is also focused in Maven, and therefore it will be easier in the future to compare the results when measuring the metrics with byte-code analysis and call-graphs, since the source will be the same.
 
-\subsubsection{Architecture}
+\section{Architecture}
 
 The proof-of-concept tool is divided into two parts: the frontend and the backend. The frontend contains the visualizations proposed to see the dependency tree and display the metrics of the model. Meanwhile, the backend receives requests to calculate the dependency tree for a given Maven library. The response to a request consists of the result of the calculation of the metrics for each server library in the dependency tree of the given client library.
 The implementation of the backend is supported by the libraries  \textit{Aether}\footnote{\url{https://wiki.eclipse.org/Aether/What_Is_Aether}}, and \textit{Javassist}\footnote{\url{http://www.javassist.org/}}.
@@ -466,7 +465,7 @@ The first visualization element's goal is to provide an overview of the client l
 \paragraph{Layout}
 Since this visualization displays the dependency tree of the client library, the chosen layout is a \textit{graph}. In particular, it is a \textit{tree}. In this graph, each node represents a library, and each edge a dependency between the nodes. The tree is organized by levels, such that the first level only contains the client library, and the second level the direct dependencies. The rest of the levels are organized according to the dependencies of the previous levels.
 
-Each node displays the following information about the library: \texttt{GroupID}, \texttt{ArtifactID}, \texttt{version}, and the result of the metrics - \texttt{MIC} and \texttt{AC} for the direct dependencies, as well as \texttt{TMIC} and \texttt{TAC} for the transitive dependencies.
+Each node displays the following information about the library: \texttt{GroupID}, \texttt{ArtifactID}, \texttt{version}, and the result of the metrics --- \texttt{MIC} and \texttt{AC} for the direct dependencies, and \texttt{TMIC} and \texttt{TAC} for the transitive dependencies.
 
 \paragraph{Shape}
 For this visualization, the shape of each of the nodes is the same, an ellipse. This is because the differentiation between the nodes is done with the node's color, not the shape. Furthermore, the ellipse is the shape that allows us to display all the necessary information in the node, without taking too much extra space.

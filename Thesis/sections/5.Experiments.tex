@@ -8,7 +8,7 @@ The goal of this experiment is to validate the implementation in the PoC. We com
 \subsection{Experimental setup}
 Soto-Valero et al. perform a qualitative analysis, in which they analyze 31 libraries available as Maven artifacts. If unused dependencies are found during the analysis, a \textit{Pull Request} is made to the \textit{GitHub} repository of the artifact in which the unused dependencies are deleted from the \textit{pom} file.
 
-With the information in the paper, we collect the \textit{GroupId} and \textit{ArtifactId} of the 31 artifacts. Out of the 31, 2 could not be found in the \textit{Maven Repository Central}. For the other 29, the \textit{version} to use in the experiment is determined by finding the last version released before the experiment by Soto-Valero et al. was conducted - November of 2019.
+With the information in the paper, we collect the \textit{GroupId} and \textit{ArtifactId} of the 31 artifacts. Out of the 31, 2 could not be found in the \textit{Maven Repository Central}. For the other 29, the \textit{version} to use in the experiment is determined by finding the last version released before the experiment by Soto-Valero et al. was conducted --- November of 2019.
 
 Of the 29 artifacts, the PoC could not use 13 because either the artifact itself or some dependency could not be downloaded from \textit{Maven Central}. Therefore, we have a set of 16 libraries to analyze and compare the results with the results obtained by Soto-Valero et al. Table \ref{table:comparison-artifacts} contains the identifiers of the artifacts used in this experiment.
 
@@ -63,7 +63,7 @@ The cases that can happen for the rest of the libraries, the ones that are found
   \item \textbf{Unused:} At least one dependency found as used by the paper is unused in the tool's analysis.
 \end{itemize}
 
-In Table \ref{table:comparison-results}, there are the results for each one of the client libraries used in the experiments.
+In Table \ref{table:comparison-results}, there are the results for each one of the client libraries used in the experiment.
 
 \begin{table}[ht!]
 \begin{center}
@@ -101,6 +101,8 @@ Next, we take a look at the detection of used dependencies. There are 9 cases in
 	The scope of the PoC has limited the analysis in some cases such as testing and shaded dependencies. This could be fixed by either including the tests in the jar files, or doing source-code analysis instead.
 	\label{find:source-code-analysis}
 \end{finding}
+
+\paragraph{Threats to validity}
 
 \section{Experiment 2: Coupling metrics significance}\label{sec:experiment2}
 
@@ -345,7 +347,7 @@ In Table \ref{table:covariance-sensitivity}, we can see that the values of the c
 \begin{figure}[ht!]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{figures/results/covariance-values-tmic.png}
-\caption{Covariance of \textit{propagation factor} and \texttt{TMIC} as a functiobn of the sumation of the coupling measured at each distance (\texttt{DTMIC}). \textit{p} corresponds to the confidence interval}
+\caption{Covariance of \textit{propagation factor} and \texttt{TMIC} as a function of the sumation of the coupling measured at each distance (\texttt{DTMIC}). \textit{p} corresponds to the confidence interval}
 \label{fig:cov-value-tmic}
 \end{center}
 \end{figure}
@@ -842,7 +844,7 @@ Finally, we also generated 70th, 80th, and 90th percentiles of each of the metri
 
 \subsection{Discussion}
 
-In the results of all the metrics, one can see that the majority of the values are the lowest ones. In other words, many dependencies are loosely coupled, while there are a few which are highly coupled. Also, it is possible to observe a difference in the values of the metrics measuring method invocation coupling (\texttt{MIC} and \texttt{TMIC}), with those measuring aggregation coupling - namely \texttt{AC} and \texttt{TAC}. The method invocation metrics generally have higher values. This can also be intuitively perceived: for each field declared, multiple method calls can occur.
+In the results of all the metrics, one can see that the majority of the values are the lowest ones. In other words, many dependencies are loosely coupled, while there are a few which are highly coupled. Also, it is possible to observe a difference in the values of the metrics measuring method invocation coupling (\texttt{MIC} and \texttt{TMIC}), with those measuring aggregation coupling --- namely \texttt{AC} and \texttt{TAC}. The method invocation metrics generally have higher values. This can also be intuitively perceived: for each field declared, multiple method calls can occur.
 
 \begin{finding}
 	The four coupling metrics have a similar distribution: small values are very common while larger values are rare.
