@@ -18,20 +18,35 @@ The option of call-level dependency graphs is useful for the metrics that measur
 \subsection{Bytecode analysis}
 The model proposed in this research is meant to be language-agnostic. Nevertheless, the proof-of-concept scope is limited to Java, since the bytecode analysis performed by the proof-of-concept is limited to this programming language. Furthermore, the PoC is focused on the libraries available in Maven. It has been decided to limit the scope to Java and Maven, since it allows to compare the results with the research by Soto-Valero et al. \cite{soto2020comprehensive} (see Section \ref{sec:Exp1}). Furthermore, the work done by the FASTEN project, is also focused in Maven, and therefore it will be easier in the future to compare the results when measuring the metrics with byte-code analysis and call-graphs, since the source will be the same.
 
-The PoC implementation is supported by the libraries  \textit{Aether}\footnote{\url{https://wiki.eclipse.org/Aether/What_Is_Aether}}, and \textit{Javassist}\footnote{\url{http://www.javassist.org/}}.
+\subsubsection{Architecture}
+
+The proof-of-concept tool is divided into two parts: the frontend and the backend. The frontend contains the visualizations proposed to see the dependency tree and display the metrics of the model. Meanwhile, the backend receives requests to calculate the dependency tree for a given Maven library. The response to a request consists of the result of the calculation of the metrics for each server library in the dependency tree of the given client library.
+The implementation of the backend is supported by the libraries  \textit{Aether}\footnote{\url{https://wiki.eclipse.org/Aether/What_Is_Aether}}, and \textit{Javassist}\footnote{\url{http://www.javassist.org/}}.
 
 \paragraph{Aether}
 Aether is a library created by Eclipse, which allows us to fetch Maven artifacts from different repositories. Besides, it is also used to resolve the dependencies of a library and create the dependency tree. To create the dependency tree, Aether uses the same strategy to resolve the dependencies as Maven.
 
 In the PoC, this library has been used for the initial steps. The request to calculate the metrics receives the identifiers of the library to analyze (\textit{GroupId}, \textit{ArtifactId}, and \textit{version}). Aether is used to fetch the library \textit{jar} and \textit{POM} files from the Maven Central Repository.
 
-Once the artifact of the client library is obtained, \textit{Aether} is used to resolve the dependencies of the artifact. For the calculation of the metrics to be possible, all the client library dependencies should also be available in the Maven Central Repository. The dependency tree of the artifact is visited, and each of the dependencies is also obtained to have the \textit{jar} files to analyze. Also, the dependency tree calculated with Aether is used to create a custom dependency tree using the custom class \texttt{DependencyTreeNode}, which stores the data about each of the libraries needed during the process of calculating the metrics. The \texttt{DependencyTreeNode} will be described in greater detail later on.
+Once the artifact of the client library is obtained, \textit{Aether} is used to resolve the dependencies of the artifact. For the calculation of the metrics to be possible, all the client library dependencies should also be available in the Maven Central Repository. The dependency tree of the artifact is visited, and each of the dependencies is also obtained to have the \textit{jar} files to analyze. Also, the dependency tree calculated with Aether is used to create a custom dependency tree using the custom class \texttt{DependencyTreeNode}, which stores the data about each of the libraries needed for calculating the metrics. The \texttt{DependencyTreeNode} will be described in greater detail later on.
 
 \paragraph{Javassist}
-Javassist is a library that allows the user to perform bytecode manipulation in a simple way. It has two levels, a source-level, and a bytecode level. Using the source-code level, it is possible to perform bytecode analysis and manipulation without a deep knowledge of bytecode. Meanwhile, the bytecode level allows the user to manipulate bytecode directly.
+Javassist is a library that allows the user to perform bytecode manipulation in a simple way. It has two levels, a source-level and a bytecode level. Using the source-code level, it is possible to perform bytecode analysis and manipulation without a deep knowledge of bytecode. Meanwhile, the bytecode level allows the user to manipulate bytecode directly.
 For this thesis, the level used is source-code.
 
 The javassist library has been used to interpret and analyze the jars of the client library and all the server libraries. Once the jars of the client library and all its dependencies are available, the first step is to join all the \textit{.class} files in a \texttt{ClassPool} object, which is the main object of \textit{Javassist}. Once the \texttt{ClassPool} is created, it is used to obtain the classes from the client library, from which the different metrics are calculated. The process of calculating the metrics is explained in greater detail in the following.
+
+\paragraph{Overview}
+
+In Figure \ref{fig:overview-backend}, one can see the process the proof-of-concept does to calculate the metrics of the model. First, obtaining the \textit{.jar} files of each library included in the dependency tree. Then, by using \textit{Javassist}, it iterates through the classes of the client library to find the usage of the direct dependencies. Next, based on the direct usage calculated, it iterates through the entire dependency tree to find the necessary data to calculate the metrics of the model. Finally, with all the necessary information stored in the data model, the metrics' value is calculated. The process of obtaining the data to store in the data model and the data model itself are described below.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/Overview-Backend.png}
+\caption{Overview of the proof-of-concept implementation of the calculation of the model}
+\label{fig:overview-backend}
+\end{center}
+\end{figure}
 
 \subsection{Model of the dependency tree}
 In order to represent the dependency tree of the client library, the implementation uses the class \texttt{DependencyTreeNode}. Each \texttt{DependencyTreeNode} contains the information of the library it represents, namely \textit{groupID}, \textit{artifactID}, and \textit{version}. Also, to represent the dependencies of the library represented by each  \texttt{DependencyTreeNode}, there is a \texttt{List} of \texttt{DependencyTreeNode}.
@@ -42,7 +57,7 @@ Each \texttt{DependencyTreeNode} has an object \texttt{MicBehaviors} and \texttt
 
 Also, for the metrics that measure the dependencies' coverage, two additional fields have been created: \texttt{ReachableClasses} and \texttt{ReachableBehaviors}. The first field is to calculate the \texttt{\%ReachableClasses}, and the second one for \texttt{\%ReachableMethods}. Both \texttt{ReachableClasses} and \texttt{ReachableBehaviors} are sets containing the classes, in the first case, and behaviors in the second case, of the library represented by the \texttt{DependencyTreeNode}, which are reachable from the client library.
 
-\begin{figure}[ht]
+\begin{figure}[ht!]
 \begin{center}
 \includegraphics[width=\textwidth]{figures/Thesis-ModelClassDiagram.png}
 \caption{Class diagram, dependency tree model}
