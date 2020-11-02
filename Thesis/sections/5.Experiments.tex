@@ -104,7 +104,7 @@ Next, we take a look at the detection of used dependencies. There are 9 cases in
 
 \paragraph{Threats to validity}
 
-- Depends on how precise is their data
+The results of this experiment depend on the results of the research done by Soto-Valero et al. \cite{soto2020comprehensive}. Therefore, if their implementation has a bug or fails to detect some usage, the results of this experiment might be affected. Moreover, as we have seen in the discussion of the results, there are some cases in which the results of our tool do not match the results obtained by Soto-Valero et al. due to testing dependencies. But without considering these cases, there are also false positives and negatives in our results. However, some of these can be due to testing dependencies --- we have already found some cases in which a dependency used for testing is not declared with scope \textit{testing}, which can alter our results. To fix this, it would be necessary to include the tests in the analysis.
 
 \section{Experiment 2: Coupling metrics significance}\label{sec:experiment2}
 
@@ -210,7 +210,7 @@ org.yaml                    & snakeyaml                       & Other       \\\h
 
 \subsection{Discussion}
 
-Based on the results shown in Table \ref{table:summary-significance}, we can see that the combination of the two types of coupling metrics allows us to detect used dependencies in 664/699 of the cases. In addition, the metrics \texttt{MIC} and \texttt{TMIC} alone, detect 659/699 of the cases. This means that \texttt{AC} and \texttt{TAC} are only really needed in 5 of these dependencies. However, this only talks about whether or not the metrics can define whether a dependency is used or not at all, which was not the goal of this thesis. Therefore, \texttt{AC} and \texttt{TAC} are also necessary to consider the type of coupling measured by this metric.
+Based on the results shown in Table \ref{table:summary-significance}, we can see that the combination of the two types of coupling metrics allows us to detect used dependencies in 664/699 of the cases, approximately a 95\%. In addition, the metrics \texttt{MIC} and \texttt{TMIC} alone, detect 659/699 of the cases, which corresponds to a 94\%. This means that \texttt{AC} and \texttt{TAC} are only really needed in 5 of these dependencies. However, this only talks about whether or not the metrics can define whether a dependency is used or not at all, which was not the goal of this thesis. Therefore, \texttt{AC} and \texttt{TAC} are also necessary to consider the type of coupling measured by this metric.
 
 Nevertheless, if we compare the number of times that \texttt{AC}/\texttt{TAC} are not able to detect whether a dependency is used or not, with the times that the same happens with \texttt{MIC}/\texttt{TMIC}, we can conclude that:
 
@@ -237,6 +237,10 @@ During the process of this thesis, it was intended to create this type of coupli
 \label{fig:annotation-dependencies}
 \end{center}
 \end{figure}
+
+\paragraph{Threats to validity}
+
+It is important to remark that the results of this experiment, as indicated in the goal of the experiment, should not be interpreted as a full validation of the significance of these metrics. The experiment is checking whether these metrics are significant enough to detect coupling between a client library and a server library or not. However, there is no information about the coupling created by other types of connections. In addition, we have to consider the sample size of this experiment; a larger dataset could change the experiment results.
 
 \section{Experiment 3: Sensitivity Analysis}
 As explained before, we have not been able to obtain the real-world data to understand what the impact of the transitive dependencies is, or can be, and correlate it with our transitive coupling metrics \texttt{TMIC}, and \texttt{TAC}. Therefore, we cannot derive an actual value of the \textit{propagation factor} for these two metrics. Instead, we conduct a sensitivity analysis of the \textit{propagation factor} on these two metrics.
@@ -379,6 +383,10 @@ Finally, in the results of the correlation coefficient between the propagation f
 \label{fig:cor-dist-tac}
 \end{center}
 \end{figure}
+
+\paragraph{Threats to validity}
+
+To evaluate the results of this experiment, it is important to consider the sample size of dependencies used. To ensure that the set of dependencies used was as relevant as possible, we selected a representative sample. The selection was made considering the distance between the client and the server, the number of times the server appeared in the dependency tree of the client, and the coupling measured.
 
 \section{Experiment 4: Expert Interviews}
 This last experiment has various goals. The main one is to validate the design of the visualization. According to Munzner \cite{Munzner2009}, there are four levels at which this validation can be done:
@@ -685,10 +693,10 @@ However, non-developers are interested in more high-level information. One of th
 
 Furthermore, there is also an indicator of this difference in their answers to the preferred metric. The coupling metrics are more useful at an architectural level to understand how much a client depends on a server library. In Table \ref{table:interview-18}, we see the the interviewees with non-developer role, always mentioned at least \texttt{MIC}/\texttt{TMIC} as the most useful metric. If we compare the average marks of the developers and non-developers in Table \ref{table:interview-15}, we can see this same difference. The marks given by non-developers to the coupling metrics are higher than those given by developers.
 
-\subsubsection{Dependency Management}
+\paragraph{Dependency Management}
 With the questions answered in the \textit{Dependency Management} section, we know that all the interviewees have experience with this type of task. Also, the interviewees considered it more important to monitor the dependencies' vulnerabilities than the update to the last version (see Figures \ref{fig:interview-6}, and \ref{fig:interview-7}). This is also confirmed by some interviewees' comments, saying that the main reason to update a dependency is to avoid being affected by possible vulnerabilities.
 
-\subsubsection{Visualizations}
+\paragraph{Visualizations}
 When asked about the tool's usefulness, there is a general agreement that the tool is useful in the scenarios discussed during the interview, Figure \ref{fig:interview-10}. There are some negative answers to whether the tool can make dependency management easier. However, most of the comments about these answers are related to the tool being useful for particular cases. Therefore, the negative responses are not associated with the tool, not making the tasks easier.
 
 \begin{finding}
@@ -707,7 +715,7 @@ With the last question about the visualizations, the interviewees suggested some
 
 Also, some interviewees expressed a need to integrate the different sources of information about dependency management. This data includes vulnerability data, the new versions available of the dependencies, and the licenses of the libraries used. Some related suggestions into making this tool's features into another type of tool are to make it an IDE Plugin and a command interface. Hence, there is a general interest in the tool, but it might be important to consider changing the format in which these are supplied.
 
-\subsubsection{Metrics}
+\paragraph{Metrics}
 Regarding the clarity and comprehensibility of the metrics, the interviewees' average grade for all the metrics is positive, being a 3.8/5, the lowest one, and a 4.73/5 the highest one, as shown in Table \ref{table:interview-15}.
 
 \begin{finding}
@@ -741,6 +749,12 @@ In the last question of the interviews, we gathered suggestions about the model'
 We have also obtained some suggestions, which are modifications to the current metrics. For example, having the absolute number of reachable methods or classes and the list of their names. It should be evaluated, which is the need for this information, and in which cases it would be useful.
 
 Finally, one of the suggestions to improve the actionability of the coupling metrics is to create a risk profile of these metrics by evaluating the common values of these metrics and the outliers. This suggestion is further investigated in the following experiment.
+
+\paragraph{Threats to validity}
+
+Given the number of participants in the interviews, some other profiles which could also be potential users of the tool might not have been represented in this study. To avoid this threat, we have not limited the participants to the host organization of this thesis. Instead, we have included professionals from other organizations and backgrounds.
+
+A common threat to validity when conducting interviews is the Hawthrone effect, according to which the interviewees act differently because they are being observed. To avoid this bias and prevent the interviewees from being biased towards evaluating the tool positively, each question was followed by a discussion, in which the interviewees could explain their opinion completely.
 
 \section{Experiment 5: Benchmarking}
 One of the main remarks received for the coupling metrics during the interviews is that there is no clear scale for those metrics. Therefore, the metrics' value can be hard to interpret, since there is no indicator of which number is very high or very low.
@@ -843,7 +857,6 @@ Finally, we also generated 70th, 80th, and 90th percentiles of each of the metri
     \label{table:percentiles}
 \end{table}
 
-
 \subsection{Discussion}
 
 In the results of all the metrics, one can see that the majority of the values are the lowest ones. In other words, many dependencies are loosely coupled, while there are a few which are highly coupled. Also, it is possible to observe a difference in the values of the metrics measuring method invocation coupling (\texttt{MIC} and \texttt{TMIC}), with those measuring aggregation coupling --- namely \texttt{AC} and \texttt{TAC}. The method invocation metrics generally have higher values. This can also be intuitively perceived: for each field declared, multiple method calls can occur.
@@ -882,3 +895,7 @@ In Table \ref{table:percentiles}, there are the 70th, 80th, and 90th percentiles
     \caption{Risk profile of coupling metrics}
     \label{table:risk-profile}
 \end{table}
+
+\paragraph{Threats to validity}
+
+Just as in the case of the experiment \textit{coupling metrics significance}, when evaluating the results of this experiment is necessary to consider the dataset used. The results of the benchmark would change if a larger dataset were used. It is also worth mentioning that we have selected the client libraries to use based on the most popular libraries of the Maven Central Repository. However, it could be interesting to see how the results change if less popular or smaller client libraries are also included in the dataset.
