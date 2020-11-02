@@ -1,6 +1,6 @@
 % !TEX root = ../main.tex
 \chapter{Proof of Concept}\label{ch:PoC}
-In this section, we describe the proof-of-concept implementation to calculate the metrics of the model, which can be found publicly in GitHub \footnote{\url{https://github.com/NuriaBruchTarrega/alexandria}}. In order to empirically validate the metrics defined in the previous section, it is necessary to be able to calculate them. Therefore, we decided to create a proof-of-concept tool to calculate the metrics for real-world libraries, and be able to experiment with the results. First, we discuss the possible techniques to implement it and describe the chosen one. Then, there is an explanation of how each metric is calculated, including pseudo-code, to illustrate it.
+In this section, we describe the proof-of-concept implementation to calculate the metrics of the model, which can be found publicly in GitHub \footnote{\url{https://github.com/NuriaBruchTarrega/alexandria}}. In order to empirically validate the metrics defined in the previous section, it is necessary to be able to calculate them. Therefore, we decided to create a proof-of-concept tool to calculate the metrics for real-world libraries and experiment with the results. First, we discuss the possible techniques to implement it and describe the chosen one. Then, there is an explanation of how each metric is calculated, including pseudo-code, to illustrate it.
 
 \section{Analysis technique}
 Several techniques could have been used to implement the PoC that calculates the different metrics proposed.
@@ -11,11 +11,11 @@ Several techniques could have been used to implement the PoC that calculates the
   \item Call-level dependency graph
 \end{itemize}
 
-After an initial effort, source code analysis has been discarded. The reason for it is that the source code is needed for both the client library and all its dependencies. Although it is sometimes available in Maven, it is not available as often as the bytecode. Furthermore, obtaining the code from GitHub created issues when resolving the dependency tree, since in many cases, the version of the dependency being used in the repository, was not yet available in Maven. Therefore, the dependency tree could not be resolved.
+After an initial effort, source code analysis has been discarded. The reason for it is that the source code is needed for both the client library and all its dependencies. Although it is sometimes available in Maven, it is not available as often as the bytecode. Furthermore, obtaining the code from GitHub created issues when resolving the dependency tree. In many cases, the version of the dependency being used in the repository was not yet available in Maven. Therefore, the dependency tree could not be resolved.
 
-The option of call-level dependency graphs is useful for the metrics that measure method invocations. However, the information needed to calculate aggregation coupling is not contained in the call-level graphs. Therefore, the approach to develop this PoC has been bytecode analysis. Furthermore, obtaining the complete dependency tree's call-graphs is still a work in progress within the FASTEN project \footnote{\url{https://www.fasten-project.eu/}}.
+The option of call-level dependency graphs is useful for the metrics that measure method invocations. However, the information needed to calculate aggregation coupling is not contained in the call-level graphs. Therefore, the approach to developing this PoC has been bytecode analysis. Furthermore, obtaining the complete dependency tree's call-graphs is still a work in progress within the FASTEN project \footnote{\url{https://www.fasten-project.eu/}}.
 
-The model proposed in this research is meant to be language-agnostic. Nevertheless, the proof-of-concept scope is limited to Java, since the bytecode analysis performed by the proof-of-concept is limited to this programming language. Furthermore, the PoC is focused on the libraries available in Maven. It has been decided to limit the scope to Java and Maven, since it allows to compare the results with the research by Soto-Valero et al. \cite{soto2020comprehensive} (see Section \ref{sec:Exp1}). Furthermore, the work done by the FASTEN project, is also focused in Maven, and therefore it will be easier in the future to compare the results when measuring the metrics with byte-code analysis and call-graphs, since the source will be the same.
+The model proposed in this research is meant to be language-agnostic. Nevertheless, the proof-of-concept scope is limited to Java since the bytecode analysis performed by the proof-of-concept is limited to this programming language. Furthermore, the PoC is focused on the libraries available in Maven. It has been decided to limit the scope to Java and Maven since it allows us to compare the results with the research by Soto-Valero et al. \cite{soto2020comprehensive} (see Section \ref{sec:Exp1}). Furthermore, the work done by the FASTEN project is also focused on Maven. Therefore, it will be easier in the future to compare the results when measuring the metrics with bytecode analysis and call-graphs since the source will be the same.
 
 \section{Architecture}
 
@@ -77,7 +77,7 @@ To calculate this first metric, the implementation iterates through all the clas
 
 Then, the tool iterates through all the behaviors (line 5) and calls the method \texttt{instrument}. The main use case of this method is to modify the bytecode of the method, but in this case, we use it to find the connections of interest for this metric. The method \texttt{instrument} receives an \texttt{ExprEditor} object, which is a class that can be extended to implement the methods for editing the bytecode, which are empty by default. To calculate this metric, the overridden methods are \texttt{edit(MethodCall mc)}, \texttt{edit(ConstructorCall cc)}, and \texttt{edit(NewExpr ne)}. These methods will be called for each method call or constructor call, existing in the method (line 6). The constructor calls in the form of \texttt{this()} or \texttt{super()} are captured by the method \texttt{edit(ConstructorCall cc)}. Meanwhile, the constructor calls in the form of \texttt{new Object()} are captured by \texttt{edit(NewExpr ne)}.
 
-Each captured call to a behavior is checked if the called behavior belongs to a server library (line 9). In case it does, the call is added to the \texttt{MicBehaviors} map of the server library (line 10), with 1 as the distance at which the connection is found since it is a direct dependency.
+For each captured call to a behavior, it is checked whether the called behavior belongs to a server library (line 9). In case it does, the call is added to the \texttt{MicBehaviors} map of the server library (line 10), with 1 as the distance at which the connection is found since it is a direct dependency.
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -99,7 +99,7 @@ for each clientClass in clientClasses
 \subsection{Aggregation Coupling}
 The pseudo-code in Figure \ref{fig:algorithm-ac} represents the algorithm used to calculate the metric \texttt{AC}. The output of the algorithm is a map containing for each \texttt{CtClass} of the server library, the set of \texttt{CtField} that are of the type of the \texttt{CtClass}. The class \texttt{CtClass} represents a class and contains the information about the class itself and about the library where it is implemented. \texttt{CtClass} is used later on to find the descendants of the class and calculate the metric \texttt{TAC} for the transitive dependencies.
 
-The algorithm for this second metric is similar to the previous one. First, the implementation iterates through all the classes of the client library (line 3). Then, for each class, it iterates through all the declared fields (line 5). Next, each of the fields containing a generic type is parsed separately (line 6), to obtain all the types included in the generic (line 7), which are treated individually (line 8). All the simple fields, if the class's implementation is found in a server library (line 13), are included in the calculation of the metric (line 14). The distance is set to 1 due to the server library being a direct dependency.
+The algorithm for this second metric is similar to the previous one. First, the implementation iterates through all the classes of the client library (line 3). Then, for each class, it iterates through all the declared fields (line 5). Next, each of the fields containing a generic type is parsed separately (line 6) to obtain all the types included in the generic (line 7), which are treated individually (line 8). All the simple fields, if the class's implementation is found in a server library (line 13), are included in the calculation of the metric (line 14). The distance is set to 1 due to the server library being a direct dependency.
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -123,9 +123,9 @@ for each c in clientClasses
 \end{figure}
 
 \paragraph{Inheritance}\label{paragraph:inheritance}
-Once the two algorithms (Figures \ref{fig:algorithm-mic} and \ref{fig:algorithm-ac}) are finished, in order to follow the definition of the metrics as specified in section \ref{subsec:metric-definition}, the hierarchies in the server libraries are visited. For the metric \texttt{MIC}, all the polymorphic implementations of the behaviors are found, and for the metric \texttt{AC} all the descendants of the classes.
+Once the two algorithms (Figures \ref{fig:algorithm-mic} and \ref{fig:algorithm-ac}) are finished, to follow the definition of the metrics as specified in section \ref{subsec:metric-definition}, the hierarchies in the server libraries are visited. For the metric \texttt{MIC}, all the polymorphic implementations of the behaviors are found, and for the metric \texttt{AC} all the descendants of the classes.
 
-The algorithms to find the descendants and the polymorphic implementations of the methods are used with each of the libraries with which the client library has a direct dependency, and for which coupling was found, either \texttt{MIC} or \texttt{AC}.
+The algorithms to find the descendants and the polymorphic implementations of the methods are used with each of the libraries with which the client library has a direct dependency and for which coupling was found, either \texttt{MIC} or \texttt{AC}.
 
 The pseudo-code used to find the polymorphic implementations of the methods can be found in Figure \ref{fig:algorithm-polymorphy}. The process is as follows: First, iterate through all the classes of the server library, given its \texttt{DependencyTreeNode} (line 5). Then, it iterates through the behaviors in the map contained in \texttt{MicBehaviors}. If the current library class is a descendant of the class containing the reachable behavior (line 8) and contains a behavior with the same signature as the reachable behavior (line 9), a polymorphic implementation of the behavior has been found. Therefore, the found behavior is added to the \texttt{MicBehaviors} with the same set of \texttt{BehaviorCall} and distance as the mic behavior (line 11).
 
@@ -147,7 +147,7 @@ for each serverClass in serverLibraryClasses
 \label{fig:algorithm-polymorphy}
 \end{figure}
 
-The process to find descendants in the case of the metric \texttt{AC} is the same as the one in Figure \ref{fig:algorithm-polymorphy}, but iterating over the \texttt{reachableClassesMap} instead of the \texttt{reachableBehaviorsMap}. Therefore, if the server class is sub-class of a reachable class, it is added to the \texttt{AcClasses} of the library.
+The process to find descendants in the case of the metric \texttt{AC} is the same as the one in Figure \ref{fig:algorithm-polymorphy}, but iterating over the \texttt{reachableClassesMap} instead of the \texttt{reachableBehaviorsMap}. Therefore, if the server class is a sub-class of a reachable class, it is added to the \texttt{AcClasses} of the library.
 
 \blankl
 As can be observed in the previous explanation of how the detection of inheritance is done, in this PoC implementation, it is not detected if a class is extended in the client library instead of in the server library.
@@ -155,7 +155,7 @@ As can be observed in the previous explanation of how the detection of inheritan
 \subsection{Transitive Method Invocation Coupling}\label{subsec:tmic}
 The calculation of \texttt{TMIC} takes place after calculating \texttt{MIC} for all the direct dependencies of the client library. The methods used in the calculation of \texttt{MIC} from these dependencies are used as a base to calculate \texttt{TMIC}.
 
-To calculate the metric for every dependency in the tree, the dependency tree is traversed using a \textit{breadth-first search (BFS)} on the \texttt{DependencyTreeNode}. The algorithm starts with the direct dependencies since the client library node has already been used for the calculation of \texttt{MIC}. A branch finishes the traversing either when a node does not have more children, or when no reachable methods have been found in a server library. The pseudo-code of the implemented algorithm can be found in Figure \ref{fig:tree-traversing-tmic}.
+To calculate the metric for every dependency in the tree, the dependency tree is traversed using a \textit{breadth-first search (BFS)} on the \texttt{DependencyTreeNode}. The algorithm starts with the direct dependencies since the client library node has already been used for the calculation of \texttt{MIC}. A branch finishes the traversing either when a node does not have more children or when no reachable methods have been found in a server library. The pseudo-code of the implemented algorithm can be found in Figure \ref{fig:tree-traversing-tmic}.
 
 For each \texttt{DependencyTreeNode} visited, the method \texttt{calculateTransitiveMIC} is executed. The pseudo-code of this method can be found in Figure \ref{fig:calculate-tmic}, which is going to be explained below.
 
@@ -203,7 +203,7 @@ for each micBehavior in micBehaviors
 
 First, we obtain all the behaviors of the visited \texttt{DependencyTreeNode}, used for the calculation of \texttt{MIC} (line 1). For each one of these behaviors (line 3), the call graph of the behavior is iterated to find all the reachable behaviors of the dependencies of the library that is being visited.
 
-A queue of the behaviors that have to be visited is created, containing initially only the current behavior (line 4). Also, a set of all the previously visited behaviors is created (line 5) to avoid infinite loops.
+A queue of the behaviors that have to be visited is created, containing initially only the current behavior (line 4). A set of all the previously visited behaviors is created (line 5) to avoid infinite loops.
 
 For each behavior in the queue, all the \texttt{behaviorCall} are visited (line 11). Then, there are three different cases to consider. First, if the called behavior is implemented in a standard class, the call is ignored (line 14). Also, if the called behavior is implemented in a dependency of the current library, the behavior is added to the behaviors to consider for the dependency (line 16), with the same distance plus 1, since it is one level more of dependency than the current \texttt{DependencyTreeNode}. Finally, the last option is if the called behavior is implemented in the current library, in which case it is added to the queue of behaviors to visit (line 19). This way, the entire call graph of the relevant behaviors is visited.
 
@@ -290,7 +290,7 @@ for each clientClass in clientClasses
 \label{fig:algorithm-usage-step1-1}
 \end{figure}
 
-In the pseudo-code of Figure \ref{fig:algorithm-usage-step1-2}, the connections are detected in the client library methods. The code iterates through every behavior declared in the current client class (line 3). For each behavior, different types of connections are detected. If any of the types involve a class or a behavior implemented in one of the dependencies, it is added to the information of the dependency as reachable. The first type of connection detected is the method or constructor calls (line 4), and the field access performed in the methods (line 10). Also, the types of the parameters of the method (line 15) and the return type (line 20) are possible connections with the dependencies, as well as the exceptions thrown by the methods (line 24). Finally, the annotations contained in the method are also detected (line 29); these annotations include those specified in the method itself and the annotations of the parameters of the method.
+In the pseudo-code of Figure \ref{fig:algorithm-usage-step1-2}, the connections are detected in the client library methods. The code iterates through every behavior declared in the current client class (line 3). For each behavior, different types of connections are detected. If any of the types involve a class or a behavior implemented in one of the dependencies, it is added to the information of the dependency as reachable. The first type of connection detected is the method or constructor calls (line 4) and the field access performed in the methods (line 10). Also, the types of the parameters of the method (line 15) and the return type (line 20) are possible connections with the dependencies, as well as the exceptions thrown by the methods (line 24). Finally, the annotations contained in the method are also detected (line 29); these annotations include those specified in the method itself and the annotations of the parameters of the method.
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -379,7 +379,7 @@ while (!toVisit.isEmpty())
 \label{fig:algorithm-usage-step2-1}
 \end{figure}
 
-The code to find all the reachable methods and usage of dependencies is in Figure \ref{fig:algorithm-usage-step2-2}. To do so, the directly reachable methods of the library are iterated (line 4). For each of these methods, the call-graph created from the method is visited in the same way it is done for the metric \texttt{TMIC} (see Section \ref{subsec:tmic}). However, for each visited method (line 8), all the possible connections are detected (line 9). These connections are the same as the ones detected in Figure \ref{fig:algorithm-usage-step1-2}. In the first step, the difference is that for each connection, the only check is if the element on the other end is in a different library. Nevertheless, in this second step, it is also checked if the element at the other end of the connection is in the same library. In this case, it is added to the reachable method or classes. Besides, if it is a method, it is added to the methods to visit, since it is part of the call-graph.
+The code to find all the reachable methods and usage of dependencies is in Figure \ref{fig:algorithm-usage-step2-2}. To do so, the directly reachable methods of the library are iterated (line 4). For each of these methods, the call-graph created from the method is visited in the same way it is done for the metric \texttt{TMIC} (see Section \ref{subsec:tmic}). However, for each visited method (line 8), all the possible connections are detected (line 9). These connections are the same as the ones detected in Figure \ref{fig:algorithm-usage-step1-2}. In the first step, the difference is that for each connection, the only check is if the element on the other end is in a different library. Nevertheless, in this second step, it is also checked if the element at the other end of the connection is in the same library. In this case, it is added to the reachable method or classes. Besides, if it is a method, it is added to the methods to visit since it is part of the call-graph.
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -398,7 +398,7 @@ findAllReachableMethodsAndUsageOfDependencies(dependencyTreeNode)
 \label{fig:algorithm-usage-step2-2}
 \end{figure}
 
-The last part is the code to find all the reachable classes and usage of the dependencies in the classes. The reachable classes found until this point are iterated (line 4), and all the reachable classes from those classes are visited. For each visited class, the different types of connections are checked (line 9). The connections checked are the same as in Figure \ref{fig:algorithm-usage-step1-3}. Also, if the class at the other end of the connection is in the same library, it is added to the library's reachable classes, and in the \texttt{toVisit} in order to check the connections starting in this class.
+The last part is the code to find all the reachable classes and usage of the dependencies in the classes. The reachable classes found until this point are iterated (line 4), and all the reachable classes from those classes are visited. For each visited class, the different types of connections are checked (line 9). The connections checked are the same as in Figure \ref{fig:algorithm-usage-step1-3}. Also, if the class at the other end of the connection is in the same library, it is added to the library's reachable classes and in the \texttt{toVisit} to check the connections starting in this class.
 
 \begin{figure}[ht!]
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -446,7 +446,7 @@ In this section, we explain how the visualization of the tool has been designed 
 
 This section contains a brief description of the technologies and libraries used to develop the application's visualization and a description of each part of the visualization.
 
-For each part of the visualization, we discuss different visual aspects of the visualization following the structure used by Kula et al. \cite{kula2014visualizing}. However, since the tool implemented for this thesis is meant to be interactive, we have added this new aspect. Therefore, the visual aspects considered are: Layout, shape, color, and interaction.
+For each part of the visualization, we discuss different visual aspects of the visualization following the structure used by Kula et al. \cite{kula2014visualizing}. However, since the tool implemented for this thesis is meant to be interactive, we have added this new aspect. Therefore, the visual aspects considered are the following: Layout, shape, color, and interaction.
 
 \subsection{Technologies}
 The visualization has been implemented using the framework \texttt{Angular}\footnote{\url{https://angular.io/}}. Most of the UI elements used are obtained from \texttt{Angular Material}\footnote{\url{https://material.angular.io/}}. Finally, for graph representations we have used \texttt{vis.js}\footnote{\url{https://visjs.org/}}, and \texttt{ngx-charts}\footnote{\url{https://github.com/swimlane/ngx-charts}} to display charts.
@@ -468,17 +468,17 @@ Since this visualization displays the dependency tree of the client library, the
 Each node displays the following information about the library: \texttt{GroupID}, \texttt{ArtifactID}, \texttt{version}, and the result of the metrics --- \texttt{MIC} and \texttt{AC} for the direct dependencies, and \texttt{TMIC} and \texttt{TAC} for the transitive dependencies.
 
 \paragraph{Shape}
-For this visualization, the shape of each of the nodes is the same, an ellipse. This is because the differentiation between the nodes is done with the node's color, not the shape. Furthermore, the ellipse is the shape that allows us to display all the necessary information in the node, without taking too much extra space.
+For this visualization, the shape of each of the nodes is the same, an ellipse. This is because the differentiation between the nodes is done with the node's color, not the shape. Furthermore, the ellipse is the shape that allows us to display all the necessary information in the node without taking too much extra space.
 
 \paragraph{Color}
-To indicate the state of the dependency with the nodes' color, we have used three different colors. The nodes representing libraries for which no coverage has been found are light grey. Then, the rest of the dependencies have different blue shades, going from lighter blue for the less used, and darker blue for the most used. Furthermore, the color of the node representing the client library is dark pink. Finally, when a node is selected (see next paragraph), the color of the node changes to light pink.
+To indicate the state of the dependency with the nodes' color, we have used three different colors. The nodes representing libraries for which no coverage has been found are light grey. The rest of the dependencies have different blue shades, going from lighter blue for the less used and darker blue for the most used. Furthermore, the color of the node representing the client library is dark pink. Finally, when a node is selected (see next paragraph), the color of the node changes to light pink.
 
 \paragraph{Interaction}
-The main problem with the dependency tree visualization is that if the tree contains too many nodes, it is very difficult to see the nodes' content. To fix this, all the nodes can be selected. When a node is selected, the visualization zooms in the selected node so that the user can see the content.
+The main problem with the dependency tree visualization is that if the tree contains too many nodes, it is difficult to see its content. To fix this, all the nodes can be selected. When a node is selected, the visualization zooms in the selected node so that the user can see the content.
 
 There are two ways to select a node. The first one is by clicking the node. The second option is by finding the node in the search bar. The search bar has been implemented to give suggestions containing all the libraries' names displayed in the tree. To clear the node selection, the user has to click in the graph view, outside of the nodes.
 
-The second type of interaction has been implemented to display some additional information on the nodes. When a user hovers over a node, a \textit{tooltip} appears. The \textit{tooltip} contains the data of the library and the value of the coupling and coverage metrics. For the coupling metrics, two tables are displaying, for each metric, the value measured, and the distance at which the value was measured.
+The second type of interaction has been implemented to display some additional information on the nodes. When a user hovers over a node, a \textit{tooltip} appears. The \textit{tooltip} contains the data of the library and the value of the coupling and coverage metrics. For the coupling metrics, two tables display the value measured and the distance at which the value was measured for each metric.
 
 \subsection{Dependency Table}
 The dependency tree visualization gives an overview of the dependencies. However, it is not useful to compare the values of the metrics among dependencies. Therefore, this second visualization is focused on seeing together all the values to sort and compare. Figure \ref{fig:table-visualization} shows the table visualization for the client library \textit{org.apache.flink:flink-core:1.9.1}.
@@ -492,7 +492,7 @@ The dependency tree visualization gives an overview of the dependencies. However
 \end{figure}
 
 \paragraph{Layout}
-To be easy to compare the value of the metrics among all the dependencies, the layout chosen for this visualization is a table. The table displays one dependency on each row, while the columns display information about the dependency, and the coupling and coverage metrics calculated for the dependency. For each library, there is a column for the \textit{groupId}, the \textit{artifactId}, the \textit{version}, and whether the dependency is direct or transitive. Then, the rest of the columns the values displayed are \texttt{MIC} and \texttt{AC} (or \texttt{TMIC} and \texttt{TAC} for transitive dependencies), and the metrics \texttt{\%ReachableClasses} and \texttt{\%ReachableMethods}.
+To be easy to compare the metrics' value among all the dependencies, the layout chosen for this visualization is a table. The table displays one dependency on each row, while the columns display information about the dependency and the coupling and coverage metrics calculated for the dependency. For each library, there is a column for the \textit{groupId}, the \textit{artifactId}, the \textit{version}, and whether the dependency is direct or transitive. Then, the rest of the columns the values displayed are \texttt{MIC} and \texttt{AC} (or \texttt{TMIC} and \texttt{TAC} for transitive dependencies), and the metrics \texttt{\%ReachableClasses} and \texttt{\%ReachableMethods}.
 
 \paragraph{Shape}
 For this visualization, the shape is already defined by the layout, which is a table.
@@ -501,10 +501,10 @@ For this visualization, the shape is already defined by the layout, which is a t
 The color is used in this visualization only to indicate which library has been selected by the user, in which case the row of the library has a pink background. The rest of the rows have a white background.
 
 \paragraph{Interaction}
-As explained earlier, this visualization is meant to compare the values easier, and therefore the first interaction implemented for this visualization is sorting. The rows of the table can be sorted according to the values of any of the columns. Also, it is possible to filter the content of the table. The rows can be filtered based on whether the dependencies are direct or transitive, and if the client library uses the dependencies or not.
+As explained earlier, this visualization is meant to compare the values easier, and therefore the first interaction implemented for this visualization is sorting. The rows of the table can be sorted according to the values of any of the columns. Also, it is possible to filter the content of the table. The rows can be filtered based on whether the dependencies are direct or transitive and if the client library uses the dependencies or not.
 
 \subsection{Distribution per class}
-With the previous visualizations, the user has an overview of the dependency tree. However, there is no way the user can have more detailed information about a specific library of the dependency tree. Therefore, and making use of the node selection implemented in the visualization described in section \ref{sec:visualization-dependency-tree}, we have created a visualization to display the usage per class metrics for the analyzed client library, and the selected server library. An example of this visualization for the client library \textit{org.apache.flink:flink-core:1.9.1} and the server library \textit{com.esotericsoftware.kryo:kryo:2.24.0}, can be found in Figure \ref{fig:per-class-visualization}.
+With the previous visualizations, the user has an overview of the dependency tree. However, there is no way the user can have more detailed information about a specific library of the dependency tree. Therefore, and making use of the node selection implemented in the visualization described in section \ref{sec:visualization-dependency-tree}, we have created a visualization to display the usage per class metrics for the analyzed client library and the selected server library. An example of this visualization for the client library \textit{org.apache.flink:flink-core:1.9.1} and the server library \textit{com.esotericsoftware.kryo:kryo:2.24.0}, can be found in Figure \ref{fig:per-class-visualization}.
 
 \begin{figure}[ht]
 \begin{center}
@@ -528,4 +528,4 @@ To follow the palette used for the rest of this tool's frontend, we use the dark
 \paragraph{Interaction}
 This visualization appears and disappears according to the node selection of the dependency tree and table visualizations.
 
-Also, if the user hovers the cursor over a column, a \textit{tooltip} appears. This \textit{tooltip} contains the values of the calculated metrics since these values are not displayed in the chart. In addition, it also contains the fully-qualified name of the class, to indicate the user the exact path to find the class within the project.
+Also, if the user hovers the cursor over a column, a \textit{tooltip} appears. This \textit{tooltip} contains the values of the calculated metrics since these values are not displayed in the chart. Furthermore, it contains the fully-qualified name of the class to indicate the user the exact path to find the class within the project.
