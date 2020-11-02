@@ -3,14 +3,14 @@
 In this section, we describe the experiments conducted with the dependency model created in this thesis, as well as the PoC. For each of the experiments, we explain the goal, the setup, the results, and finally, we discuss the results and the conclusions extracted from these.
 
 \section{Experiment 1: Comparison}\label{sec:Exp1}
-The goal of this experiment is to validate the implementation in the PoC. We compare against the results of the study \textit{"A Comprehensive Study of Bloated Dependencies in the Maven Ecosystem"} by Soto-Valero et al. \cite{soto2020comprehensive}. In this work, a byte-code analysis is performed on Maven Artifacts to detect which of these artifacts' dependencies are \textit{bloated}, which we refer to as \textit{unused}. Although the PoC created in this thesis does not perform the same kind of analysis, we consider that a dependency is \textit{unused} if all the model's metrics detects no usage.
+The goal of this experiment is to validate the implementation in the PoC. We compare against the results of the study \textit{"A Comprehensive Study of Bloated Dependencies in the Maven Ecosystem"} by Soto-Valero et al. \cite{soto2020comprehensive}. In this work, a bytecode analysis is performed on Maven Artifacts to detect which of these artifacts' dependencies are \textit{bloated}, which we refer to as \textit{unused}. Although the PoC created in this thesis does not perform the same kind of analysis, we consider that a dependency is \textit{unused} if all the model's metrics detects no usage.
 
 \subsection{Experimental setup}
 Soto-Valero et al. perform a qualitative analysis, in which they analyze 31 libraries available as Maven artifacts. If unused dependencies are found during the analysis, a \textit{Pull Request} is made to the \textit{GitHub} repository of the artifact in which the unused dependencies are deleted from the \textit{pom} file.
 
 With the information in the paper, we collect the \textit{GroupId} and \textit{ArtifactId} of the 31 artifacts. Out of the 31, 2 could not be found in the \textit{Maven Repository Central}. For the other 29, the \textit{version} to use in the experiment is determined by finding the last version released before the experiment by Soto-Valero et al. was conducted --- November of 2019.
 
-Of the 29 artifacts, the PoC could not use 13 because either the artifact itself or some dependency could not be downloaded from \textit{Maven Central}. Therefore, we have a set of 16 libraries to analyze and compare the results with the results obtained by Soto-Valero et al. Table \ref{table:comparison-artifacts} contains the identifiers of the artifacts used in this experiment.
+Of the 29 artifacts, the PoC could not use 13 because either the artifact itself or some dependency could not be downloaded from \textit{Maven Central}. Therefore, we have 16 libraries to analyze and compare the results with the results obtained by Soto-Valero et al. Table \ref{table:comparison-artifacts} contains the artifacts' identifiers used in this experiment.
 
 \begin{table}[ht!]
     \begin{center}
@@ -54,12 +54,12 @@ The results obtained from the comparison with the data from Soto-Valero et al. \
   \item \textbf{Used:} At least one of the unused dependencies is found as used by the PoC.
 \end{itemize}
 
-The cases that can happen for the rest of the libraries, the ones that are found as used by Soto-Valero et al. are listed below:
+The cases that can happen for the rest of the libraries, the ones that are found as used by Soto-Valero et al., are listed below:
 
 \begin{itemize}
   \item \textbf{Correct:} All the used dependencies, according to the paper, are also used according to the tool.
   \item \textbf{Shaded:} At least one dependency is detected as unused because it is shaded within the jar file of the client library in the building process.
-  \item \textbf{Testing:} At least one dependency is found as unused since it is only used for testing, but not marked with scope \textit{testing}.
+  \item \textbf{Testing:} At least one dependency is found as unused since it is only used for testing but not marked with scope \textit{testing}.
   \item \textbf{Unused:} At least one dependency found as used by the paper is unused in the tool's analysis.
 \end{itemize}
 
@@ -93,12 +93,12 @@ org.jacop:jacop:4.7.0                                       & Correct       & Te
 \end{table}
 
 \subsection{Discussion}
-To evaluate the results of this experiment, we will discuss the meaning of the different cases to detect unused dependencies. There are 9 cases in which the unused dependencies were not correctly detected. Out of these 9, 4 can completely be fixed, if the tool could also analyze the tests defined in the client library. This could be fixed by doing source-code analysis including the testing, instead of bytecode analysis. Also, the 2 cases in which the dependencies are inherited from the parent, and the algorithm used to resolve the dependencies does not include them. Finally, there are 3 cases in which there is at least one dependency which according to the paper should be unused, and it was detected used by the PoC. Therefore, the PoC implementation is overestimating in certain measure the usage of the dependencies.
+To evaluate this experiment's results, we will discuss the meaning of the different cases involved in detecting unused dependencies. There are 9 cases in which the unused dependencies were not correctly detected. Out of these 9, 4 can completely be fixed if the tool could also analyze the tests defined in the client library. This could be fixed by doing source-code analysis, including the testing, instead of bytecode analysis. Also, the 2 cases in which the dependencies are inherited from the parent, and the algorithm used to resolve the dependencies does not include them. Finally, there are 3 cases in which there is at least one dependency, which should be unused according to the paper, but it was detected used by the PoC. Therefore, the PoC implementation is overestimating in a certain measure the usage of the dependencies.
 
-Next, we take a look at the detection of used dependencies. There are 9 cases in which at least one of the dependencies that were supposed to be used has no usage detected. Two of these cases are due to the dependencies being shaded within the client library's jar during the build process. Also, one case includes a dependency used for testing. These scenarios could be fixed by doing source-code analysis, since the dependencies would not be shaded yet, and the tests could be included in the analysis. Finally, the other 7 cases include dependencies detected as unused, according to the paper by Soto-Valero et al. \cite{soto2020comprehensive}. Therefore, there are some false negatives, which could be related to the way we defined an unused dependency: based on the metrics of the model. It is possible that there are still some types of connections not detected by the tool (e.g., reflection constructs). In some other cases it could happen that it is a very specific type of library, the usage of which cannot be detected on the code. For example, we researched the server libraries of these cases, and it includes a case in which the dependency is related to the compilation of the project. Another case involves a client library in which the part that uses the dependency is not shipped with Maven, and therefore it cannot be detected in the jar file. Finally, there are some empty dependencies - have no classes. A next step could be to investigate what are these libraries used for, and how to detect it.
+Next, we take a look at the detection of used dependencies. There are 9 cases in which at least one of the dependencies that were supposed to be used has no usage detected. Two of these cases are due to the dependencies being shaded within the client library's jar during the build process. Also, one case includes a dependency used for testing. These scenarios could be fixed by doing source-code analysis since the dependencies would not be shaded yet, and the tests could be included in the analysis. Finally, the other 7 cases include dependencies detected as unused, according to the paper by Soto-Valero et al. \cite{soto2020comprehensive}. Therefore, there are some false negatives, which could be related to the way we defined an unused dependency: based on the model's metrics. There may still be some types of connections not detected by the tool (e.g., reflection constructs). In some other cases, it could be a particular type of server library involved, the usage of which cannot be detected on the code. For example, we researched the server libraries of these cases, and it includes a case in which the dependency is related to the compilation of the project. Another case involves a client library in which the part that uses the dependency is not shipped with Maven, and therefore it cannot be detected in the jar file. Finally, there are some empty dependencies - have no classes. A next step could be to investigate what these libraries are used for and how to detect it.
 
 \begin{finding}
-	The scope of the PoC has limited the analysis in some cases such as testing and shaded dependencies. This could be fixed by either including the tests in the jar files, or doing source-code analysis instead.
+	The scope of the PoC has limited the analysis in some cases, such as testing and shaded dependencies. This could be fixed by either including the tests in the jar files or doing source-code analysis instead.
 	\label{find:source-code-analysis}
 \end{finding}
 
@@ -115,18 +115,18 @@ The original idea was to measure real-world data about how the clients update th
 
 First, we tried to find GitHub commits in which there had been an update of a dependency. However, the search engine in GitHub does not allow to filter the results by the language of the commit. Therefore, most of the results obtained were not useful. Also, most of the updates are only patches, which require only a bump in the version number of the declared dependency.
 
-Based on these findings, the second approach we took was to look for updates that contained breaking changes. To find the libraries that had these types of changes and versions, we used the \textit{Maven Dependency Dataset} \cite{Raemaekers2013}. Raemaekers et al. used this dataset to analyze the use of semantic versioning and the possible impact of breaking changes \cite{Raemaekers2017}. It is possible to query this dataset to obtain libraries with breaking changes, with version numbers and other libraries that depended on these. However, we need to find the commit of the client library in which the update containing a breaking change was made, and it is not always possible. We considered some of the requirements to be able to analyze a dependency with the PoC. For instance, we need all the dependencies of the client library available in Maven, and testing dependencies cannot be used since they are not analyzed by the tool. Considering all these requirements, obtaining enough data for the experiment from the \textit{Maven Dependency Dataset} had to be done manually.
+Based on these findings, the second approach we took was to look for updates that contained breaking changes. To find the libraries, and the versions of these libraries, that had these types of changes, we used the \textit{Maven Dependency Dataset} \cite{Raemaekers2013}. Raemaekers et al. used this dataset to analyze the use of semantic versioning and the possible impact of breaking changes \cite{Raemaekers2017}. It is possible to query this dataset to obtain libraries with breaking changes, with version numbers, and other libraries that depended on these. However, we need to find the commit of the client library in which the update containing a breaking change was made, and it is not always possible. We considered some of the requirements to be able to analyze a dependency with the PoC. For instance, we need all the dependencies of the client library available in Maven, and testing dependencies cannot be used since they are not analyzed by the tool. Considering all these requirements, obtaining enough data for the experiment from the \textit{Maven Dependency Dataset} had to be done manually.
 
 Next, we contacted the first author of the paper \textit{"Why and How Java Developers Break APIs"} \cite{Brito2018}, which mines GitHub repositories to find possible breaking changes in APIs, to obtain the dataset of breaking changes created based on their findings. Brito, the author, shared the dataset with us. The dataset includes 24 commits containing breaking changes, which correspond to 19 different libraries. Out of the 25 commits, 12 are from Gradle libraries instead of Maven and cannot be used with the PoC. Besides, we could not find four of the commits in GitHub, and two others correspond to testing libraries, which are out of the scope of the analysis performed by the PoC. Therefore, there were only six breaking changes left, for which three the Maven artifact that these belong to had no dependants for which to do the analysis. The last three have only one dependant, and therefore is not possible to compare the impact of the breaking changes.
 
-Finally, we tried to manually search for deprecated libraries and other libraries that used them — however, similar problems where encountered. Finding commits which replaced a deprecated dependency and the client library and all the dependencies are available in \textit{Maven Central Repository}, was a laborious manual task that eventually gave no results.
+Finally, we tried to manually search for deprecated libraries and other libraries that used them — however, similar problems were encountered. Finding commits that replaced a deprecated dependency and the client library and all the dependencies are available in \textit{Maven Central Repository} was a laborious manual task that eventually gave no results.
 
 \subsection{Experimental set up}
-In this experiment, we calculated the coupling and coverage metrics of the model, for a set of Maven libraries (see list of libraries in Appendix \ref{appendix:data-set}), to compare the results between the two types of metrics.To run this experiment, we prepared a new request in the API of the PoC. The request has to contain a path to a \textit{.txt} file (tab-delimited). The file has to contain three columns (with headers): \textit{Group Id}, \textit{Artifact Id}, and \textit{version}. For each one of the rows, the metrics are calculated for each of the dependencies. The result of each of the analyses is processed, summarizing all the analyses with the following information:
+In this experiment, we calculated the coupling and coverage metrics of the model for a set of Maven libraries (see list of libraries in Appendix \ref{appendix:data-set}), to compare the results between the two types of metrics. To run this experiment, we prepared a new request in the API of the PoC. The request has to contain a path to a \textit{.txt} file (tab-delimited). The file has to contain three columns (with headers): \textit{Group Id}, \textit{Artifact Id}, and \textit{version}. For each one of the rows, the metrics are calculated for each of the dependencies. The result of each of the analyses is processed, summarizing all the analyses with the following information:
 
 \begin{itemize}
   \item \textbf{Total number of dependencies:} Number of dependencies of all the analyzed client libraries, including both direct and indirect.
-  \item \textbf{Times coupling metrics were not enough:} Number of dependencies for which all the coupling metrics had value zero, but there where methods and classes found reachable by the usage metrics.
+  \item \textbf{Times coupling metrics were not enough:} Number of dependencies for which all the coupling metrics had value zero, but there were methods and classes found reachable by the usage metrics.
   \item \textbf{Times MIC/TMIC were not enough:} Number of times in which there was usage found, but MIC (or TMIC in the case of transitive dependencies) had value zero.
   \item \textbf{Times AC/TAC were not enough:} Number of times in which there was usage found, but MIC (or TMIC in the case of transitive dependencies) had value zero.
   \item \textbf{List server libraries coupling metrics not enough:} The list of \textit{GroupId}, \textit{ArtifactId}, and \textit{version} of the server libraries for which all the coupling metrics were not enough to indicate if there is usage or not.
@@ -134,10 +134,10 @@ In this experiment, we calculated the coupling and coverage metrics of the model
   \item \textbf{List server libraries AC/TAC not enough:} The list of \textit{GroupId}, \textit{ArtifactId}, and \textit{version} of the server libraries for which the metrics \texttt{AC} and \texttt{TAC} were not enough to indicate if there is usage or not.
 \end{itemize}
 
-As can be seen, in addition to the number of times that a dependency was used and it was not detected by the metrics (or at least by one of them), the list of server libraries of these dependencies is also stored. This way, it is possible to analyze which types of libraries are those, and why the coupling metrics are not enough to detect their usage.
+As can be seen, in addition to the number of times that a dependency was used and it was not detected by the metrics (or at least by one of them), the list of server libraries of these dependencies is also stored. This way, it is possible to analyze which types of libraries are those and why the coupling metrics are not enough to detect their usage.
 
 \blankl
-The experiment was run with a file containing 67 client libraries from the \textit{Maven Central Repository}.  We selected the client libraries to use for this experiment with the following criteria. First, we used the same libraries as in the comparison experiment (see Section \ref{sec:Exp1}), but using the last version of each library. We decided to reuse these libraries because the criteria used to select these libraries by Soto-Valero et al. \cite{soto2020comprehensive} is aligned with the needs of this experiment, and are listed below:
+The experiment was run with a file containing 67 client libraries from the \textit{Maven Central Repository}.  We selected the client libraries to use for this experiment with the following criteria. First, we used the same libraries as in the comparison experiment (see Section \ref{sec:Exp1}), but using the last version of each library. We decided to reuse these libraries because the criteria used to select these libraries by Soto-Valero et al. \cite{soto2020comprehensive} is aligned with the needs of this experiment and are listed below:
 
 \begin{itemize}
   \item The library is relevant - has more than 100 stars on GitHub.
@@ -147,7 +147,7 @@ The experiment was run with a file containing 67 client libraries from the \text
   \item It is indicated how to create a pull request.
 \end{itemize}
 
-Although some of the items of the list are not explicitly required for our experiment. We need that the library can be built and is available in Maven as well as that it has at least one relevant dependency (compile scope). Therefore, the libraries in this set are a good fit for the experiment.
+Although some of the items on the list are not explicitly required for our experiment. We need that the library can be built and is available in Maven as well as that it has at least one relevant dependency (compile scope). Therefore, the libraries in this set are a good fit for the experiment.
 
 To analyze more client libraries and, therefore, more dependencies, we extended the list of libraries. First, we visited the popular libraries list of the \textit{Maven Central Repository} \footnote{\url{https://mvnrepository.com/popular}}. Also, we queried the dataset generated by Harrand et al. \cite{Harrand2019} with the 99 most popular libraries from Maven, according to the number of clients these have. For each of the libraries, we selected the last version available in Maven and filtered the resulting list according to the following criteria:
 
@@ -174,7 +174,7 @@ The summary of the results of this experiment is shown in Table \ref{table:summa
 \label{table:summary-significance}
 \end{table}
 
-The server libraries for which usage was found by the coverage metrics but not by the coupling metrics can be found in Table \ref{table:significance-coupling}. The first two columns of this table are the \textit{group id}, and the \textit{artifact id} of the server libraries. Only by looking at the libraries' names, one can see that some of them are libraries that contain \texttt{annotations}. We have checked the content of all the libraries to find out which include only \texttt{annotations}. The result of this search can be seen in the last column of Table \ref{table:significance-coupling}.
+The server libraries for which usage was found by the coverage metrics but not by the coupling metrics can be found in Table \ref{table:significance-coupling}. The first two columns of this table are the \textit{group id}, and the \textit{artifact id} of the server libraries. Only by looking at the libraries' names one can see that some of them are libraries that contain \texttt{annotations}. We have checked the content of all the libraries to find out which include only \texttt{annotations}. The result of this search can be seen in the last column of Table \ref{table:significance-coupling}.
 
 \begin{table}[ht!]
 \begin{center}
@@ -210,16 +210,16 @@ org.yaml                    & snakeyaml                       & Other       \\\h
 
 \subsection{Discussion}
 
-Based on the results shown in Table \ref{table:summary-significance}, we can see that the combination of the two types of coupling metrics allows us to detect used dependencies in 664/699 of the cases, approximately a 95\%. In addition, the metrics \texttt{MIC} and \texttt{TMIC} alone, detect 659/699 of the cases, which corresponds to a 94\%. This means that \texttt{AC} and \texttt{TAC} are only really needed in 5 of these dependencies. However, this only talks about whether or not the metrics can define whether a dependency is used or not at all, which was not the goal of this thesis. Therefore, \texttt{AC} and \texttt{TAC} are also necessary to consider the type of coupling measured by this metric.
+Based on the results shown in Table \ref{table:summary-significance}, we can see that the combination of the two types of coupling metrics allows us to detect used dependencies in 664/699 of the cases, approximately 95\%. In addition, the metrics \texttt{MIC} and \texttt{TMIC} alone, detect 659/699 of the cases, which corresponds to a 94\%. This means that \texttt{AC} and \texttt{TAC} are only really needed in 5 of these dependencies. However, this only talks about whether or not the metrics can define whether a dependency is used or not, which was not the goal of this thesis. Therefore, \texttt{AC} and \texttt{TAC} are also necessary to consider the type of coupling measured by this metric.
 
-Nevertheless, if we compare the number of times that \texttt{AC}/\texttt{TAC} are not able to detect whether a dependency is used or not, with the times that the same happens with \texttt{MIC}/\texttt{TMIC}, we can conclude that:
+Nevertheless, if we compare the number of times that \texttt{AC}/\texttt{TAC} are not able to detect whether a dependency is used or not with the times that the same happens with \texttt{MIC}/\texttt{TMIC}, we can conclude that:
 
 \begin{finding}
 	Method invocation is enough to detect dependency usage in more cases than Field declaration. Therefore, it is a more significant metric.
 	\label{find:significance-mic}
 \end{finding}
 
-This is in line with the intuition that method invocation is the most significant type of connection. Generally, if there is an object of a particular class type in the code, at some point, a method call will be done on this object. However, an object can exist in the code through mechanisms other than field declaration (e.g., return type of a method call, or a variable).
+This is in line with the intuition that method invocation is the most significant type of connection. Generally, if there is an object of a particular class type in the code, at some point, a method call will be done on this object. However, an object can exist in the code through mechanisms other than field declaration (e.g., return type of a method call or a variable).
 
 Nevertheless, since there are cases in which the combination of both types of metrics was not enough, it indicates that there are some other types of connections to be considered and measured. Given that half of the server libraries used but not detected by the coupling metrics contain annotations, creating a metric to measure the coupling created by annotations would improve these results.
 
@@ -251,9 +251,9 @@ A \textit{Sensitivity Analysis} consists of analyzing how much the output of a m
 
 To run this analysis, we have set up a new request in the API of the PoC. This request receives a list of Maven artifacts in a \textit{.txt} file (tab-delimited). The file includes three columns, containing for each artifact, the following information: \textit{group id}, \textit{artifact id}, and \textit{version}.
 
-The first step is to run the dependency model's calculation for each of the dependencies of the artifacts. Then, for each one of the transitive dependencies with coupling, we run the sensitivity analysis. Since the \textit{propagation factor} is a value in the range $(0,1]$, we calculate the value of the metrics incrementing the propagation factor by $0.01$ from $0.01$ to $1$.
+The first step is to run the dependency model's calculation for each of the dependencies of the Maven artifacts included in the list. Then, for each one of the transitive dependencies with coupling, we run the sensitivity analysis. Since the \textit{propagation factor} is a value in the range $(0,1]$, we calculate the value of the metrics incrementing the propagation factor by $0.01$ from $0.01$ to $1$.
 
-We run this experiment with a randomly selected subset of the libraries used for the significance experiment. Then, out of the set of dependencies that can be used for the sensitivity analysis, we select a representative subset of $15$ dependencies. This subset is chosen to have dependencies with different distances, and values measured at each distance. The dependencies used for the sensitivity analysis can be found in Table \ref{table:sensitivity-dependencies}.
+We run this experiment with a randomly selected subset of the libraries used for the significance experiment. Then, out of the set of dependencies that can be used for the sensitivity analysis, we select a representative subset of $15$ dependencies. This subset is chosen to have dependencies with different distances and values measured at each distance. The dependencies used for the sensitivity analysis can be found in Table \ref{table:sensitivity-dependencies}.
 
 \begin{table}[ht!]
 \begin{center}
@@ -366,7 +366,7 @@ In Table \ref{table:covariance-sensitivity}, we can see that the values of the c
 \end{center}
 \end{figure}
 
-Finally, in the results of the correlation coefficient between the propagation factor and the metrics, we also observe that the cases with the lowest correlation coefficients tend to be dependencies in which there is more distance between the client library and the server library. To compare the correlation and the distances, we create a plot with the correlation coefficient calculated for the sensitivity analysis and the maximum distance at which coupling is found, the plots for \texttt{TMIC} and \texttt{TAC} can be found in Figures \ref{fig:cor-dist-tmic} and \ref{fig:cor-dist-tac} respectively.
+Finally, in the results of the correlation coefficient between the propagation factor and the metrics, we also observe that the cases with the lowest correlation coefficients tend to be dependencies in which there is more distance between the client library and the server library. To compare the correlation and the distances, we create a plot with the correlation coefficient calculated for the sensitivity analysis and the maximum distance at which coupling is found. The plots for \texttt{TMIC}, and \texttt{TAC} can be found in Figures \ref{fig:cor-dist-tmic} and \ref{fig:cor-dist-tac} respectively.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -398,20 +398,20 @@ This last experiment has various goals. The main one is to validate the design o
   \item Algorithm Design
 \end{enumerate}
 
-In this case, we focus on the third option: Visual Encoding and Interaction Design. To carry out this validation, we designed an \textit{Expert Review} by the means of interviews. In addition, the second goal of this experiment is to evaluate the clarity and actionability of the metrics included in the model. Therefore, we added questions about clarity and actionablity, so the participants could give their view. Therefore, these two aspects of the metrics, which are included in the set of validation criteria defined by Meneely et al. \cite{Meneely2012}, can also be validated. Is important to mention that this experiment is not a complete validation of the metrics or the visualization in all scenarios. Instead it is used to evaluate the clarity and actionability of the metrics, and the usability of the visualizations in the discussed scenarios, not in a general sense.
+In this case, we focus on the third option: Visual Encoding and Interaction Design. To carry out this validation, we designed an \textit{Expert Review} through interviews. In addition, the second goal of this experiment is to evaluate the clarity and actionability of the metrics included in the model. Therefore, we added questions about clarity and actionability so that the participants could give their views. Therefore, these two aspects of the metrics, which are included in the set of validation criteria defined by Meneely et al. \cite{Meneely2012}, can also be validated. It is important to mention that this experiment is not a complete validation of the metrics or the visualization in all scenarios. Instead, it is used to evaluate the clarity and actionability of the metrics and the usability of the visualizations in the discussed scenarios, not in a general sense.
 
 \subsection{Experimental set up}
-The interview consists on 19 questions and a demonstration of the PoC, with two proposed scenarios in which the interviewee uses the tool. The questions are divided in four sections, which together with the demonstration divide the interview in a total of five parts:
+The interview consists of 19 questions and a demonstration of the PoC, with two proposed scenarios in which the interviewee uses the tool. The questions are divided into four sections, which, together with the demonstration, divide the interview into a total of five parts:
 
 \begin{enumerate}
   \item \textbf{Demographics:} The questions of this section are related to the interviewee's professional experience and current job.
   \item \textbf{Dependency Management:} In this part, the questions are focused on the interviewee's experience with dependency management and the tools used for this purpose.
-  \item \textbf{Demonstration:} The third part is the demonstration of the tool, in which two scenarios are presented to the interviewee. During the scenarios discussion, the interviewee controls the mouse, so the person can interact directly with the tool.
+  \item \textbf{Demonstration:} The third part is the demonstration of the tool, in which two scenarios are presented to the interviewee. During the discussion of the scenarios, the interviewee controls the mouse to interact directly with the tool.
   \item \textbf{Visualizations:} The section after the demonstration contains questions about the tool itself and the designed visualizations.
-  \item \textbf{Metrics:} The last section focuses on the designed metrics, the clarity and comprehensibility of these, as well as actionability.
+  \item \textbf{Metrics:} The last section focuses on the designed metrics, the clarity, and comprehensibility of these, as well as actionability.
 \end{enumerate}
 
-The interviews contain three types of questions: open answer, binary, and scaled from 1 to 5. During every question, even the binary and scaled questions, the interviewee can make comments or discuss the answer. The list of questions contained in the interview, can be found in Table \ref{table:interview-questions}.
+The interviews contain three types of questions: open answer, binary, and scaled from 1 to 5. During every question, even the binary and scaled questions, the interviewee can make comments or discuss the answer. The list of questions contained in the interview can be found in Table \ref{table:interview-questions}.
 
 \begin{table}[p]
     \begin{center}
@@ -450,7 +450,7 @@ The interviews contain three types of questions: open answer, binary, and scaled
     \label{table:interview-questions}
 \end{table}
 
-The interviews were done via \textit{Zoom}\footnote{\url{https://zoom.us/}}. \textit{Zoom} offers the possibility of sharing the control of the mouse with other participants and the option of recording the interview. The interviews are recorded to rewatch it afterward and take notes of the interviewees' answers. Therefore, the interview itself feels more like a normal conversation, and there are no pauses. The control of the mouse was shared with the interviewees to try to use the tool themselves, to get a better idea of how it works and how they would use it.
+The interviews were done via \textit{Zoom}\footnote{\url{https://zoom.us/}}. \textit{Zoom} offers the possibility of sharing the control of the mouse with other participants and the option of recording the interview. The interviews are recorded to rewatch it afterward and take notes of the interviewees' answers. Therefore, the interview itself feels more like a normal conversation, and there are no pauses.
 
 \subsection{Results}
 In this section, we show the answers obtained during the interviews. The results will be discussed in section \ref{sec:discussion-interviews}: the suitability of the visualizations, as well as the clarity and actionability of the metrics.
@@ -471,7 +471,7 @@ The years of experience range from 1 to 20, with an average of 7.13. Half of the
 
 \subsubsection{Dependency Management}
 
-The 15 interviewees have experience with dependency management. However, some of them indicated that it is not a task that they usually perform in their jobs, but rather in personal projects or time. Figure \ref{fig:interview-6} shows the answers to question 6, regarding the importance of updating the dependencies. The reasons given by the interviewees answering \textit{Neutral} and \textit{Important} for not giving it more importance include: prioritizing the fact that the versions used are compatible, that there are no version incompatibilities with the current version used, and that the version used is stable.
+The 15 interviewees have experience with dependency management. However, some of them indicated that it is not a task that they usually perform in their jobs, but rather in personal projects or time. Figure \ref{fig:interview-6} shows the answers to question 6 regarding the importance of updating the dependencies. The reasons given by the interviewees answering \textit{Neutral} and \textit{Important} for not giving it more importance include: prioritizing the fact that the versions used are compatible, that there is no version incompatibilities with the current version used, and that the version used is stable.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -481,7 +481,7 @@ The 15 interviewees have experience with dependency management. However, some of
 \end{center}
 \end{figure}
 
- Figure \ref{fig:interview-7} shows the answers to question 7 about the importance of monitoring the dependencies' vulnerabilities. The interviewees which considered that the importance of monitoring the dependencies' vulnerabilities was less than \textit{Very important} reasoned about it. For example, some said that it is something that they do, but not regularly. They just update when there is a new version, to make sure that if a vulnerability has been discovered, the patch is always used. Finally, the last reason depends on the type of dependency that it is, since if it is not a customer-facing dependency, it is not that important.
+ Figure \ref{fig:interview-7} shows the answers to question 7 about the importance of monitoring the dependencies' vulnerabilities. The interviewees considered that the importance of monitoring the dependencies' vulnerabilities was less than \textit{Very important} reasoned about it. For example, some said that it is something that they do, but not regularly. They just update when there is a new version to ensure that the patch is always used if a vulnerability has been discovered. Finally, the last reason depends on the type of dependency --- if it is not a customer-facing dependency, it is not that important.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -501,7 +501,7 @@ In Figure \ref{fig:interview-8}, there are the answers to question 8. The interv
 \end{center}
 \end{figure}
 
-Finally, the answers to question 9, regarding the how helpul are the tools that the interviewees use for dependency management are. The interviewees that considered the tools to be really helpful (5), compared it to not using any tool. Whilts the interviewees giving lower marks (2-3), considered that features are missing. Mainly, they considered that the basic needs are covered, however some more detailed information about how to manage the dependencies is not there.
+Finally, the answers to question 9, regarding how helpful are the tools that the interviewees use for dependency management. The interviewees who considered the tools to be really helpful (5) compared it to not using any tool. Whilst the interviewees giving lower marks (2-3), considered that features are missing. Mainly, they considered that the basic needs are covered. However, some more detailed information about how to manage the dependencies is not there.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -513,7 +513,7 @@ Finally, the answers to question 9, regarding the how helpul are the tools that 
 
 \subsubsection{Visualizations}
 
-The answers of the interviewees to question 10 about the tool's usefulness are displayed in Figure \ref{fig:interview-10}. Some of the interviewees' reasons for not giving it the maximum grade are the need for improvement in some aspects of both the visualization and the metrics and being useful for some very specific scenarios.
+The interviewees' answers to question 10 about the tool's usefulness are displayed in Figure \ref{fig:interview-10}. Some of the interviewees' reasons for not giving it the maximum grade are the need for improvement in some aspects of both the visualization and the metrics and being useful for some particular scenarios.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -523,7 +523,7 @@ The answers of the interviewees to question 10 about the tool's usefulness are d
 \end{center}
 \end{figure}
 
-Figure \ref{fig:interview-11} we can see the results for Question 11. In this case, the interviewees who answered \textit{Disagree} or \textit{Neutral} considered that the tool is meant for some very specific cases, which are not very likely to be needed. The other interviewees agreed that the tool would probably not be used daily, but would make some tasks easier, such as those discussed in the scenarios.
+Figure \ref{fig:interview-11} we can see the results for Question 11. In this case, the interviewees who answered \textit{Disagree} or \textit{Neutral} considered that the tool is meant for some particular cases, which are not very likely to be needed. The other interviewees agreed that the tool would probably not be used daily but would make some tasks easier, such as those discussed in the scenarios.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -533,7 +533,7 @@ Figure \ref{fig:interview-11} we can see the results for Question 11. In this ca
 \end{center}
 \end{figure}
 
-For Question 12, about which visualizations are most useful, most of the interviews answered with more than one visualization. Table \ref{table:interview-12} summarizes the answers.
+For Question 12, about which visualizations are most useful, most of the interviews answered more than one visualization. Table \ref{table:interview-12} summarizes the answers.
 
 \begin{table}[ht!]
     \begin{center}
@@ -629,7 +629,7 @@ In Figure \ref{fig:interview-16}, there are the answers to question 16 of the in
 \end{center}
 \end{figure}
 
-The answers to question 17 can be found in Figure \ref{fig:interview-17}. The interviewees who gave the grade \textit{Neutral} reasoned that the metrics need some improvements to be trully actionable and that there is information that still can only be found in other places. The interviewees who answered \textit{Agree} suggested that the model's metrics are a good starting point to know which actions to take to start with.
+The answers to question 17 can be found in Figure \ref{fig:interview-17}. The interviewees who gave the grade \textit{Neutral} reasoned that the metrics need some improvements to be truly actionable and that there is information that still can only be found in other places. The interviewees who answered \textit{Agree} suggested that the model's metrics are a good starting point to know which actions to take to start with.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -668,7 +668,7 @@ For question 18, the interviewees answered with which metrics they considered mo
     \label{table:interview-18}
 \end{table}
 
-Finally, the suggestions made for improving the current metrics or adding new ones, in the answers of question 19, can be found in the list below:
+Finally, the suggestions made for improving the current metrics or adding new ones, in the answers to question 19, can be found in the list below:
 
 \begin{itemize}
   \item Min, max, and mean of the coupling metrics.
@@ -711,26 +711,26 @@ In the answers to Question 12, only four interviewees answer only one of the vis
 	\label{find:different-perspectives}
 \end{finding}
 
-With the last question about the visualizations, the interviewees suggested some improvements to be made. Certain suggestions are small improvements in terms of interaction with the visualizations, and some other additions to make it easier to use. According to the research method, the next step would be implementing some of these suggestions and doing more interviews. However, due to time limitations, we cannot do these tasks.
+With the last question about the visualizations, the interviewees suggested some improvements to be made. Certain suggestions are small improvements in terms of interaction with the visualizations and some other additions to make it easier to use. According to the research method, the next step would be implementing some of these suggestions and doing more interviews. However, due to time limitations, we cannot do these tasks.
 
-Also, some interviewees expressed a need to integrate the different sources of information about dependency management. This data includes vulnerability data, the new versions available of the dependencies, and the licenses of the libraries used. Some related suggestions into making this tool's features into another type of tool are to make it an IDE Plugin and a command interface. Hence, there is a general interest in the tool, but it might be important to consider changing the format in which these are supplied.
+Also, some interviewees expressed a need to integrate the different sources of information about dependency management. This data includes vulnerability data, the new versions available of the dependencies, and the licenses of the libraries used. Some related suggestions for making this tool's features into another type of tool are to make it an IDE Plugin and a command interface. Hence, there is a general interest in the tool, but it might be important to consider changing the format in which these are supplied.
 
 \paragraph{Metrics}
-Regarding the clarity and comprehensibility of the metrics, the interviewees' average grade for all the metrics is positive, being a 3.8/5, the lowest one, and a 4.73/5 the highest one, as shown in Table \ref{table:interview-15}.
+Regarding the clarity and comprehensibility of the metrics, the interviewees' average grade for all the metrics is positive, being a 3.8/5, the lowest one, and a 4.73/5, the highest one, as shown in Table \ref{table:interview-15}.
 
 \begin{finding}
 	There is a consensus that the metrics defined in this model are clear and comprehensible.
 	\label{find:clear-comprehensible}
 \end{finding}
 
-The metrics with the lowest grade are the coupling metrics. As confirmed by the comments of the question about the model's actionability, most of the interviewees agreed that the coupling metrics are harder to understand since there is not a clear scale. Therefore, a number gives some information on the dependency itself and how it compares to the rest of dependencies in the tree, but there is no clear meaning that indicates if a certain value is "good" or "bad."
+The metrics with the lowest grade are the coupling metrics. As confirmed by the comments on the model's actionability, most of the interviewees agreed that the coupling metrics are harder to understand since there is not a clear scale. Therefore, a number gives some information on the dependency itself and how it compares to the rest of the dependencies in the tree, but there is no clear meaning that indicates if a certain value is "good" or "bad."
 
 \begin{finding}
 	The coupling metrics could be improved with a clear scale or rating evaluation.
 	\label{find:coupling-scale}
 \end{finding}
 
-The answers to Question 16, about the usefulness of the model, are mainly positive (see Figure \ref{fig:interview-16}). Just as in the visualizations, the interviewees giving the lowest marks reasoned that the need to have such a detailed evaluation of the dependencies is not necessary daily.
+The answers to Question 16, about the model's usefulness, are mainly positive (see Figure \ref{fig:interview-16}). Just as in the visualizations, the interviewees giving the lowest marks reasoned that the need to have such a detailed evaluation of the dependencies is not necessary daily.
 
 \begin{finding}
 	The model is useful for dependency management. However, it is not needed for the most common and regular tasks.
@@ -748,16 +748,16 @@ In the last question of the interviews, we gathered suggestions about the model'
 
 We have also obtained some suggestions, which are modifications to the current metrics. For example, having the absolute number of reachable methods or classes and the list of their names. It should be evaluated, which is the need for this information, and in which cases it would be useful.
 
-Finally, one of the suggestions to improve the actionability of the coupling metrics is to create a risk profile of these metrics by evaluating the common values of these metrics and the outliers. This suggestion is further investigated in the following experiment.
+Finally, one of the suggestions to improve the coupling metrics' actionability is to create a risk profile of these metrics by evaluating the common values of these metrics and the outliers. This suggestion is further investigated in the following experiment.
 
 \paragraph{Threats to validity}
 
 Given the number of participants in the interviews, some other profiles which could also be potential users of the tool might not have been represented in this study. To avoid this threat, we have not limited the participants to the host organization of this thesis. Instead, we have included professionals from other organizations and backgrounds.
 
-A common threat to validity when conducting interviews is the Hawthrone effect, according to which the interviewees act differently because they are being observed. To avoid this bias and prevent the interviewees from being biased towards evaluating the tool positively, each question was followed by a discussion, in which the interviewees could explain their opinion completely.
+A common threat to validity when conducting interviews is the Hawthrone effect, according to which the interviewees act differently because they are being observed. To avoid this bias and prevent the interviewees from being biased towards evaluating the tool positively, each question was followed by a discussion. The interviewees could explain their opinion completely.
 
 \section{Experiment 5: Benchmarking}
-One of the main remarks received for the coupling metrics during the interviews is that there is no clear scale for those metrics. Therefore, the metrics' value can be hard to interpret, since there is no indicator of which number is very high or very low.
+One of the main remarks received for the coupling metrics during the interviews is that there is no clear scale for those metrics. Therefore, the metrics' value can be hard to interpret since there is no indicator of which number is very high or very low.
 
 Hence, we have benchmarked the values of the metrics \texttt{MIC}, \texttt{AC}, \texttt{TMIC}, and \texttt{TAC}. The goal is to understand, which is the distribution of the values and be able to indicate which are the outliers of these metrics.
 
@@ -768,7 +768,7 @@ Then, the calculation of the metrics of the model is performed. For each analyze
 
 \subsection{Results}
 
-We have analyzed a total of $299$ direct dependencies and $470$ transitive dependencies, obtained from analyzing a set of Maven libraries (see list of libraries in Appendix \ref{appendix:data-set}). We filtered out zero values since it means that there is no coupling in this case, and we plot the rest of the values. In Figures \ref{fig:MIC-benchmark} and \ref{fig:AC-benchmark}, we show the histograms representing the distribution of the values of \texttt{MIC} and \texttt{AC} respectively.
+We have analyzed a total of $299$ direct dependencies and $470$ transitive dependencies, obtained from analyzing a set of Maven libraries (see list of libraries in Appendix \ref{appendix:data-set}). We filtered out zero values since there is no coupling in those cases, and we plot the rest of the values. In Figures \ref{fig:MIC-benchmark} and \ref{fig:AC-benchmark}, we show the histograms representing the distribution of the values of \texttt{MIC} and \texttt{AC} respectively.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -862,7 +862,7 @@ Finally, we also generated 70th, 80th, and 90th percentiles of each of the metri
 In the results of all the metrics, one can see that the majority of the values are the lowest ones. In other words, many dependencies are loosely coupled, while there are a few which are highly coupled. Also, it is possible to observe a difference in the values of the metrics measuring method invocation coupling (\texttt{MIC} and \texttt{TMIC}), with those measuring aggregation coupling --- namely \texttt{AC} and \texttt{TAC}. The method invocation metrics generally have higher values. This can also be intuitively perceived: for each field declared, multiple method calls can occur.
 
 \begin{finding}
-	The four coupling metrics have a similar distribution: small values are very common while larger values are rare.
+	The four coupling metrics have a similar distribution: small values are common, while larger values are rare.
 	\label{find:coupling-distribution}
 \end{finding}
 
@@ -871,11 +871,11 @@ When comparing the results of the metrics \texttt{TMIC} and \texttt{TAC} with di
 Furthermore, it is expected that with a lower propagation factor, the values of the metrics are pushed to zero. Therefore, the first bin of the graph should substantially increase. Looking at Figure \ref{fig:TMIC-benchmark-1}, we can see that the first bin with $1$ as the \textit{propagation factor} is around $100$. In Figure \ref{fig:TMIC-benchmark-0.5}, we can see that the first bin increased to around $110$, and in Figure \ref{fig:TMIC-benchmark-0.1}, the count of the first bin is around $120$. The increment is not as high as could be expected, considering the difference between the propagation factors. However, this is again due to some server libraries being at the same time direct and transitive dependencies; the coupling measured at distance $1$ decreases the difference in the value of the metric. Nevertheless, the fact that a decrease in the \textit{propagation factor} moves the distribution of the metric's values to zero can be seen in Table \ref{table:percentiles}. In the table, we can see that the percentiles' values are closer to zero as the \textit{propagation factor} decreases.
 
 \begin{finding}
-	The values of \texttt{TMIC} and \texttt{TAC}, do not decrease as much as could be expected when the \textit{propagation factor} is decreased. This is because of the libraries which are found in direct and transitive dependencies. The coupling created with the direct dependency remains equal regardless of which \textit{propagation factor} is applied.
+	The values of \texttt{TMIC} and \texttt{TAC}, do not decrease as much as could be expected when the \textit{propagation factor} is decreased. This is because of the libraries which are found in direct and transitive dependencies. The coupling created in the direct dependency remains equal regardless of which \textit{propagation factor} is applied.
 	\label{find:propagation-factor-distance}
 \end{finding}
 
-In Table \ref{table:percentiles}, there are the 70th, 80th, and 90th percentiles of each of the metrics. These percentiles have been previously used for software metrics for risk assessment \cite{alves2010deriving}. Considering the values in Table \ref{table:percentiles}, the risk assessment for each of the metrics can be found in Table \ref{table:risk-profile}, with four risk profiles: low risk, medium risk, high risk, and very high risk. It is worth saying that for this risk profile to be completely useful, the percentiles should be calculated with other datasets, with different types of client library. Therefore, this risk profile is only valid for the current dataset.
+In Table \ref{table:percentiles}, there are the 70th, 80th, and 90th percentiles of each of the metrics. These percentiles have been previously used for software metrics for risk assessment \cite{alves2010deriving}. Considering the values in Table \ref{table:percentiles}, the risk assessment for each of the metrics can be found in Table \ref{table:risk-profile}, with four risk profiles: low risk, medium risk, high risk, and very high risk. It is worth saying that the percentiles should be calculated with other datasets with different characteristics for this risk profile to be completely useful. Therefore, this risk profile is only valid for the current dataset.
 
 \begin{table}[ht!]
     \begin{center}
