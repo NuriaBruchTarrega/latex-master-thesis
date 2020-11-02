@@ -3,7 +3,7 @@
 In this chapter, we present the background information needed for the research conducted in this thesis. In addition, we also define some terminology used throughout the thesis.
 
 \section{Terminology}
-In this section, we will review the terms used in some of the related literature, particularly those papers that specify the terminology used. The different terms used are compared by explaining the differences. Finally, we specify the terms used in this thesis and their definition.
+This section contains a review of the terms used in some related literature, particularly those papers that specify the terminology used. The different terms used are compared by explaining the differences. Finally, we specify the terms used in this thesis and its definition.
 
 \begin{table}[htb!]
     \begin{center}
@@ -45,10 +45,10 @@ In this section, we will review the terms used in some of the related literature
 \end{table}
 
 \blankls
-First, we are going to discuss the differences between the first four terms of the table. A \textit{library} is a software unit, which is distributed independently and can be reused in other software components. The term \textit{library} is replaced by the term \textit{package} in some papers, when refering to certain software \textit{ecosystems} which use this term, or \textit{package managers} (e.g., npm). The term \textit{application} is used to differentiate the software components that are available in repositories to be reused (\textit{libraries}) and those that are not (\textit{applications}) \cite{kikas2017structure}.
+First, we discuss the differences between the first four terms of the table. A \textit{library} is a software unit distributed independently and can be reused in other software components. The term \textit{library} is replaced by the term \textit{package} in some papers, when referring to certain software \textit{ecosystems} or \textit{package managers} which use this term. The term \textit{application} is used to differentiate the software components that are available in repositories to be reused (\textit{libraries}) and those that are not (\textit{applications}) \cite{kikas2017structure}.
 The term \textit{project} is used in different papers with different meanings. Pashchenko et al. \cite{pashchenko2018vulnerable} use it to refer to a group of \textit{libraries} developed or maintained by the same team of developers. Kikas et al. \cite{kikas2017structure} use it to refer to both \textit{library} and \textit{application}. Finally, Soto-Valero et al. use it to refer to Maven Projects.
 
-Each \textit{library}, available in a \textit{package repository}, can have different \textit{versions}. Apart from the word \textit{version}, the literature also uses the terms \textit{instance} and \textit{release}, but with the same meaning. The word \textit{artifact} is used by Soto-Valero et al. \cite{soto2020comprehensive} to refer to a Maven Artifact, which corresponds to a Maven Project version.
+Each \textit{library}, available in a \textit{package repository}, can have different \textit{versions}. Apart from the word \textit{version}, the literature also uses the terms \textit{instance} and \textit{release}, with the same meaning. The word \textit{artifact} is used by Soto-Valero et al. \cite{soto2020comprehensive} to refer to a Maven Artifact, which corresponds to a Maven Project version.
 
 The papers that specifically define \textit{package manager} or \textit{package repository} in the terminology, it is because these tools have an important role in the research.
 
@@ -56,7 +56,7 @@ When describing the relationship in which a \textit{library} uses another, relev
 
 The \textit{dependencies} declared in a \textit{library} are always called \textit{direct dependencies}, and those introduced by the \textit{direct dependencies} are called \textit{transitive} or \textit{indirect}.
 
-There is also the distinction between \textit{deployed} and \textit{non-deployed}. The \textit{deployed} ones are those included in the software product once it is in production, and the \textit{non-deployed} ones are those used for development tasks (e.g., testing \textit{libraries}).
+There is also the distinction between \textit{deployed} and \textit{non-deployed} \textit{dependencies}. The \textit{deployed} ones are those included in the software product once it is in production, and the \textit{non-deployed} ones are those used for development tasks (e.g., testing \textit{libraries}).
 
 When considering the risk associated with a \textit{dependency}, it is important to consider whether the \textit{library} is \textit{own} or \textit{third-party}. An \textit{own} \textit{dependency} is maintained by the same team that develops the product that has the \textit{dependency}.
 
@@ -70,7 +70,7 @@ Finally, the terms \textit{dependency tree} and \textit{dependency network} refe
 Based on the terminology discussed above, we define the terms that are used within this thesis.
 
 \begin{itemize}
-  \item \textbf{Library:} A software \textit{artifact} that is distributed independently. It can have different implementations distinguished by \textit{versions}. The model created in this thesis is meant to analyze the \textit{dependencies} of any software product. However, for simplicity during the thesis, we always refer to \textit{libraries}.
+  \item \textbf{Library:} A software artifact that is distributed independently. It can have different implementations distinguished by \textit{versions}. The model created in this thesis is meant to analyze the \textit{dependencies} of any software product. However, for simplicity during the thesis, we always refer to \textit{libraries}.
 
   \item \textbf{Version:} A \textit{version} of a \textit{library} that contains an implementation of the \textit{library}. Each \textit{version} has specific metadata associated to build the \textit{version} successfully. Among other data, it specifies which \textit{versions} of other \textit{libraries} it is using.
 
@@ -78,7 +78,7 @@ Based on the terminology discussed above, we define the terms that are used with
 
   \item \textbf{Direct and transitive dependencies:} A \textit{direct dependency} is when a \textit{library} \textit{version} directly uses a \textit{version} of another \textit{library}. A \textit{transitive dependency} means a \textit{library} \textit{version} uses another one indirectly, through other \textit{library} \textit{versions} that it depends on.
 
-  \item \textbf{Unused dependencies:} We have decided to use the term unused dependency, instead of \textit{bloated dependency} since we find it easier to understand. A \textit{dependency} is unused when included in the \textit{library} \textit{version}'s \textit{dependency} set, but the \textit{library} never reaches it. This could happen with both \textit{direct} and \textit{transitive dependencies} for different reasons.
+  \item \textbf{Unused dependencies:} We have decided to use the term unused dependency, instead of \textit{bloated dependency} since we find it easier to understand. A \textit{dependency} is unused when included in the \textit{library} \textit{version}'s \textit{dependency} tree, but the \textit{library} never reaches it. This could happen with both \textit{direct} and \textit{transitive dependencies} for different reasons.
 
   \item \textbf{Dependency network:} Graph that represents the \textit{dependencies} between \textit{library} \textit{versions}. In a \textit{dependency network}, the \textit{library} \textit{versions} are the nodes, and the \textit{dependencies} between them are the edges.
 
@@ -86,7 +86,7 @@ Based on the terminology discussed above, we define the terms that are used with
 \end{itemize}
 
 \section{Dependency management}
-There exist several dependency managers. Tn this thesis, we will be analyzing Java libraries, and in particular, we will use projects in the Maven ecosystem, \textit{Maven Central Repository}\footnote{\url{https://repo1.maven.org/maven2/}}. Therefore, the dependency manager used is the one included in Maven. This section describes different characteristics of Maven, including the different types of dependencies and how these are declared.
+There exist several dependency managers. In this thesis, we analyze Java libraries, and in particular, we will use projects in the Maven ecosystem, \textit{Maven Central Repository}\footnote{\url{https://repo1.maven.org/maven2/}}. Therefore, the dependency manager used is the one included in Maven. This section describes the characteristics of Maven, including the types of dependencies and how these are declared.
 
 \subsection{Maven Dependencies}
 The configuration of a Maven Project, including the dependency management, is done in the \textit{Project Object Model (POM)} file. Apart from defining the dependencies of a project, the POM file contains the project's description and the build plugins that it uses.
@@ -101,7 +101,7 @@ The following parameters define a project:
 \end{itemize}
 
 \paragraph{Module hierarchy}
-A Maven Project can be configured using two different strategies. First, as a single module, it will only have one \textit{POM} file, and that only one packaging will result in the build of the project. The second option is to create a multi-module project. In this case, the project has multiple \textit{POM} files. These \textit{POM} files can have a defined hierarchy in which there is a parent \textit{POM} that has children \textit{POMs}, these children will \textit{inherit} dependencies from the parent file. For the development of the PoC of this thesis, a module with a \textit{POM} file, even if it has a parent module, is considered a library, since it can be used in a different library as an individual dependency.
+A Maven Project can be configured using two different strategies. First, as a single module, it will only have one \textit{POM} file, and that only one packaging will result in the build of the project. The second option is to create a multi-module project. In this case, the project has multiple \textit{POM} files. These \textit{POM} files can have a defined hierarchy in which there is a parent \textit{POM} that has children \textit{POMs}, these children will \textit{inherit} dependencies from the parent file. For the development of the PoC of this thesis, a module with a \textit{POM} file, even if it has a parent module, is considered a library since it can be used in a different library as an individual dependency.
 
 \paragraph{Dependencies and DependencyManagement}
 There are two sections in a \textit{POM} file that are used for dependency management purposes: \texttt{dependencies} and \texttt{dependencyManagement}.
@@ -132,15 +132,15 @@ One of the main mechanisms that the Maven dependency manager offers is the depen
 \paragraph{Optional dependencies and exclusions}
 In Maven, it is possible to declare dependencies as \textit{optional}. The primary use case for this is when a project is not divided into sub-modules, and specific dependencies are only used in certain parts of the project. In this case, it might be possible to use the project without using these parts, and the dependency might not be necessary. Declaring the dependency as optional allows saving both space and memory when the dependency is not used.
 
-Another feature of the dependency management available in Maven is the dependency \textit{exclusions}. This feature has the goal of saving part of the memory and space used by transitive dependencies. When a particular transitive dependency is not used in your project, it is possible to specify the transitive dependency exclusion. It could be useful if you use only a part of a direct dependency that does not need the transitive dependency. The excluded dependency will not be included in the dependency tree of the project and will not be imported in the library's classpath.
+Another feature of the dependency management available in Maven is the dependency \textit{exclusions}. This feature has the goal of saving part of the memory and space used by transitive dependencies. When a particular transitive dependency is not used in your project, it is possible to specify the transitive dependency exclusion. It could be useful if you use only a part of a direct dependency that does not need the transitive dependency. The excluded dependency will not be included in the project's dependency tree and will not be imported in the library's classpath.
 
 \paragraph{Dependency resolution}
-To resolve the dependencies, Maven uses the \textit{POM} file and scopes recursively to create the dependency tree. However, another aspect of dependency resolution is the version of each of the dependencies. It is possible that a dependency tree contains the same dependency more than once, and maybe with different versions. Maven uses the dependency mediation algorithm to resolve the version of the dependencies. The algorithm's strategy is the "nearest definition," which consists of choosing the version of the dependency that is closer to the root in the dependency tree. If one artifact is declared twice with different versions and at the same level, the dependency mediation will choose the first declaration of the dependency.
+To resolve the dependencies, Maven uses the \textit{POM} file and scopes recursively to create the dependency tree. However, another aspect of dependency resolution is the version of each of the dependencies. It is possible that a dependency tree contains the same dependency more than once, and maybe with different versions. Maven uses the dependency mediation algorithm to resolve the version of the dependencies. The algorithm's strategy is the "nearest definition," which consists of choosing the version of the dependency closer to the root in the dependency tree. If one artifact is declared twice with different versions and at the same level, the dependency mediation will choose the first declaration of the dependency.
 
 \section{Coupling}\label{section:bg-coupling}
 When assessing the quality of software, many aspects are considered and measured. One of these, in particular for Object-Oriented systems, is coupling. Coupling measures the degree of dependency between two different parts of a system. In the literature of coupling metrics, these have been used to measure the dependence of the same system elements or give an overview of the coupling within a system. However, in this thesis, we measure the coupling, or degree of dependency, between two systems.
 
-Therefore, we propose re-using already existing coupling metrics, meant to measure the coupling between units of the \textit{same} project and adapt them to measure coupling \textit{between} projects.
+Therefore, we propose revisiting the existing coupling metrics, meant to measure the coupling between units of the \textit{same} project and adapt them to measure coupling \textit{between} projects.
 
 \blankl
 According to Poshyvanyk and Marcus in \cite{poshyvanyk2006conceptual}, there are six main groups of coupling metrics:
@@ -160,7 +160,7 @@ According to Poshyvanyk and Marcus in \cite{poshyvanyk2006conceptual}, there are
 \end{itemize}
 
 \blankl
-Since this research is aimed to be independent of the domain, the last category is not considered in this thesis. Moreover, the evolutionary coupling is not possible to be applied in our context. Likely, the separate projects are not going to evolve simultaneously, given that the same team does not develop them. Finally, the research of this project, owing to the time limitation, will be centered on the structural metrics.
+Since this research is aimed to be independent of the domain, the last category is not considered in this thesis. Moreover, the evolutionary coupling is not possible to be applied in our context. Likely, the separate projects will not evolve simultaneously, given that the same team does not develop them. Finally, the research of this project, owing to the time limitation, will be centered on the structural metrics.
 
 These metrics are going to be proposed as a first step to measure the degree of library dependency. Nevertheless, the metrics can be extended and calculated more accurately by adding dynamic coupling and information entropy approach metrics in future work.
 
@@ -175,7 +175,7 @@ According to the unified framework defined by Briand et al. \cite{briand1999unif
 
   \item \textbf{Granularity of the measure:} The detail at which the metric calculates coupling. It is defined by 1) The domain at which coupling is measured (e.g., class-level) and 2) how the metric counts the connections (e.g., evaluating whether two elements are connected or not, or counting each one of the connections individually). The six options to count connections as defined by Briand et al. \cite{briand1999unified}, can be found in Table \ref{table:counting-connections}.
 
-  \item \textbf{Stability of the server:} In the framework by Briand et al. \cite{briand1999unified}, the servers are classified as unstable if these are  "subject to development or modification in the project at hand" and stable if these "are not subject to change in the project at hand." The last one includes classes imported from libraries. According to Briand et al., coupling with an unstable class represents more risk than coupling with a stable class. However, the framework's studied metrics do not make use of this criterion and treat all classes with the same importance.
+  \item \textbf{Stability of the server:} In the framework by Briand et al. \cite{briand1999unified}, the servers are classified as unstable if these are  "subject to development or modification in the project at hand" and stable if these "are not subject to change in the project at hand." The last one includes classes imported from libraries. According to Briand et al., coupling with an unstable class represents more risk than coupling with a stable class. However, the framework's studied metrics do not use this criterion and treat all classes with the same importance.
 
   \item \textbf{Direct and indirect coupling:} Does the connection between the two elements are direct or transitive (there is at least one other element connecting the two). The metrics that do not account for indirect coupling can be adapted by calculating the metric's transitive closure.
 
@@ -294,15 +294,15 @@ Based on these criteria, Briand et al. classify the existing coupling metrics, a
 
 \paragraph{Data Abstraction Coupling (DAC)} This metric was also defined by Li and Henry \cite{li1993object} as follows: \textit{"number of ADTs defined in a class"}, where ADT is abstract data type. However, this definition does not specify how the metric should count the connections or consider inherited ADTs. Because of this ambiguity in the original definition of the metric, Briand et al. \cite{briand1999unified} redefined the metric: \textit{"DAC is the number of not inherited attributes that have a class as their type. The number of the classes used as types for attributes is counted by DAC'"}.
 
-\paragraph{Coupling Factor (COF)} COF is the only metric of which the domain of measurement is the entire system, and was defined by Abreu et al. \cite{abreu1995toward}. COF calculates the number of relations between classes of the system, which are not related through inheritance. The relations are counted in a binary manner, only counted to how many other classes is a class related, instead of how many times these are connected. The coupling factor is normalized between 1 and 0 by dividing the number of relations by the system's maximum number of relations possible. This way, it is possible to compare systems of different sizes.
+\paragraph{Coupling Factor (COF)} COF is the only metric of which the domain of measurement is the entire system and was defined by Abreu et al. \cite{abreu1995toward}. COF calculates the number of relations between classes of the system, which are not related through inheritance. The relations are counted in a binary manner, only counted to how many other classes is a class related, instead of how many times these are connected. The coupling factor is normalized between 1 and 0 by dividing the number of relations by the system's maximum number of relations possible. This way, it is possible to compare systems of different sizes.
 
 \paragraph{Information-flow-based Coupling (ICP)} The original ICP metric counts \textit{"for method m of class c, the number of polymorphically invoked methods of other classes, weighted by the number of parameters of the invoked method."} Sadly, we have not been able to obtain the original paper, but it is described by Briand et al. \cite{briand1999unified}. From this description, the metrics IH-ICP and NIH-ICP are defined. IH-ICP counts only inheritance-based coupling, whereas NIH-ICP counts coupling to those classes with no inheritance relationship. Finally, the metric ICP is the sum of the previous two.
 
 \paragraph{Suite of metrics by Briand et al.} This set of metrics was defined by Briand et al. with their previous framework for coupling metrics \cite{briand1997investigation}. This framework was specially created for C++, and therefore, it has some extensions specific to this language.
-The metrics of the set are named according to three criteria: relationship, locus, and type of relationship. Each metric's name is composed in the following way: the initials of the relationship, the initials of the type of interaction, and the initials of the locus. These initials are described below.
+The metrics of the set are named according to three criteria: relationship, locus, and type of interaction. Each metric's name is composed in the following way: the initials of the relationship, the initials of the type of interaction, and the initials of the locus. These initials are described below.
 
 \blankl
-There are three types of relationships, listed below, which can be used to determine the coupling of a class $c$. All the definitions have been obtained from \cite{briand1997investigation}.
+There are three types of connections, listed below, which can be used to determine the coupling of a class $c$. All the definitions have been obtained from \cite{briand1997investigation}.
 
 \begin{itemize}
   \item Inheritance (A, D): Interactions from a class to its antecessors or descendants, depending on the locus.
@@ -331,4 +331,4 @@ The suite of metrics is defined based on all possible combinations of these thre
 \section{Metrics validation}
 This thesis includes evaluating and validating the metrics included in the proposed model by using the proof-of-concept. Since there is no unique way to validate metrics which is globally accepted and used, various approaches are adopted. In the paper \cite{srinivasan2014software}, Srinivasan et al. explain that there are two fundamental approaches for metric validation: \textit{theoretically} and \textit{empirically}. Therefore, to provide a check of validity that is as broad as possible, a mixture of these two approaches will be used during this project. However, this research does not contain a full validation of the metrics due to time constraints.
 
-For the coupling metrics' theoretical validity, these are validated according to the \textit{Mathematical Properties of Measures for Coupling} \cite{srinivasan2014software}. Also, a subset of the aspects presented by Meenely et al. \cite{Meneely2012} are also used to validate all the metrics in the model; in particular, we focus on Actionability and Definition validity.
+The coupling metrics' theoretical validation is conducted according to the \textit{Mathematical Properties of Measures for Coupling} \cite{srinivasan2014software}. Also, a subset of the aspects presented by Meenely et al. \cite{Meneely2012} are also used to validate all the metrics in the model; in particular, we focus on Actionability and Definition validity.
